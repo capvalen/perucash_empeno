@@ -25,7 +25,7 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 /* liberar la serie de resultados */
 mysqli_free_result($log);
 
-/* cerrar la conexi贸n */
+/* cerrar la conexión */
 mysqli_close($conection);
 echo json_encode($filas);
 ?>

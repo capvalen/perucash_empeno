@@ -16,7 +16,7 @@
 <div class="container formulario">
 <div class="text-center">
 <img src="images/logo.png">
-<h3>Perú Cash $<small> Sistema de préstamos y empeños</small></h3></div>
+<h3>PerúCa$h<small> Sistema de préstamos y empeños</small></h3></div>
 
 <div class="panel with-nav-tabs panel-warning">
 	<div class="panel-heading">
@@ -73,8 +73,10 @@
 			<div class="col-sm-6"><label>Correo electrónico: </label> <span class="text-primary mayuscula"  id="spanCorreo"></span></div>
 			<div class="col-sm-6"><label>Celular(es): </label> <span class="text-primary mayuscula"  id="spanCelular"></span></div>
 		</div>
-		<p><strong><i class="icofont icofont-cube"></i> Listado de productos adquiridos:</strong></p>
-		<div class="row well">  		
+		<p><strong><i class="icofont icofont-cube"></i> Listado de productos adquiridos por el cliente:</strong></p>
+		
+		<div class="row well hidden" id="rowWellFijo">
+			<span class="hidden" id="lblIdProductosEnc"></span>
 			<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">4</span>%</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"></span></div>
@@ -84,7 +86,13 @@
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar por parte del cliente: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
-			<button class="btn btn-success push-right"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+			<div class="col-sm-8 col-sm-offset-2">
+				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
+				<button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+				<button class="btn btn-success btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+			</div>
+		</div>
+		<div id="rowWellCambiante">
 		</div>
 	</div>
 	
@@ -183,6 +191,9 @@ $(document).ready(function () {
 	
 	if(idNew==0){ console.log('nada')}
 	else {
+		$('#rowWellFijo').removeClass('hidden');
+		$('#rowWellCambiante').addClass('hidden');
+
 		console.log('solcitar producto con id: ' + idNew);
 		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
 			var dato = JSON.parse(resp);
@@ -197,30 +208,27 @@ $(document).ready(function () {
 			var hoy= moment();
 			var fechaIni =moment(dato[0].prodFechaInicial);
 			var fechaFin=moment(dato[0].prodFechaVencimiento);
+			var respu;
 			if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
-				calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoDado, dato[0].prodInteres);
+				respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoDado, dato[0].prodInteres);
 			}
 			else{//seccion cuando el producto ya paso su fecha límite
-				calculoIntereses(fechaIni, hoy, dato[0].prodMontoDado, dato[0].prodInteres);
-				$('#spanPeriodo').text();
+				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoDado, dato[0].prodInteres);
 				$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
-				
 			}
+			
+			$('#spanPeriodo2').text(respu[0].periodo);
+			$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
+			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato[0].prodMontoDado)).toFixed(2));
 
-
-
-
+			moment.locale('es');
 			$('#spanProducto').text(dato[0].prodNombre);
 			$('#spanPorcent').text(dato[0].prodInteres);
-			$('#spanFechaInicio').text(dato[0].prodFechaInicial);
-			$('#spanFechaFin').text(dato[0].prodFechaVencimiento);
+			$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
+			$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
 			
 			$('#spanMontoDado').text(dato[0].prodMontoDado);
-			
-			
-			
-
-		
+	
 		})
 		$('.nav-tabs li').eq(1).children('a').click();
 
@@ -237,14 +245,14 @@ $('#dtpFechaVencimiento').change(function () {
 	calcularPeriodo();
 });
 function calculoIntereses(fechaAnterior, fechaVencimiento, montoDado, montoInteres){
-
+	var resultado =[];
 	var diferenciaDias, diferenciaSemanas, diferenciaRestoDias, montoaPagar;
 	diferenciaDias = fechaVencimiento.diff(fechaAnterior, 'days');
 		
 	
 	
-	if(diferenciaDias<=6){diferenciaSemanas=0;diferenciaRestoDias=1; $('#spanPeriodo2').text(diferenciaDias + ' días') }
-	else{diferenciaSemanas =  parseInt(diferenciaDias/7); diferenciaRestoDias= diferenciaDias%7; $('#spanPeriodo2').text(diferenciaSemanas + ' semanas y ' +diferenciaRestoDias + ' días') }
+	if(diferenciaDias<=6){diferenciaSemanas=0;diferenciaRestoDias=1; resultado.push({periodo: diferenciaDias + ' días'})}//$('#spanPeriodo2').text() }
+	else{diferenciaSemanas =  parseInt(diferenciaDias/7); diferenciaRestoDias= diferenciaDias%7; resultado.push({periodo: diferenciaSemanas + ' semanas y ' +diferenciaRestoDias + ' días'})}//$('#spanPeriodo2').text() }
 	
 
 
@@ -253,11 +261,9 @@ function calculoIntereses(fechaAnterior, fechaVencimiento, montoDado, montoInter
 	}
 
 	montoaPagar = parseFloat(montoDado)+(parseFloat(montoDado)*parseInt(montoInteres)/100)*(diferenciaSemanas);
-	//console.log(montoaPagar)
+	resultado.push({monto:parseFloat(montoaPagar).toFixed(2) })
 	
-	$('#spanPagar').text(parseFloat(montoaPagar).toFixed(2))
-	$('#spanIntGenerado').text(parseFloat(montoaPagar-montoDado).toFixed(2))
-
+	return resultado;// parseFloat(montoaPagar).toFixed(2);
 }
 function calcularPeriodo(){
 
@@ -413,7 +419,7 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 		//console.log('enter')
 		$('#rowUsuarioEncontrado').children().remove();
 		$.ajax({url: 'php/ubicarPersonaProductos.php', type: 'POST', data: {campo:$('#txtBuscarPersona').val() }}).done(function (resp) {
-			dato = JSON.parse(resp); console.log(dato)
+			dato = JSON.parse(resp);// console.log(dato)
 			$.each(dato, function(i, elem){
 				$('#rowUsuarioEncontrado').append(`<div class="rowEnc"><div class="col-xs-6 mayuscula eleNom">${elem.cliApellidos}, ${elem.cliNombres}</div>
 					<div class="hidden eleIdCli" >${elem.idCliente}</div>
@@ -439,9 +445,45 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 	$('#spanCorreo').text( $('.rowEnc').eq(indice).find('.eleCorr').text());
 	$('#spanCelular').text( $('.rowEnc').eq(indice).find('.eleCel').text());
 
+	$('#rowWellFijo').addClass('hidden');
+	$('#rowWellCambiante').removeClass('hidden');
+
+	$.ajax({ url: 'php/solicitarProductoPorCliente.php', type: 'POST', data: {idCli: $('.rowEnc').eq(indice).find('.eleIdCli').text() }}). done(function (resp) {
+		console.log(resp)
+		$.each(JSON.parse(resp), function (i, dato) {
+			var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(dato.prodFechaVencimiento), dato.prodMontoDado, dato.prodInteres )
+
+			var obsDin='';
+			var intge=parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2)
+
+			if(dato.prodObservaciones==''){ obsDin='Ninguna'} else{ obsDin= dato.prodObservaciones}
+			
+			$('#spanPeriodo2').text(respu[0].periodo);
+			$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
+			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2));
+
+			$('#rowWellCambiante').append(`<div class="row well" >
+			<span class="hidden" id="lblIdProductosEnc">${dato.idProducto}</span>
+			<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto">${dato.prodNombre}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${dato.prodInteres}</span>%</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${dato.prodFechaInicial}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${dato.prodFechaVencimiento}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${dato.prodMontoDado}</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar por parte del cliente: </label> <span class="text-success">S/. <span id="spanPagar">${dato.prodMontoPagar}</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">${obsDin}</span></em></div>
+			<button class="btn btn-success push-right"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+		</div>`)
+		})
+	})
+
 	$('.modal-mostrarResultadosCliente').modal('hide');
 
 });
+$('#btn-imprimirTicketFijo').click(function () {
+	$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {usuario: 'Carlos Alex.'}}).done(function(resp){console.log(resp);});
+})
 </script>
 </body>
 </html>

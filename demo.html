@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>	Demo</title>
+</head>
+<body>
+<h1>Hola</h1>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+	$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {usuario: 'Carlos Alex P.'}}).done(function(resp){console.log(resp);});
+</script>
+
+</body>
+</html>

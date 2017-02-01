@@ -1,0 +1,6 @@
+Instalar xampp en el lado del cliente y poner estos archivos
+demo.html
+printTicket.php
+carpeta vendor
+
+siempre con su archivo de accesso .htaccess indicando el server que se comunica
