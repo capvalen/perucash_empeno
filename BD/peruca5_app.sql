@@ -125,7 +125,8 @@ DROP PROCEDURE IF EXISTS `listarProductosPorCliente`$$
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarProductosPorCliente`(in idCli int)
 BEGIN
 select * from producto
-where idcliente =idCli;
+where idcliente =idCli
+order by prodFechaRegistro desc;
 END$$
 
 DROP PROCEDURE IF EXISTS `listarProductosVencidos`$$
