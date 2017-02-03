@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 03-02-2017 a las 11:45:15
+-- Tiempo de generación: 03-02-2017 a las 12:11:23
 -- Versión del servidor: 5.6.34
 -- Versión de PHP: 5.6.20
 
@@ -70,7 +70,7 @@ INSERT INTO `peruca5_app`.`producto`
 `prodObservaciones`,
 `prodMontoPagar`,
 `idCliente`,
-`prodActivo`, `prodFechaRegistro`)
+`prodActivo`, `prodFechaRegistro`, `idUsuario` )
 VALUES
 (null,
 nomProd,
@@ -81,7 +81,7 @@ feachavencimiento,
 observaciones,
 montopagar,
 @id,
-1, now());
+1, now(), usuario);
 
 set @prod=last_insert_id();
 select @prod;
@@ -103,7 +103,7 @@ INSERT INTO `peruca5_app`.`producto`
 `prodObservaciones`,
 `prodMontoPagar`,
 `idCliente`,
-`prodActivo`, `prodFechaRegistro`)
+`prodActivo`, `prodFechaRegistro`, `IdUsuario` )
 VALUES
 (null,
 nomProd,
@@ -114,7 +114,7 @@ feachavencimiento,
 observaciones,
 montopagar,
 idCl,
-1, now());
+1, now(), usuario);
 
 set @prod=last_insert_id();
 select @prod;
@@ -122,7 +122,7 @@ select @prod;
 END$$
 
 DROP PROCEDURE IF EXISTS `listarProductosPorCliente`$$
-CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarProductosPorCliente`(in idCli int)
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarProductosPorCliente`(IN `idCli` INT)
 BEGIN
 select * from producto
 where idcliente =idCli
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `Cliente` (
   `cliCelular` varchar(50) NOT NULL,
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Volcado de datos para la tabla `Cliente`
@@ -199,7 +199,11 @@ INSERT INTO `Cliente` (`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cli
 (6, 'pardo gomez', 'roberto luis', '45896521', 'av real 421', '', '843261'),
 (7, 'pariona', 'valencia', '32475064', 'mmmg', '', '514132'),
 (8, 'cardenas pineda', 'mariza', '88015138', 'las retamas 555', 'mcarenasp', '96577778'),
-(9, 'huaycuch valenzuela', 'yuri paola', '77704076', 'mpj. union', '', '931374171');
+(9, 'huaycuch valenzuela', 'yuri paola', '77704076', 'mpj. union', '', '931374171'),
+(10, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
+(11, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
+(12, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
+(13, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54');
 
 -- --------------------------------------------------------
 
@@ -241,26 +245,34 @@ CREATE TABLE IF NOT EXISTS `producto` (
   `idCliente` int(11) NOT NULL,
   `prodActivo` bit(1) NOT NULL,
   `prodFechaRegistro` datetime DEFAULT NULL,
+  `idUsuario` int(11) NOT NULL,
   PRIMARY KEY (`idProducto`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodInteres`, `prodFechaInicial`, `prodFechaVencimiento`, `prodObservaciones`, `prodMontoPagar`, `idCliente`, `prodActivo`, `prodFechaRegistro`) VALUES
-(1, 'Radio grabadora modelo MG53', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 1, b'1', '2017-01-26 12:36:40'),
-(2, 'Celular Galaxy s5', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 2, b'1', '2017-01-26 12:43:50'),
-(3, 'Vajilla de losa', 44, 4, '2017-01-26', '2017-01-27', '', 45.76, 3, b'1', '2017-01-26 12:44:42'),
-(4, 'pack de libros antiguos', 40, 4, '2017-01-26', '2017-01-27', '', 41.6, 4, b'1', '2017-01-26 12:56:49'),
-(5, 'Casa de muñecas', 2, 4, '2017-01-26', '2017-01-27', '', 2.08, 5, b'0', '2017-01-26 13:29:29'),
-(6, 'computadora intel core i5', 600, 4, '2017-01-26', '2017-01-30', '', 624, 6, b'1', '2017-01-26 14:04:22'),
-(7, 'producto 1', 11, 4, '2017-01-30', '2017-02-05', '', 11.44, 7, b'1', '2017-01-30 10:57:15'),
-(8, 'caja de herramientas', 10, 4, '2017-02-01', '2017-02-02', '', 10.4, 4, b'0', '2017-02-01 18:00:40'),
-(9, 'monitor led 42"', 100, 4, '2017-02-01', '2017-02-02', 'sin cargador', 104, 4, b'1', '2017-02-01 20:40:19'),
-(10, 'televisor', 500, 4, '2017-02-01', '2017-02-20', 'dejo pantalla dañada', 560, 8, b'1', '2017-02-01 20:51:42'),
-(11, 'celular motorola ......', 70, 4, '2017-02-02', '2017-02-09', 'pantalla rota', 72.8, 9, b'1', '2017-02-02 14:33:29'),
-(12, 'caja 1', 100, 4, '2017-02-03', '2017-03-10', '', 120, 4, b'1', '2017-02-03 11:02:31');
+INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodInteres`, `prodFechaInicial`, `prodFechaVencimiento`, `prodObservaciones`, `prodMontoPagar`, `idCliente`, `prodActivo`, `prodFechaRegistro`, `idUsuario`) VALUES
+(1, 'Radio grabadora modelo MG53', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 1, b'1', '2017-01-26 12:36:40', 0),
+(2, 'Celular Galaxy s5', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 2, b'1', '2017-01-26 12:43:50', 0),
+(3, 'Vajilla de losa', 44, 4, '2017-01-26', '2017-01-27', '', 45.76, 3, b'1', '2017-01-26 12:44:42', 0),
+(4, 'pack de libros antiguos', 40, 4, '2017-01-26', '2017-01-27', '', 41.6, 4, b'1', '2017-01-26 12:56:49', 0),
+(5, 'Casa de muñecas', 2, 4, '2017-01-26', '2017-01-27', '', 2.08, 5, b'0', '2017-01-26 13:29:29', 0),
+(6, 'computadora intel core i5', 600, 4, '2017-01-26', '2017-01-30', '', 624, 6, b'1', '2017-01-26 14:04:22', 0),
+(7, 'producto 1', 11, 4, '2017-01-30', '2017-02-05', '', 11.44, 7, b'1', '2017-01-30 10:57:15', 0),
+(8, 'caja de herramientas', 10, 4, '2017-02-01', '2017-02-02', '', 10.4, 4, b'0', '2017-02-01 18:00:40', 0),
+(9, 'monitor led 42"', 100, 4, '2017-02-01', '2017-02-02', 'sin cargador', 104, 4, b'1', '2017-02-01 20:40:19', 0),
+(10, 'televisor', 500, 4, '2017-02-01', '2017-02-20', 'dejo pantalla dañada', 560, 8, b'1', '2017-02-01 20:51:42', 0),
+(11, 'celular motorola ......', 70, 4, '2017-02-02', '2017-02-09', 'pantalla rota', 72.8, 9, b'1', '2017-02-02 14:33:29', 0),
+(12, 'caja 1', 100, 4, '2017-02-03', '2017-03-10', '', 120, 4, b'1', '2017-02-03 11:02:31', 0),
+(13, 'celular md4', 11, 8, '2017-02-03', '2017-02-04', '', 11.88, 4, b'1', '2017-02-03 12:03:00', 0),
+(14, 'caja 2', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 4, b'1', '2017-02-03 12:06:26', 0),
+(15, 'caja 4', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 4, b'1', '2017-02-03 12:07:03', 0),
+(16, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 10, b'1', '2017-02-03 12:07:33', 0),
+(17, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 11, b'1', '2017-02-03 12:08:07', 0),
+(18, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 12, b'1', '2017-02-03 12:08:07', 0),
+(19, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 13, b'1', '2017-02-03 12:10:22', 2);
 
 -- --------------------------------------------------------
 

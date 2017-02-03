@@ -1,9 +1,10 @@
 <?php 
+session_start();
 include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
 
 
-$sql= "call insertarProductoSolo ('".$_POST['productoNombre']."', ".$_POST['montoentregado'].", ".$_POST['interes'].", ".$_POST['montopagar'].", '".$_POST['fechainicial']."', '".$_POST['feachavencimiento']."', '".$_POST['observaciones']."' , 1, ".$_POST['idCl'].")";
+$sql= "call insertarProductoSolo ('".$_POST['productoNombre']."', ".$_POST['montoentregado'].", ".$_POST['interes'].", ".$_POST['montopagar'].", '".$_POST['fechainicial']."', '".$_POST['feachavencimiento']."', '".$_POST['observaciones']."' , ".$_SESSION['idUsuario'].", ".$_POST['idCl'].")";
 //echo $sql;
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	/* obtener el array de objetos */

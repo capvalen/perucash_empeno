@@ -196,6 +196,7 @@ $(document).ready(function () {
 	$('#dtpFechaVencimiento').val(moment().add(1, 'days').format('DD/MM/YYYY'));
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
 	
+	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
 	if(idNew==0){ console.log('nada')}
 	else {
 		$('#rowWellFijo').removeClass('hidden');

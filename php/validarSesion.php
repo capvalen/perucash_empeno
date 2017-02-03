@@ -12,6 +12,7 @@ if ($row['idUsuario']>=1){
 	$_SESSION['Sucursal']=$_POST['user'];
 	$_SESSION['Atiende']=$_POST['nomb'];
 	$_SESSION['Power']=$row['usuPoder'];
+	$_SESSION['idUsuario']=$row['idUsuario'];
 	echo "Welcome guy!";
 }
 
