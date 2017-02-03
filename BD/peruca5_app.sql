@@ -138,7 +138,9 @@ concat(cliapellidos, ', ', clinombres) as propietario,
 prodFechaVencimiento
 FROM `producto` p inner join Cliente c
 on c.idcliente = p.idproducto
-where prodactivo = 1 and datediff( prodfechavencimiento , now())<=0$$
+where prodactivo = 1 and datediff( prodfechavencimiento , now())<=0
+order by prodfechavencimiento desc$$
+
 
 DROP PROCEDURE IF EXISTS `solicitarProductoPorId`$$
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `solicitarProductoPorId`(IN `idProd` INT)
