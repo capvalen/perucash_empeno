@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {-webkit-appearance: none;margin: 0;} 
 input[type=number] {-moz-appearance:textfield;}
@@ -311,3 +313,36 @@ input[type=number] {-moz-appearance:textfield;}
     color: #fff; /* active text color */
     background-color: #a94442; /* active bg color */
 }
+
+
+
+
+
+body {
+
+    font-family: 'Open Sans', sans-serif;
+}
+.wello{
+    background-color:#fff!important;
+   
+    border:none!important;
+
+}
+
+.wello.login-box {
+    width:400px;
+    margin:0 auto;
+    
+}
+.wello.login-box legend {
+  /*font-size:26px;*/
+  text-align:center;
+  /*font-weight:300;*/
+}
+.wello.login-box label {
+  font-weight:300;
+  font-size:16px;
+  
+}
+
+

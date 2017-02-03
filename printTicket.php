@@ -1,4 +1,5 @@
 <?php
+session_start();
 /* Change to the correct path if you copy this example! */
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 use Mike42\Escpos\Printer;
@@ -13,7 +14,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
  *  echo "Hello World" > LPT1
  */
  
-    $connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
+    $connector = new WindowsPrintConnector("smb://ICARUS/TM-U220");
 try {
     
     // A FilePrintConnector will also work, but on non-Windows systems, writes
@@ -26,13 +27,13 @@ try {
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n\n");
-    $printer -> text("   2:30 p.m. Lunes, 30 Enero 2017\n\n");
-    $printer -> text("Cliente: Pariona Valencia, Carlos Alex\n");
-    $printer -> text('Artículo: Televisor De 42" Samsung'."\n");
-    $printer -> text("Obs. Se deja sin adaptador\n\n");
-    $printer -> text("Monto entregado: S/. 100.00\n\n");
+    $printer -> text("   ".$_POST['hora']."\n\n");
+    $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n\n");
+    $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
+    $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n\n");
+    $printer -> text("Monto entregado: S/. ".$_POST['monto']."\n\n");
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
-    $printer -> text("Usuario: ".$_POST['usuario']."\n");
+    $printer -> text("Usuario: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("      Celular: # 943 798696\n");
     $printer -> text("      Web: www.perucash.com\n");

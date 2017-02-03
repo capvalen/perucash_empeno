@@ -1,1 +1,2 @@
 Header set Access-Control-Allow-Origin "http://perucash.com"
+Header set Access-Control-Allow-Origin "https://perucash.com"
