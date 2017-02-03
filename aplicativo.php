@@ -217,10 +217,10 @@ $(document).ready(function () {
 			var fechaFin=moment(dato[0].prodFechaVencimiento);
 			var respu; console.log(dato[0]);
 			if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
-				respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoDado, dato[0].prodInteres);
+				respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
 			}
 			else{//seccion cuando el producto ya paso su fecha límite
-				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoDado, dato[0].prodInteres);
+				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
 				$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
 			}
 			
@@ -234,7 +234,7 @@ $(document).ready(function () {
 			$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
 			$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
 			
-			$('#spanMontoDado').text(dato[0].prodMontoDado);
+			$('#spanMontoDado').text(dato[0].prodMontoEntregado);
 			
 			if(dato[0].prodActivo==0){$('#btn-FinalizarPrestamoFijo').addClass('hidden');}
 	
@@ -414,6 +414,9 @@ function verificarTodoRellenado(){
 	return estado;
 }
 $('#txtMontoEntregado').focusout(function () {
+	calcularPeriodo();
+});
+$('#txtMontoInteres').focusout(function () {
 	calcularPeriodo();
 })
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
