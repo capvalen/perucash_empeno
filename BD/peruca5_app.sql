@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 03-02-2017 a las 12:11:23
+-- Tiempo de generación: 03-02-2017 a las 12:16:25
 -- Versión del servidor: 5.6.34
 -- Versión de PHP: 5.6.20
 
@@ -277,6 +277,27 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `sucursal`
+--
+
+DROP TABLE IF EXISTS `sucursal`;
+CREATE TABLE IF NOT EXISTS `sucursal` (
+  `idSucursal` int(11) NOT NULL AUTO_INCREMENT,
+  `sucNombre` varchar(50) NOT NULL,
+  `sucLugar` varchar(200) NOT NULL,
+  PRIMARY KEY (`idSucursal`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `sucursal`
+--
+
+INSERT INTO `sucursal` (`idSucursal`, `sucNombre`, `sucLugar`) VALUES
+(1, 'Sucursal 1', 'Las Retamas');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuario`
 --
 
@@ -288,6 +309,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `usuNick` varchar(50) NOT NULL,
   `usuPass` varchar(100) NOT NULL,
   `usuPoder` int(11) NOT NULL,
+  `idSucursal` int(11) NOT NULL,
   `usuActivo` bit(1) NOT NULL,
   PRIMARY KEY (`idUsuario`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
@@ -296,9 +318,9 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `usuNombres`, `usuApellido`, `usuNick`, `usuPass`, `usuPoder`, `usuActivo`) VALUES
-(1, 'Carlos Alex', 'Pariona Valencia', 'cpariona', 'b84d8185d9fc5d64de366cc8a06d8ef1', 1, b'1'),
-(2, 'Sucursal', '01', 'sucursal1', '93585797569d208d914078d513c8c55a', 2, b'1');
+INSERT INTO `usuario` (`idUsuario`, `usuNombres`, `usuApellido`, `usuNick`, `usuPass`, `usuPoder`, `idSucursal`, `usuActivo`) VALUES
+(1, 'Carlos Alex', 'Pariona Valencia', 'cpariona', 'b84d8185d9fc5d64de366cc8a06d8ef1', 1, 1, b'1'),
+(2, 'Sucursal', '01', 'sucursal1', '93585797569d208d914078d513c8c55a', 2, 1, b'1');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
