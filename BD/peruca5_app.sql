@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.14
--- http://www.phpmyadmin.net
+-- version 4.0.10.18
+-- https://www.phpmyadmin.net
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 03-02-2017 a las 12:16:25
--- Versión del servidor: 5.6.34
+-- Tiempo de generación: 08-02-2017 a las 13:54:59
+-- Versión del servidor: 5.6.35
 -- Versión de PHP: 5.6.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -121,6 +121,14 @@ select @prod;
 
 END$$
 
+DROP PROCEDURE IF EXISTS `insertarUsuario`$$
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarUsuario`(IN `nombre` VARCHAR(50), IN `apellido` VARCHAR(50), IN `nick` VARCHAR(50), IN `pass` VARCHAR(50), IN `poder` INT, IN `idSucur` INT)
+    NO SQL
+INSERT INTO `usuario`(`idUsuario`, `usuNombres`, `usuApellido`,
+                      `usuNick`, `usuPass`, `usuPoder`,
+                      `idSucursal`, `usuActivo`) 
+VALUES (null,apellido,nombre,nick,md5(pass),poder,idSucur,1)$$
+
 DROP PROCEDURE IF EXISTS `listarProductosPorCliente`$$
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarProductosPorCliente`(IN `idCli` INT)
 BEGIN
@@ -141,6 +149,25 @@ on c.idcliente = p.idproducto
 where prodactivo = 1 and datediff( prodfechavencimiento , now())<=0
 order by prodfechavencimiento desc$$
 
+DROP PROCEDURE IF EXISTS `listarTodosProductosNoFinalizados`$$
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarTodosProductosNoFinalizados`()
+    NO SQL
+SELECT c.*, p.*, u.usuNombres FROM `producto` p
+inner join Cliente c
+on p.idcliente = c.idcliente
+inner join usuario u
+on p.idusuario = u.idusuario
+where prodactivo =1
+order by c.cliApellidos asc$$
+
+DROP PROCEDURE IF EXISTS `listarTodosUsuarios`$$
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarTodosUsuarios`()
+    NO SQL
+SELECT u.`idUsuario`, concat( `usuNombres`, ' ',  `usuApellido` ) as nombre, p.`descripcion`,  sucLugar 
+FROM `usuario` u inner join sucursal s
+on u.`idSucursal`= s.`idSucursal`
+inner join poder p on p.idPoder=usuPoder
+WHERE `usuActivo`=1$$
 
 DROP PROCEDURE IF EXISTS `solicitarProductoPorId`$$
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `solicitarProductoPorId`(IN `idProd` INT)
@@ -186,26 +213,31 @@ CREATE TABLE IF NOT EXISTS `Cliente` (
   `cliCelular` varchar(50) NOT NULL,
   PRIMARY KEY (`idCliente`),
   UNIQUE KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Volcado de datos para la tabla `Cliente`
 --
 
 INSERT INTO `Cliente` (`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`) VALUES
-(1, 'Valencia perez', 'Angel', '7345', 'ewq', '', '645'),
-(2, 'La rosa sanchez', 'Melisa', '7345', 'ewq', '', '645'),
-(3, 'Zuasnabar quispe', 'Clara', 'f55', '22', '', 'dda'),
-(4, 'pariona valencia', 'carlos alex', '44475064', 'av hvca 435', '', '205090'),
-(5, 'parna', 'delf', '55', 'mk', '', '225'),
-(6, 'pardo gomez', 'roberto luis', '45896521', 'av real 421', '', '843261'),
-(7, 'pariona', 'valencia', '32475064', 'mmmg', '', '514132'),
-(8, 'cardenas pineda', 'mariza', '88015138', 'las retamas 555', 'mcarenasp', '96577778'),
-(9, 'huaycuch valenzuela', 'yuri paola', '77704076', 'mpj. union', '', '931374171'),
-(10, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
-(11, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
-(12, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54'),
-(13, 'chocolate', 'carton', '14253678', 'dasdsa3', '', 'dsg54');
+(1, 'madrid vargas', 'luis fernando', '48211897', 'jr. san martin #247-huancayo', 'vanslove15@gmail.com', '934958237 '),
+(2, 'milagros sarapura', 'sharon jenifer', '46573028', 'calle apata s/n - matahuasi (paradero muruhuay)', 'sharonsahe_10@hotmail.com', '948003747'),
+(3, 'najera daza', 'raul alex', '47800688', 'jr. sausa rasa 1357 - el tambo', '', '944843829'),
+(4, 'quispe berrocal', 'miguel', '48583422', 'av. daniel a. carrion 1337-hyo', 'mqberrocal@gmail.com', '995111142'),
+(5, 'ycomedes echevarria', 'carlos', '45920195', 'jr. los bosques #440', 'carlos7lim@gmail.com', '956657898'),
+(6, 'yancan canchanya', 'katerin', '44594241', 'jose olaya #1635 jPV', '', '961925224'),
+(7, 'sedano sanchez', 'jhonnatan', '47508900', 'av. cordova, jr. progreso (chilca)', 'jlegendarios@gmail.com', '064-432241'),
+(8, 'ninanya martel ', 'luigi harold', '71097809', 'jr. pachacutec #310 -  el tambo', 'luigi_sak07@hotmail.com', '939409382'),
+(9, 'torres cardenas', 'elizabeth clarisa', '40771830', 'jr. hermilio valdizan', 'eliza-tc2406@hotmail.com', '941996175'),
+(10, 'ortiz freyre', 'miguel angel', '19911874', 'jr. moquegua #1360 - el tambo', '', '988223369'),
+(11, 'palomino gonzales ', 'milagros stefany', '76420947', 'prog. arequipa #993 - chilca', 'milili-11@hotmail.com', '964097073'),
+(12, 'rivera menendez', 'jose miguel', '44370823', 'jr. hipolito unanue s/n', 'jose-123rivera@hotmail.com', '941430582'),
+(13, 'hinostroza morales', 'moises', '44146810', 'av. los obreros #714-jPV', 'vithmor-eirl@hotmail.com', '984577740'),
+(14, 'ames miranda ', 'cesar franshesco', '47585699', 'jr. 28 de julio #229-chilca', 'famesuncofim@gmail.com', '939797541'),
+(15, 'peña palomino ', 'gianfranco', '75381486', 'prol. mariategui #328-el tambo', '75381486@continental.com.pe', '945929282'),
+(16, 'castillo gaspar', 'jhover carlos', '73197213', 'jr. lima #2509-yauris', '', '998448261'),
+(17, 'soto paredes', 'yomira gianella', '75316856', 'jr. san isidro #125- el tambo', 'solita_27_glo@hotmail.com', '979080363'),
+(18, 'perez romero', 'michael', '46512606', 'pasaje 2 de mayo #114-chilca', 'michael910mnuc@hotmail.com', '988625355');
 
 -- --------------------------------------------------------
 
@@ -225,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `poder` (
 --
 
 INSERT INTO `poder` (`idPoder`, `Descripcion`) VALUES
-(1, 'Supremo'),
+(1, 'Todopoderoso'),
 (2, 'Simple mortal');
 
 -- --------------------------------------------------------
@@ -249,32 +281,31 @@ CREATE TABLE IF NOT EXISTS `producto` (
   `prodFechaRegistro` datetime DEFAULT NULL,
   `idUsuario` int(11) NOT NULL,
   PRIMARY KEY (`idProducto`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
 INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodInteres`, `prodFechaInicial`, `prodFechaVencimiento`, `prodObservaciones`, `prodMontoPagar`, `idCliente`, `prodActivo`, `prodFechaRegistro`, `idUsuario`) VALUES
-(1, 'Radio grabadora modelo MG53', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 1, b'1', '2017-01-26 12:36:40', 0),
-(2, 'Celular Galaxy s5', 32, 4, '2017-01-26', '2017-01-27', '', 33.28, 2, b'1', '2017-01-26 12:43:50', 0),
-(3, 'Vajilla de losa', 44, 4, '2017-01-26', '2017-01-27', '', 45.76, 3, b'1', '2017-01-26 12:44:42', 0),
-(4, 'pack de libros antiguos', 40, 4, '2017-01-26', '2017-01-27', '', 41.6, 4, b'1', '2017-01-26 12:56:49', 0),
-(5, 'Casa de muñecas', 2, 4, '2017-01-26', '2017-01-27', '', 2.08, 5, b'0', '2017-01-26 13:29:29', 0),
-(6, 'computadora intel core i5', 600, 4, '2017-01-26', '2017-01-30', '', 624, 6, b'1', '2017-01-26 14:04:22', 0),
-(7, 'producto 1', 11, 4, '2017-01-30', '2017-02-05', '', 11.44, 7, b'1', '2017-01-30 10:57:15', 0),
-(8, 'caja de herramientas', 10, 4, '2017-02-01', '2017-02-02', '', 10.4, 4, b'0', '2017-02-01 18:00:40', 0),
-(9, 'monitor led 42"', 100, 4, '2017-02-01', '2017-02-02', 'sin cargador', 104, 4, b'1', '2017-02-01 20:40:19', 0),
-(10, 'televisor', 500, 4, '2017-02-01', '2017-02-20', 'dejo pantalla dañada', 560, 8, b'1', '2017-02-01 20:51:42', 0),
-(11, 'celular motorola ......', 70, 4, '2017-02-02', '2017-02-09', 'pantalla rota', 72.8, 9, b'1', '2017-02-02 14:33:29', 0),
-(12, 'caja 1', 100, 4, '2017-02-03', '2017-03-10', '', 120, 4, b'1', '2017-02-03 11:02:31', 0),
-(13, 'celular md4', 11, 8, '2017-02-03', '2017-02-04', '', 11.88, 4, b'1', '2017-02-03 12:03:00', 0),
-(14, 'caja 2', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 4, b'1', '2017-02-03 12:06:26', 0),
-(15, 'caja 4', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 4, b'1', '2017-02-03 12:07:03', 0),
-(16, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 10, b'1', '2017-02-03 12:07:33', 0),
-(17, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 11, b'1', '2017-02-03 12:08:07', 0),
-(18, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 12, b'1', '2017-02-03 12:08:07', 0),
-(19, 'bombones', 11, 4, '2017-02-03', '2017-02-04', '', 11.44, 13, b'1', '2017-02-03 12:10:22', 2);
+(1, 'tripode (hansa)', 50, 4, '2017-01-07', '2017-02-07', '', 60, 1, b'1', '2017-02-06 12:29:21', 2),
+(2, 'camara panasonic con cargador + calular huawei cun-lo3', 200, 4, '2017-01-13', '2017-02-07', '', 232, 2, b'1', '2017-02-06 12:42:39', 2),
+(3, 'laptop hp 455', 130, 4, '2017-01-18', '2017-02-18', '', 156, 3, b'1', '2017-02-06 13:00:15', 2),
+(4, 'monitor led de 20" + aspiradora vlast pro', 300, 4, '2017-01-18', '2017-02-18', '', 360, 4, b'1', '2017-02-06 13:04:22', 2),
+(5, 'monitor lG flatron 17"', 60, 4, '2017-01-19', '2017-02-19', '', 72, 5, b'1', '2017-02-06 13:08:30', 2),
+(6, 'cocina 5 hornillas bosh + blueray philips ', 500, 4, '2017-01-19', '2017-02-19', '', 600, 6, b'1', '2017-02-06 13:26:03', 2),
+(7, 'laptop hp pavilion ', 350, 4, '2017-01-20', '2017-02-20', '', 420, 7, b'1', '2017-02-06 13:30:46', 2),
+(8, 'back-ups cs 650 apc', 50, 4, '2017-01-23', '2017-02-23', 'transformador blanco', 60, 8, b'1', '2017-02-06 13:36:28', 2),
+(9, 'cubiertos rena ware + cortinas', 400, 4, '2017-01-26', '2017-02-26', '26 cubiertos ', 480, 9, b'1', '2017-02-06 13:45:32', 2),
+(10, 'celular huawei g6 l33', 80, 4, '2017-01-31', '2017-02-28', '', 92.8, 10, b'1', '2017-02-06 13:52:49', 2),
+(11, 'laptop lenovo b50-80', 500, 4, '2017-02-03', '2017-03-03', 'nuevo+cargador+boleta (en caja)', 580, 11, b'1', '2017-02-06 13:56:58', 2),
+(12, 'celular lg g3 + dvd', 150, 4, '2017-02-06', '2017-03-06', '', 174, 12, b'1', '2017-02-06 14:03:55', 2),
+(13, 'reloj casio 5468', 100, 4, '2017-01-10', '2017-02-10', 'en caja', 120, 13, b'0', '2017-02-06 14:19:15', 2),
+(14, 'horno microondas color negro', 105, 4, '2017-01-11', '2017-02-11', '', 126, 14, b'1', '2017-02-06 14:38:37', 2),
+(15, 'camara digital finefix ', 30, 4, '2017-02-07', '2017-03-07', 'con memoria 8gb ', 34.8, 15, b'1', '2017-02-07 17:46:08', 2),
+(16, 'licuadora taurus + celular huawey', 100, 4, '2017-02-07', '2017-03-07', '', 116, 16, b'1', '2017-02-07 17:51:17', 2),
+(17, 'laptop dell inspiracion 14 serie 3000', 400, 4, '2017-02-07', '2017-03-06', 'funda+cargador+mause', 464, 17, b'1', '2017-02-07 17:54:08', 2),
+(18, '2 incubadoras automaticas', 170, 4, '2017-02-07', '2017-03-07', '', 197.2, 18, b'1', '2017-02-07 17:57:25', 2);
 
 -- --------------------------------------------------------
 
@@ -314,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `idSucursal` int(11) NOT NULL,
   `usuActivo` bit(1) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -322,7 +353,9 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 INSERT INTO `usuario` (`idUsuario`, `usuNombres`, `usuApellido`, `usuNick`, `usuPass`, `usuPoder`, `idSucursal`, `usuActivo`) VALUES
 (1, 'Carlos Alex', 'Pariona Valencia', 'cpariona', 'b84d8185d9fc5d64de366cc8a06d8ef1', 1, 1, b'1'),
-(2, 'Sucursal', '01', 'sucursal1', '93585797569d208d914078d513c8c55a', 2, 1, b'1');
+(2, 'Yuri Paola', 'Huaycuch Valenzuela', 'sucursal1', '93585797569d208d914078d513c8c55a', 2, 1, b'1'),
+(3, 'Yuri Paola', 'Huaycuch Valenzuela', 'yhuaycuch', '93585797569d208d914078d513c8c55a', 2, 1, b'1'),
+(4, 'bela', 'nova', 'nbela', 'c4ca4238a0b923820dcc509a6f75849b', 1, 1, b'1');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

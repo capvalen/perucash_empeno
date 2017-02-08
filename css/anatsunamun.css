@@ -316,7 +316,7 @@ input[type=number] {-moz-appearance:textfield;}
 
 
 
-
+.small small{font-size: 80%;}
 
 body {
 
@@ -344,5 +344,8 @@ body {
   font-size:16px;
   
 }
+
+#tabNoFinalizados {}
+#tabNoFinalizados .row{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px; }
 
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html  lang="es">
+<head>
+<meta charset="UTF-8">
+	<title></title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/anubis.css">
+</head>
+<body>
+<main>
+	<div class="row text-center"><strong>Listado de productos por recoger - PerúCash</strong></div><br>
+	<div class="row"><strong>
+		<div class="col-sm-3">Apellidos y Nombres</div>
+		<div class="col-sm-2">Registro</div>
+		<div class="col-sm-2">Caduca</div>
+		<div class="col-sm-1">Móvil</div>
+		<div class="col-sm-1">Monto S/.</div>
+		<div class="col-sm-3">Garantía</div></strong>
+
+	</div>
+	<div  id="divNoFinalizados">
+		
+
+	</div>
+	<div class="push-left"><br> Total de clientes: <em id="totCli"></em>.</div>
+
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="js/moment.js"></script>
+	<script type="text/javascript">
+		$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST'}).done(function (resp) {
+	 		//console.log(JSON.parse(resp))
+	 		moment.locale('es');
+	 		$('#totCli').text(JSON.parse(resp).length)
+	 		$.each(JSON.parse(resp), function (i, dato) {
+	 			$('#divNoFinalizados').append(`<div class="row"><div class="col-sm-3 mayuscula">${i+1}. ${dato.cliApellidos}, ${dato.cliNombres}</div>
+			<div class="col-sm-2">${moment(dato.prodFechaRegistro).format('DD MMMM YYYY')}</div>
+			<div class="col-sm-2">${moment(dato.prodFechaVencimiento).format('DD MMMM YYYY')}</div>
+			<div class="col-sm-1">${dato.cliCelular}</div>
+			<div class="col-sm-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
+			<div class="col-sm-3 mayuscula">${dato.prodNombre}</div></div>`);
+	 		});
+	 		
+	 	});
+	</script>
+</main>
+</body>
+</html>

@@ -19,17 +19,21 @@ if (@!$_SESSION['Sucursal']){
 <body>
 
 
-<div class="container formulario">
+<div class="container formulario col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 <div class="text-center">
 <img src="images/logo.png">
 <h3>PerúCa$h<small> Sistema de préstamos y empeños</small></h3></div>
 
-<div class="panel with-nav-tabs panel-warning">
+<div class="panel with-nav-tabs panel-warning hidden-print">
 	<div class="panel-heading">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#tabRegistro" data-toggle="tab">Registro</a></li>
-			<li><a href="#tabBusqueda" data-toggle="tab">Búsqueda</a></li>
-			<li><a href="#tabDetalle" data-toggle="tab">Productos Vencidos <span class="badge"> <?php require('php/contarVencidos.php'); ?></span></a></li>
+			<li class="active"><a href="#tabRegistro" data-toggle="tab"><i class="icofont icofont-favourite"></i> Registro</a></li>
+			<li><a href="#tabBusqueda" data-toggle="tab"><i class="icofont icofont-favourite"></i> Búsqueda</a></li>
+			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Productos Vencidos <span class="badge"> <?php require('php/contarVencidos.php'); ?></span></a></li>
+			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados</a></li>
+			<?php if ( $_SESSION['Power']== 1){ ?>
+			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear usuarios</a></li>
+			<?php  } ?>
 		  </ul>
 	</div>
 	<div class="panel-body">
@@ -50,7 +54,7 @@ if (@!$_SESSION['Sucursal']){
 
 	<div class="row well well-amarillo">
 		<p><strong>Datos del bien que ingresa:</strong></p>
-		<label>Objeto que se ingresa:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
+		<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
 		<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
 		<div class="col-sm-6"><label>Interés (%):</label> <input type="number" id="txtMontoInteres" class="form-control" placeholder="% de Interés" value="4" min ="0" step="1"></div>
 		<div class="col-sm-6"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
@@ -103,7 +107,7 @@ if (@!$_SESSION['Sucursal']){
 	</div>
 	
 	</div>
-	<div class="tab-pane fade  " id="tabDetalle"><p>Se encontraron <strong> <?php require('php/contarVencidos.php'); ?></strong> productos de fecha límite.</p>
+	<div class="tab-pane fade" id="tabDetalle"><p>Se encontraron <strong> <?php require('php/contarVencidos.php'); ?></strong> productos de fecha límite.</p>
 		<div class="row hidden-xs"><strong>
 			<div class="col-sm-4">Nombre del producto</div>
 			<div class="col-sm-1">Monto S/.</div>
@@ -113,10 +117,63 @@ if (@!$_SESSION['Sucursal']){
 		<div class="row" id="divProdAVencerse">
 			<p>Sin elementos que mostrar</p>
 		</div>
+
+	<!-- fin de tab pane 1 -->
 	</div>
+	<div class="tab-pane fade" id="tabNoFinalizados">
+	<button class="btn btn-negro btn-outline" id="btnImprimirNoFinalizados"><i class="icofont icofont-print"></i> Imprimir éste reporte</button>
+		<div class="row"><strong>
+			<div class="col-sm-3">Apellidos y Nombres</div>
+			<div class="col-sm-2">Registro</div>
+			<div class="col-sm-2">Caduca</div>
+			<div class="col-sm-1">Móvil</div>
+			<div class="col-sm-1">Entregado</div>
+			<div class="col-sm-3">Garantía</div></strong>
+
+		</div>
+
+		<div  id="divNoFinalizados">
+			
+		</div>
+	<!-- fin de tab pane 3 -->
+	</div>
+	<?php if ( $_SESSION['Power']== 1){ ?>
+	<div class="tab-pane fade" id="tabCrearUsuario">
+		<div class="row well">
+		<p>Creación de usuarios</p>
+			<div class="col-xs-12 col-sm-6"><strong>Apellidos</strong> <input type="text" class="form-control mayuscula" id="txtApellUser" placeholder="Apellidos del usuario"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Nombres</strong> <input type="text" class="form-control mayuscula" id="txtNombrUser" placeholder="Nombres del usuario"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Nick</strong> <input type="text" class="form-control" id="txtNickUser" placeholder="Nick del usuario para ingresar al sistema"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Contraseña</strong> <input type="password" class="form-control" id="txtPassUser" placeholder="Contraseña"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Repita la contraseña</strong> <input type="password" class="form-control" id="txtPassUser2" placeholder="Confirmar la contraseña"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Nivel</strong> 
+				<select id="cmbNivelSel" class="form-control">
+					<option value="0">Seleccione uno</option>
+					<?php include 'php/listarPoderes.php'; ?>
+				</select>
+			</div>
+			
+			<div class="col-xs-12 col-sm-6"><strong>Sucursal</strong>
+				<select  id="cmbSucurSel" class="form-control">
+					<option value="0">Seleccione uno</option>
+					<?php include 'php/listarSucursales.php'; ?>
+				</select>
+			</div>
+			<div class="col-xs-12 text-center"> <button id="btnGuardarUsuario" style="margin-top: 5px;" class="btn btn-outline btn-morado"><i class="icofont icofont-user-alt-7"></i> Generar nuevo ususario</button></div>
+			
+		</div>
+		<div class="row well" id="divListadoUser"><p>Listado de usuarios activos:</p>
+		<!-- <p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 1. Carlos Alex Pariona Valencia asignado a «Las Retamas» sucursal</p>
+		<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 2. Carlos Alex Pariona Valencia</p>
+		<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 3. Carlos Alex Pariona Valencia</p> -->
+		</div>
+	<!-- fin de tab pane usuarios -->
+	</div>
+	<?php } ?>
 
   </div>
-  <div class="pull-right">User actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em></div>
+  <div class="pull-right">User actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
+  <button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
 	</div>
 </div>
 
@@ -190,6 +247,7 @@ if (@!$_SESSION['Sucursal']){
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/impotem.js"></script>
+<script type="text/javascript" src="js/jquery.printPage.js"></script>
 <script>
 $(document).ready(function () {
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
@@ -197,7 +255,7 @@ $(document).ready(function () {
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
 	
 	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
-	if(idNew==0){ console.log('nada')}
+	if(idNew==0){ }//console.log('nada')
 	else {
 		$('#rowWellFijo').removeClass('hidden');
 		$('#rowWellCambiante').addClass('hidden');
@@ -439,12 +497,38 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoPagar).toFixed(2)}</div>
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.startOf('day').fromNow()}</div>
-			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-social-aim"></i></a> </span>
+			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-eye"></i></a> </span>
 		</div>`)
 
 	 		})
 	 		// body...
 	 	})
+	 }
+	 if(target=='#tabNoFinalizados'){
+	 	$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST'}).done(function (resp) {
+	 		//console.log(JSON.parse(resp))
+	 		moment.locale('es');
+	 		$.each(JSON.parse(resp), function (i, dato) {
+	 			$('#divNoFinalizados').append(`<div class="row"><div class="col-xs-3 mayuscula">${i+1}. ${dato.cliApellidos}, ${dato.cliNombres}</div>
+			<div class="col-xs-2">${moment(dato.prodFechaInicial).format('DD MMMM YYYY')}</div>
+			<div class="col-xs-2">${moment(dato.prodFechaVencimiento).format('DD MMMM YYYY')}</div>
+			<div class="col-xs-1">${dato.cliCelular}</div>
+			<div class="col-xs-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
+			<div class="col-xs-3 mayuscula">${dato.prodNombre}</div></div>`);
+	 		});
+	 		
+	 	});
+	 }
+	 if(target=='#tabCrearUsuario'){
+	 	$.ajax({url: 'php/listarTodosUsuarios.php', type: 'POST'}).done(function (resp) {
+	 		//console.log(JSON.parse(resp))
+	 		moment.locale('es');
+	 		$.each(JSON.parse(resp), function (i, dato) {
+	 			$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> ${i+1}. <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
+	 			
+	 		});
+	 		
+	 	});
 	 }
 });
 function rellenarTabBusqueda(){
@@ -572,6 +656,73 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarPrestamoMovil', function () {
 	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
 	 	if(parseInt(resp)==1){$('#rowWellCambiante').eq(indice).find('.btn-FinalizarPrestamoMovil').addClass('hide'); }
  	});
+});
+
+/*$("#btnImprimirNoFinalizados").printPage({
+	url: 'reporteNoFinalizados.html',
+	attr: 'href',
+	message: 'Espere mientras se crea el reporte.'
+})*/
+$('#btnImprimirNoFinalizados').click(function () {
+	// body...
+	var codigoCuadro=encodeURIComponent ($('#divNoFinalizados').html());
+	//console.log(codigoCuadro)
+	urlImpr='demoprint.html?codigoTabla='+codigoCuadro;
+	//console.log(urlImpr);
+	$('#btnImprimirNoFinalizados').printPage({
+		url: urlImpr,
+		attr: "href",
+		message:"Tu documento está siendo creado"})
+});
+$('#btnCerrarSesion').click(function () {
+	window.location.href = "php/desconectar.php" 
+});
+$('#txtNombrUser').focusout(function () {
+	var nombr= $('#txtNombrUser').val()
+	var apellido = $('#txtApellUser').val();
+	
+	$('#txtNickUser').val( nombr.substr(0,1) + apellido.replace(/\ /g, ''))//reemplaza todos los caracteres 'espacio' por no espacio
+});
+function variableUsuario(){
+	//console.log( $('#cmbNivelSel').val())
+	var estado=false;
+	if( $('#txtApellUser').val() ==''  || $('#txtNombrUser').val() ==''){$('#lblFalta').text('Rellene los campos de apellidos y nombres.'); $('.modal-faltaCompletar').modal('show');}
+	else if( $('#txtNickUser').val() =='' ){$('#lblFalta').text('Falta asignar un nick al usuario');  $('.modal-faltaCompletar').modal('show');}
+	else if( $('#txtPassUser').val() ==""){$('#lblFalta').text('No puede dejar vacío el campo de contraseña.');  $('.modal-faltaCompletar').modal('show');}
+	else if( $('#txtPassUser').val() != $('#txtPassUser2').val() ){$('#lblFalta').text('Las contraseñas no coinciden.');  $('.modal-faltaCompletar').modal('show');}
+	else if( $('#cmbNivelSel').val() ==0 ){$('#lblFalta').text('Seleccione una categoría de Nivel.');  $('.modal-faltaCompletar').modal('show');}
+	else if( $('#cmbSucurSel').val() ==0 ){$('#lblFalta').text('Seleccione una categoría de Sucursal.');  $('.modal-faltaCompletar').modal('show');}
+	else{estado = true}
+	return estado;
+}
+$('#btnGuardarUsuario').click(function () {
+	//console.log('crea')
+	if(variableUsuario()){
+		$.ajax({ url: 'php/insertarUsuario.php', type: 'POST', data:{
+			apellido: $('#txtApellUser').val(),
+			nombre: $('#txtNombrUser').val(),
+			nick: $('#txtNickUser').val(),
+			passw: $('#txtPassUser').val(),
+			nivel: $('#cmbNivelSel').val(),
+			sucursal: $('#cmbSucurSel').val()
+		} }).done(function (resp) {
+			if(parseInt(resp)==1){
+				$('#divListadoUser').prepend(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> ${$('#txtApellUser').val()} ${$('#txtNombrUser').val()} asignado a «${$('#cmbSucurSel').text}» sucursal</p>`);
+				$('.modal-ventaGuardada').modal('show');
+			}else{
+				$('#lblFalta').text('Con la conexión.');  $('.modal-faltaCompletar').modal('show');
+			}
+			// body...
+		})
+	}
+	// body...
+// 	txtApellUser
+// txtNombrUser
+// txtNickUser
+// txtPassUser
+// txtPassUser2
+// cmbNivelSel
+// cmbSucurSel
 });
 </script>
 </body>
