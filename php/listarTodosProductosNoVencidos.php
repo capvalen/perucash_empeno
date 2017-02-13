@@ -5,7 +5,7 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call listarTodosProductosNoFinalizados()");
+$log = mysqli_query($conection,"call listarTodosProductosNoFinalizados( ".$_POST['idSucursal'].")");
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))

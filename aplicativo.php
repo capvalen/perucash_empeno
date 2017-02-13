@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (@!$_SESSION['Sucursal']){
-	header("Location:index.html");
+	header("Location:index.php");
 }
 ?>
 <!DOCTYPE html>
@@ -23,13 +23,21 @@ if (@!$_SESSION['Sucursal']){
 <div class="text-center">
 <img src="images/logo.png">
 <h3>PerúCa$h<small> Sistema de préstamos y empeños</small></h3></div>
+<?php if ( $_SESSION['Power']== 1){ ?>
+<div class="row">
+	<div class="col-xs-6 col-md-offset-3"><div><label for="">Ud. está visualizando los datos de:</label> <select class="form-control" name="Achinga" id="cmbOficinasTotal">
+		<?php  include "php/listarSucursalesMenos1.php"; ?>	
+	</select> <button class="btn form-control btn-info" id="btnProbar">Probar</button></div></div>
+</div>
+	<br>
+<?php  } ?>
 
 <div class="panel with-nav-tabs panel-warning hidden-print">
 	<div class="panel-heading">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#tabRegistro" data-toggle="tab"><i class="icofont icofont-favourite"></i> Registro</a></li>
 			<li><a href="#tabBusqueda" data-toggle="tab"><i class="icofont icofont-favourite"></i> Búsqueda</a></li>
-			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Productos Vencidos <span class="badge"> <?php require('php/contarVencidos.php'); ?></span></a></li>
+			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Productos Vencidos <span class="badge" id="spanContarVenc"></span></a></li>
 			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados</a></li>
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear usuarios</a></li>
@@ -107,7 +115,7 @@ if (@!$_SESSION['Sucursal']){
 	</div>
 	
 	</div>
-	<div class="tab-pane fade" id="tabDetalle"><p>Se encontraron <strong> <?php require('php/contarVencidos.php'); ?></strong> productos de fecha límite.</p>
+	<div class="tab-pane fade" id="tabDetalle"><p>Se encontraron <strong id="strFaltan"> </strong> productos de fecha límite.</p>
 		<div class="row hidden-xs"><strong>
 			<div class="col-sm-4">Nombre del producto</div>
 			<div class="col-sm-1">Monto S/.</div>
@@ -172,7 +180,7 @@ if (@!$_SESSION['Sucursal']){
 	<?php } ?>
 
   </div>
-  <div class="pull-right">User actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
+  <div class="pull-right">Sessión actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
   <button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
 	</div>
 </div>
@@ -253,6 +261,11 @@ $(document).ready(function () {
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('#dtpFechaVencimiento').val(moment().add(1, 'days').format('DD/MM/YYYY'));
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
+	$.idOficina=0;
+	if( <?php echo $_SESSION['idSucursal']; ?> !=3){ $.idOficina =  <?php echo $_SESSION['idSucursal']; ?> }
+	else{$.idOficina=$('#cmbOficinasTotal').val();}
+	cambiodeOficina()
+;	
 	
 	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
 	if(idNew==0){ }//console.log('nada')
@@ -485,7 +498,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 }
 	 if(target=='#tabDetalle'){
 	 	$('#divProdAVencerse').children().remove();
-	 	$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST' }). done(function (resp) {
+	 	$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }). done(function (resp) {
 	 		
 	 		var dato = JSON.parse(resp);
 	 		
@@ -493,7 +506,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 			var limite = moment(elem.prodFechaVencimiento);
 	 			//console.log(elem)
 	 			$('#divProdAVencerse').append(`<div class="row">
-			<div class="col-sm-4"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
+			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoPagar).toFixed(2)}</div>
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.startOf('day').fromNow()}</div>
@@ -505,7 +518,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 	})
 	 }
 	 if(target=='#tabNoFinalizados'){
-	 	$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST'}).done(function (resp) {
+	 	$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }).done(function (resp) {
 	 		//console.log(JSON.parse(resp))
 	 		moment.locale('es');
 	 		$.each(JSON.parse(resp), function (i, dato) {
@@ -531,9 +544,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 	});
 	 }
 });
-function rellenarTabBusqueda(){
 
-}
 
 $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 	if(code==13 && $('#txtBuscarPersona').val()!=''  ){	e.preventDefault();
@@ -724,6 +735,22 @@ $('#btnGuardarUsuario').click(function () {
 // cmbNivelSel
 // cmbSucurSel
 });
+$('#cmbNivelSel').change(function () {
+	if($('#cmbNivelSel').val()==1){ 
+		$('#cmbSucurSel').val('3');
+	}else {$('#cmbSucurSel').val('0');}
+});
+function cambiodeOficina(){
+	$.ajax({url:'php/contarVencidos.php', type: 'POST', data:{ idSucursal: $.idOficina }}).done(function (resp) { console.log('resp ' + resp)
+		$('#spanContarVenc').text(resp);
+		$('#strFaltan').text(resp);
+	});
+}
+$('#cmbOficinasTotal').change(function () {
+	$.idOficina= $('#cmbOficinasTotal').val();
+	cambiodeOficina();
+});
+
 </script>
 </body>
 </html>

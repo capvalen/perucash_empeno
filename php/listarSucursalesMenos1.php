@@ -1,16 +1,15 @@
 <?php 
 
-
 include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call contarVencidos(".$_POST['idSucursal'].");");
+$log = mysqli_query($conection,"SELECT * FROM sucursal where idSucursal<>3 order by idSucursal asc;");
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {
-	echo $row['Num'];
+	echo '<option value="'.$row['idSucursal'].'">'.$row['sucLugar'].'</option>';
 	
 	
 }

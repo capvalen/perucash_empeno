@@ -4,15 +4,16 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 
 
-$log = mysqli_query($conection,"select * from  usuario where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."' and usuActivo=1;");
-
+$log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."' and u.idSucursal= ".$_POST['offi']." and usuPoder= ".$_POST['modalidad']." and usuActivo=1;");
 
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if ($row['idUsuario']>=1){
-	$_SESSION['Sucursal']=$_POST['user'];
-	$_SESSION['Atiende']=$_POST['nomb'];
+	$_SESSION['idSucursal']=$row['idSucursal'];
+	$_SESSION['Sucursal']=$row['sucLugar'];
+	$_SESSION['Atiende']=$row['usuNombres'];
 	$_SESSION['Power']=$row['usuPoder'];
 	$_SESSION['idUsuario']=$row['idUsuario'];
+	$_SESSION['oficina']=$_POST['offi'];
 	echo "Welcome guy!";
 }
 
