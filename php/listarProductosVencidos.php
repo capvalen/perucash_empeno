@@ -12,7 +12,7 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {
 	$filas[]= array('idproducto' => $row['idproducto'],
 		'prodNombre' => $row['prodNombre'],
-		'prodMontoPagar' => $row['prodMontoPagar'],		
+		'prodMontoEntregado' => $row['prodMontoEntregado'],		
 		'propietario' => $row['propietario'],
 		'prodFechaVencimiento' => $row['prodFechaVencimiento']
 	);

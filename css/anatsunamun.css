@@ -345,7 +345,9 @@ body {
   
 }
 
-#tabNoFinalizados {}
-#tabNoFinalizados .row{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px; }
 
-
+#tabDetalle .row, #tabNoFinalizados .row, #divListadoUser p{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px;transition: all 1s; }
+#tabDetalle .row:hover, #tabNoFinalizados .row:hover {background-color: #fcebba;
+    border: 1px solid #968143;
+    border-radius: 4px;
+    transition: all 1s;}

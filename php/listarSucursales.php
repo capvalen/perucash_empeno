@@ -4,12 +4,12 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"SELECT * FROM sucursal order by sucLugar asc;");
+$log = mysqli_query($conection,"SELECT * FROM sucursal where sucActivo =1 order by sucLugar asc;");
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {
-	echo '<option value="'.$row['idSucursal'].'">'.$row['sucLugar'].'</option>';
+	echo '<option class="mayuscula" value="'.$row['idSucursal'].'">'.$row['sucNombre'].'</option>';
 	
 	
 }

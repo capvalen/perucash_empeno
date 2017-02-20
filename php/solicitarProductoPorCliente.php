@@ -20,7 +20,8 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodMontoDado' => $row['prodMontoEntregado'],
 		'prodMontoPagar' => $row['prodMontoPagar'],
 		'prodFechaRegistro' => $row['prodFechaRegistro'],
-		'prodActivo' => $row['prodActivo']
+		'prodActivo' => $row['prodActivo'],
+		'prodAdelanto' => $row['prodAdelanto'],
 
 
 	);

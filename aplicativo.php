@@ -27,12 +27,12 @@ if (@!$_SESSION['Sucursal']){
 <div class="row">
 	<div class="col-xs-6 col-md-offset-3"><div><label for="">Ud. está visualizando los datos de:</label> <select class="form-control" name="Achinga" id="cmbOficinasTotal">
 		<?php  include "php/listarSucursalesMenos1.php"; ?>	
-	</select> <button class="btn form-control btn-info" id="btnProbar">Probar</button></div></div>
+	</select> <button class="btn form-control btn-info hidden" id="btnProbar">Probar</button></div></div>
 </div>
 	<br>
 <?php  } ?>
 
-<div class="panel with-nav-tabs panel-warning hidden-print">
+<div class="panel with-nav-tabs panel-primary hidden-print">
 	<div class="panel-heading">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#tabRegistro" data-toggle="tab"><i class="icofont icofont-favourite"></i> Registro</a></li>
@@ -41,6 +41,7 @@ if (@!$_SESSION['Sucursal']){
 			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados</a></li>
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear usuarios</a></li>
+			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear oficinas</a></li>
 			<?php  } ?>
 		  </ul>
 	</div>
@@ -88,7 +89,7 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label>Apellidos y Nombres: </label> <span class="text-primary mayuscula" id="spanNombre"></span></div>
 			<div class="col-sm-6"><label>Documento de Identidad: </label> <span class="text-primary mayuscula"  id="spanDni"></span></div>
 			<div class="col-sm-6"><label>Dirección domiciliaria: </label> <span class="text-primary mayuscula"  id="spanDireccion"></span></div>
-			<div class="col-sm-6"><label>Correo electrónico: </label> <span class="text-primary mayuscula"  id="spanCorreo"></span></div>
+			<div class="col-sm-6"><label>Correo electrónico: </label> <span class="text-primary "  id="spanCorreo"></span></div>
 			<div class="col-sm-6"><label>Celular(es): </label> <span class="text-primary mayuscula"  id="spanCelular"></span></div>
 		</div>
 		<p><strong><i class="icofont icofont-cube"></i> Listado de productos adquiridos por el cliente:</strong></p>
@@ -97,16 +98,19 @@ if (@!$_SESSION['Sucursal']){
 			<span class="hidden" id="lblIdProductosEnc"><?php echo $_GET['idprod']; ?></span>
 			<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">4</span>%</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin"></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"> <span class="sr-only" id="spanFechaInicioNum"></span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin"></span> <span class="sr-only" id="spanFechaFinNum"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">0.00</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar por parte del cliente: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">0.00</span></span></div>
+			<!-- <div class="col-sm-6 col-sm-offset-6"><label><i class="icofont icofont-chat"></i> Deuda del cliente: </label> <span class="text-success">S/. <span id="spanDeudaFinal">0.00</span></span></div> -->
 			<div class="col-sm-8 col-sm-offset-2">
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 				<button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+				<button class="btn btn-indigo btn-outline" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
 				<button class="btn btn-success btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 			</div>
 		</div>
@@ -122,7 +126,7 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-4">Dueño</div>
 			<div class="col-sm-2">Fecha</div></strong>
 		</div>
-		<div class="row" id="divProdAVencerse">
+		<div id="divProdAVencerse">
 			<p>Sin elementos que mostrar</p>
 		</div>
 
@@ -148,7 +152,7 @@ if (@!$_SESSION['Sucursal']){
 	<?php if ( $_SESSION['Power']== 1){ ?>
 	<div class="tab-pane fade" id="tabCrearUsuario">
 		<div class="row well">
-		<p>Creación de usuarios</p>
+		<p><strong>Creación de usuarios</strong></p>
 			<div class="col-xs-12 col-sm-6"><strong>Apellidos</strong> <input type="text" class="form-control mayuscula" id="txtApellUser" placeholder="Apellidos del usuario"></div>
 			<div class="col-xs-12 col-sm-6"><strong>Nombres</strong> <input type="text" class="form-control mayuscula" id="txtNombrUser" placeholder="Nombres del usuario"></div>
 			<div class="col-xs-12 col-sm-6"><strong>Nick</strong> <input type="text" class="form-control" id="txtNickUser" placeholder="Nick del usuario para ingresar al sistema"></div>
@@ -170,17 +174,39 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-xs-12 text-center"> <button id="btnGuardarUsuario" style="margin-top: 5px;" class="btn btn-outline btn-morado"><i class="icofont icofont-user-alt-7"></i> Generar nuevo ususario</button></div>
 			
 		</div>
-		<div class="row well" id="divListadoUser"><p>Listado de usuarios activos:</p>
+		<div class="row well" id="divListadoUser"><h3>Listado de usuarios activos:</h3>
 		<!-- <p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 1. Carlos Alex Pariona Valencia asignado a «Las Retamas» sucursal</p>
 		<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 2. Carlos Alex Pariona Valencia</p>
 		<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> 3. Carlos Alex Pariona Valencia</p> -->
 		</div>
 	<!-- fin de tab pane usuarios -->
 	</div>
+
+	<div class="tab-pane fade" id="tabCrearOficina">
+		<div class="row well">
+			<p><strong>Creación de oficinas</strong></p>
+			<div class="col-xs-12 col-sm-6">
+				<strong>Nombre de nueva oficina</strong>
+				<input type="text" class="form-control mayuscula" id="txtNomOfic" placeholder="Nombra de la nueva oficina">
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<strong>Dirección de la nueva oficina</strong>
+				<input type="text" class="form-control mayuscula" id="txtDirecOfic" placeholder="Dirección de la nueva oficina">
+			</div>
+			<div class="col-xs-12 text-center"><br>
+				<button class="btn btn-control btn-negro btn-outline" id="btnGuardarOffice"><i class="icofont icofont-industries-alt-5"></i> Guardar oficina</button>
+			</div>
+
+		</div>
+		<div class="row well" id="divListadoOffi"><h3>Listado de oficinas activas:</h3>
+
+		</div>
+	</div>
+
 	<?php } ?>
 
   </div>
-  <div class="pull-right">Sessión actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
+  <br><div class="pull-right">Sessión actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
   <button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
 	</div>
 </div>
@@ -210,6 +236,28 @@ if (@!$_SESSION['Sucursal']){
 		</div>
 		</div>
 	</div>
+
+ <!-- Modal para indicar que se guardó con éxito -->
+	<div class="modal fade modal-adelantarPago" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog " role="document">
+		<div class="modal-content">
+			<div class="modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Adelantar pago</h4>
+			</div>
+			<div class="modal-body container-fluid text-center">
+				<p>Ingrese una cantidad para agregarlo como adelanto. <span class="sr-only" id="spanIdProdxAdelanto"></span></p>
+				<p class="text-danger hidden" id="pAdelantoMal">No puede ingresar un valor negativo o vacío.</p>
+				<div class="col-sm-4 col-sm-offset-4"><input type="number" class="form-control text-center" value='0.00' step=1 min=0></div>
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" id="btnCancelarIngreso" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cancelar ingreso</button>
+			<button class="btn btn-primary btn-outline" id="btnIngresarPago" ><i class="icofont icofont-check"></i> Ingresar pago e imprimir ticket</button></div>
+		</div>
+		</div>
+	</div>
+	
+</div>
 
 
  <!-- Modal para indicar que se guardó con éxito -->
@@ -282,7 +330,7 @@ $(document).ready(function () {
 			$('#spanDireccion').text(dato[0].cliDireccion);
 			$('#spanCorreo').text(dato[0].cliCorreo);
 			$('#spanCelular').text(dato[0].cliCelular);
-			if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').text(dato[0].prodObservaciones);}
+			if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
 
 			var hoy= moment();
 			var fechaIni =moment(dato[0].prodFechaInicial);
@@ -295,18 +343,22 @@ $(document).ready(function () {
 				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
 				$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
 			}
-			
+						
 			$('#spanPeriodo2').text(respu[0].periodo);
 			$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
-			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato[0].prodMontoDado)).toFixed(2));
+			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
 
 			moment.locale('es');
 			$('#spanProducto').text(dato[0].prodNombre);
 			$('#spanPorcent').text(dato[0].prodInteres);
 			$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
 			$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
+			$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
+			$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
 			
-			$('#spanMontoDado').text(dato[0].prodMontoEntregado);
+			$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
+			$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
+			$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
 			
 			if(dato[0].prodActivo==0){$('#btn-FinalizarPrestamoFijo').addClass('hidden');}
 	
@@ -494,7 +546,7 @@ $('#txtMontoInteres').focusout(function () {
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 var target = $(e.target).attr("href") // activated tab
 	 if(target=='#tabBusqueda'){
-	  rellenarTabBusqueda();
+	  // rellenarTabBusqueda();
 	 }
 	 if(target=='#tabDetalle'){
 	 	$('#divProdAVencerse').children().remove();
@@ -507,7 +559,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 			//console.log(elem)
 	 			$('#divProdAVencerse').append(`<div class="row">
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
-			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoPagar).toFixed(2)}</div>
+			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.startOf('day').fromNow()}</div>
 			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-eye"></i></a> </span>
@@ -527,7 +579,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			<div class="col-xs-2">${moment(dato.prodFechaVencimiento).format('DD MMMM YYYY')}</div>
 			<div class="col-xs-1">${dato.cliCelular}</div>
 			<div class="col-xs-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
-			<div class="col-xs-3 mayuscula">${dato.prodNombre}</div></div>`);
+			<div class="col-xs-3 mayuscula">${dato.prodNombre} <a class="btn btn-negro btn-outline btnIcono pull-right" href="aplicativo.php?idprod=${dato.idProducto}"><i class="icofont icofont-eye"></i></a></div></div>`);
 	 		});
 	 		
 	 	});
@@ -536,11 +588,21 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 	$.ajax({url: 'php/listarTodosUsuarios.php', type: 'POST'}).done(function (resp) {
 	 		//console.log(JSON.parse(resp))
 	 		moment.locale('es');
+	 		$('#divListadoUser').children().remove();
 	 		$.each(JSON.parse(resp), function (i, dato) {
-	 			$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline"><i class="icofont icofont-minus-square"></i></button> ${i+1}. <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
+	 			$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarUser"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idUsuario}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
 	 			
 	 		});
 	 		
+	 	});
+	 }
+	 if(target=='#tabCrearOficina'){
+	 	$.ajax({url: 'php/listarSucDisplay.php', type:'POST'}).done(function (resp) {
+	 		$('#divListadoOffi').children().remove();
+	 		$.each(JSON.parse(resp), function (i, dato) {
+	 			$('#divListadoOffi').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarOffice"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idSucursal}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.sucNombre}</strong> ubicado en: «${dato.sucLugar}».</p>`);
+	 			
+	 		});
 	 	});
 	 }
 });
@@ -599,6 +661,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 				botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
 				<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 				<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+				<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
 				<button class="btn btn-success btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 			</div>`;
 			}else{
@@ -611,13 +674,15 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 			<span class="hidden" id="lblIdProductosEnc">${dato.idProducto}</span>
 			<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto">${dato.prodNombre}</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${dato.prodInteres}</span>%</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${dato.prodFechaInicial}</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${dato.prodFechaVencimiento}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${moment(dato.prodFechaInicial).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaInicioNum">${dato.prodFechaInicial}</span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${moment(dato.prodFechaVencimiento).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaFinNum">${dato.prodFechaVencimiento}</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${parseFloat(dato.prodMontoDado).toFixed(2)}</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar por parte del cliente: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">${obsDin}</span></em></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">das ${obsDin}</span></em></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">${parseFloat(dato.prodAdelanto).toFixed(2)}</span></span></div>
+			
 			${botonAgregar}
 		</div>`)
 		})
@@ -741,7 +806,7 @@ $('#cmbNivelSel').change(function () {
 	}else {$('#cmbSucurSel').val('0');}
 });
 function cambiodeOficina(){
-	$.ajax({url:'php/contarVencidos.php', type: 'POST', data:{ idSucursal: $.idOficina }}).done(function (resp) { console.log('resp ' + resp)
+	$.ajax({url:'php/contarVencidos.php', type: 'POST', data:{ idSucursal: $.idOficina }}).done(function (resp) { //console.log('resp ' + resp)
 		$('#spanContarVenc').text(resp);
 		$('#strFaltan').text(resp);
 	});
@@ -751,6 +816,72 @@ $('#cmbOficinasTotal').change(function () {
 	cambiodeOficina();
 });
 
+$('#btn-AdelantoPrestamoFijo').click(function () {
+	$('#spanIdProdxAdelanto').text($(this).parent().parent().find('#lblIdProductosEnc').text());
+	$('#pAdelantoMal').addClass('hidden');
+	$('#btnIngresarPago').removeClass('disabled');
+	$('.modal-adelantarPago').modal('show');
+});
+$('#rowWellCambiante').on('click', '.btn-AdelantoPrestamoMovil', function () {
+	$('#spanIdProdxAdelanto').text($(this).parent().parent().find('#lblIdProductosEnc').text());
+	$('#pAdelantoMal').addClass('hidden');
+	$('#btnIngresarPago').removeClass('disabled');
+	$('.modal-adelantarPago').modal('show');
+});
+$('#btnCancelarIngreso').click(function () {
+	$('.modal-adelantarPago').modal('hide');
+});
+$('#btnIngresarPago').click(function () {
+	
+	if($('#btnIngresarPago').hasClass('disabled')){ }
+	else{$(this).addClass('disabled');
+		if($('.modal-adelantarPago input').val()=='' || parseInt($('.modal-adelantarPago input').val())==0 ){ $('#pAdelantoMal').removeClass('hidden')}
+	else{$('#pAdelantoMal').addClass('hidden');
+	//Guardar data de adelanto
+		guardarAdelanto($('.modal-adelantarPago input').val(), $('#spanIdProdxAdelanto').text());
+	}}
+});
+function guardarAdelanto(cant, produc){
+	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) { console.log(resp);
+		if(resp==1){
+			var adela=parseFloat( $('#spanAdelanto').text());
+			var dado = parseFloat($('#spanMontoDado').text());
+			
+			$('#spanMontoDado').text(parseFloat(dado-cant).toFixed(2));
+			$('#spanAdelanto').text( parseFloat(adela+parseFloat(cant)).toFixed(2) );
+			$('#spanObservacion').html( 'Se adelantó S/. '+ cant+' del monto S/. '+dado+' el día '+moment().format('DD/MM/YYYY')+'<br>'+$('#spanObservacion').text())
+			$('#btnIngresarPago').removeClass('disabled');
+			$('.modal-adelantarPago').modal('hide');}
+		else{$('#pAdelantoMal').removeClass('hidden').text('Hubo un problema con la conexión.');}
+		// body...
+	});
+}
+$('#divListadoUser').on('click', '.btnEliminarUser', function () {
+	console.log('limi')
+});
+$('#btnGuardarOffice').click(function () {
+	if(!$('#btnGuardarOffice').hasClass('disabled')){
+		$('#btnGuardarOffice').addClass('disabled');
+		$.ajax({url: 'php/insertarSucursalNueva.php', type: 'POST', data: {nombre: $('#txtNomOfic').val() , direccion:$('#txtDirecOfic').val() }}).done(function (resp) {
+			if(resp==1){
+				$('.modal-ventaGuardada').modal('show');
+			}else{
+				$('#lblFalta').text('Con la conexión.');  $('.modal-faltaCompletar').modal('show');
+				$('#btnGuardarOffice').removeClass('disabled');
+			}
+		});
+	}
+
+});
+$('#divListadoOffi').on('click', '.btnEliminarOffice', function () {
+	var ind= $(this).next().text();
+	$.ajax({url: 'php/updateFinalizarSucursal.php', type: 'POST', data: {idSuc: ind}}).done(function (resp) {
+		console.log(resp)
+		if(resp==1){
+			$('.modal-ventaGuardada').modal('show');
+		}
+	})
+});
 </script>
 </body>
 </html>

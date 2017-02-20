@@ -19,6 +19,7 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodObservaciones' => $row['prodObservaciones'],
 		'prodMontoDado' => $row['prodMontoPagar'],
 		'prodFechaRegistro' => $row['prodFechaRegistro'],
+		'prodAdelanto' => $row['prodAdelanto'],
 
 		'idCliente' => $row['idCliente'],
 		'cliApellidos' => $row['cliApellidos'],
@@ -28,6 +29,7 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'cliCorreo' => $row['cliCorreo'],
 		'cliCelular' => $row['cliCelular'],
 		'prodActivo' => $row['prodActivo']
+		
 	);
 	
 }
