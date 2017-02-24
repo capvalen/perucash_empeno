@@ -891,8 +891,8 @@ function guardarAdelanto(cant, produc, indexDatos){
 			moment().locale('es');
 			$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
 				cliente: $('#spanNombre').text(),
-				articulo: cant,
-				adelanto: parseFloat(adela).toFixed(2),
+				articulo: articula,
+				adelanto: parseFloat(cant).toFixed(2),
 				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 				usuario: $('#spanUsuario').text()
 			}}).done(function(resp){console.log(resp);});
