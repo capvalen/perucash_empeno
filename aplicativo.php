@@ -702,7 +702,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 		usuario: $('#spanUsuario').text()
 	}}).done(function(resp){console.log(resp);});
-})
+});
 $('#btn-FinalizarPrestamoFijo').click(function () {
 	var iProd=$('#rowWellFijo #lblIdProductosEnc').text();
 	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
@@ -848,7 +848,7 @@ $('#btnIngresarPago').click(function () {
 	}}
 });
 function guardarAdelanto(cant, produc, indexDatos){
-	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) { console.log(resp);
+	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) {// console.log(resp);
 		if(resp==1){
 			var adela=parseFloat( $('#spanAdelanto').text());
 			var dado = parseFloat($('#spanMontoDado').text());
@@ -870,10 +870,11 @@ function guardarAdelanto(cant, produc, indexDatos){
 			}
 			
 
-			$('.modal-adelantarPago').modal('hide');
+			
+			moment().locale('es');
 			$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
 				cliente: $('#spanNombre').text(),
-				articulo: articula,
+				articulo: cant,
 				adelanto: parseFloat(adela).toFixed(2),
 				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 				usuario: $('#spanUsuario').text()
@@ -881,7 +882,7 @@ function guardarAdelanto(cant, produc, indexDatos){
 			
 		}
 		else{$('#pAdelantoMal').removeClass('hidden').text('Hubo un problema con la conexión.');}
-		// body...
+		$('.modal-adelantarPago').modal('hide');
 	});
 }
 $('#divListadoUser').on('click', '.btnEliminarUser', function () {
