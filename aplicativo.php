@@ -871,7 +871,7 @@ function guardarAdelanto(cant, produc, indexDatos){
 			
 
 			$('.modal-adelantarPago').modal('hide');
-			$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {
+			$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
 				cliente: $('#spanNombre').text(),
 				articulo: articula,
 				adelanto: parseFloat(adela).toFixed(2),
