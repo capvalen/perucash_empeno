@@ -22,6 +22,8 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodFechaRegistro' => $row['prodFechaRegistro'],
 		'prodActivo' => $row['prodActivo'],
 		'prodAdelanto' => $row['prodAdelanto'],
+		'idSucursal' => $row['idSucursal'],
+		'sucNombre' => $row['sucNombre']
 
 
 	);

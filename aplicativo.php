@@ -316,51 +316,62 @@ $(document).ready(function () {
 ;	
 	
 	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
-	if(idNew==0){ }//console.log('nada')
+	if(parseInt(idNew)==0){ }//console.log('nada')
 	else {
 		$('#rowWellFijo').removeClass('hidden');
 		$('#rowWellCambiante').addClass('hidden');
 
 		console.log('solcitar producto con id: ' + idNew);
 		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
-			var dato = JSON.parse(resp);			
-			
+			var dato = JSON.parse(resp);
+
 			$('#spanNombre').text(dato[0].cliApellidos+', '+dato[0].cliNombres);
 			$('#spanDni').text(dato[0].cliDni);
 			$('#spanDireccion').text(dato[0].cliDireccion);
 			$('#spanCorreo').text(dato[0].cliCorreo);
 			$('#spanCelular').text(dato[0].cliCelular);
-			if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
 
-			var hoy= moment();
-			var fechaIni =moment(dato[0].prodFechaInicial);
-			var fechaFin=moment(dato[0].prodFechaVencimiento);
-			var respu; console.log(dato[0]);
-			if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
-				respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
-			}
-			else{//seccion cuando el producto ya paso su fecha límite
-				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
-				$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
-			}
-						
-			$('#spanPeriodo2').text(respu[0].periodo);
-			$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
-			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
+			if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?>){ console.log('misma sucursal');
+				
+				if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
 
-			moment.locale('es');
-			$('#spanProducto').text(dato[0].prodNombre);
-			$('#spanPorcent').text(dato[0].prodInteres);
-			$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
-			$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
-			$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
-			$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
+				var hoy= moment();
+				var fechaIni =moment(dato[0].prodFechaInicial);
+				var fechaFin=moment(dato[0].prodFechaVencimiento);
+				var respu; console.log(dato[0]);
+				if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
+					respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
+				}
+				else{//seccion cuando el producto ya paso su fecha límite
+					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
+					$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
+				}
+							
+				$('#spanPeriodo2').text(respu[0].periodo);
+				$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
+				$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
+
+				moment.locale('es');
+				$('#spanProducto').text(dato[0].prodNombre);
+				$('#spanPorcent').text(dato[0].prodInteres);
+				$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
+				$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
+				$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
+				$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
+				
+				$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
+				$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
+				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
+				
+				if(dato[0].prodActivo==0){$('#btn-FinalizarPrestamoFijo').addClass('hidden');}
+			}
+			else{console.log('otra sucrusal');
+			$('#rowWellFijo').html(`<div class="alert alert-danger ">
+        <i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato[0].sucNombre}».
+            </div>`);
+		}
 			
-			$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
-			$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
-			$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
 			
-			if(dato[0].prodActivo==0){$('#btn-FinalizarPrestamoFijo').addClass('hidden');}
 	
 		})
 		$('.nav-tabs li').eq(1).children('a').click();
@@ -649,42 +660,48 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 			var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(dato.prodFechaVencimiento), dato.prodMontoDado, dato.prodInteres )
 
 			var obsDin='';
-			var intge=parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2)
-
-			if(dato.prodObservaciones==''){ obsDin='Ninguna'} else{ obsDin= dato.prodObservaciones}
+			var intge=parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2);
+			if( dato.idSucursal==  <?php echo $_SESSION['idSucursal'] ?>){ console.log('misma sucursal');
+				if(dato.prodObservaciones==''){ obsDin='Ninguna'} else{ obsDin= dato.prodObservaciones}
 			
-			$('#spanPeriodo2').text(respu[0].periodo);
-			$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
-			$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2));
-			var botonAgregar='';
-			if(parseInt(dato.prodActivo) ==1){
-				botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
-				<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-				<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
-				<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-				<button class="btn btn-success btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
-			</div>`;
-			}else{
-			botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
-				<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-				<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
-			</div>`;}
+				$('#spanPeriodo2').text(respu[0].periodo);
+				$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
+				$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2));
+				var botonAgregar='';
+				if(parseInt(dato.prodActivo) ==1){
+					botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
+					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
+					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+					<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
+					<button class="btn btn-success btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+				</div>`;
+				}else{
+					botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
+					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
+					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+				</div>`;}
 
-			$('#rowWellCambiante').append(`<div class="row well" >
-			<span class="hidden" id="lblIdProductosEnc">${dato.idProducto}</span>
-			<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto">${dato.prodNombre}</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${dato.prodInteres}</span>%</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${moment(dato.prodFechaInicial).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaInicioNum">${dato.prodFechaInicial}</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${moment(dato.prodFechaVencimiento).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaFinNum">${dato.prodFechaVencimiento}</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${parseFloat(dato.prodMontoDado).toFixed(2)}</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">das ${obsDin}</span></em></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">${parseFloat(dato.prodAdelanto).toFixed(2)}</span></span></div>
+				$('#rowWellCambiante').append(`<div class="row well" >
+				<span class="hidden" id="lblIdProductosEnc">${dato.idProducto}</span>
+				<div class="col-sm-6"><label><i class="icofont icofont-cube"></i> Producto: </label> <span class="text-success mayuscula" id="spanProducto">${dato.prodNombre}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${dato.prodInteres}</span>%</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${moment(dato.prodFechaInicial).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaInicioNum">${dato.prodFechaInicial}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${moment(dato.prodFechaVencimiento).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaFinNum">${dato.prodFechaVencimiento}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${parseFloat(dato.prodMontoDado).toFixed(2)}</span></span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">das ${obsDin}</span></em></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">${parseFloat(dato.prodAdelanto).toFixed(2)}</span></span></div>			
+				${botonAgregar}
+			</div>`);
+		}
+			else{console.log('otra sucursal');
+			$('#rowWellCambiante').append(`<div class="alert alert-danger ">
+        <i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato.sucNombre}».
+            </div>`);}
+
 			
-			${botonAgregar}
-		</div>`)
 		})
 	})
 
