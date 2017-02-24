@@ -246,7 +246,7 @@ if (@!$_SESSION['Sucursal']){
 				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Adelantar pago</h4>
 			</div>
 			<div class="modal-body container-fluid text-center">
-				<p>Ingrese una cantidad para agregarlo como adelanto. <span class="sr-only" id="spanIdProdxAdelanto"></span></p>
+				<p>Ingrese una cantidad para agregarlo como adelanto. <span class="sr-only" id="spanIdProdxAdelanto"></span><span class="sr-only" id="idDivDatos"></span><span class="sr-only" id="tipoFijooMovil"></span></p>
 				<p class="text-danger hidden" id="pAdelantoMal">No puede ingresar un valor negativo o vacío.</p>
 				<div class="col-sm-4 col-sm-offset-4"><input type="number" class="form-control text-center" value='0.00' step=1 min=0></div>
 			</div>
@@ -820,12 +820,17 @@ $('#btn-AdelantoPrestamoFijo').click(function () {
 	$('#spanIdProdxAdelanto').text($(this).parent().parent().find('#lblIdProductosEnc').text());
 	$('#pAdelantoMal').addClass('hidden');
 	$('#btnIngresarPago').removeClass('disabled');
+	$('#idDivDatos').text(0);
+	$('#tipoFijooMovil').text('fijo');
+
 	$('.modal-adelantarPago').modal('show');
 });
 $('#rowWellCambiante').on('click', '.btn-AdelantoPrestamoMovil', function () {
 	$('#spanIdProdxAdelanto').text($(this).parent().parent().find('#lblIdProductosEnc').text());
 	$('#pAdelantoMal').addClass('hidden');
 	$('#btnIngresarPago').removeClass('disabled');
+	$('#idDivDatos').text($(this).parent().parent().index());
+	$('#tipoFijooMovil').text('movil');
 	$('.modal-adelantarPago').modal('show');
 });
 $('#btnCancelarIngreso').click(function () {
@@ -838,20 +843,43 @@ $('#btnIngresarPago').click(function () {
 		if($('.modal-adelantarPago input').val()=='' || parseInt($('.modal-adelantarPago input').val())==0 ){ $('#pAdelantoMal').removeClass('hidden')}
 	else{$('#pAdelantoMal').addClass('hidden');
 	//Guardar data de adelanto
-		guardarAdelanto($('.modal-adelantarPago input').val(), $('#spanIdProdxAdelanto').text());
+		guardarAdelanto($('.modal-adelantarPago input').val(), $('#spanIdProdxAdelanto').text(), $('#idDivDatos').text());
+
 	}}
 });
-function guardarAdelanto(cant, produc){
+function guardarAdelanto(cant, produc, indexDatos){
 	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) { console.log(resp);
 		if(resp==1){
 			var adela=parseFloat( $('#spanAdelanto').text());
 			var dado = parseFloat($('#spanMontoDado').text());
+			var articula;
+			if($('#tipoFijooMovil').text()=='fijo'){
+				$('#rowWellFijo').find('#spanMontoDado').text(parseFloat(dado-cant).toFixed(2));
+				$('#rowWellFijo').find('#spanAdelanto').text( parseFloat(adela+parseFloat(cant)).toFixed(2) );
+				$('#rowWellFijo').find('#spanObservacion').html( 'Se adelantó S/. '+ cant+' del monto S/. '+dado+' el día '+moment().format('DD/MM/YYYY')+'<br>'+$('#spanObservacion').text());
+				$('#rowWellFijo').find('#btnIngresarPago').removeClass('disabled');
+				articula=$('#rowWellFijo #spanProducto').text();
+
+
+			}else{
+				$('.divResultadosPorPersona').eq(indexDatos).find('#spanMontoDado').text(parseFloat(dado-cant).toFixed(2));
+				$('.divResultadosPorPersona').eq(indexDatos).find('#spanAdelanto').text(parseFloat(adela+parseFloat(cant)).toFixed(2));
+				$('.divResultadosPorPersona').eq(indexDatos).find('#spanObservacion').html( 'Se adelantó S/. '+ cant+' del monto S/. '+dado+' el día '+moment().format('DD/MM/YYYY')+'<br>'+$('#spanObservacion').text());			
+				$('.divResultadosPorPersona').eq(indexDatos).find('#btnIngresarPago').removeClass('disabled');
+				articula=$('.divResultadosPorPersona').eq(indexDatos).find('#spanProducto').text();
+			}
 			
-			$('#spanMontoDado').text(parseFloat(dado-cant).toFixed(2));
-			$('#spanAdelanto').text( parseFloat(adela+parseFloat(cant)).toFixed(2) );
-			$('#spanObservacion').html( 'Se adelantó S/. '+ cant+' del monto S/. '+dado+' el día '+moment().format('DD/MM/YYYY')+'<br>'+$('#spanObservacion').text())
-			$('#btnIngresarPago').removeClass('disabled');
-			$('.modal-adelantarPago').modal('hide');}
+
+			$('.modal-adelantarPago').modal('hide');
+			$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {
+				cliente: $('#spanNombre').text(),
+				articulo: articula,
+				adelanto: parseFloat(adela).toFixed(2),
+				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+				usuario: $('#spanUsuario').text()
+			}}).done(function(resp){console.log(resp);});
+			
+		}
 		else{$('#pAdelantoMal').removeClass('hidden').text('Hubo un problema con la conexión.');}
 		// body...
 	});
