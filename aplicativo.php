@@ -81,7 +81,7 @@ if (@!$_SESSION['Sucursal']){
 	<!-- fin de tab pane 1 -->
 	</div>
 	<div class="tab-pane fade  " id="tabBusqueda">
-		<div class="row"> <label>Búsqueda del producto:</label>
+		<div class="row"> <label>Búsqueda por propietario del producto:</label>
 			<input type="text" class="form-control" id="txtBuscarPersona" placeholder="Ingrese Nombre o Dni del cliente">
 		</div><br>
 		<div class="divResultadosPorPersona">
@@ -248,6 +248,67 @@ if (@!$_SESSION['Sucursal']){
 	<button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
 	</div>
 </div>
+
+
+<!-- Modal para editar los datos de los usuarios  -->
+	<div class="modal fade modal-editarDatosUsuarios" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header-indigo">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Actualizar datos del cliente</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+				<div class="row">
+					<label for="">Apellidos</label>
+					<input type="text" class="form-control mayuscula" id="txtUsapellido">
+				</div>
+				<div class="row">
+					<label for="">Nombres:</label>
+					<input type="text" class="form-control mayuscula" id="txtUsnombre">
+				</div>
+				<div class="row">
+					<label for="">Nick:</label>
+					<input type="text" class="form-control mayuscula" id="txtUsnick">
+				</div>
+				<div class="row">
+					<label for="">Contraseña:</label><span> *Almacenada, no se mostrará*</span><br>
+					<button class="btn btn-negro btn-outline btn-md"><i class="icofont icofont-pixels"></i> Asignar nueva contraseña</button>
+				</div>
+				<div class="row container-fluid" id="cambContraseña">
+					<div class="row">
+					<label for="">Contraseña:</label>
+					<input type="password1" class="form-control" id="txtUsPss1">
+				</div>
+				<div class="row">
+					<label for="">Contraseña:</label>
+					<input type="password2" class="form-control" id="txtUsPss2">
+				</div>
+				</div>
+				<div class="row">
+					<label for="">Nivel:</label>
+					<select class="form-control" id="cmbLvlUser">
+						<?php include 'php/listarPoderes.php'; ?>
+					</select>
+				</div>
+				<div class="row">
+					<label for="">Oficina:</label>
+					<select class="form-control" id="cmbOficinasUser">
+						<?php  include "php/listarSucursales.php"; ?>
+					</select>
+				</div>
+				</div>
+				
+				
+			</div>
+				
+			<div class="modal-footer">
+				<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cancelar actualización</button>
+				<button class="btn btn-morita btn-outline" id="btnActualizarDataUser"><i class="icofont icofont-social-meetme"></i> Actualizar usuario</button></div>
+		</div>
+		</div>
+	</div>
 
 
 <!-- Modal para editar los datos de los clientes  -->
@@ -692,7 +753,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			moment.locale('es');
 			$('#divListadoUser').children().remove();
 			$.each(JSON.parse(resp), function (i, dato) {
-				$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarUser"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idUsuario}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
+				$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline btnEditarUser"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarUser"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only idUser">${dato.idUsuario}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
 				
 			});
 			
@@ -702,7 +763,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 		$.ajax({url: 'php/listarSucDisplay.php', type:'POST'}).done(function (resp) {
 			$('#divListadoOffi').children().remove();
 			$.each(JSON.parse(resp), function (i, dato) {
-				$('#divListadoOffi').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarOffice"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idSucursal}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.sucNombre}</strong> ubicado en: «${dato.sucLugar}».</p>`);
+				$('#divListadoOffi').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarOffice"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only idSuc">${dato.idSucursal}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.sucNombre}</strong> ubicado en: «${dato.sucLugar}».</p>`);
 				
 			});
 		});
@@ -1129,7 +1190,11 @@ $('#btn-imprimirImpresoraFijo').click(function () {
 		attr: "href",
 		message:"Tu documento está siendo creado"});
 
-})
+});
+$('#divListadoUser').on('click', '.btnEditarUser', function () {
+	console.log($(this).parent().find('.idUser').text());
+	$('.modal-editarDatosUsuarios').modal('show');
+});
 </script>
 </body>
 </html>

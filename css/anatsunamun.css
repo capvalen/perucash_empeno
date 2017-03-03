@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+html{background-color: #f0f3f4}
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {-webkit-appearance: none;margin: 0;} 
 input[type=number] {-moz-appearance:textfield;}
@@ -346,11 +347,13 @@ body {
 }
 
 
-#tabDetalle .row, #tabNoFinalizados .row, #divListadoUser p{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px;transition: all 1s; }
-#tabDetalle .row:hover, #tabNoFinalizados .row:hover {background-color: #fcebba;
-    border: 1px solid #968143;
+#tabDetalle .row, #tabNoFinalizados .row, #divListadoUser p, #divTotalProductos .row{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px;transition: all 1s; color: #7d7d7d; }
+#tabDetalle .row:hover, #tabNoFinalizados .row:hover, #divTotalProductos .row:hover {background-color: #fcebba;
+    /*border: 1px solid #968143;*/
+    box-shadow: 0 0px 2px 0 rgb(255, 200, 34), 0 1px 2px 0 rgb(245, 169, 0);
+    color: #968143;
     border-radius: 4px;
-    transition: all 1s;}
+    transition: all 0.4s;}
 .modal-editarDatosCliente input{margin-left: 20px;  width: 91%;}
 
 .fa-spin {
@@ -390,3 +393,4 @@ body {
     transform: rotate(359deg);
   }
 }
+.btn-md{padding: 10px 16px; font-size: 16px; line-height: 1.3333333; border-radius: 6px;}

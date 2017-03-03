@@ -52,44 +52,40 @@ mysqli_close($conection);
 			<div class="col-xs-4 parteNoDato">
 				<div class="row container-fluid text-center ">
 					<img src="https://perucash.com/app/images/logo.png" alt="">
-					<div class="row"><h4>Comprobante de empeño a Perú Cash</h4> 
-					<small>Generado el día <small id="spanDia"></small>,</small> 
-					<small>por «<?php echo $row['atendio']; ?>»</small> 
-					<small> en la oficina <?php echo $row['sucNombre']; ?> </small><br>
+					<div class="row"><h4>Casa de préstamos y empeños</h4>
 					<small>Celular: # 943 798696</small><br>
 					<small>Web: www.perucash.com</small><br>
-					<small>Gracias por tu preferencia</small>
+					
 					</div>
 				</div>
 			</div>
 			<div class="col-xs-8 parteDatos">
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Propietario:</strong> </div>
+					<div class="col-xs-4  text-right"><strong>Cliente:</strong> </div>
 					<div class="col-xs-8 mayuscula"><?php echo $row['propietario']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Objeto:</strong> </div>
+					<div class="col-xs-4  text-right"><strong>Artículo:</strong> </div>
 					<div class="col-xs-8 mayuscula"><?php echo $row['prodNombre']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Monto inicial:  </strong> </div>
+					<div class="col-xs-4  text-right"><strong>Monto inicial: </strong> </div>
 					<div class="col-xs-8">S/. <?php echo $row['prodMontoEntregado']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Interés:  </strong> </div>
-					<div class="col-xs-8"><?php echo $row['prodInteres']; ?> % semanal</div>
+					<div class=" col-xs-4  text-right"><strong>Observaciones: </strong> </div>
+					<div class="col-xs-8"><em><?php if($row['prodObservaciones']==''){ echo 'Ninguna';} else {$row['prodObservaciones'];} ?></em></div>
 				</div>
-				<div class="row">
-					<div class=" col-xs-4  text-right"><strong>Observaciones:  </strong> </div>
-					<div class="col-xs-8"><em><?php echo $row['prodObservaciones']; ?></em></div>
-				</div>
-				<div class="row">
-					<div class=" col-xs-5 vistoBueno text-center"><small class="mayuscula"><?php echo $row['propietario']; ?></small> <br><span>Cliente</span></div>
+				 <div class="row text-center">
+					<!--<div class=" col-xs-5 vistoBueno text-center"><small class="mayuscula"><?php echo $row['propietario']; ?></small> <br><span>Cliente</span></div>
 					<div class="col-xs-offset-2 col-xs-4 vistoBueno text-center"><small class="mayuscula"><?php echo $row['atendio']; ?></small> <br><span>Asistente</span></div>
-				</div>
+				-->
+					<small>Generado el día <span class="spanDia"></span>,</small> 
+					<small>Ud. fue atendido por «<?php echo $row['atendio']; ?>»</small> 
+					<small> en la oficina: <?php echo $row['sucNombre']; ?> </small>. <small>Gracias por su preferencia</small>
+				</div> 
 			</div>
 		</div>
-		
 	</div>
 	<hr>
 	<div class="container">
@@ -97,44 +93,40 @@ mysqli_close($conection);
 			<div class="col-xs-4 parteNoDato">
 				<div class="row container-fluid text-center ">
 					<img src="https://perucash.com/app/images/logo.png" alt="">
-					<div class="row"><h4>Comprobante de empeño a Perú Cash</h4> 
-					<small>Generado el día <small id="spanDia"></small>,</small> 
-					<small>por «<?php echo $row['atendio']; ?>»</small> 
-					<small> en la oficina <?php echo $row['sucNombre']; ?> </small><br>
+					<div class="row"><h4>Casa de préstamos y empeños</h4> 
 					<small>Celular: # 943 798696</small><br>
 					<small>Web: www.perucash.com</small><br>
-					<small>Gracias por tu preferencia</small>
+					
 					</div>
 				</div>
 			</div>
 			<div class="col-xs-8 parteDatos">
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Propietario:</strong> </div>
+					<div class="col-xs-4  text-right"><strong>Cliente:</strong> </div>
 					<div class="col-xs-8 mayuscula"><?php echo $row['propietario']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Objeto:</strong> </div>
+					<div class="col-xs-4  text-right"><strong>Artículo:</strong> </div>
 					<div class="col-xs-8 mayuscula"><?php echo $row['prodNombre']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Monto inicial:  </strong> </div>
+					<div class="col-xs-4  text-right"><strong>Monto inicial: </strong> </div>
 					<div class="col-xs-8">S/. <?php echo $row['prodMontoEntregado']; ?></div>
 				</div>
 				<div class="row">
-					<div class="col-xs-4  text-right"><strong>Interés:  </strong> </div>
-					<div class="col-xs-8"><?php echo $row['prodInteres']; ?> % semanal</div>
+					<div class=" col-xs-4  text-right"><strong>Observaciones: </strong> </div>
+					<div class="col-xs-8"><em><?php if($row['prodObservaciones']==''){ echo 'Ninguna';} else {$row['prodObservaciones'];} ?></em></div>
 				</div>
-				<div class="row">
-					<div class=" col-xs-4  text-right"><strong>Observaciones:  </strong> </div>
-					<div class="col-xs-8"><em><?php echo $row['prodObservaciones']; ?></em></div>
-				</div>
-				<div class="row">
-					<div class=" col-xs-5 vistoBueno text-center"><small class="mayuscula"><?php echo $row['propietario']; ?></small> <br><span>Cliente</span></div>
+				 <div class="row text-center">
+					<!--<div class=" col-xs-5 vistoBueno text-center"><small class="mayuscula"><?php echo $row['propietario']; ?></small> <br><span>Cliente</span></div>
 					<div class="col-xs-offset-2 col-xs-4 vistoBueno text-center"><small class="mayuscula"><?php echo $row['atendio']; ?></small> <br><span>Asistente</span></div>
-				</div>
+				-->
+					<small>Generado el día <span class="spanDia"></span>,</small> 
+					<small>Ud. fue atendido por «<?php echo $row['atendio']; ?>»</small> 
+					<small> en la oficina: <?php echo $row['sucNombre']; ?> </small>. <small>Gracias por su preferencia</small>
+				</div> 
 			</div>
 		</div>
-		
 	</div>
 
 
@@ -155,7 +147,7 @@ mysqli_close($conection);
 <script>
 
 moment.locale('es');
-$('#spanDia').text( moment( '<?php echo $row['prodFechaInicial']; ?>').format('dddd, DD [de] MMMM [de] YYYY'));
+$('.spanDia').text( moment( '<?php echo $row['prodFechaInicial']; ?>').format('dddd, DD [de] MMMM [de] YYYY'));
 </script>
  </body>
  </html>

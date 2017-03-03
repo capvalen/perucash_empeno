@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="background-color:transparent;">
 
 <head>
 	<title>.:: Bienvenido a PeruCa$h ::.</title>
