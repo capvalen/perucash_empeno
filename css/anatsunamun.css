@@ -351,3 +351,4 @@ body {
     border: 1px solid #968143;
     border-radius: 4px;
     transition: all 1s;}
+.modal-editarDatosCliente input{margin-left: 20px;  width: 91%;}

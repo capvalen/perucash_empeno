@@ -40,7 +40,7 @@
 			<div class="form-group">
 				<label for="password">Elija una modalidad</label>
 				<select name="" id="cmbMod" class="form-control">
-					<option value="2">Empleado administrativo</option>
+					<option value="2">Asistente administrativo</option>
 					<option value="1">Director operativo</option>
 					
 				</select>
@@ -59,7 +59,6 @@
 				<button class="btn btn-success btn-outline" id="btnIniciar"><i class="icofont icofont-key"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 1.3.3 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>

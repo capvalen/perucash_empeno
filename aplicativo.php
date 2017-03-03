@@ -39,11 +39,12 @@ if (@!$_SESSION['Sucursal']){
 			<li><a href="#tabBusqueda" data-toggle="tab"><i class="icofont icofont-favourite"></i> Búsqueda</a></li>
 			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Productos Vencidos <span class="badge" id="spanContarVenc"></span></a></li>
 			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados</a></li>
+			<li><a href="#tabTodosProductos" data-toggle="tab"><i class="icofont icofont-favourite"></i> Todos los Productos</a></li>
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear oficinas</a></li>
 			<?php  } ?>
-		  </ul>
+			</ul>
 	</div>
 	<div class="panel-body">
 		 <div class="tab-content container-fluid">
@@ -85,12 +86,13 @@ if (@!$_SESSION['Sucursal']){
 		</div><br>
 		<div class="divResultadosPorPersona">
 		<div class="row well">
-			<p><strong><i class="icofont icofont-user-alt-2"></i> Datos del cliente</strong></p>
-			<div class="col-sm-6"><label>Apellidos y Nombres: </label> <span class="text-primary mayuscula" id="spanNombre"></span></div>
+			<p><strong><i class="icofont icofont-user-alt-2"></i> Datos del cliente</strong> <span class="hidden" id="spanIdCliente"></span></p>
+			<div class="col-sm-6"><label>Apellidos y Nombres: </label> <span class="text-primary mayuscula" id="spanApellido"></span>, <span class="text-primary mayuscula" id="spanNombre"></span></div>
 			<div class="col-sm-6"><label>Documento de Identidad: </label> <span class="text-primary mayuscula"  id="spanDni"></span></div>
 			<div class="col-sm-6"><label>Dirección domiciliaria: </label> <span class="text-primary mayuscula"  id="spanDireccion"></span></div>
 			<div class="col-sm-6"><label>Correo electrónico: </label> <span class="text-primary "  id="spanCorreo"></span></div>
 			<div class="col-sm-6"><label>Celular(es): </label> <span class="text-primary mayuscula"  id="spanCelular"></span></div>
+			<div class="col-sm-6"><button class="btn btn-negro btn-outline " id="btnEditarDatoCliente"><i class="icofont icofont-edit"></i> Actualizar datos</button></div>
 		</div>
 		<p><strong><i class="icofont icofont-cube"></i> Listado de productos adquiridos por el cliente:</strong></p>
 		
@@ -149,6 +151,42 @@ if (@!$_SESSION['Sucursal']){
 		</div>
 	<!-- fin de tab pane 3 -->
 	</div>
+	<div class="tab-pane fade" id="tabTodosProductos">
+		A continuación se muestran todos los items ordenados alfabéticamente en bloques de 30 items. <br>
+		<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li>
+							<a href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+		<?php 
+		$cantTotal= include 'php/returnConteoDatos.php';
+			$bloques=intval($cantTotal/30);
+			
+			$ultimo= $cantTotal%30;
+			
+
+			for ($i=1; $i <= $bloques ; $i++) { 
+				?>
+						<li <?php if($i==1){ echo 'class="active"';} ?>><a href="#" aria-label="<?php echo $i; ?>"><?php echo $i; ?></a></li>
+				<?php
+			}
+			if ($ultimo<30 && $ultimo==0){}
+			else{ ?>
+						<li><a href="#" aria-label="<?php echo $i; ?>"><?php echo $bloques+1; ?></a></li>
+				<?php }
+		 ?>
+
+		 <li>
+							<a href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			<div class="row " id="divTotalProductos"></div>
+	</div>
 	<?php if ( $_SESSION['Power']== 1){ ?>
 	<div class="tab-pane fade" id="tabCrearUsuario">
 		<div class="row well">
@@ -165,7 +203,7 @@ if (@!$_SESSION['Sucursal']){
 				</select>
 			</div>
 			
-			<div class="col-xs-12 col-sm-6"><strong>Sucursal</strong>
+			<div class="col-xs-12 col-sm-6"><strong>Oficina</strong>
 				<select  id="cmbSucurSel" class="form-control">
 					<option value="0">Seleccione uno</option>
 					<?php include 'php/listarSucursales.php'; ?>
@@ -205,12 +243,58 @@ if (@!$_SESSION['Sucursal']){
 
 	<?php } ?>
 
-  </div>
-  <br><div class="pull-right">Sessión actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
-  <button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
+	</div>
+	<br><div class="pull-right">Sessión actual: <em class="mayuscula"><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span></em>
+	<button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button></div>
 	</div>
 </div>
 
+
+<!-- Modal para editar los datos de los clientes  -->
+	<div class="modal fade modal-editarDatosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header-wysteria">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Actualizar datos del cliente</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+				<div class="row">
+					<label for="">D.N.I:</label>
+					<input type="number" class="form-control" id="txtddni">
+				</div>
+				<div class="row">
+					<label for="">Apellidos</label>
+					<input type="text" class="form-control mayuscula" id="txtaapellido">
+				</div>
+				<div class="row">
+					<label for="">Nombres:</label>
+					<input type="text" class="form-control mayuscula" id="txtnnombre">
+				</div>
+				<div class="row">
+					<label for="">Dirección:</label>
+					<input type="text" class="form-control mayuscula" id="txtddireccion">
+				</div>
+				<div class="row">
+					<label for="">Correo electrónico:</label>
+					<input type="text" class="form-control" id="txteemail">
+				</div>
+				<div class="row">
+					<label for="">Celular(es):</label>
+					<input type="text" class="form-control" id="txtccelular">
+				</div>
+				</div>
+				
+				
+			</div>
+				
+			<div class="modal-footer">
+				<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cancelar actualización</button>
+				<button class="btn btn-morita btn-outline" id="btnActualizarDataCliente"><i class="icofont icofont-social-meetme"></i> Actualizar</button></div>
+		</div>
+		</div>
+	</div>
 
 <!-- Modal para mostrar los clientes coincidentes -->
 	<div class="modal fade modal-mostrarResultadosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -325,13 +409,15 @@ $(document).ready(function () {
 		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
 			var dato = JSON.parse(resp);
 
-			$('#spanNombre').text(dato[0].cliApellidos+', '+dato[0].cliNombres);
+			$('#spanIdCliente').text(dato[0].idCliente);
+			$('#spanApellido').text(dato[0].cliApellidos);
+			$('#spanNombre').text(dato[0].cliNombres);
 			$('#spanDni').text(dato[0].cliDni);
 			$('#spanDireccion').text(dato[0].cliDireccion);
 			$('#spanCorreo').text(dato[0].cliCorreo);
 			$('#spanCelular').text(dato[0].cliCelular);
 
-			if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?>){ console.log('misma sucursal');
+			if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?> ||  <?php echo $_SESSION['Power']  ?>==1){ console.log('misma sucursal');
 				
 				if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
 
@@ -367,8 +453,8 @@ $(document).ready(function () {
 			}
 			else{console.log('otra sucrusal');
 			$('#rowWellFijo').html(`<div class="alert alert-danger ">
-        <i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato[0].sucNombre}».
-            </div>`);
+				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato[0].sucNombre}».
+						</div>`);
 		}
 			
 			
@@ -421,7 +507,7 @@ function calcularPeriodo(){
 		
 		if(diferenciaDias<=0){$('#lblFalta').text('La fecha de vencimiento no puede ser mejor o igual a la fecha de ingreso.')
 			$('.modal-faltaCompletar').modal('show');montoDado =0;diferenciaSemanas=0;
-		  }
+			}
 		else{
 			if(diferenciaDias<=6){diferenciaSemanas=0;diferenciaRestoDias=1; $('#spanPeriodo').text(diferenciaDias + ' días'); }
 			else{diferenciaSemanas =  parseInt(diferenciaDias/7); diferenciaRestoDias= diferenciaDias%7; $('#spanPeriodo').text(diferenciaSemanas + ' semanas y ' +diferenciaRestoDias + ' días') }
@@ -557,64 +643,69 @@ $('#txtMontoInteres').focusout(function () {
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 var target = $(e.target).attr("href") // activated tab
 	 if(target=='#tabBusqueda'){
-	  // rellenarTabBusqueda();
+		// rellenarTabBusqueda();
 	 }
 	 if(target=='#tabDetalle'){
-	 	$('#divProdAVencerse').children().remove();
-	 	$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }). done(function (resp) {
-	 		
-	 		var dato = JSON.parse(resp);
-	 		
-	 		$.each(dato, function (i, elem) { moment.locale('es')
-	 			var limite = moment(elem.prodFechaVencimiento);
-	 			//console.log(elem)
-	 			$('#divProdAVencerse').append(`<div class="row">
+		$('#divProdAVencerse').children().remove();
+		$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }). done(function (resp) {
+			
+			var dato = JSON.parse(resp);
+			
+			$.each(dato, function (i, elem) { moment.locale('es')
+				var limite = moment(elem.prodFechaVencimiento);
+				//console.log(elem)
+				$('#divProdAVencerse').append(`<div class="row">
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.startOf('day').fromNow()}</div>
 			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-eye"></i></a> </span>
-		</div>`)
+		</div>`);
 
-	 		})
-	 		// body...
-	 	})
+			})
+			// body...
+		})
 	 }
 	 if(target=='#tabNoFinalizados'){
-	 	$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }).done(function (resp) {
-	 		//console.log(JSON.parse(resp))
-	 		moment.locale('es');
-	 		$.each(JSON.parse(resp), function (i, dato) {
-	 			$('#divNoFinalizados').append(`<div class="row"><div class="col-xs-3 mayuscula">${i+1}. ${dato.cliApellidos}, ${dato.cliNombres}</div>
+		$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }).done(function (resp) {
+			//console.log(JSON.parse(resp))
+			moment.locale('es');
+			$('#divNoFinalizados').children().remove();
+			$.each(JSON.parse(resp), function (i, dato) {
+				$('#divNoFinalizados').append(`<div class="row"><div class="col-xs-3 mayuscula">${i+1}. ${dato.cliApellidos}, ${dato.cliNombres}</div>
 			<div class="col-xs-2">${moment(dato.prodFechaInicial).format('DD MMMM YYYY')}</div>
 			<div class="col-xs-2">${moment(dato.prodFechaVencimiento).format('DD MMMM YYYY')}</div>
 			<div class="col-xs-1">${dato.cliCelular}</div>
 			<div class="col-xs-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-xs-3 mayuscula">${dato.prodNombre} <a class="btn btn-negro btn-outline btnIcono pull-right" href="aplicativo.php?idprod=${dato.idProducto}"><i class="icofont icofont-eye"></i></a></div></div>`);
-	 		});
-	 		
-	 	});
+			});
+			
+		});
+	 }
+	 if(target=='#tabTodosProductos'){
+	 	llamarProductosPaginado(1,30);
+
 	 }
 	 if(target=='#tabCrearUsuario'){
-	 	$.ajax({url: 'php/listarTodosUsuarios.php', type: 'POST'}).done(function (resp) {
-	 		//console.log(JSON.parse(resp))
-	 		moment.locale('es');
-	 		$('#divListadoUser').children().remove();
-	 		$.each(JSON.parse(resp), function (i, dato) {
-	 			$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarUser"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idUsuario}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
-	 			
-	 		});
-	 		
-	 	});
+		$.ajax({url: 'php/listarTodosUsuarios.php', type: 'POST'}).done(function (resp) {
+			//console.log(JSON.parse(resp))
+			moment.locale('es');
+			$('#divListadoUser').children().remove();
+			$.each(JSON.parse(resp), function (i, dato) {
+				$('#divListadoUser').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarUser"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idUsuario}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.nombre}</strong> asignado a «${dato.sucLugar}» sucursal con nivel: «${dato.descripcion}»</p>`);
+				
+			});
+			
+		});
 	 }
 	 if(target=='#tabCrearOficina'){
-	 	$.ajax({url: 'php/listarSucDisplay.php', type:'POST'}).done(function (resp) {
-	 		$('#divListadoOffi').children().remove();
-	 		$.each(JSON.parse(resp), function (i, dato) {
-	 			$('#divListadoOffi').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarOffice"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idSucursal}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.sucNombre}</strong> ubicado en: «${dato.sucLugar}».</p>`);
-	 			
-	 		});
-	 	});
+		$.ajax({url: 'php/listarSucDisplay.php', type:'POST'}).done(function (resp) {
+			$('#divListadoOffi').children().remove();
+			$.each(JSON.parse(resp), function (i, dato) {
+				$('#divListadoOffi').append(`<p><button class="btn btn-negro btn-xs btn-outline"><i class="icofont icofont-key"></i></button> <button class="btn btn-danger btn-xs btn-outline btnEliminarOffice"><i class="icofont icofont-minus-square"></i></button> <span class="sr-only">${dato.idSucursal}</span> <span style="margin-left: 15px"> ${i+1}.</span> <strong class="mayuscula">${dato.sucNombre}</strong> ubicado en: «${dato.sucLugar}».</p>`);
+				
+			});
+		});
 	 }
 });
 
@@ -644,7 +735,11 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 	//console.log($(this).attr('id'));
 	var indice=$(this).parent().parent().index();
-	$('#spanNombre').text( $('.rowEnc').eq(indice).find('.eleNom').text() );
+	var nom= $('.rowEnc').eq(indice).find('.eleNom').text() ;
+	
+	$('#spanIdCliente').text($('.rowEnc').eq(indice).find('.eleIdCli').text());
+	$('#spanApellido').text( nom.split(',')[0] );
+	$('#spanNombre').text( nom.split(',')[1] );
 	$('#spanDni').text( $('.rowEnc').eq(indice).find('.eleDni').text());
 	$('#spanDireccion').text( $('.rowEnc').eq(indice).find('.eleDire').text());
 	$('#spanCorreo').text( $('.rowEnc').eq(indice).find('.eleCorr').text());
@@ -661,7 +756,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 
 			var obsDin='';
 			var intge=parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2);
-			if( dato.idSucursal==  <?php echo $_SESSION['idSucursal'] ?>){ console.log('misma sucursal');
+			if( dato.idSucursal==  <?php echo $_SESSION['idSucursal']  ?> || <?php echo $_SESSION['Power']  ?>==1 ){ console.log('misma sucursal');
 				if(dato.prodObservaciones==''){ obsDin='Ninguna'} else{ obsDin= dato.prodObservaciones}
 			
 				$('#spanPeriodo2').text(respu[0].periodo);
@@ -698,8 +793,8 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 		}
 			else{console.log('otra sucursal');
 			$('#rowWellCambiante').append(`<div class="alert alert-danger ">
-        <i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato.sucNombre}».
-            </div>`);}
+				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato.sucNombre}».
+						</div>`);}
 
 			
 		})
@@ -712,7 +807,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 	moment.locale('es');
 	//console.log($('#rowWellFijo #spanProducto').text())
 	$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {
-		cliente: $('#spanNombre').text(),
+		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),
 		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
 		obs: $('#rowWellFijo #spanObservacion').text(),
@@ -733,7 +828,7 @@ $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
 	// console.log('nombre: '+ contenedor.find('#spanProducto').text());
 
 	$.ajax({url: '//localhost/perucash/printTicket.php', type: 'POST', data: {
-		cliente: $('#spanNombre').text(),
+		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: contenedor.find('#spanProducto').text(),
 		monto: parseFloat(contenedor.find('#spanMontoDado').text()).toFixed(2),
 		obs: contenedor.find('#spanObservacion').text(),
@@ -747,8 +842,8 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarPrestamoMovil', function () {
 	var iProd=contenedor.find('#lblIdProductosEnc').text();
 
 	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
-	 	if(parseInt(resp)==1){$('#rowWellCambiante').eq(indice).find('.btn-FinalizarPrestamoMovil').addClass('hide'); }
- 	});
+		if(parseInt(resp)==1){$('#rowWellCambiante').eq(indice).find('.btn-FinalizarPrestamoMovil').addClass('hide'); }
+	});
 });
 
 /*$("#btnImprimirNoFinalizados").printPage({
@@ -765,7 +860,7 @@ $('#btnImprimirNoFinalizados').click(function () {
 	$('#btnImprimirNoFinalizados').printPage({
 		url: urlImpr,
 		attr: "href",
-		message:"Tu documento está siendo creado"})
+		message:"Tu documento está siendo creado"});
 });
 $('#btnCerrarSesion').click(function () {
 	window.location.href = "php/desconectar.php" 
@@ -890,7 +985,7 @@ function guardarAdelanto(cant, produc, indexDatos){
 			
 			moment().locale('es');
 			$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
-				cliente: $('#spanNombre').text(),
+				cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 				articulo: articula,
 				adelanto: parseFloat(cant).toFixed(2),
 				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
@@ -928,6 +1023,111 @@ $('#divListadoOffi').on('click', '.btnEliminarOffice', function () {
 		}
 	})
 });
+
+$('#btnEditarDatoCliente').click(function () {
+$('#txtddni').val($('.divResultadosPorPersona #spanDni').text());
+$('#txtaapellido').val($('.divResultadosPorPersona #spanApellido').text());
+$('#txtnnombre').val($('.divResultadosPorPersona #spanNombre').text());
+$('#txtddireccion').val($('.divResultadosPorPersona #spanDireccion').text());
+$('#txteemail').val($('.divResultadosPorPersona #spanCorreo').text());
+$('#txtccelular').val($('.divResultadosPorPersona #spanCelular').text());
+
+	$('.modal-editarDatosCliente').modal('show');
+});
+$('#btnActualizarDataCliente').click(function () {
+	if(!$('#btnActualizarDataCliente').hasClass('disabled')){
+		$('#btnActualizarDataCliente').addClass('disabled');
+		$.ajax({url:'php/actualizarDatosCliente.php', type: 'POST', data: {
+		iid: $('#spanIdCliente').text(),
+		appe:$('#txtaapellido').val(),
+		nnomb:$('#txtnnombre').val(),
+		ddni:$('#txtddni').val(),
+		ddirecion:$('#txtddireccion').val(),
+		eemail:$('#txteemail').val(),
+		ccelular:$('#txtccelular').val()
+
+	 }}).done(function (resp) { console.log(resp);
+		$('.modal-editarDatosCliente').modal('hide');
+
+		if(resp==1){
+			$('.divResultadosPorPersona #spanDni').text($('#txtddni').val());
+			$('.divResultadosPorPersona #spanApellido').text($('#txtaapellido').val());
+			$('.divResultadosPorPersona #spanNombre').text($('#txtnnombre').val());
+			$('.divResultadosPorPersona #spanDireccion').text($('#txtddireccion').val());
+			$('.divResultadosPorPersona #spanCorreo').text($('#txteemail').val());
+			$('.divResultadosPorPersona #spanCelular').text($('#txtccelular').val());
+		}
+		// body...
+	 });
+	}
+	 
+});
+$('.pagination li').click(function () {
+	//console.log( <?php echo $_SESSION['Power'] ?>)
+	
+	if(!$(this).hasClass('active')){
+		$('.pagination li').removeClass('active');
+		moment.locale('es');
+		var desde, hasta;
+		var aCargar= $(this).children().attr('aria-label');
+		console.log(aCargar)
+		if(aCargar=='Previous'){//cargar el bloque # 1
+			$('.pagination li a[aria-label=1]').parent().addClass('active');
+			desde=1; hasta =30;
+		}
+		else if(aCargar=='Next'){//cargar el úñtimo bloque 
+			$(this).prev().addClass('active');
+			hasta =$(this).prev().children().attr('aria-label')*30;
+			desde=hasta-29;
+		}
+		else{
+			
+			$('.pagination li').find('a[aria-label='+aCargar+']').parent().addClass('active');
+			hasta = aCargar*30;
+			desde=hasta-29;
+		}
+		//console.log('desde:' +desde + '\n' + 'hasta '+hasta)
+		llamarProductosPaginado(desde, hasta);
+
+		
+	}
+});
+function llamarProductosPaginado(desde, hasta){
+	var fuente;
+	$('#divTotalProductos').children().remove();
+	secuencia = desde;
+	$.ajax({url:'php/listarProductosTotal.php', type: 'POST', data: {
+			desdde: desde-1,
+			hastta: hasta,
+			idSuc: <?php echo $_SESSION['idSucursal']; ?>
+		}
+		}).done(function (resp) { //console.log(resp)
+			$.each(JSON.parse(resp), function (i, elem) {
+				var limite = moment(elem.prodFechaInicial);
+				if(elem.prodActivo=='1'){fuente = 'text-primary'}
+				else{fuente = 'text-mute'}
+				$('#divTotalProductos').append(`<div class="row ${fuente}">
+			<div class="col-sm-3 mayuscula"><strong class="visible-xs-block">Producto: </strong>${secuencia}. ${elem.prodNombre}</div>
+			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
+			<div class="col-sm-3 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
+			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong><small>${elem.sucNombre}</small></div>
+			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${moment(elem.prodFechaInicial).format('DD MMMM YYYY')}</div>
+			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idProducto}"><i class="icofont icofont-eye"></i></a> </span>
+		</div>`);
+				secuencia+=1;
+			});
+		});
+}
+$('#btn-imprimirImpresoraFijo').click(function () {
+	
+	urlImpr='php/reporteVoucherPrestamo.php?idProd='+$(this).parent().parent().find('#lblIdProductosEnc').text();
+	//console.log(urlImpr);
+	$('#btn-imprimirImpresoraFijo').printPage({
+		url: urlImpr,
+		attr: "href",
+		message:"Tu documento está siendo creado"});
+
+})
 </script>
 </body>
 </html>
