@@ -56,10 +56,10 @@
 			<div class="form-group text-center text-danger hidden" id="divError">Error en alguno de los datos, complételos todos cuidadosamente.</div>
 			<div class="form-group text-center">
 				<button class="btn btn-danger btn-outline" id="btnCancelar"><i class="icofont icofont-logout"></i> Cancelar</button>
-				<button class="btn btn-success btn-outline" id="btnIniciar"><i class="icofont icofont-key"></i> Iniciar</button>
+				<button class="btn btn-success btn-outline" id="btnIniciar"><div class="fa-spin sr-only"><i class="icofont icofont-spinner"></i> </div> <i class="icofont icofont-key icono"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 1.4 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
+			<div class="pull-right" ><small>Ver. 1.4.1 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>
@@ -72,7 +72,12 @@
 	$.ajax({url: 'php/desconectar.php'});
 	$('#username').focus();
 	$('#btnIniciar').click(function () {
-		if($('#username').val()=='' || $('#passw').val()=='' || $('#office').val()==0){$('#divError').removeClass('hidden');}
+		$('#btnIniciar').find('.icono').addClass('sr-only');
+		$('#btnIniciar').find('.fa-spin').removeClass('sr-only');
+
+		if($('#username').val()=='' || $('#passw').val()=='' || $('#office').val()==0){$('#divError').removeClass('hidden');
+			$('#btnIniciar').find('.icono').removeClass('sr-only');
+			$('#btnIniciar').find('.fa-spin').addClass('sr-only');}
 		else{
 			$.ajax({url: 'php/validarSesion.php', type: 'POST', data: {
 			user: $('#username').val(),
@@ -82,9 +87,12 @@
 			 
 
 			}}).done(function (resp) {
+				
 			console.log(resp);
 			if(resp==''){
 				$('#divError').removeClass('hidden');
+				$('#btnIniciar').find('.icono').removeClass('sr-only');
+				$('#btnIniciar').find('.fa-spin').addClass('sr-only');
 			}
 			if(resp=='Welcome guy!'){window.location.href = 'aplicativo.php'}
 		}).error(function (err) {console.log(err);
@@ -94,7 +102,7 @@
 		
 	});
 	$('#btnCancelar').click(function(){
-		//console.log($('#office').val())
+		window.location.href = 'www.perucash.com'
 	});
 	</script>
 </body>

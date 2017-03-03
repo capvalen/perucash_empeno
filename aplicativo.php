@@ -185,7 +185,7 @@ if (@!$_SESSION['Sucursal']){
 						</li>
 					</ul>
 				</nav>
-			<div class="row " id="divTotalProductos"></div>
+			<div class="row " id="divTotalProductos"><div class="fa-spin text-left"><i class="icofont icofont-spinner"></i> </div></div>
 	</div>
 	<?php if ( $_SESSION['Power']== 1){ ?>
 	<div class="tab-pane fade" id="tabCrearUsuario">
@@ -1094,7 +1094,8 @@ $('.pagination li').click(function () {
 });
 function llamarProductosPaginado(desde, hasta){
 	var fuente;
-	$('#divTotalProductos').children().remove();
+	//$('#divTotalProductos').children().remove();
+	$('#divTotalProductos').html('<div class="fa-spin text-left"><i class="icofont icofont-spinner"></i> </div>');
 	secuencia = desde;
 	$.ajax({url:'php/listarProductosTotal.php', type: 'POST', data: {
 			desdde: desde-1,
@@ -1102,6 +1103,7 @@ function llamarProductosPaginado(desde, hasta){
 			idSuc: <?php echo $_SESSION['idSucursal']; ?>
 		}
 		}).done(function (resp) { //console.log(resp)
+			$('#divTotalProductos').html('');
 			$.each(JSON.parse(resp), function (i, elem) {
 				var limite = moment(elem.prodFechaInicial);
 				if(elem.prodActivo=='1'){fuente = 'text-primary'}

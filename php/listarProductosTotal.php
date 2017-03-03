@@ -4,7 +4,6 @@ session_start();
 header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 
-
 $filas=array();
 if($_SESSION['Power']==1){
 	$log = mysqli_query($conection,"call listarTodoProductosSinSuc(".$_POST['desdde']." , ".$_POST['hastta']." );");
