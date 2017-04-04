@@ -49,7 +49,9 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-indigo.btn-outline{color:#3E50B4;}
 .btn-morita.btn-outline{color:#9B26AF;}
  
- 
+.primeroMayuscula::first-letter {
+     text-transform: uppercase;
+}
 
 .btn-primary.btn-outline:focus,.btn-success.btn-outline:focus,.btn-info.btn-outline:focus,.btn-warning.btn-outline:focus,.btn-danger.btn-outline:focus,
 .btn-primary.btn-outline:active,.btn-success.btn-outline:active,.btn-info.btn-outline:active,.btn-warning.btn-outline:active,.btn-danger.btn-outline:active,

@@ -102,10 +102,10 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">4</span>%</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"> <span class="sr-only" id="spanFechaInicioNum"></span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin"></span> <span class="sr-only" id="spanFechaFinNum"></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2"></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período hasta hoy: </label> <span class="text-success mayuscula" id="spanPeriodo2"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">0.00</span></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Total al día de hoy: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">0.00</span></span></div>
 			<!-- <div class="col-sm-6 col-sm-offset-6"><label><i class="icofont icofont-chat"></i> Deuda del cliente: </label> <span class="text-success">S/. <span id="spanDeudaFinal">0.00</span></span></div> -->
@@ -260,6 +260,9 @@ if (@!$_SESSION['Sucursal']){
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
+				<div class="alert alert-danger hidden">
+				  <strong>Ups!</strong> <span class="spanError"></span>
+				</div>
 				<div class="row">
 					<label for="">Apellidos</label>
 					<input type="text" class="form-control mayuscula" id="txtUsapellido">
@@ -274,17 +277,15 @@ if (@!$_SESSION['Sucursal']){
 				</div>
 				<div class="row">
 					<label for="">Contraseña:</label><span> *Almacenada, no se mostrará*</span><br>
-					<button class="btn btn-negro btn-outline btn-md"><i class="icofont icofont-pixels"></i> Asignar nueva contraseña</button>
+					<button class="btn btn-negro btn-outline btn-md" id="btnAsignarNuevaPassUsr"><i class="icofont icofont-pixels"></i> Asignar nueva contraseña</button>
 				</div>
-				<div class="row container-fluid" id="cambContraseña">
+				<div class="row container-fluid hidden" id="cambContraseña">
 					<div class="row">
-					<label for="">Contraseña:</label>
-					<input type="password1" class="form-control" id="txtUsPss1">
-				</div>
-				<div class="row">
-					<label for="">Contraseña:</label>
-					<input type="password2" class="form-control" id="txtUsPss2">
-				</div>
+					<label class="text-primary" for="">Contraseña:</label>
+					<input type="password" class="form-control" id="txtUsPss1">
+						<label class="text-primary" for="">Confirme su contraseña:</label>
+						<input type="password" class="form-control" id="txtUsPss2">
+					</div>
 				</div>
 				<div class="row">
 					<label for="">Nivel:</label>
@@ -404,6 +405,23 @@ if (@!$_SESSION['Sucursal']){
 	
 </div>
 
+ <!-- Modal para indicar que se guardó con éxito -->
+	<div class="modal fade modal-EstaSeguro" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-wysteria">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Confirmación</h4>
+			</div>
+			<div class="modal-body">
+				¿Está seguro que desea realizar ésta operación?
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No quiero</button>
+			<button class="btn btn-morita btn-outline btnSeguroFinalizar" ><i class="icofont icofont-check"></i> Sí, seguro</button></div>
+		</div>
+		</div>
+	</div>
 
  <!-- Modal para indicar que se guardó con éxito -->
 	<div class="modal fade modal-ventaGuardada" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -482,19 +500,20 @@ $(document).ready(function () {
 				
 				if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
 
-				var hoy= moment();
+				moment.locale('es');
+				var hoy = moment();
 				var fechaIni =moment(dato[0].prodFechaInicial);
 				var fechaFin=moment(dato[0].prodFechaVencimiento);
-				var respu; console.log(dato[0]);
-				if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
-					respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
-				}
-				else{//seccion cuando el producto ya paso su fecha límite
-					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
-					$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');
-				}
+				respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
+				// var respu; console.log(dato[0]);
+				// if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
+				// 	respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
+				// }
+				// else{//seccion cuando el producto ya paso su fecha límite
+				// 	respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
+				// 	$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');				}
 							
-				$('#spanPeriodo2').text(respu[0].periodo);
+				$('#spanPeriodo2').text(moment(fechaIni).fromNow());
 				$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
 				$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
 
@@ -505,7 +524,7 @@ $(document).ready(function () {
 				$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
 				$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
 				$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
-				
+				console.log('Tantos dias desde fecha incial a hoy: '+ hoy.diff(fechaIni, 'days'));
 				$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
 				$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
 				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
@@ -812,15 +831,16 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 
 	$.ajax({ url: 'php/solicitarProductoPorCliente.php', type: 'POST', data: {idCli: $('.rowEnc').eq(indice).find('.eleIdCli').text() }}). done(function (resp) {
 		console.log(JSON.parse(resp))
+		moment.locale('es');
 		$.each(JSON.parse(resp), function (i, dato) {
-			var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(dato.prodFechaVencimiento), dato.prodMontoDado, dato.prodInteres )
+			var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(), dato.prodMontoDado, dato.prodInteres )
 
 			var obsDin='';
 			var intge=parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2);
 			if( dato.idSucursal==  <?php echo $_SESSION['idSucursal']  ?> || <?php echo $_SESSION['Power']  ?>==1 ){ console.log('misma sucursal');
 				if(dato.prodObservaciones==''){ obsDin='Ninguna'} else{ obsDin= dato.prodObservaciones}
 			
-				$('#spanPeriodo2').text(respu[0].periodo);
+				
 				$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
 				$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto).toFixed(2)-parseFloat(dato.prodMontoDado)).toFixed(2));
 				var botonAgregar='';
@@ -843,10 +863,10 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 				<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${dato.prodInteres}</span>%</span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${moment(dato.prodFechaInicial).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaInicioNum">${dato.prodFechaInicial}</span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${moment(dato.prodFechaVencimiento).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaFinNum">${dato.prodFechaVencimiento}</span></div>
-				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período entre las fechas: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período hasta hoy: </label> <span class="text-success mayuscula" id="spanPeriodo2">${moment(dato.prodFechaInicial).fromNow()}</span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${parseFloat(dato.prodMontoDado).toFixed(2)}</span></span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
-				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto a pagar generado: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Total al día de hoy: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(dato.prodMontoPagar).toFixed(2)}</span></span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">das ${obsDin}</span></em></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">${parseFloat(dato.prodAdelanto).toFixed(2)}</span></span></div>			
 				${botonAgregar}
@@ -878,10 +898,20 @@ $('#btn-imprimirTicketFijo').click(function () {
 });
 $('#btn-FinalizarPrestamoFijo').click(function () {
 	var iProd=$('#rowWellFijo #lblIdProductosEnc').text();
+	$('.modal-EstaSeguro').modal('show');
 	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){$('#btn-FinalizarPrestamoFijo').addClass('hide'); }
 		// body...
 	});
+
+	$.ajax({url: '//localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
+		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+		articulo: $('#rowWellFijo #spanProducto').text(),
+		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
+		obs: $('#rowWellFijo #spanObservacion').text(),
+		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+		usuario: $('#spanUsuario').text()
+	}}).done(function(resp){console.log(resp);});
 	
 });
 $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
@@ -1086,12 +1116,12 @@ $('#divListadoOffi').on('click', '.btnEliminarOffice', function () {
 });
 
 $('#btnEditarDatoCliente').click(function () {
-$('#txtddni').val($('.divResultadosPorPersona #spanDni').text());
-$('#txtaapellido').val($('.divResultadosPorPersona #spanApellido').text());
-$('#txtnnombre').val($('.divResultadosPorPersona #spanNombre').text());
-$('#txtddireccion').val($('.divResultadosPorPersona #spanDireccion').text());
-$('#txteemail').val($('.divResultadosPorPersona #spanCorreo').text());
-$('#txtccelular').val($('.divResultadosPorPersona #spanCelular').text());
+	$('#txtddni').val($('.divResultadosPorPersona #spanDni').text());
+	$('#txtaapellido').val($('.divResultadosPorPersona #spanApellido').text());
+	$('#txtnnombre').val($('.divResultadosPorPersona #spanNombre').text());
+	$('#txtddireccion').val($('.divResultadosPorPersona #spanDireccion').text());
+	$('#txteemail').val($('.divResultadosPorPersona #spanCorreo').text());
+	$('#txtccelular').val($('.divResultadosPorPersona #spanCelular').text());
 
 	$('.modal-editarDatosCliente').modal('show');
 });
@@ -1192,8 +1222,38 @@ $('#btn-imprimirImpresoraFijo').click(function () {
 
 });
 $('#divListadoUser').on('click', '.btnEditarUser', function () {
-	console.log($(this).parent().find('.idUser').text());
-	$('.modal-editarDatosUsuarios').modal('show');
+
+	console.log();
+	$.ajax({url: 'php/listarUnUsuario.php', type: 'POST', data: {idUs: $(this).parent().find('.idUser').text()}}).done(function (resp) {
+		var dato= JSON.parse(resp);
+		console.log(dato);
+		$('.modal-editarDatosUsuarios').find('#txtUsapellido').val(dato[0].usuApellido);
+		$('.modal-editarDatosUsuarios').find('#txtUsnombre').val(dato[0].usuNombres);
+		$('.modal-editarDatosUsuarios').find('#txtUsnick').val(dato[0].usuNick);
+		$('.modal-editarDatosUsuarios').find('#cmbLvlUser').val(dato[0].idPoder);
+		$('.modal-editarDatosUsuarios').find('#cmbOficinasUser').val(dato[0].idSucursal);
+		$('.modal-editarDatosUsuarios').modal('show');
+	});
+	
+});
+$('#btnAsignarNuevaPassUsr').click(function () {
+	$('#cambContraseña').removeClass('hidden');
+	$(this).addClass('hidden');
+});
+$('#btnActualizarDataUser').click(function () {
+	if($('#btnAsignarNuevaPassUsr').hasClass('hidden')){
+		$('.modal-editarDatosUsuarios .alert').removeClass('hidden');
+		$('.modal-editarDatosUsuarios .spanError').text('Debe ingresar las contraseñas');
+	}
+	else if($('#txtUsPss1').val()!=$('#txtUsPss2').val()){
+		$('.modal-editarDatosUsuarios .alert').removeClass('hidden');
+		$('.modal-editarDatosUsuarios .spanError').text('Las contraseñas no son iguales');
+	}
+	else{
+		$('.modal-editarDatosUsuarios .alert').addClass('hidden'); 
+	}
+		
+	
 });
 </script>
 </body>
