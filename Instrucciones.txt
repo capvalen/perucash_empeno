@@ -4,3 +4,10 @@ printTicket.php
 carpeta vendor
 
 siempre con su archivo de accesso .htaccess indicando el server que se comunica
+
+
+
+Cualquier depósito hasta el día 14, tiene por defecto el 10% de interés
+A partir del día 15 el interés deberá ser del 4%
+
+pagos cancelados
