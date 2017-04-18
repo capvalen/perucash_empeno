@@ -1064,10 +1064,12 @@ $('.modal-adelantarPago').on('shown.bs.modal', function() {
   $('#txtAdelantPagoMonto').focus();
 })
 $('#btn-AdelantoPrestamoFijo').click(function () {
+	console.log($(this).parent().parent().find('#lblIdProductosEnc').text())
 	$('#spanIdProdxAdelanto').text($(this).parent().parent().find('#lblIdProductosEnc').text());
 	$('#pAdelantoMal').addClass('hidden');
 	$('#btnIngresarPago').removeClass('disabled');
 	$('#idDivDatos').text(0);
+
 	$('#tipoFijooMovil').text('fijo');
 
 	$('.modal-adelantarPago').modal('show');
@@ -1087,11 +1089,12 @@ $('#btnCancelarIngreso').click(function () {
 $('#btnIngresarPago').click(function () {
 	
 	if($('#btnIngresarPago').hasClass('disabled')){ }
-	else{$(this).addClass('disabled');
+	else{
+		$(this).addClass('disabled');
 		if($('.modal-adelantarPago input').val()=='' || parseInt($('.modal-adelantarPago input').val())==0 ){ $('#pAdelantoMal').removeClass('hidden')}
-	else{$('#pAdelantoMal').addClass('hidden');
-	//Guardar data de adelanto
-		guardarAdelanto($('.modal-adelantarPago input').val(), $('#spanIdProdxAdelanto').text(), $('#idDivDatos').text());
+		else{$('#pAdelantoMal').addClass('hidden');
+		//Guardar data de adelanto
+			guardarAdelanto($('.modal-adelantarPago input').val(), $('#spanIdProdxAdelanto').text(), $('#idDivDatos').text());
 
 	}}
 });
@@ -1126,11 +1129,14 @@ function guardarAdelanto(cant, produc, indexDatos){
 				adelanto: parseFloat(cant).toFixed(2),
 				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 				usuario: $('#spanUsuario').text()
-			}}).done(function(resp){console.log(resp);});
+			}}).done(function(resp){console.log(resp);
+			});
+
 			
 		}
 		else{$('#pAdelantoMal').removeClass('hidden').text('Hubo un problema con la conexión.');}
 		$('.modal-adelantarPago').modal('hide');
+		window.location.href = "aplicativo.php?idprod=" +produc;
 	});
 }
 $('#divListadoUser').on('click', '.btnEliminarUser', function () {
