@@ -23,7 +23,11 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodActivo' => $row['prodActivo'],
 		'prodAdelanto' => $row['prodAdelanto'],
 		'idSucursal' => $row['idSucursal'],
-		'sucNombre' => $row['sucNombre']
+		'sucNombre' => $row['sucNombre'],
+		'sucNombre' => $row['sucNombre'],
+		'prodQuienFinaliza' => $row['prodQuienFinaliza'],
+		'prodFechaFinaliza' => $row['prodFechaFinaliza'],
+		'prodCuantoFinaliza' => $row['prodCuantoFinaliza']
 
 
 	);

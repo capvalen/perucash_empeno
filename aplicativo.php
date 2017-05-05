@@ -32,7 +32,7 @@ if (@!$_SESSION['Sucursal']){
 	<br>
 <?php  } ?>
 
-<div class="panel with-nav-tabs panel-primary hidden-print">
+<div class="panel with-nav-tabs panel-morado hidden-print">
 	<div class="panel-heading">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#tabRegistro" data-toggle="tab"><i class="icofont icofont-favourite"></i> Registro</a></li>
@@ -43,6 +43,7 @@ if (@!$_SESSION['Sucursal']){
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Crear oficinas</a></li>
+			<li><a href="#tabAprobarFinalizados" data-toggle="tab"><i class="icofont icofont-badge"></i> Aprobar finalizados</a></li>
 			<?php  } ?>
 			</ul>
 	</div>
@@ -111,6 +112,12 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">0.00</span></span></div>
 			<!-- <div class="col-sm-6 col-sm-offset-6"><label><i class="icofont icofont-chat"></i> Deuda del cliente: </label> <span class="text-success">S/. <span id="spanDeudaFinal">0.00</span></span></div> -->
+			<div class="col-xs-12 sr-only" id="contenedorFinalizados" >
+				<div class="alert-message alert-message-morado">
+						<h4>Producto finalizado</h4>
+						<p>por: <strong><span class="mayuscula" id="QuienFinalizo"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong>, por el monto: S/. <span id="finalizaMonto"></span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+				</div>
+			</div>
 			<div class="col-sm-8 col-sm-offset-2">
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 				<button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button>
@@ -128,7 +135,7 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-4">Nombre del producto</div>
 			<div class="col-sm-1">Monto S/.</div>
 			<div class="col-sm-4">Dueño</div>
-			<div class="col-sm-2">Fecha</div></strong>
+			<div class="col-sm-2">Fecha Registro</div></strong>
 		</div>
 		<div id="divProdAVencerse">
 			<p>Sin elementos que mostrar</p>
@@ -243,6 +250,26 @@ if (@!$_SESSION['Sucursal']){
 		</div>
 	</div>
 
+		<div class="tab-pane fade" id="tabAprobarFinalizados">
+		<div class="row well">
+			<p><strong>Listado de productos por aprobar</strong></p>
+			<div class="col-xs-12 ">
+				<div >
+					<div class="row"><strong>
+					<div class="col-sm-5">Producto</div>
+					<div class="col-sm-2">Monto Cancelado</div>
+					<div class="col-sm-2">Responsable</div>
+					<div class="col-sm-2">Fecha</div>
+					</strong></div>
+				</div>
+				<div id="divListaPorFinalizar">
+				</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 	<?php } ?>
 
 	</div>
@@ -263,7 +290,7 @@ if (@!$_SESSION['Sucursal']){
 			<div class="modal-body">
 				<div class="container-fluid">
 				<div class="alert alert-danger hidden">
-				  <strong>Ups!</strong> <span class="spanError"></span>
+					<strong>Ups!</strong> <span class="spanError"></span>
 				</div>
 				<div class="row">
 					<label for="">Apellidos</label>
@@ -408,6 +435,24 @@ if (@!$_SESSION['Sucursal']){
 </div>
 
  <!-- Modal para indicar que se guardó con éxito -->
+	<div class="modal fade modal-EstaSeguroFinalizar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-wysteria">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Confirmación</h4>
+			</div>
+			<div class="modal-body">
+				Estas aceptando el producto como finalizado ¿Es correcto?
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No, cancelar</button>
+			<button class="btn btn-morita btn-outline " id="btnSeguroFinalizar"><i class="icofont icofont-check"></i> Sí, seguro</button></div>
+		</div>
+		</div>
+	</div>
+
+ <!-- Modal para indicar que se guardó con éxito -->
 	<div class="modal fade modal-EstaSeguro" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
@@ -416,7 +461,7 @@ if (@!$_SESSION['Sucursal']){
 				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Confirmación</h4>
 			</div>
 			<div class="modal-body">
-				¿Está seguro que desea realizar ésta operación?<span id="idEstaseguro"></span>
+				¿Está seguro que desea realizar ésta operación con el monto S/. <span id="montoSeguro"></span>?<span class="sr-only" id="idEstaseguro"></span>
 			</div>
 			<div class="modal-footer"> 
 			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No quiero</button>
@@ -540,17 +585,22 @@ $(document).ready(function () {
 				$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
 				$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
 				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
-				
-				if(dato[0].prodActivo==0){$('#btn-FinalizarPrestamoFijo').addClass('hidden');}
+
+				if(dato[0].prodActivo==0){
+					$('#btn-AdelantoPrestamoFijo').addClass('hidden');
+					$('#btn-FinalizarPrestamoFijo').addClass('hidden');
+					$('#contenedorFinalizados').removeClass('sr-only');
+					$('#QuienFinalizo').text(dato[0].prodQuienFinaliza);
+					$('#finalizaMonto').text(parseFloat(dato[0].prodCuantoFinaliza).toFixed(2));
+					$('#FechaFinalizo').text(moment(dato[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm'));
+				}
 			}
 			else{console.log('otra sucrusal');
 			$('#rowWellFijo').html(`<div class="alert alert-danger ">
 				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato[0].sucNombre}».
 						</div>`);
 		}
-			
-			
-	
+
 		})
 		$('.nav-tabs li').eq(1).children('a').click();
 
@@ -758,9 +808,9 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
-			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.startOf('day').fromNow()}</div>
+			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.format('DD MMMM YYYY')}</div>
 			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-eye"></i></a> </span>
-		</div>`);
+			</div>`);
 
 			})
 			// body...
@@ -783,7 +833,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 		});
 	 }
 	 if(target=='#tabTodosProductos'){
-	 	llamarProductosPaginado(1,30);
+		llamarProductosPaginado(1,30);
 
 	 }
 	 if(target=='#tabCrearUsuario'){
@@ -807,7 +857,31 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			});
 		});
 	 }
+
+	 if(target=='#tabAprobarFinalizados'){
+	 	$.ajax({url: 'php/listarProductosPorAprobar.php', type:'POST', data: {oficina: $.idOficina}}).done(function (resp) {
+			$('#divListaPorFinalizar').children().remove();
+			var fechita=''; 
+			$.each(JSON.parse(resp), function (i, dato) {
+				moment.locale('es')
+				if(moment(dato.prodFechaFinaliza,'').format('dddd[,] DD MMMM YYYY [a las] hh:mm')=='Fecha no válida'){fechita=''}else{fechita=moment(dato.prodFechaFinaliza,'').format('dddd[,] DD MMMM YYYY [a las] hh:mm')}
+
+				$('#divListaPorFinalizar').append(`<div class="row">
+					<div class="col-sm-5 mayuscula"><strong>${i+1}.</strong> ${dato.prodNombre}</div>
+					<div class="col-sm-2">S/. ${parseFloat(dato.prodCuantoFinaliza).toFixed(2)}</div>
+					<div class="col-sm-2">${dato.prodQuienFinaliza}</div>
+					<div class="col-sm-2">${fechita}</div>
+					<div class="col-sm-1"><a class="btn btn-morado btn-outline btnIcono btnBotonPorConcluir" ><i class="icofont icofont-fire-burn"></i></a></div>
+					</div>`);
+				
+			});
+		});
+	 }
 });
+$('#divListaPorFinalizar').on('click','.btnBotonPorConcluir',  function () {
+	$('.modal-EstaSeguroFinalizar').modal('show');
+})
+
 
 
 $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
@@ -887,7 +961,14 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 					<button class="btn btn-success btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 				</div>`;
 				}else{
-					botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
+					botonAgregar = `
+					<div class="col-xs-12" >
+						<div class="alert-message alert-message-morado">
+								<h4>Producto finalizado</h4>
+								<p>por: <strong><span class="mayuscula" id="QuienFinalizo">${dato.prodQuienFinaliza}</span></strong>, el día: <strong><span id="FechaFinalizo">${moment(dato.prodFechaFinaliza).format('')}</span></strong>, por el monto: S/. <span id="finalizaMonto">${parseFloat(dato.prodCuantoFinaliza).toFixed(2)}</span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+						</div>
+					</div>
+					<div class="col-sm-8 col-sm-offset-2">
 					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
 				</div>`;}
@@ -934,6 +1015,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 $('#btn-FinalizarPrestamoFijo').click(function () {
 	var iProd=$('#rowWellFijo #lblIdProductosEnc').text();
 	$('#idEstaseguro').text(iProd);
+	$('#montoSeguro').text($('#rowWellFijo #spanPagar').text());
 	$('.modal-EstaSeguro').modal('show');
 
 
@@ -941,8 +1023,12 @@ $('#btn-FinalizarPrestamoFijo').click(function () {
 });
 $('#btnSeguroFinalizar').click(function () {
 	var iProd=$('#idEstaseguro').text();
-	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
-		if(parseInt(resp)==1){$('#btn-FinalizarPrestamoFijo').addClass('hide'); }
+	var valor=parseFloat($('#montoSeguro').text());
+	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
+		if(parseInt(resp)==1){
+			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
+			$('.modal-EstaSeguro').modal('hide');
+	}
 		// body...
 	});
 
@@ -954,6 +1040,8 @@ $('#btnSeguroFinalizar').click(function () {
 	hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 	usuario: $('#spanUsuario').text()
 }}).done(function(resp){console.log(resp);});
+
+	window.location.href = "aplicativo.php?idprod=" +iProd;
 });
 
 $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
@@ -974,9 +1062,13 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarPrestamoMovil', function () {
 	var indice = $(this).parent().parent().index();
 	var iProd=contenedor.find('#lblIdProductosEnc').text();
 
-	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
-		if(parseInt(resp)==1){$('#rowWellCambiante').eq(indice).find('.btn-FinalizarPrestamoMovil').addClass('hide'); }
-	});
+	$('#idEstaseguro').text(iProd);
+	$('#montoSeguro').text(contenedor.find('#spanPagar').text());
+	$('.modal-EstaSeguro').modal('show');
+
+	// $.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd }}).done(function (resp) { console.log(resp)
+	// 	if(parseInt(resp)==1){$('#rowWellCambiante').eq(indice).find('.btn-FinalizarPrestamoMovil').addClass('hide'); }
+	// });
 });
 
 /*$("#btnImprimirNoFinalizados").printPage({
@@ -1061,7 +1153,7 @@ $('#cmbOficinasTotal').change(function () {
 	cambiodeOficina();
 });
 $('.modal-adelantarPago').on('shown.bs.modal', function() {
-  $('#txtAdelantPagoMonto').focus();
+	$('#txtAdelantPagoMonto').focus();
 })
 $('#btn-AdelantoPrestamoFijo').click(function () {
 	console.log($(this).parent().parent().find('#lblIdProductosEnc').text())
@@ -1138,8 +1230,8 @@ function guardarAdelanto(cant, produc, indexDatos){
 		$('.modal-adelantarPago').modal('hide');
 		window.location.href = "aplicativo.php?idprod=" +produc;
 	});
-}
-$('#divListadoUser').on('click', '.btnEliminarUser', function () {
+
+}$('#divListadoUser').on('click', '.btnEliminarUser', function () {
 	console.log('limi')
 });
 $('#btnGuardarOffice').click(function () {

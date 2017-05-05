@@ -316,7 +316,55 @@ input[type=number] {-moz-appearance:textfield;}
     color: #fff; /* active text color */
     background-color: #a94442; /* active bg color */
 }
-
+/**************************************************************/
+/*** PANEL morado ***/
+.panel-morado {
+    border-color: #694D9F;
+}
+.panel-morado>.panel-heading {
+    color: #3c763d;
+    background-color: #694D9F;
+    border-color: #694D9F; }
+.with-nav-tabs.panel-morado .nav-tabs > li > a,
+.with-nav-tabs.panel-morado .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > li > a:focus {
+    color: #fff;
+}
+.with-nav-tabs.panel-morado .nav-tabs > .open > a,
+.with-nav-tabs.panel-morado .nav-tabs > .open > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > .open > a:focus,
+.with-nav-tabs.panel-morado .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > li > a:focus {
+    color: #fff;
+    background-color: #694D9F;
+    border-color: transparent;
+}
+.with-nav-tabs.panel-morado .nav-tabs > li.active > a,
+.with-nav-tabs.panel-morado .nav-tabs > li.active > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > li.active > a:focus {
+    color: #694D9F;
+    background-color: #fff;
+    border-color: #694D9F;
+    border-bottom-color: transparent;
+}
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu {
+    background-color: #694D9F;
+    border-color: #694D9F;
+}
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > li > a {
+    color: #fff;   
+}
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+    background-color: #694D9F;
+}
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+.with-nav-tabs.panel-morado .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+    background-color: #694D9F;
+}
+.panel-morado .badge{color: #694D9F; background-color: #fff;}
+/********************************************************************/
 
 
 .small small{font-size: 80%;}
@@ -349,8 +397,10 @@ body {
 }
 
 
-#tabDetalle .row, #tabNoFinalizados .row, #divListadoUser p, #divTotalProductos .row{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px;transition: all 1s; color: #7d7d7d; }
-#tabDetalle .row:hover, #tabNoFinalizados .row:hover, #divTotalProductos .row:hover {background-color: #fcebba;
+#tabDetalle .row, #tabNoFinalizados .row, #divListadoUser p, #divTotalProductos .row, #divListaPorFinalizar p, #divListaPorFinalizar .row
+{border-bottom: 1px solid #e5e5e5; padding-bottom: 6px; padding-top: 6px;transition: all 1s; color: #7d7d7d; }
+#tabDetalle .row:hover, #tabNoFinalizados .row:hover, #divTotalProductos .row:hover, #divListaPorFinalizar .row:hover
+{background-color: #fcebba;
     /*border: 1px solid #968143;*/
     box-shadow: 0 0px 2px 0 rgb(255, 200, 34), 0 1px 2px 0 rgb(245, 169, 0);
     color: #968143;
@@ -396,3 +446,94 @@ body {
   }
 }
 .btn-md{padding: 10px 16px; font-size: 16px; line-height: 1.3333333; border-radius: 6px;}
+
+
+
+
+
+
+
+.alert-message
+{
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #eee;
+}
+.alert-message h4
+{
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.alert-message p:last-child
+{
+    margin-bottom: 0;
+}
+.alert-message code
+{
+    background-color: #fff;
+    border-radius: 3px;
+}
+.alert-message-success
+{
+    background-color: #F4FDF0;
+    border-color: #3C763D;
+}
+.alert-message-success h4
+{
+    color: #3C763D;
+}
+.alert-message-danger
+{
+    background-color: #fdf7f7;
+    border-color: #d9534f;
+}
+.alert-message-danger h4
+{
+    color: #d9534f;
+}
+.alert-message-warning
+{
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+}
+.alert-message-warning h4
+{
+    color: #f0ad4e;
+}
+.alert-message-info
+{
+    background-color: #f4f8fa;
+    border-color: #5bc0de;
+}
+.alert-message-info h4
+{
+    color: #5bc0de;
+}
+.alert-message-default
+{
+    background-color: #EEE;
+    border-color: #B4B4B4;
+}
+.alert-message-default h4
+{
+    color: #000;
+}
+.alert-message-notice
+{
+    background-color: #FCFCDD;
+    border-color: #BDBD89;
+}
+.alert-message-notice h4
+{
+    color: #444;
+}
+.alert-message-morado
+{
+    background-color: #fff;
+    border-color: #694D9F;
+}
+.alert-message-morado h4
+{
+    color: #694D9F;
+}
+.alert-message-morado p{color: #555; font-size: 14px}
