@@ -20,33 +20,33 @@
 </style>
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 text-center" style="color: #192335;">
 			<div class="wello login-box">
-				<h2 class="text-center" style="font-weight:300;">PeruCash</h2>
-				<legend><small>Casa de préstamos y empeños</small></legend>
+				<h2 class="text-center" style="font-weight:300; color:#2b3f63">PeruCash</h2>
+				<legend><small style="color: #3b475d;">Casa de préstamos y empeños</small></legend>
 				
-			<div class="form-group">
-				<label for="username">Usuario</label>
+			<div class="form-group text-center">
+				<label for="username">Usuario:</label>
 				<input class="form-control" value='' id="username" placeholder="Ingrese su nombre de usuario" type="text"  />
 			</div>
-			<div class="form-group">
-				<label for="password">Contraseña</label>
+			<div class="form-group text-center">
+				<label for="password">Contraseña:</label>
 				<input class="form-control" id="passw" value='' placeholder="Contraseña" type="password" />
 			</div>
 			<div class="form-group hidden">
 				<label for="password">Su nombre</label>
 				<input class="form-control mayuscula" id="nombr" value='' placeholder="Díme tu nombre, por favor" type="text" />
 			</div>
-			<div class="form-group">
-				<label for="password">Elija una modalidad</label>
+			<div class="form-group text-center">
+				<label for="password">Elija una modalidad:</label>
 				<select name="" id="cmbMod" class="form-control">
 					<option value="2">Asistente administrativo</option>
 					<option value="1">Director operativo</option>
 					
 				</select>
 			</div>
-			<div class="form-group">
-				<label for="password">Oficina</label>
+			<div class="form-group text-center">
+				<label for="password">Oficina:</label>
 				<select name="" id="office" class="form-control">
 					<option value="0">Seleccione una oficina</option>
 					<?php include 'php/listarSucursales.php'; ?>
@@ -59,7 +59,7 @@
 				<button class="btn btn-success btn-outline" id="btnIniciar"><div class="fa-spin sr-only"><i class="icofont icofont-spinner"></i> </div> <i class="icofont icofont-key icono"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 1.5 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
+			<div class="pull-right" ><small>Ver. 1.8 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>

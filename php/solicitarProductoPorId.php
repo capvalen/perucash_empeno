@@ -33,7 +33,9 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'sucNombre' => $row['sucNombre'],
 		'prodQuienFinaliza' => $row['prodQuienFinaliza'],
 		'prodFechaFinaliza' => $row['prodFechaFinaliza'],
-		'prodCuantoFinaliza' => $row['prodCuantoFinaliza']
+		'prodCuantoFinaliza' => $row['prodCuantoFinaliza'],
+		'prodUltimaFechaInteres' => $row['prodUltimaFechaInteres']
+
 
 
 
