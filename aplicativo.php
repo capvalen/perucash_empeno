@@ -279,6 +279,7 @@ if (@!$_SESSION['Sucursal']){
 
 	</div>
 	<br><div class="pull-right"><p style="margin-top: 10px;">Sessión actual: <em class="mayuscula"><strong><?php echo $_SESSION['Sucursal'].' - '; ?><span id="spanUsuario"><?php echo $_SESSION['Atiende'] ?></span> </strong></em>
+	<button class="btn btn-sm btn-morado btn-outline" id="btnCambiarMiContras"><i class="icofont icofont-key"></i> Cambiar mi contraseña</button> 
 	<button class="btn btn-sm btn-morado btn-outline" id="btnCerrarSesion"><i class="icofont icofont-exit"></i> Cerrar sesión</button> </p></div>
 	</div>
 </div>
@@ -476,6 +477,39 @@ if (@!$_SESSION['Sucursal']){
 		</div>
 	</div>
 
+ <!-- Modal para indicar que se guardó con éxito -->
+	<div class="modal fade modal-cambiarMiContraseña" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-wysteria">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Cambiar mi contraseña</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<p>Ten en cuenta que debes ingresar todos los datos correctos para que puedas usar tu nueva contraseña.</p>
+					
+					<div class="row">
+						<label for="">Tu contraseña actual</label>
+						<input type="password" class="form-control" id="txtMiPassAnt">
+					</div>
+					<div class="row">
+						<label for="">Tu nueva contraseña</label>
+						<input type="password" class="form-control" id="txtMiPassNuevo">
+					</div>
+					<div class="row">
+						<label for="">Repite tu nueva contraseña</label>
+						<input type="password" class="form-control" id="txtMiPassNuevo2">
+					</div>
+					<p class="text-danger hidden"></p>
+				</div>
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cancelar</button>
+			<button class="btn btn-morita btn-outline " id="btnCambiarSeguroPass"><i class="icofont icofont-check"></i> Asignar</button></div>
+		</div>
+		</div>
+	</div>
 
  <!-- Modal para indicar que se guardó con éxito -->
 	<div class="modal fade modal-EstaSeguro" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -1087,25 +1121,50 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarImpuestoMovil', function () {
 $('#btnSeguroFinalizar').click(function () {
 	var iProd=$('#idEstaseguro').text();
 	var valor=parseFloat($('#montoSeguro').text());
-	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
+
+	console.log(iProd)
+	
+	/*$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){
 			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
 			$('.modal-EstaSeguro').modal('hide');
 	}
 		// body...
-	});
+	});*/
 
-	$.ajax({url: '//localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
-	cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
-	articulo: $('#rowWellFijo #spanProducto').text(),
-	monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
-	obs: $('#rowWellFijo #spanObservacion').text(),
-	hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-	usuario: $('#spanUsuario').text()
-}}).done(function(resp){console.log(resp);});
+	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: ');
+		$.ajax({url: '//localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
+			cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+			articulo: $('#rowWellFijo #spanProducto').text(),
+			monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
+			obs: $('#rowWellFijo #spanObservacion').text(),
+			hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+			usuario: $('#spanUsuario').text()
+		}}).done(function(resp){console.log(resp);});
+		}
+	if( !$('#rowWellCambiante').hasClass('hidden')){
+		$.each($('#rowWellCambiante #lblIdProductosEnc'), function (i, elem) {
+			if($(elem).text()==iProd){
+					
+				$.ajax({url: '//localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
+					cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+					articulo: $(elem).parent().find('#spanProducto').text(),
+					monto: parseFloat( $(elem).parent().find('#spanPagar').text() ).toFixed(2),
+					obs: $(elem).parent().find('#spanObservacion').text(),
+					hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+					usuario: $('#spanUsuario').text()
+				}}).done(function(resp){console.log(resp);});
+
+
+
+			}
+
+		});
+	 console.log( 'Buscar Datos en dinamico');
+	}
 
 	window.location.href = "aplicativo.php?idprod=" +iProd;
-});
+ });
 
 $('#btnInteresFinalizar').click(function () {
 	var iProd=$('#idInteresSeguro').text();
@@ -1493,6 +1552,49 @@ $('#btnActualizarDataUser').click(function () { console.log($('#cmbLvlUser').val
 	}
 		
 	
+});
+
+$('#btnCambiarMiContras').click(function () {
+	$('.modal-cambiarMiContraseña').modal('show');
+});
+$('#btnCambiarSeguroPass').click(function () {
+	if($.antPassIsOk==true && $.CoincideNuevPass==true){
+		//console.log('guardar')
+		$.ajax({url: 'php/updatePassSinDatos.php', type: 'POST', data: {texto: $('#txtMiPassNuevo').val() }}).done(function (resp) {
+			if (resp=='1'){
+				$('.modal-cambiarMiContraseña').modal('hide');
+			}
+			
+		});
+	}
+	else{
+		$('.modal-cambiarMiContraseña .text-danger').text('Tienes algun dato erroneo, revísalo.')}
+});
+$('#txtMiPassAnt').focusout(function () {
+	$.ajax({url: 'php/coincidePass.php', type: 'POST', data: {texto: $('#txtMiPassAnt').val()}}).done(function (resp) {
+		var nuev=JSON.parse(resp)
+		if(nuev[0].result==0){
+			$.antPassIsOk=false;
+			//$('#btnCambiarSeguroPass').addClass('disabled');
+			$('.modal-cambiarMiContraseña .text-danger').text('No coincide tu contraseña anterior.').removeClass('hidden');
+		}else{
+			$.antPassIsOk=true;
+			//$('#btnCambiarSeguroPass').removeClass('disabled');
+			$('.modal-cambiarMiContraseña .text-danger').addClass('hidden');
+		}
+	
+});
+});
+$('#txtMiPassNuevo2').focusout(function () {
+	if($('#txtMiPassNuevo').val()!= $('#txtMiPassNuevo2').val()){
+		$('.modal-cambiarMiContraseña .text-danger').text('Las nuevas contraseñas no coinciden.').removeClass('hidden');
+		$.CoincideNuevPass=false;
+		//$('#btnCambiarSeguroPass').addClass('disabled');
+	}else{
+		//$('#btnCambiarSeguroPass').removeClass('disabled');
+		$.CoincideNuevPass=true;
+		$('.modal-cambiarMiContraseña .text-danger').addClass('hidden');
+	}
 });
 </script>
 </body>

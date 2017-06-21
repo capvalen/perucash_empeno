@@ -3,6 +3,7 @@ session_start();
 /* Change to the correct path if you copy this example! */
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 use Mike42\Escpos\Printer;
+use Mike42\Escpos\CapabilityProfiles\DefaultCapabilityProfile;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 /**
