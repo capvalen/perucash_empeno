@@ -46,6 +46,7 @@ if (@!$_SESSION['Sucursal']){
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de oficinas</a></li>
 			<li><a href="#tabAprobarFinalizados" data-toggle="tab"><i class="icofont icofont-badge"></i> Aprobar finalizados</a></li>
+			<li><a href="#tabConfirmarMovimientos" data-toggle="tab"><i class="icofont icofont-badge"></i> Confirmar movimientos</a></li>
 			<?php  } ?>
 			</ul>
 	</div>
@@ -116,10 +117,16 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">0.00</span></span></div>
 			<!-- <div class="col-sm-6 col-sm-offset-6"><label><i class="icofont icofont-chat"></i> Deuda del cliente: </label> <span class="text-success">S/. <span id="spanDeudaFinal">0.00</span></span></div> -->
+			<div class="col-xs-12 sr-only" id="contenedorAdelantos" >
+				<div class="alert-message alert-message-warning">
+						<h4>Actividad con el producto</h4>
+						<p>Por: <strong><span class="mayuscula" id="QuienOcurre"></span></strong>, el día: <strong><span id="FechaOcurrencia"></span></strong>, <strong><span id="casoOcurrencia"></span></strong> por el monto: S/. <span id="montoOcurrencia"></span> estado: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+				</div>
+			</div>
 			<div class="col-xs-12 sr-only" id="contenedorFinalizados" >
 				<div class="alert-message alert-message-morado">
 						<h4>Producto finalizado</h4>
-						<p>por: <strong><span class="mayuscula" id="QuienFinalizo"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong>, por el monto: S/. <span id="finalizaMonto"></span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+						<p>Por: <strong><span class="mayuscula" id="QuienFinalizo"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong>, por el monto: S/. <span id="finalizaMonto"></span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
 				</div>
 			</div>
 			<div class="col-sm-8 col-sm-offset-2">
@@ -272,6 +279,44 @@ if (@!$_SESSION['Sucursal']){
 				</div>
 			</div>
 		</div>
+
+
+		<div class="tab-pane fade" id="tabConfirmarMovimientos">
+		<div class="row ">
+			<p>Confirmar movimientos diarios, apoyo a controlar las actividades del personal. Ordenado de más actual a más antigüo.</p>
+			<div class="col-xs-12 ">
+				<div >
+					<div class="row"><strong>
+					<div class="col-sm-3">Producto</div>
+					<div class="col-sm-1">Monto</div>
+					<div class="col-sm-1">Responsable</div>
+					<div class="col-sm-2">Fecha</div>
+					<div class="col-sm-2">Movimiento</div>
+					<div class="col-sm-2">Acciones</div>
+					</strong></div>
+				</div>
+				<div id="divListaPorConfirmar">
+					<div class="row">
+					<div class="col-sm-3">Producto ABC</div>
+					<div class="col-sm-1">S/. 25.50</div>
+					<div class="col-sm-1">Carlos Alex</div>
+					<div class="col-sm-2">Lunes, 21 Junio 2017</div>
+					<div class="col-sm-2">El cliente adelantó un monto a su préstamo</div>
+					<div class="col-sm-2">
+						<button class="btn btn-primary btn-outline sr-only" style="padding: 6px 6px;"><i class="icofont icofont-check"></i> Aceptar</button> 
+						<button class="btn btn-morado btn-outline " style="padding: 6px 6px;"><i class="icofont icofont-exchange"></i> Retirar</button>
+						<button class="btn btn-danger btn-outline " style="padding: 6px 6px;"><i class="icofont icofont-sale-discount"></i> Rematar</button>
+						
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+
+	</div>
+	
+	
 
 	</div>
 
@@ -1174,14 +1219,14 @@ $('#btnInteresFinalizar').click(function () {
 
 	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: '+ $('#rowWellFijo #spanProducto').text());
 		
-			articuloCalc: $('#rowWellFijo #spanProducto').text();
-			montoCalc: $('#rowWellFijo #spanIntGenerado').text();
+			articuloCalc= $('#rowWellFijo #spanProducto').text();
+			montoCalc= $('#rowWellFijo #spanIntGenerado').text();
 		}
 	if( !$('#rowWellCambiante').hasClass('hidden')){
 		$.each($('#rowWellCambiante #lblIdProductosEnc'), function (i, elem) {
 			if($(elem).text()==iProd){
-				articuloCalc: $(elem).parent().find('#spanProducto').text();
-				montoCalc: parseFloat( $(elem).parent().find('#spanPagar').text() ).toFixed(2);
+				articuloCalc= $(elem).parent().find('#spanProducto').text();
+				montoCalc= parseFloat( $(elem).parent().find('#spanIntGenerado').text() ).toFixed(2);
 				return false;
 			}
 
@@ -1198,6 +1243,7 @@ $('#btnInteresFinalizar').click(function () {
 	}
 		// body...
 	});
+	//console.log(articuloCalc+'\n'+montoCalc)
 
 	$.ajax({url: '//localhost/perucash/printTicketInteres.php', type: 'POST', data: {
 	cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
@@ -1207,7 +1253,7 @@ $('#btnInteresFinalizar').click(function () {
 	usuario: $('#spanUsuario').text()
 }}).done(function(resp){console.log(resp);});
 
-//	window.location.href = "aplicativo.php?idprod=" +iProd;
+	window.location.href = "aplicativo.php?idprod=" +iProd;
 });
 
 $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
@@ -1357,7 +1403,7 @@ $('#btnIngresarPago').click(function () {
 	}}
 });
 function guardarAdelanto(cant, produc, indexDatos){
-	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) {// console.log(resp);
+	$.ajax({url:'php/insertarAdelantoAProducto.php', type:'POST', data: {monto: cant, idProd: produc}}).done(function (resp) { //console.log(resp);
 		if(resp==1){
 			var adela=parseFloat( $('#spanAdelanto').text());
 			var dado = parseFloat($('#spanMontoDado').text());
@@ -1381,14 +1427,14 @@ function guardarAdelanto(cant, produc, indexDatos){
 
 			
 			moment().locale('es');
-			$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
+			/*$.ajax({url: '//localhost/perucash/printTicketAdelanto.php', type: 'POST', data: {
 				cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 				articulo: articula,
 				adelanto: parseFloat(cant).toFixed(2),
 				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 				usuario: $('#spanUsuario').text()
 			}}).done(function(resp){console.log(resp);
-			});
+			});*/
 
 			
 		}
