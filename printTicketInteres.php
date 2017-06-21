@@ -24,16 +24,16 @@ try {
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connector);
     $printer -> text("                PeruCash\n");
-    $printer -> text("      Casa de Préstamos y Empeños\n");
-    $printer -> text("          Oficina de Apoyo N° 1\n");
+    $printer -> text("      Casa de Prestamos y Empeños\n");
+    $printer -> text("          Oficina de Apoyo N 1\n");
     $printer -> text("   ----------------------------------\n\n");
-    $printer -> text("          * Pago Finalizado *\n\n");
+    $printer -> text("          * Pago de Interes *\n\n");
     $printer -> text("   ".$_POST['hora']."\n\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
-    $printer -> text("Monto saldado: S/. ".$_POST['monto']."\n\n");
+    $printer -> text("Monto interes: S/. ".$_POST['monto']."\n\n");
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
-    $printer -> text("Usuario: ".ucwords($_POST['usuario'])."\n");
+    $printer -> text("Atendido por: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("         Celular: # 943 798696\n");
     $printer -> text("         Web: www.perucash.com\n");

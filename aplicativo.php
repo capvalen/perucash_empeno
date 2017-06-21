@@ -1124,19 +1124,19 @@ $('#btnSeguroFinalizar').click(function () {
 
 	console.log(iProd)
 	
-	/*$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
+	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){
 			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
 			$('.modal-EstaSeguro').modal('hide');
 	}
 		// body...
-	});*/
+	});
 
-	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: ');
+	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: '+ $('#rowWellFijo #spanProducto').text());
 		$.ajax({url: '//localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
 			cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 			articulo: $('#rowWellFijo #spanProducto').text(),
-			monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
+			monto: parseFloat($('#rowWellFijo #spanPagar').text()).toFixed(2),
 			obs: $('#rowWellFijo #spanObservacion').text(),
 			hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 			usuario: $('#spanUsuario').text()
@@ -1155,8 +1155,7 @@ $('#btnSeguroFinalizar').click(function () {
 					usuario: $('#spanUsuario').text()
 				}}).done(function(resp){console.log(resp);});
 
-
-
+				return false;
 			}
 
 		});
@@ -1169,6 +1168,29 @@ $('#btnSeguroFinalizar').click(function () {
 $('#btnInteresFinalizar').click(function () {
 	var iProd=$('#idInteresSeguro').text();
 	var valor=parseFloat($('#spanInteresSeguro').text());
+	var articuloCalc='', montoCalc='';
+
+
+
+	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: '+ $('#rowWellFijo #spanProducto').text());
+		
+			articuloCalc: $('#rowWellFijo #spanProducto').text();
+			montoCalc: $('#rowWellFijo #spanIntGenerado').text();
+		}
+	if( !$('#rowWellCambiante').hasClass('hidden')){
+		$.each($('#rowWellCambiante #lblIdProductosEnc'), function (i, elem) {
+			if($(elem).text()==iProd){
+				articuloCalc: $(elem).parent().find('#spanProducto').text();
+				montoCalc: parseFloat( $(elem).parent().find('#spanPagar').text() ).toFixed(2);
+				return false;
+			}
+
+		});
+	 console.log( 'Buscar Datos en dinamico');
+	}
+
+
+
 	$.ajax({url:'php/updateFinalizarInteres.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){
 			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
@@ -1179,13 +1201,13 @@ $('#btnInteresFinalizar').click(function () {
 
 	$.ajax({url: '//localhost/perucash/printTicketInteres.php', type: 'POST', data: {
 	cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
-	articulo: $('#rowWellFijo #spanProducto').text(),
-	monto: parseFloat(valor).toFixed(2),
+	articulo: articuloCalc,
+	monto: montoCalc,
 	hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 	usuario: $('#spanUsuario').text()
 }}).done(function(resp){console.log(resp);});
 
-	window.location.href = "aplicativo.php?idprod=" +iProd;
+//	window.location.href = "aplicativo.php?idprod=" +iProd;
 });
 
 $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
