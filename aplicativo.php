@@ -45,7 +45,7 @@ if (@!$_SESSION['Sucursal']){
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de oficinas</a></li>
-			<li><a href="#tabAprobarFinalizados" data-toggle="tab"><i class="icofont icofont-badge"></i> Aprobar finalizados</a></li>
+			<li class="sr-only"><a href="#tabAprobarFinalizados" data-toggle="tab"><i class="icofont icofont-badge"></i> Aprobar finalizados</a></li>
 			<li><a href="#tabConfirmarMovimientos" data-toggle="tab"><i class="icofont icofont-badge"></i> Confirmar movimientos</a></li>
 			<?php  } ?>
 			</ul>
@@ -296,7 +296,7 @@ if (@!$_SESSION['Sucursal']){
 					</strong></div>
 				</div>
 				<div id="divListaPorConfirmar">
-					<div class="row">
+					<!-- <div class="row">
 					<div class="col-sm-3">Producto ABC</div>
 					<div class="col-sm-1">S/. 25.50</div>
 					<div class="col-sm-1">Carlos Alex</div>
@@ -308,7 +308,7 @@ if (@!$_SESSION['Sucursal']){
 						<button class="btn btn-danger btn-outline " style="padding: 6px 6px;"><i class="icofont icofont-sale-discount"></i> Rematar</button>
 						
 					</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -484,6 +484,62 @@ if (@!$_SESSION['Sucursal']){
 	</div>
 	
 </div>
+
+ <!-- Modal para indicar que esta seguro de retirando -->
+	<div class="modal fade modal-EstaSeguroRetirarMovimiento" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-wysteria">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Retirar movimiento</h4>
+			</div>
+			<div class="modal-body"> <span class="sr-only idSelecRow"></span>
+				Estas intentando <strong>retirar</strong> el movimiento generado del producto «<strong class="strProd mayuscula"></strong>» por «<strong class="strUser"></strong>» ¿Es correcto?
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No, cancelar</button>
+			<button class="btn btn-morita btn-outline " id="btnRetirarMovimientoModal"><i class="icofont icofont-check"></i> Sí, seguro</button></div>
+		</div>
+		</div>
+	</div>
+
+
+
+ <!-- Modal para indicar que esta seguro de rematar -->
+	<div class="modal fade modal-EstaSeguroRematarMovimiento" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-danger">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Rematar producto</h4>
+			</div>
+			<div class="modal-body"> <span class="sr-only idSelecRow"></span>
+				Estas intentando <strong>rematar</strong> movimiento generado del producto «<strong class="strProd mayuscula"></strong>» por «<strong class="strUser"></strong>» ¿Es correcto?
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No, cancelar</button>
+			<button class="btn btn-morita btn-outline " id="btnRematarMovimientoModal"><i class="icofont icofont-check"></i> Sí, seguro</button></div>
+		</div>
+		</div>
+	</div>
+
+ <!-- Modal para indicar que esta seguro de aceptar -->
+	<div class="modal fade modal-EstaSeguroAceptarMovimiento" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-success">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Aceptar movimiento</h4>
+			</div>
+			<div class="modal-body"> <span class="sr-only idSelecRow"></span>
+				Estas intentando <strong>aceptar</strong> movimiento generado del producto «<strong class="strProd mayuscula"></strong>» por «<strong class="strUser"></strong>» ¿Es correcto?
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> No, cancelar</button>
+			<button class="btn btn-morita btn-outline " id="btnAceptarMovimientoModal"><i class="icofont icofont-check"></i> Sí, seguro</button></div>
+		</div>
+		</div>
+	</div>
 
  <!-- Modal para indicar que se guardó con éxito -->
 	<div class="modal fade modal-EstaSeguroFinalizar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -997,11 +1053,111 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			});
 		});
 	 }
+
+	 if(target=='#tabConfirmarMovimientos'){
+	 	$.ajax({url:'php/listarMovimientosSinAprobar.php', type: 'POST', data:{oficina: $('#cmbOficinasTotal').val()}}).done(function (resp) {
+	 		//console.log(JSON.parse(resp));
+	 		$('#divListaPorConfirmar').children().remove();
+	 		$.each(JSON.parse(resp), function (i, elem) {
+
+	 			//console.log(elem)
+	 			var boton='';
+	 			if(elem.idDetalleReporte==2||elem.idDetalleReporte==1){
+	 				boton=`<button class="btn btn-success btn-outline btnAceptarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-check"></i> Aceptar</button> `
+	 			}
+	 			if(elem.idDetalleReporte==3){
+	 				boton=`<button class="btn btn-morado btn-outline btnRetirarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-exchange"></i> Retirar</button>
+						<button class="btn btn-danger btn-outline btnRematarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-sale-discount"></i> Rematar</button>`;
+	 			}
+	 			$('#divListaPorConfirmar').append(`
+	 				<div class="row">
+	 				<div class="idRowReporte sr-only">${elem.idReporte}</div>
+					<div class="col-sm-3 mayuscula nomProd">${elem.prodNombre}</div>
+					<div class="col-sm-1">S/. ${parseFloat(elem.repoValorMonetario).toFixed(2)}</div>
+					<div class="col-sm-1 nomUsr">${elem.repoUsuario}</div>
+					<div class="col-sm-2">${elem.repoFechaOcurrencia}</div>
+					<div class="col-sm-2">${elem.repoDescripcion}</div>
+					<div class="col-sm-2 botones">
+						${boton}
+					</div>
+					</div>`)
+	 		})
+	 	});
+	 }
 });
+
+$('#divListaPorConfirmar').on('click', '.btnAceptarReporteGuar', function () {
+	var padre= $(this).parent().parent();
+	//console.log(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroAceptarMovimiento').find('.idSelecRow').text(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroAceptarMovimiento').find('.strProd').text(padre.find('.nomProd').text());
+	$('.modal-EstaSeguroAceptarMovimiento').find('.strUser').text(padre.find('.nomUsr').text());
+	$('.modal-EstaSeguroAceptarMovimiento').modal('show');
+});
+$('#divListaPorConfirmar').on('click', '.btnRetirarReporteGuar', function () {
+	var padre= $(this).parent().parent();
+	//console.log(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroRetirarMovimiento').find('.idSelecRow').text(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroRetirarMovimiento').find('.strProd').text(padre.find('.nomProd').text());
+	$('.modal-EstaSeguroRetirarMovimiento').find('.strUser').text(padre.find('.nomUsr').text());
+	$('.modal-EstaSeguroRetirarMovimiento').modal('show');
+});
+$('#divListaPorConfirmar').on('click', '.btnRematarReporteGuar', function () {
+	var padre= $(this).parent().parent();
+	//console.log(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroRematarMovimiento').find('.idSelecRow').text(padre.find('.idRowReporte').text());
+	$('.modal-EstaSeguroRematarMovimiento').find('.strProd').text(padre.find('.nomProd').text());
+	$('.modal-EstaSeguroRematarMovimiento').find('.strUser').text(padre.find('.nomUsr').text());
+	$('.modal-EstaSeguroRematarMovimiento').modal('show');
+});
+$('#btnAceptarMovimientoModal').click(function () {
+	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
+	$.ajax({url:'php/updateMovimientoAceptar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	 if(resp==1){
+	 	$('.modal-EstaSeguroAceptarMovimiento').modal('hide');
+	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { //console.log(elem)
+	 		if($(elem).text()==idCamb){
+	 			$(this).parent().find('.botones').children().remove();
+	 			$(this).parent().find('.botones').append('<p>Se aceptó el movimiento por <strong>'+$('#spanUsuario').text()+'</strong> </p>' );
+	 		}
+	 	})
+	 }
+	});
+});
+$('#btnRematarMovimientoModal').click(function () {
+	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
+	$.ajax({url:'php/updateMovimientoRematar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	 if(resp==1){
+	 	$('.modal-EstaSeguroRematarMovimiento').modal('hide');
+	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
+	 		if($(elem).text()==idCamb){
+	 			$(this).parent().find('.botones').children().remove();
+	 			$(this).parent().find('.botones').append('<p>Se registró como rematado por <strong>'+$('#spanUsuario').text()+'</strong> </p>' );
+	 		}
+	 	})
+	 }
+	});
+});
+$('#btnRetirarMovimientoModal').click(function () {
+	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
+	$.ajax({url:'php/updateMovimientoRetirar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	 if(resp==1){
+	 	$('.modal-EstaSeguroRetirarMovimiento').modal('hide');
+	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
+	 		if($(elem).text()==idCamb){
+	 			$(this).parent().find('.botones').children().remove();
+	 			$(this).parent().find('.botones').append('<p>Producto retirado por <strong>'+$('#spanUsuario').text()+'</strong> </p>' );
+	 		}
+	 	})
+	 }
+	});
+});
+
+//, , btnAceptarMovimientoModal
+
 $('#divListaPorFinalizar').on('click','.btnBotonPorConcluir',  function () {
 	$('.modal-EstaSeguroFinalizar').modal('show');
-})
-
+});
 
 
 $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
@@ -1018,10 +1174,10 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 					<div class="col-xs-3 eleDni">${elem.cliDni}</div>
 					<div class="col-xs-2 eleCel">${elem.cliCelular}</div>
 					<div class="col-xs-1"><button class="btn btn-negro btn-outline btnSelectUser" id="${elem.idCliente}"><i class="icofont icofont-tick-mark"></i></button></div></div>`)
-			})
+			});
 			
 			$('.modal-mostrarResultadosCliente').modal('show');
-		})
+		});
 		
 		
 	}
