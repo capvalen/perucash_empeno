@@ -5,7 +5,7 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call updateMovimientoRematar(".$_POST['idRepo'].", '".$_SESSION['Atiende']."' );");
+$log = mysqli_query($conection,"call updateMovimientoRematar(".$_POST['idRepo'].", '".$_POST['idUser']."' );");
 //echo "call updateMovimientoAceptar(".$_POST['idRepo'].", '".$_SESSION['Atiende']."' );";
 /* cerrar la conexión */
 mysqli_close($conection);

@@ -39,9 +39,9 @@ if (@!$_SESSION['Sucursal']){
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#tabRegistro" data-toggle="tab"><i class="icofont icofont-favourite"></i> Registro</a></li>
 			<li><a href="#tabBusqueda" data-toggle="tab"><i class="icofont icofont-favourite"></i> Búsqueda</a></li>
-			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Productos Vencidos <span class="badge" id="spanContarVenc"></span></a></li>
-			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados</a></li>
-			<li><a href="#tabTodosProductos" data-toggle="tab"><i class="icofont icofont-favourite"></i> Todos los Productos</a></li>
+			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Artículos vencidos <span class="badge" id="spanContarVenc"></span></a></li>
+			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados <span class="badge" id="spanContarNoFin"></span></a></li>
+			<li><a href="#tabTodosProductos" data-toggle="tab"><i class="icofont icofont-favourite"></i> Todos los artículos</a></li>
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de oficinas</a></li>
@@ -68,7 +68,9 @@ if (@!$_SESSION['Sucursal']){
 
 	<div class="row well well-amarillo">
 		<p><strong>Datos del bien que ingresa:</strong></p>
-		<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
+		<div class="col-sm-12">
+			<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
+		</div>
 		<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
 		<div class="col-sm-6 hidden"><label>Interés (%):</label> <input type="number" id="txtMontoInteres" class="form-control" placeholder="% de Interés" value="10" min ="0" step="1" disabled></div>
 		<div class="col-sm-6"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
@@ -102,7 +104,7 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label>Celular(es): </label> <span class="text-primary mayuscula"  id="spanCelular"></span></div>
 			<div class="col-sm-6"><button class="btn btn-negro btn-outline " id="btnEditarDatoCliente"><i class="icofont icofont-edit"></i> Actualizar datos</button></div>
 		</div>
-		<p><strong><i class="icofont icofont-cube"></i> Listado de productos adquiridos por el cliente:</strong></p>
+		<p><strong><i class="icofont icofont-cube"></i> Listado de artículos adquiridos por el cliente:</strong></p>
 		
 		<div class="row well hidden" id="rowWellFijo">
 			<span class="hidden" id="lblIdProductosEnc"><?php echo $_GET['idprod']; ?></span>
@@ -117,16 +119,26 @@ if (@!$_SESSION['Sucursal']){
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Observaciones: </label> <em><span class="text-success mayuscula" id="spanObservacion">Ninguna</span></em></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-chat"></i> Adelantos: </label> <span class="text-success">S/. <span id="spanAdelanto">0.00</span></span></div>
 			<!-- <div class="col-sm-6 col-sm-offset-6"><label><i class="icofont icofont-chat"></i> Deuda del cliente: </label> <span class="text-success">S/. <span id="spanDeudaFinal">0.00</span></span></div> -->
+			<div class="col-xs-12 sr-only" id="contenedorVigente" >
+				<div class="alert-message alert-message-success">
+						<h4>Artículo vigente: <small>El artículo se encuentra dentro del plazo, pasa a posible remate en: <strong id="contDiasPosRem"></strong> días.</small></h4>
+				</div>
+			</div>
+			<div class="col-xs-12 sr-only" id="contenedorExpiro" >
+				<div class="alert-message alert-message-danger">
+						<h4>Artículo expirado: <small>El artículo se encuentra más de un mes, se sugiere <strong>rematar</strong></small></h4>
+				</div>
+			</div>
 			<div class="col-xs-12 sr-only" id="contenedorAdelantos" >
 				<div class="alert-message alert-message-warning">
 						<h4>Actividad con el producto</h4>
-						<p>Por: <strong><span class="mayuscula" id="QuienOcurre"></span></strong>, el día: <strong><span id="FechaOcurrencia"></span></strong>, <strong><span id="casoOcurrencia"></span></strong> por el monto: S/. <span id="montoOcurrencia"></span> estado: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+						<p>Por: <strong><span class="mayuscula" id="QuienOcurre"></span></strong>, el día: <strong><span id="FechaOcurrencia"></span></strong>, <strong><span id="casoOcurrencia"></span></strong> por el monto: S/. <span id="montoOcurrencia"></span> estado: <strong><span id="QuienApruebaMov"></span><span id="estadoAprobacionMov"></span></strong>.</p>
 				</div>
 			</div>
 			<div class="col-xs-12 sr-only" id="contenedorFinalizados" >
 				<div class="alert-message alert-message-morado">
-						<h4>Producto finalizado</h4>
-						<p>Por: <strong><span class="mayuscula" id="QuienFinalizo"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong>, por el monto: S/. <span id="finalizaMonto"></span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+						<h4>Artículo finalizado</h4>
+						<p>Por: <strong><span class="mayuscula" id="QuienFinalizoFin"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong> Monto: S/. <span id="finalizaMonto"></span> por: <strong><span id="QuienApruebaFin"></span>, <span id="estadoAprobacionFin"></span></strong>.</p>
 				</div>
 			</div>
 			<div class="col-sm-8 col-sm-offset-2">
@@ -134,7 +146,7 @@ if (@!$_SESSION['Sucursal']){
 				<button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button>
 				<button class="btn btn-indigo btn-outline" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 				<button class="btn btn-indigo btn-outline" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-				<button class="btn btn-success btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+				<button class="btn btn-danger btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 			</div>
 		</div>
 		<div id="rowWellCambiante">
@@ -142,33 +154,59 @@ if (@!$_SESSION['Sucursal']){
 	</div>
 	
 	</div>
-	<div class="tab-pane fade" id="tabDetalle"><p>Se encontraron <strong id="strFaltan"> </strong> productos vencidos de más de 30 días.</p>
+	<div class="tab-pane fade" id="tabDetalle"><p>Se encontraron <strong id="strFaltan"> </strong> Artículos vencidos de más de 30 días.</p>
 		<div class="row hidden-xs"><strong>
-			<div class="col-sm-4">Nombre del producto</div>
+			<div class="col-sm-4">Nombre del artículo</div>
 			<div class="col-sm-1">Monto S/.</div>
-			<div class="col-sm-4">Dueño</div>
+			<div class="col-sm-1">Más interés</div>
+			<div class="col-sm-3">Dueño</div>
 			<div class="col-sm-2">Fecha Registro</div></strong>
 		</div>
 		<div id="divProdAVencerse">
 			<p>Sin elementos que mostrar</p>
 		</div>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			<div class="panel panel-default" id="cuadroPanelVencidos">
+			  <div class="panel-heading"><strong>Resumen de cuadro finalizados: </strong> <span class="spandia"></span></div>
+			  <div class="panel-body">
+			  	<p><strong>Total de productos: </strong> <span class="spanCuadrProd"> 0 productos</span></p>
+			  	<p><strong>Suma total de montos: </strong> <span class="spanCuadrSumaMont">S/. 0.00</span></p>
+			  	<p><strong>Suma total con intereses: </strong> <span class="spanCuadrSumaInt">S/. 0.00</span></p>
+			  </div>
+			</div>
+		</div>
+		</div>
 
 	<!-- fin de tab pane 1 -->
 	</div>
 	<div class="tab-pane fade" id="tabNoFinalizados">
-	<button class="btn btn-negro btn-outline" id="btnImprimirNoFinalizados"><i class="icofont icofont-print"></i> Imprimir éste reporte</button>
+	
+	<button class="btn btn-negro btn-outline sr-only" id="btnImprimirNoFinalizados"><i class="icofont icofont-print"></i> Imprimir éste reporte</button>
 		<div class="row"><strong>
 			<div class="col-sm-3">Apellidos y Nombres</div>
 			<div class="col-sm-2">Registro</div>
 			<div class="col-sm-2 hidden">Caduca</div>
-			<div class="col-sm-1">Móvil</div>
 			<div class="col-sm-1">Entregado</div>
+			<div class="col-sm-1">Más interés</div>
 			<div class="col-sm-3">Garantía</div></strong>
 
 		</div>
 
 		<div  id="divNoFinalizados">
 			
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+			<div class="panel panel-default" id="cuadroPanelNoFinalizados">
+			  <div class="panel-heading"><strong>Resumen de cuadro finalizados: </strong> <span class="spandia"></span></div>
+			  <div class="panel-body">
+			  	<p><strong>Total de productos: </strong> <span class="spanCuadrProd"> 0 productos</span></p>
+			  	<p><strong>Suma total de montos: </strong> <span class="spanCuadrSumaMont">S/. 0.00</span></p>
+			  	<p><strong>Suma total con intereses: </strong> <span class="spanCuadrSumaInt">S/. 0.00</span></p>
+			  </div>
+			</div>
+		</div>
 		</div>
 	<!-- fin de tab pane 3 -->
 	</div>
@@ -264,7 +302,7 @@ if (@!$_SESSION['Sucursal']){
 
 		<div class="tab-pane fade" id="tabAprobarFinalizados">
 		<div class="row well">
-			<p><strong>Listado de productos por aprobar</strong></p>
+			<p><strong>Listado de artículos por aprobar</strong></p>
 			<div class="col-xs-12 ">
 				<div >
 					<div class="row"><strong>
@@ -296,6 +334,7 @@ if (@!$_SESSION['Sucursal']){
 					</strong></div>
 				</div>
 				<div id="divListaPorConfirmar">
+					<p>No hay artículos que mostrar</p>
 					<!-- <div class="row">
 					<div class="col-sm-3">Producto ABC</div>
 					<div class="col-sm-1">S/. 25.50</div>
@@ -711,9 +750,19 @@ $(document).ready(function () {
 				var hoy = moment();
 				var fechaIni =moment(dato[0].prodFechaInicial);
 				var fechaFin=moment(dato[0].prodFechaVencimiento);
-				console.log('Tantos dias desde fecha incial a hoy: '+ hoy.diff(fechaIni, 'days'));
+				var differencia=hoy.diff(fechaIni, 'days');
+				console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
+				if(parseInt(differencia)>30){
+					$('#contenedorExpiro').removeClass('sr-only');
+				}else{
+					$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(31-differencia));
+				}
+			
 				//respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
 
+				if(dato[0].prodActivo==0){
+					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
+				}else{
 				if( hoy.diff(fechaIni, 'days') <=14){
 					
 					if(dato[0].prodUltimaFechaInteres==moment().format('DD/MM/YYYY')){ 
@@ -727,6 +776,7 @@ $(document).ready(function () {
 				else{
 					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
 					//$('#spanPorcent').text(dato[0].prodInteres);
+				}
 				}
 				
 				// var respu; console.log(dato[0]);
@@ -754,12 +804,25 @@ $(document).ready(function () {
 				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
 
 				if(dato[0].prodActivo==0){
+					$('#btn-imprimirTicketFijo').addClass('hidden');
+					$('#btn-imprimirImpresoraFijo').addClass('hidden');
 					$('#btn-AdelantoPrestamoFijo').addClass('hidden');
+					$('#btn-FinalizarImpuestoFijo').addClass('hidden');
 					$('#btn-FinalizarPrestamoFijo').addClass('hidden');
 					$('#contenedorFinalizados').removeClass('sr-only');
-					$('#QuienFinalizo').text(dato[0].prodQuienFinaliza);
-					$('#finalizaMonto').text(parseFloat(dato[0].prodCuantoFinaliza).toFixed(2));
-					$('#FechaFinalizo').text(moment(dato[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm'));
+					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
+						dato2=JSON.parse(resp);
+						console.log(dato2)
+						$('#QuienFinalizoFin').text(dato2[0].repoUsuario);
+						$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
+						$('#QuienApruebaFin').text(dato2[0].repoQuienConfirma);
+						$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
+						$('#estadoAprobacionFin').text(dato2[0].estadoConfirmacion);
+						$('#finalizaMonto').text(parseFloat(dato2[0].repoValorMonetario).toFixed(2));
+						$('#FechaFinalizo').text(moment(dato2[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm a'));
+					});
+					console.log(moment().diff(fechaIni, 'days'))
+					
 				}
 			}
 			else{console.log('otra sucrusal');
@@ -972,39 +1035,68 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 		// rellenarTabBusqueda();
 	 }
 	 if(target=='#tabDetalle'){
+	 	
+	 	
 		$('#divProdAVencerse').children().remove();
 		$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }). done(function (resp) {
-			
+			var montSimpleAcum=0, montIntAcum=0;
 			var dato = JSON.parse(resp);
-			
-			$.each(dato, function (i, elem) { moment.locale('es')
-				var limite = moment(elem.prodFechaVencimiento);
-				//console.log(elem)
+			$('#cuadroPanelVencidos').find('.spandia').text(moment().format('DD/MM/YYYY'));
+			$('#cuadroPanelVencidos').find('.spanCuadrProd').text(dato.length);
+
+			$.each(dato, function (i, elem) { moment.locale('es');
+				var limite = moment(elem.prodFechainicial);
+				var hoy = moment();
+				var fechaIni =moment(elem.prodFechainicial);
+				respu=calculoIntereses(fechaIni, hoy, elem.prodMontoEntregado, 4);
+				//console.log(respu)
+				montSimpleAcum+=parseFloat(elem.prodMontoEntregado);
+				montIntAcum+=parseFloat(respu[1].monto)
+
 				$('#divProdAVencerse').append(`<div class="row">
 			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
-			<div class="col-sm-4 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
+			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(respu[1].monto).toFixed(2)}</div>
+			<div class="col-sm-3 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${limite.format('DD MMMM YYYY')}</div>
 			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idproducto}"><i class="icofont icofont-eye"></i></a> </span>
 			</div>`);
 
-			})
-			// body...
-		})
+			});
+			$('#cuadroPanelVencidos').find('.spanCuadrSumaMont').text('S/. '+ parseFloat( montSimpleAcum).toFixed(2));
+			$('#cuadroPanelVencidos').find('.spanCuadrSumaInt').text('S/. '+ parseFloat( montIntAcum).toFixed(2));
+		});
 	 }
 	 if(target=='#tabNoFinalizados'){
 		$.ajax({url: 'php/listarTodosProductosNoVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }).done(function (resp) {
 			//console.log(JSON.parse(resp))
 			moment.locale('es');
+			var montSimpleAcum=0, montIntAcum=0;
 			$('#divNoFinalizados').children().remove();
+			//, spanCuadrSumaMont, spanCuadrSumaInt
+			var dato = JSON.parse(resp);
+			$('#cuadroPanelNoFinalizados').find('.spandia').text(moment().format('DD/MM/YYYY'));
+			$('#cuadroPanelNoFinalizados').find('.spanCuadrProd').text(dato.length);
+
 			$.each(JSON.parse(resp), function (i, dato) {
+				var hoy = moment();
+				var fechaIni =moment(dato.prodFechaInicial);
+				respu=calculoIntereses(fechaIni, hoy, dato.prodMontoEntregado, dato.prodInteres);
+				//console.log(respu);
+				montSimpleAcum+=parseFloat(dato.prodMontoEntregado);
+				montIntAcum+=parseFloat(respu[1].monto)
+;
 				$('#divNoFinalizados').append(`<div class="row"><div class="col-xs-3 mayuscula">${i+1}. ${dato.cliApellidos}, ${dato.cliNombres}</div>
 			<div class="col-xs-2">${moment(dato.prodFechaInicial).format('DD MMMM YYYY')}</div>
 			<div class="col-xs-2 hidden">${moment(dato.prodFechaVencimiento).format('DD MMMM YYYY')}</div>
-			<div class="col-xs-1">${dato.cliCelular}</div>
+			<div class="col-xs-1 sr-only">${dato.cliCelular}</div>
 			<div class="col-xs-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
+			<div class="col-xs-1">${parseFloat(respu[1].monto).toFixed(2)}</div>
 			<div class="col-xs-3 mayuscula">${dato.prodNombre} <a class="btn btn-negro btn-outline btnIcono pull-right" href="aplicativo.php?idprod=${dato.idProducto}"><i class="icofont icofont-eye"></i></a></div></div>`);
 			});
+			$('#cuadroPanelNoFinalizados').find('.spanCuadrSumaMont').text('S/. '+ parseFloat( montSimpleAcum).toFixed(2));
+			$('#cuadroPanelNoFinalizados').find('.spanCuadrSumaInt').text('S/. '+ parseFloat( montIntAcum).toFixed(2));
+			
 			
 		});
 	 }
@@ -1066,8 +1158,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 	 				boton=`<button class="btn btn-success btn-outline btnAceptarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-check"></i> Aceptar</button> `
 	 			}
 	 			if(elem.idDetalleReporte==3){
-	 				boton=`<button class="btn btn-morado btn-outline btnRetirarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-exchange"></i> Retirar</button>
-						<button class="btn btn-danger btn-outline btnRematarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-sale-discount"></i> Rematar</button>`;
+	 				boton=`<button class="btn btn-morado btn-outline btnRetirarReporteGuar" style="padding: 6px 3px;"><i class="icofont icofont-exchange"></i> Retirado</button>
+						<button class="btn btn-danger btn-outline btnRematarReporteGuar" style="padding: 6px 3px;"><i class="icofont icofont-sale-discount"></i> Rematado</button>`;
 	 			}
 	 			$('#divListaPorConfirmar').append(`
 	 				<div class="row">
@@ -1112,7 +1204,7 @@ $('#divListaPorConfirmar').on('click', '.btnRematarReporteGuar', function () {
 });
 $('#btnAceptarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoAceptar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoAceptar.php', type:'POST', data:{idRepo: idCamb, idUser: $('#spanUsuario').text()}}).done(function (resp) {
 	 if(resp==1){
 	 	$('.modal-EstaSeguroAceptarMovimiento').modal('hide');
 	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { //console.log(elem)
@@ -1126,7 +1218,7 @@ $('#btnAceptarMovimientoModal').click(function () {
 });
 $('#btnRematarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoRematar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoRematar.php', type:'POST', data:{idRepo: idCamb, idUser: $('#spanUsuario').text()}}).done(function (resp) {
 	 if(resp==1){
 	 	$('.modal-EstaSeguroRematarMovimiento').modal('hide');
 	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
@@ -1140,7 +1232,7 @@ $('#btnRematarMovimientoModal').click(function () {
 });
 $('#btnRetirarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoRetirar.php', type:'POST', data:{idRepo: idCamb}}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoRetirar.php', type:'POST', data:{idRepo: idCamb, idUser: $('#spanUsuario').text()}}).done(function (resp) {
 	 if(resp==1){
 	 	$('.modal-EstaSeguroRetirarMovimiento').modal('hide');
 	 	$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
@@ -1208,7 +1300,13 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 			var hoy = moment();
 			var fechaIni =moment(dato.prodFechaInicial);
 			var fechaFin=moment(dato.prodFechaVencimiento);
-			console.log('Tantos dias desde fecha incial a hoy: '+ hoy.diff(fechaIni, 'days'));
+			var differencia=hoy.diff(fechaIni, 'days');
+			console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
+			if(parseInt(differencia)>30){
+				$('#contenedorExpiro').removeClass('sr-only');
+			}else{
+				$('#contenedorVigente').removeClass('sr-only');
+			}
 		
 			var intRS;
 			if( hoy.diff(fechaIni, 'days') <=14){
@@ -1235,7 +1333,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
 					<button class="btn btn-indigo btn-outline btn-FinalizarImpuestoMovil"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 					<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-					<button class="btn btn-success btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+					<button class="btn btn-danger btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 				</div>`;
 				}else{
 					botonAgregar = `
@@ -1515,6 +1613,9 @@ function cambiodeOficina(){
 		$('#spanContarVenc').text(resp);
 		$('#strFaltan').text(resp);
 	});
+	$.ajax({url:'php/contarNoFinalizados.php', type: 'POST', data:{ idSucursal: $.idOficina }}).done(function (resp) { //console.log('resp ' + resp)
+		$('#spanContarNoFin').text(resp);
+	});
 }
 $('#cmbOficinasTotal').change(function () {
 	$.idOficina= $('#cmbOficinasTotal').val();
@@ -1713,7 +1814,7 @@ function llamarProductosPaginado(desde, hasta){
 				$('#divTotalProductos').append(`<div class="row ${fuente}">
 			<div class="col-sm-3 mayuscula"><strong class="visible-xs-block">Producto: </strong>${secuencia}. ${elem.prodNombre}</div>
 			<div class="col-sm-1"><strong class="visible-xs-block">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
-			<div class="col-sm-3 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
+			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Dueño: </strong>${elem.propietario}</div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong><small>${elem.sucNombre}</small></div>
 			<div class="col-sm-2 mayuscula"><strong class="visible-xs-block">Fecha: </strong>${moment(elem.prodFechaInicial).format('DD MMMM YYYY')}</div>
 			<span class="col-sm-1 push-right"> <a class="btn btn-negro btn-outline btnIcono" href="aplicativo.php?idprod=${elem.idProducto}"><i class="icofont icofont-eye"></i></a> </span>
