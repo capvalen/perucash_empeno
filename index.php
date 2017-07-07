@@ -59,7 +59,7 @@
 				<button class="btn btn-success btn-outline" id="btnIniciar"><div class="fa-spin sr-only"><i class="icofont icofont-spinner"></i> </div> <i class="icofont icofont-key icono"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 1.9.4 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
+			<div class="pull-right" ><small>Ver. 1.9.5 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>
@@ -70,7 +70,23 @@
 	<script type="text/javascript" src="js/impotem.js"></script>
 	<script type="text/javascript">
 	$.ajax({url: 'php/desconectar.php'});
-	$('#username').focus();
+	$(document).ready(function () {
+		$('#username').focus();
+		$('#cmbMod').change();
+	});
+	$('#cmbMod').change(function () {
+		//console.log()
+
+		if($(this).val()==1){
+			$('#office').find('option').addClass('hidden');
+			$('#office').find('option[value=3]').removeClass('hidden').prop('selected', true);
+
+		}else{
+			$('#office').find('option').removeClass('hidden');
+			$('#office').find('option[value=0]').prop('selected', true);			
+			$('#office').find('option[value=3]').addClass('hidden');
+		}
+	});
 	$('#btnIniciar').click(function () {
 		$('#btnIniciar').find('.icono').addClass('sr-only');
 		$('#btnIniciar').find('.fa-spin').removeClass('sr-only');

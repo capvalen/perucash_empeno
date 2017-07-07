@@ -15,7 +15,7 @@ if (@!$_SESSION['Sucursal']){
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" href="images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css">
+	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.2">
 	<link rel="stylesheet" type="text/css" href="css/icofont.css">
 </head>
 <body>
@@ -69,6 +69,17 @@ if (@!$_SESSION['Sucursal']){
 	<div class="row well well-amarillo">
 		<p><strong>Datos del bien que ingresa:</strong></p>
 		<div class="col-sm-12">
+			<div class="container row">
+				<div class="material-switch pull-left ">
+				    <input id="someSwitchOptionWarning" type="checkbox"/>
+				    <label for="someSwitchOptionWarning" class="label-success"></label>
+
+				</div>
+				<span for="someSwitchOptionWarning" id="lblSWQueEs" style="margin-left: 10px; color: #606bdc; transition: all 0.3s ease-in-out;"> Producto no es una compra</span>
+		</div>
+			
+		</div>
+		<div class="col-sm-12">
 			<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
 		</div>
 		<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
@@ -76,7 +87,7 @@ if (@!$_SESSION['Sucursal']){
 		<div class="col-sm-6"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
 		<div class="col-sm-6 "><label>Vencimiento:</label> <div class="sandbox-container"><input  id="dtpFechaVencimiento" type="text" class="form-control"></div></div>
 		<div class="col-sm-6"><label>Observaciones o datos extras:</label> <textarea  class="form-control mayuscula" id="txtObservaciones" rows="2" placeholder="¿Alguna observación o dato extra que desees recordar luego?"></textarea></div>
-		<div class="col-sm-12 text-center"><label>Simulado:</label>
+		<div class="col-sm-12 text-center" id="divSimulado"><label>Simulado:</label>
 		<h4> <span ><p>Periodo: <span id="spanPeriodo"></span></p></span>
 		<span ><p>Interes: <span id="spanIntGene"></span></p></span>
 		<p>Intereses: <span id="spanInteres">S/. 0.00</span></p> <p>Monto total a pagar: S/.  <span id="spanMonto">0.00</span></p></h4>
@@ -86,7 +97,9 @@ if (@!$_SESSION['Sucursal']){
 	</div>
 	<hr>
 	<div class="pull-left"><button class="btn btn-success" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
-	<div class="text-center"><button class="btn btn-primary" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button></div>
+	<div class="text-center"><button class="btn btn-primary" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
+		<button class="btn btn-primary sr-only" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+	</div>
 	
 	<!-- fin de tab pane 1 -->
 	</div>
@@ -1920,6 +1933,64 @@ $('#txtMiPassNuevo2').focusout(function () {
 		$.CoincideNuevPass=true;
 		$('.modal-cambiarMiContraseña .text-danger').addClass('hidden');
 	}
+});
+$('#someSwitchOptionWarning').change(function (e) {
+	if($(this).is(':checked')){//true
+		$('#lblSWQueEs').text('Producto es una compra sin intereses').css('color', '#5CB85C');
+		$('#dtpFechaVencimiento').attr("disabled", 'true');
+		$('#divSimulado').addClass('sr-only');
+		$('#btnGuardarDatos').addClass('sr-only');
+		$('#btnGuardarCompra').removeClass('sr-only');
+
+
+	}else{//false
+		$('#lblSWQueEs').text('Artículo con intereses').css('color', '#606bdc');
+		$('#dtpFechaVencimiento').removeAttr("disabled");
+		$('#divSimulado').removeClass('sr-only');
+		$('#btnGuardarDatos').removeClass('sr-only');
+		$('#btnGuardarCompra').addClass('sr-only');
+	}
+	$('#txtNombreProducto').focus();
+});
+$('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto').val())
+	if(verificarTodoRellenado()){
+		if($('#txtIdCliente').val().length>0){//guardar sólo el producto
+			$.ajax({url: 'php/insertarCompraSolo.php', type: 'POST', data:{
+				productoNombre: $('#txtNombreProducto').val(),
+				montoentregado: $('#txtMontoEntregado').val(),
+				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
+				observaciones: $('#txtObservaciones').val(),
+				idCl: $('#txtIdCliente').val()
+				}
+			}).done(function (resp) { console.log(resp) 
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				limpiarCasillas();
+			}
+			});
+		}else{//guardar ambos productos y cliente
+		$.ajax({url: 'php/insertarCompraNew.php', type: 'POST', data:{
+				nombre: $('#txtNombres').val(),
+				apellido: $('#txtApellidos').val(),
+				direccion: $('#txtDireccion').val(),
+				dni: $('#txtDni').val(),
+				email:  $('#txtCorreo').val(),
+				celular: $('#txtCelular').val(),
+				productoNombre: $('#txtNombreProducto').val(),
+				montoentregado: $('#txtMontoEntregado').val(),
+				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
+				observaciones: $('#txtObservaciones').val()
+				}
+			}).done(function (resp) { console.log(resp) 
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				limpiarCasillas();
+			}
+			}).error(function () { console.log('error');
+				// body...
+			});
+		}
+		
+	}//<- fin de if verificarTodoRellenado
+	
 });
 </script>
 </body>
