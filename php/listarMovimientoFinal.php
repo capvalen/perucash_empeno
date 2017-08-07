@@ -5,8 +5,8 @@ header('Content-Type: text/html; charset=utf8');
 
 
 $filas=array();
-$log = mysqli_query($conection,"call listarMovimientoFinal(".$_POST['idProd'].");");
-//echo "call listarMovimientosSinAprobar( ".$_POST['oficina'].");";
+$log = mysqli_query($conection,"call listarMovimientoFinal(".$_POST['idProd'].", ".$_POST['idSuc']." );");
+//echo "call listarMovimientoFinal(".$_POST['idProd'].", ".$_POST['idSuc']." );";
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
