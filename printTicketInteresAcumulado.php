@@ -36,12 +36,11 @@ for ($i=1; $i <=60 ; $i++) {
 	$filas[1][]= array(
 		'numDia' => $i,
 		'intAcum' => number_format($interesAcumulado,2)
-
 	);
 }
 $textoInteres='';
 
-	$connector = new WindowsPrintConnector("smb://ICARUS/TM-U220");
+	$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
 	
 	// A FilePrintConnector will also work, but on non-Windows systems, writes
