@@ -39,6 +39,22 @@ for ($i=1; $i <=60 ; $i++) {
 	);
 }
 $textoInteres='';
+if($DiadeHoy!=0){
+	if($montoInicial<=5000){
+		/**/
+		$textoInteres=$textoInteres.'1 al 14:  S/. '.$filas[1][14-1]['intAcum']."\n";
+		for ($i=14; $i <=31 ; $i++) { 
+			$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
+		}
+	}else{
+		$textoInteres=$textoInteres.'1 al 24:  S/. '.$filas[1][24-1]['intAcum']."\n");
+		for ($i=24; $i <=31 ; $i++) { 
+			$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
+		}
+		
+	}
+
+}else{$textoInteres='Vacio';}
 
 	$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
@@ -53,22 +69,8 @@ try {
 	$printer -> text("Monto inicial: S/. ".$_POST['inicial']."\n");
 	$printer -> text("Dia      S/. \n");
 
-	if($DiadeHoy!=0){
-		if($montoInicial<=5000){
-			/**/
-			$textoInteres=$textoInteres.'1 al 14:  S/. '.$filas[1][14-1]['intAcum']."\n";
-			for ($i=14; $i <=31 ; $i++) { 
-				$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
-			}
-		}else{
-			$textoInteres=$textoInteres.'1 al 24:  S/. '.$filas[1][24-1]['intAcum']."\n");
-			for ($i=24; $i <=31 ; $i++) { 
-				$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
-			}
-			
-		}
-
-	}else{$textoInteres='Vacio';}
+	
+	$printer -> text($textoInteres);
 	$printer -> text("   ----------------------------------\n");
 	$printer -> text("         Celular: # 943 798696\n");
 	$printer -> text("         Web: www.perucash.com\n");
