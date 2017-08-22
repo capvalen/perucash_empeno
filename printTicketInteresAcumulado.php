@@ -38,7 +38,7 @@ for ($i=1; $i <=60 ; $i++) {
 		'intAcum' => number_format($interesAcumulado,2)
 	);
 }
-$textoInteres='';
+$textoInteres=''; 
 if($DiadeHoy!=0){
 	if($montoInicial<=5000){
 		/**/
