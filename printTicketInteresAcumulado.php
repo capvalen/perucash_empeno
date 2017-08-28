@@ -50,20 +50,20 @@ if($DiadeHoy!=0){
 			for ($i=24; $i <=31 ; $i++) {
 				$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n");
 			}*/
-		$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."\n";
-		for ($i=14; $i <=31 ; $i++) { 
-			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n";
+		$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."<br>";
+		for ($i=15; $i <=30 ; $i++) { 
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."<br>";
 		}
 	}
 	else{
-		$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."\n";
-		for ($i=24; $i <=31 ; $i++) { 
-			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n";
+		$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."<br>";
+		for ($i=25; $i <=30 ; $i++) { 
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."<br>";
 		}
 	}
 
 }else{$textoInteres='Vacio';}
-
+echo $textoInteres;
 	$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
 	
@@ -75,8 +75,6 @@ try {
 	$printer = new Printer($connector);
 	$printer -> text("       * Pago de interes acumulado *\n\n");
 	$printer -> text("Monto inicial: S/. ".$_GET['inicial']."\n");
-	$printer -> text("Dia      S/. \n");
-
 	
 	$printer -> text($textoInteres);
 	$printer -> text("   ----------------------------------\n");
