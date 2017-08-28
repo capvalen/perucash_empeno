@@ -22,7 +22,7 @@ if(isset($_SESSION['Atiende'])){?>
 
 
 <div class="container formulario col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-<div class="text-center">
+<div class="text-center hidden-print">
 <img src="images/logo.png">
 <h3>PerúCa$h<small> Sistema de préstamos y empeños</small></h3></div>
 <?php if ( $_SESSION['Power']== 1){ ?>
