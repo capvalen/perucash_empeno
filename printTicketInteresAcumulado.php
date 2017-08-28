@@ -38,20 +38,28 @@ for ($i=1; $i <=60 ; $i++) {
 		'intAcum' => number_format($interesAcumulado,2)
 	);
 }
-$textoInteres=''; 
+$textoInteres='';
 if($DiadeHoy!=0){
 	if($montoInicial<=5000){
-		/**/
-		$textoInteres=$textoInteres.'1 al 14:  S/. '.$filas[1][14-1]['intAcum']."\n";
-		for ($i=14; $i <=31 ; $i++) { 
-			$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
-		}
+		/*$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."\n";
+		for ($i=14; $i <=31 ; $i++) {
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n");
+			}
 	}else{
-		$textoInteres=$textoInteres.'1 al 24:  S/. '.$filas[1][24-1]['intAcum']."\n");
-		for ($i=24; $i <=31 ; $i++) { 
-			$textoInteres=$textoInteres.$i.':  S/. '.$filas[1][$i]['intAcum']."\n");
+			$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."\n");
+			for ($i=24; $i <=31 ; $i++) {
+				$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n");
+			}*/
+		$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."\n";
+		for ($i=14; $i <=31 ; $i++) { 
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n";
 		}
-		
+	}
+	else{
+		$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."\n";
+		for ($i=24; $i <=31 ; $i++) { 
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n";
+		}
 	}
 
 }else{$textoInteres='Vacio';}
@@ -66,7 +74,7 @@ try {
 	/* Print a "Hello world" receipt" */
 	$printer = new Printer($connector);
 	$printer -> text("       * Pago de interes acumulado *\n\n");
-	$printer -> text("Monto inicial: S/. ".$_POST['inicial']."\n");
+	$printer -> text("Monto inicial: S/. ".$_GET['inicial']."\n");
 	$printer -> text("Dia      S/. \n");
 
 	
