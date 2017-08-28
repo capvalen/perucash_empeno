@@ -50,15 +50,15 @@ if($DiadeHoy!=0){
 			for ($i=24; $i <=31 ; $i++) {
 				$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i]['intAcum']."\n");
 			}*/
-		$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."<br>";
+		$textoInteres=$textoInteres."1 al 14:  S/. ".$filas[1][14-1]['intAcum']."\n";
 		for ($i=15; $i <=30 ; $i++) { 
-			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."<br>";
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."\n";
 		}
 	}
 	else{
-		$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."<br>";
+		$textoInteres=$textoInteres."1 al 24:  S/. ".$filas[1][24-1]['intAcum']."\n";
 		for ($i=25; $i <=30 ; $i++) { 
-			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."<br>";
+			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."\n";
 		}
 	}
 
@@ -75,7 +75,7 @@ try {
 	$printer = new Printer($connector);
 	$printer -> text("       * Pago de interes acumulado *\n\n");
 	$printer -> text("Monto inicial: S/. ".$_GET['inicial']."\n");
-	
+	$printer -> text("--  Dia   -------  Monto  ----------"."\n");
 	$printer -> text($textoInteres);
 	$printer -> text("   ----------------------------------\n");
 	$printer -> text("         Celular: # 943 798696\n");

@@ -9,13 +9,14 @@
 
 <style>
 *{font-size: 11px;}
-tr{
+tr, .table-condensed>tbody>tr>td{
 	
-	padding-top: 0px;
+	padding-top: 0px; padding-bottom: 0px;
 }
 </style>
 
 <div class="col-xs-4">
+<strong>Pago Intereses</strong>
 	<p><strong>Monto inicial: S/. <?php echo $_GET['inicial']; ?></strong></p>
 	<table class="table-condensed">
 	<thead>
