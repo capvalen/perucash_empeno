@@ -59,7 +59,7 @@
 				<button class="btn btn-success btn-outline" id="btnIniciar"><div class="fa-spin sr-only"><i class="icofont icofont-spinner"></i> </div> <i class="icofont icofont-key icono"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 1.9.6 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
+			<div class="pull-right" ><small>Ver. 2.0.1 | 2017 <a href="https://info-cat.com">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>

@@ -38,7 +38,7 @@ else if($DiadeHoy<=60 && $montoInicial>5000){$filas[2][]=array('pagarAHoy' => $f
 
 
 
-return json_encode($filas);
+echo json_encode($filas);
 
 
  ?>

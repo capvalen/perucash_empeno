@@ -14,7 +14,7 @@ if(isset($_SESSION['Atiende'])){?>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" href="images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.2">
+	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.6">
 	<link rel="stylesheet" type="text/css" href="css/icofont.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-table.css">
 </head>
@@ -54,59 +54,106 @@ if(isset($_SESSION['Atiende'])){?>
 		 <div class="tab-content container-fluid">
 	<div class="tab-pane fade in active" id="tabRegistro">
 	
-	<div class="row well">
-		<p><strong>Datos de cliente:</strong></p>
-		<div class="col-sm-12"><input type="number" class=" form-control hidden " id="txtIdCliente"></div>
-		
-		<div class="col-sm-6"><label>D.N.I.:</label><input type="number" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8"></div>
-		<div class="col-sm-6"><label>Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos"></div>
-		<div class="col-sm-6"><label>Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos"></div>
-		<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente"></div>
-		<div class="col-sm-6"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente"></div>
-		<div class="col-sm-6"><label>Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular(es)"></div>
-	</div>
+	<div class="row rowClienteDatos">
+		<div class="col-sm-6">
+			<div class="panel panel-cielo">
+				<div class="panel-heading"><h3 class="panel-title">Datos de cliente:</h3></div>
+				<div class="panel-body">
+					<div class="col-sm-12"><input type="number" class=" form-control hidden " id="txtIdCliente"></div>
+					
+					<div class="row">
+						<div class="col-sm-4"><label>D.N.I.:</label><input type="number" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8"></div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6"><label>Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos"></div>
+					<div class="col-sm-6"><label>Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos"></div>
+					<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente"></div>
+					<div class="col-sm-6"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente"></div>
+					<div class="col-sm-6"><label>Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular(es)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<div class="row well well-amarillo">
-		<p><strong>Datos del bien que ingresa:</strong></p>
-		<div class="col-sm-12">
-			<div class="container row">
-				<div class="material-switch pull-left ">
-					<input id="someSwitchOptionWarning" type="checkbox"/>
-					<label for="someSwitchOptionWarning" class="label-success"></label>
+		<div class="col-sm-6">
+			<div class="panel panel-cielo">
+				<div class="panel-heading"><h3 class="panel-title">Datos del bien que ingresa:</h3></div>
+				<div class="panel-body">
+					<div class="col-sm-12">
+						<div class="container">
+							<div class="material-switch pull-left ">
+								<input id="someSwitchOptionWarning" type="checkbox"/>
+								<label for="someSwitchOptionWarning" class="label-success" ></label>
+
+							</div>
+							<label for="someSwitchOptionWarning" id="lblSWQueEs" style="padding-top: 0;margin-left: 10px; color: #606bdc; transition: all 0.3s ease-in-out;"> Artículo con intereses</label>
+					</div>
+						
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
+						</div>
+						<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
+						<div class="col-sm-6 hidden"><label>Interés (%):</label> <input type="number" id="txtMontoInteres" class="form-control" placeholder="% de Interés" value="10" min ="0" step="1" disabled></div>
+						<div class="col-sm-6 hidden"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
+						<div class="col-sm-6 hidden "><label>Vencimiento:</label> <div class="sandbox-container"><input  id="dtpFechaVencimiento" type="text" class="form-control"></div></div>
+						<div class="col-sm-6"><label>Observaciones o datos extras:</label> <textarea  class="form-control mayuscula" id="txtObservaciones" rows="3" placeholder="¿Alguna observación o dato extra que desees recordar luego?"></textarea></div>
+						
+						<div class="sr-only">
+							<div class="col-sm-12 text-center" id="divSimulado"><label>Simulado:</label>
+							<h4> <span ><p>Periodo: <span id="spanPeriodo"></span></p></span>
+							<span ><p>Interes: <span id="spanIntGene"></span></p></span>
+							<p>Intereses: <span id="spanInteres">S/. 0.00</span></p> <p>Monto total a pagar: S/.  <span id="spanMonto">0.00</span></p></h4>
+							</div>
+							<br>
+						</div>
+					
+					<div class="col-sm-12">
+						<p style="color: #1976d2"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos cálculos</em></strong> <br>
+						De S/. 1 a S/. 5000 de préstamo tiene 2 semanas para cancelar el 10% luego de ello, se sumará el 6% diario.<br>
+						De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
+						</p>
+					</div>
+						<div class="col-sm-12 text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button></div>
+					</div>
 
 				</div>
-				<label for="someSwitchOptionWarning" id="lblSWQueEs" style="margin-left: 10px; color: #606bdc; transition: all 0.3s ease-in-out;"> Artículo con intereses</label>
-		</div>
+			</div>
+			</div>
 			
-		</div>
-		<div class="col-sm-12">
-			<label>Objeto que ingresa a la tienda:</label> <input type="text" class="form-control mayuscula" id="txtNombreProducto" placeholder="Detalle el nombre y características del objeto.">
-		</div>
-		<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
-		<div class="col-sm-6 hidden"><label>Interés (%):</label> <input type="number" id="txtMontoInteres" class="form-control" placeholder="% de Interés" value="10" min ="0" step="1" disabled></div>
-		<div class="col-sm-6"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
-		<div class="col-sm-6 "><label>Vencimiento:</label> <div class="sandbox-container"><input  id="dtpFechaVencimiento" type="text" class="form-control"></div></div>
-		<div class="col-sm-6"><label>Observaciones o datos extras:</label> <textarea  class="form-control mayuscula" id="txtObservaciones" rows="2" placeholder="¿Alguna observación o dato extra que desees recordar luego?"></textarea></div>
-		<div class="col-sm-12 text-center" id="divSimulado"><label>Simulado:</label>
-		<h4> <span ><p>Periodo: <span id="spanPeriodo"></span></p></span>
-		<span ><p>Interes: <span id="spanIntGene"></span></p></span>
-		<p>Intereses: <span id="spanInteres">S/. 0.00</span></p> <p>Monto total a pagar: S/.  <span id="spanMonto">0.00</span></p></h4>
-		</div>
-		<br>
+			<div class="row col-sm-6 col-sm-offset-3">
+				<div class="pull-left"><button class="btn btn-success" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
+				<div class="text-center"><button class="btn btn-primary" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
+					<button class="btn btn-primary sr-only" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+				</div>
+			</div>
+		
+	</div>
 
-	</div>
-	<hr>
-	<div class="pull-left"><button class="btn btn-success" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
-	<div class="text-center"><button class="btn btn-primary" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
-		<button class="btn btn-primary sr-only" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
-	</div>
 	
 	<!-- fin de tab pane 1 -->
 	</div>
 	<div class="tab-pane fade  " id="tabBusqueda">
-		<div class="row"> <label>Búsqueda por propietario del producto:</label>
-			<input type="text" class="form-control" id="txtBuscarPersona" placeholder="Ingrese Nombre o Dni del cliente">
-		</div><br>
+		<div class="row">
+			<div class="col-sm-4">
+				<label>Búsqueda por propietario del producto:</label>
+				<input type="text" class="form-control" id="txtBuscarPersona" placeholder="Ingrese Nombre o Dni del cliente">
+			</div>
+			<div class="col-sm-4">
+				<label>Búsqueda por producto:</label>
+				<input type="text" class="form-control" id="txtBuscarProducto" placeholder="Ingrese el producto">
+			</div>
+			<div class="col-sm-4">
+				<label>Listar movimientos por fecha:</label>
+				<div class="sandbox-container input-group" ><input  id="dtpFechaListarMovimientos" type="text" class="form-control text-center" placeholder="Ingrese la fecha">
+					<div class="input-group-btn">
+						<button class="btn btn-morado btn-outline" id="btnFiltrarMovimientos"><i class="icofont icofont-search-alt-1"></i></button>
+					</div>
+					</div>
+				</div>
+		</div>
+		<br>
 		<div class="divResultadosPorPersona">
 		<div class="row well">
 			<p><strong><i class="icofont icofont-user-alt-2"></i> Datos del cliente</strong> <span class="hidden" id="spanIdCliente"></span></p>
@@ -125,7 +172,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent"></span>%</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"> <span class="sr-only" id="spanFechaInicioNum"></span></span></div>
 			<div class="col-sm-6 hidden"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin"></span> <span class="sr-only" id="spanFechaFinNum"></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período hasta hoy: </label> <span class="text-success" id="spanPeriodo2"></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Registrado: </label> <span class="text-success" id="spanPeriodo2"></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Total al día de hoy: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
@@ -211,7 +258,7 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			<div class="col-sm-8 col-sm-offset-2 hidden" id="divBotonesFijos">
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-				<button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
 				<button class="btn btn-indigo btn-outline" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 				<button class="btn btn-indigo btn-outline" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
 				<button class="btn btn-indigo btn-outline" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Pago a cuenta (En desarrollo)</button>
@@ -258,7 +305,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-sm-2 hidden">Caduca</div>
 			<div class="col-sm-1">Entregado</div>
 			<div class="col-sm-1">Más interés</div>
-			<div class="col-sm-3">Garantía</div></strong>
+			<div class="col-sm-4">Garantía</div></strong>
 
 		</div>
 
@@ -548,7 +595,7 @@ if(isset($_SESSION['Atiende'])){?>
 
 <!-- Modal para mostrar los clientes coincidentes -->
 	<div class="modal fade modal-mostrarResultadosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header-indigo">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -562,6 +609,31 @@ if(isset($_SESSION['Atiende'])){?>
 					
 				</div>
 				<div class="row container-fluid" id="rowUsuarioEncontrado">
+					
+				</div>
+				
+			</div>
+			<div class="modal-footer"> <button class="btn btn-primary btn-outline" data-dismiss="modal"></i><i class="icofont icofont-alarm"></i> Aceptar</button></div>
+		</div>
+		</div>
+	</div>
+
+<!-- Modal para mostrar los clientes coincidentes -->
+	<div class="modal fade modal-mostrarResultadosProducto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header-indigo">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Resultados de la búsqueda</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row container-fluid"> <strong>
+					<div class="col-xs-4">Producto</div>
+					<div class="col-xs-3">Nombre de Cliente</div>
+					<div class="col-xs-2">Fecha ocurrencia</div>
+					<div class="col-xs-2">Monto inicial</div></strong>
+				</div>
+				<div class="row container-fluid" id="rowProductoEncontrado">
 					
 				</div>
 				
@@ -792,6 +864,97 @@ if(isset($_SESSION['Atiende'])){?>
 		<button class="btn btn-danger btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Ok, revisaré</button>
 		</div>
 	</div>
+</div>
+</div>
+<!-- Modal para editar los datos de los clientes  -->
+<div class="modal fade modal-detalleFinalizadosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog" role="document">
+	<div class="modal-content">
+		<div class="modal-header-wysteria">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Reporte del producto con cliente</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<label for="">D.N.I:</label>
+				<input type="number" class="form-control" id="txtFindni" disabled>
+			</div>
+			<div class="row">
+				<label for="">Apellidos y nombres</label>
+				<input type="text" class="form-control mayuscula" id="txtFinapellido" disabled>
+			</div>
+			<div class="row">
+				<label for="">Producto:</label>
+				<input type="text" class="form-control mayuscula" id="txtFinproducto" disabled>
+			</div>
+			<div class="row">
+				<label for="">Monto inicial:</label>
+				<input type="text" class="form-control" id="txtFinmonto" disabled>
+			</div>
+			<div class="row">
+				<label for="">Fecha de registro:</label>
+				<input type="text" class="form-control" id="txtFinfecha" disabled>
+			</div>
+			</div>
+			
+			
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-morita btn-outline" id="btnActualizarDataCliente" data-dismiss="modal"><i class="icofont icofont-social-meetme"></i> Aceptar</button>
+			</div>
+	</div>
+	</div>
+</div>
+<!-- Modal para mostrar los movimientos realizados por un dia especifico -->
+<div class="modal fade modal-mostrarMovimientosProductoFecha" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		<div class="modal-header-indigo">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Resultados de la búsqueda por fecha</h4>
+		</div>
+		<div class="modal-body">
+			<div class="row container-fluid"> <strong>
+				<div class="col-xs-5">Producto</div>
+				<div class="col-xs-3">Accion</div>
+				<div class="col-xs-2">Usuario</div>
+				<div class="col-xs-2">Monto</div>
+				</strong>
+			</div>
+			<div class="row container-fluid" id="rowMovimientoEncontradoFecha">
+				
+			</div>
+			
+		</div>
+		<div class="modal-footer"> <button class="btn btn-primary btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Aceptar</button></div>
+	</div>
+	</div>
+</div>
+<!-- Modal para mostrar el proyectado de intereses acumulados -->
+<div class="modal fade modal-mostrarProyectadoIntereses" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog  modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-cielo">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Intereses proyectados</h4>
+		</div>
+		<div class="modal-body">
+			<div class="row container-fluid"> <strong>
+				<div class="col-xs-6">Dia</div>
+				<div class="col-xs-6">Monto</div>
+				</strong>
+			</div>
+			<div class="row container-fluid" id="rowInteresesProyectado">
+				
+			</div>
+			
+		</div>
+		<div class="modal-footer"> 
+			<button class="btn btn-success btn-outline" data-dismiss="modal" id="btnImprTicketInterProyect"><i class="icofont icofont-ticket"></i> Imprimir ticket</button>
+			<button class="btn btn-primary btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Aceptar</button></div>
+	</div>
 	</div>
 </div>
 
@@ -905,25 +1068,28 @@ $(document).ready(function () {
 					$('#btn-FinalizarImpuestoFijo').addClass('hidden');
 					$('#btn-FinalizarPrestamoFijo').addClass('hidden');
 					$('#contenedorFinalizados').removeClass('sr-only');
-					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew, idSuc: $.JsonUsuario[0].sucursal }}).done(function (resp) {
+					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
 						dato2=JSON.parse(resp); 
 						console.log(dato2)
-						$('#QuienFinalizoFin').text(dato2[0].repoUsuario);
-						$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
-						$('#QuienApruebaFin').text(dato2[0].repoQuienConfirma);
-						$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
-						$('#estadoAprobacionFin').text(dato2[0].estadoConfirmacion);
-						$('#finalizaMonto').text(parseFloat(dato2[0].repoValorMonetario).toFixed(2));
-						$('#FechaFinalizo').text(moment(dato2[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm a'));
+						
+						if(dato2.length==0){$('#finalizaMonto').parent().addClass('hidden');}
+						else{
+							$('#contenedorExpiro').addClass('sr-only');
+							$('#QuienFinalizoFin').text(dato2[0].repoUsuario);
+							$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
+							$('#QuienApruebaFin').text(dato2[0].repoQuienConfirma);
+
+							$('#finalizaMonto').text(parseFloat(dato2[0].repoValorMonetario).toFixed(2));
+							$('#FechaFinalizo').text(moment(dato2[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm a'));
+						}
 					});
-					console.log(moment().diff(fechaIni, 'days'))
-					
+					//console.log(moment().diff(fechaIni, 'days'))
 				}
 				else{$('#divBotonesFijos').removeClass('hidden');}
 			}
 			else{console.log('otra sucrusal');
 			$('#rowWellFijo').html(`<div class="alert alert-danger ">
-				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto está asignado a la oficina «${dato[0].sucNombre}».
+				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto no está asignado a tu sucursal, se encuentra en «${dato[0].sucNombre}».
 						</div>`);
 		}
 
@@ -1067,10 +1233,11 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 	}//<- fin de if verificarTodoRellenado
 	
 });
-$('.btnAceptarGuardado').click(function () {
+$('body').on('click','.btnAceptarGuardado',function () {
 	var id= $(this).attr('id');
 	window.location.href = "aplicativo.php?idprod=" +id;
-})
+});
+
 $('#btnLimpiarDatos').click(function () {
 	limpiarCasillas();
 });
@@ -1121,6 +1288,7 @@ function verificarTodoRellenado(){
 }
 $('#txtMontoEntregado').focusout(function () {
 	calcularPeriodo();
+	
 });
 $('#txtMontoInteres').focusout(function () {
 	calcularPeriodo();
@@ -1188,7 +1356,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			<div class="col-xs-1 sr-only">${dato.cliCelular}</div>
 			<div class="col-xs-1">${parseFloat(dato.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-xs-1">${parseFloat(respu[1].monto).toFixed(2)}</div>
-			<div class="col-xs-3 mayuscula">${dato.prodNombre} <a class="btn btn-negro btn-outline btnIcono pull-right" href="aplicativo.php?idprod=${dato.idProducto}"><i class="icofont icofont-eye"></i></a></div></div>`);
+			<div class="col-xs-4 mayuscula">${dato.prodNombre} <a class="btn btn-negro btn-outline btnIcono pull-right" href="aplicativo.php?idprod=${dato.idProducto}"><i class="icofont icofont-eye"></i></a></div></div>`);
 			});
 			$('#cuadroPanelNoFinalizados').find('.spanCuadrSumaMont').text('S/. '+ parseFloat( montSimpleAcum).toFixed(2));
 			$('#cuadroPanelNoFinalizados').find('.spanCuadrSumaInt').text('S/. '+ parseFloat( montIntAcum).toFixed(2));
@@ -1251,7 +1419,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 				//console.log(elem)
 				var boton='';
 				if(elem.idDetalleReporte==2||elem.idDetalleReporte==1){
-					boton=`<button class="btn btn-success btn-outline btnAceptarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-check"></i> Aceptar</button> `
+					boton=`<button class="btn btn-success btn-outline btnAceptarReporteGuar" style="padding: 6px 6px;"><i class="icofont icofont-check"></i> Aceptar</button>`
 				}
 				if(elem.idDetalleReporte==3){
 					boton=`<button class="btn btn-morado btn-outline btnRetirarReporteGuar" style="padding: 6px 3px;"><i class="icofont icofont-exchange"></i> Retirado</button>
@@ -1260,7 +1428,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 				$('#divListaPorConfirmar').append(`
 					<div class="row">
 					<div class="idRowReporte sr-only">${elem.idReporte}</div>
-					<div class="col-sm-3 mayuscula nomProd">${elem.prodNombre}</div>
+					<div class="col-sm-3 mayuscula nomProd"><button class="btn btn-xs btn-primary btn-outline btn-verInfoFinalizado" id="${elem.idProducto}"><i class="icofont icofont-eye"></i></button> ${elem.prodNombre}</div>
 					<div class="col-sm-1">S/. ${parseFloat(elem.repoValorMonetario).toFixed(2)}</div>
 					<div class="col-sm-1 nomUsr">${elem.repoUsuario}</div>
 					<div class="col-sm-2">${elem.repoFechaOcurrencia}</div>
@@ -1347,6 +1515,12 @@ $('#divListaPorFinalizar').on('click','.btnBotonPorConcluir',  function () {
 	$('.modal-EstaSeguroFinalizar').modal('show');
 });
 
+$('#txtMontoEntregado').keyup(function (e) {var code = e.which;
+	if(code==13 && $('#txtMontoEntregado').val()!='' && $('#txtMontoEntregado').val()>='0'   ){	e.preventDefault();
+		//console.log('enter')
+		$('#btnCronogramaPagosVer').click();
+	}
+});
 
 $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 	if(code==13 && $('#txtBuscarPersona').val()!=''  ){	e.preventDefault();
@@ -1355,7 +1529,7 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 		$.ajax({url: 'php/ubicarPersonaProductos.php', type: 'POST', data: {campo:$('#txtBuscarPersona').val() }}).done(function (resp) {
 			dato = JSON.parse(resp);// console.log(dato)
 			$.each(dato, function(i, elem){
-				$('#rowUsuarioEncontrado').append(`<div class="rowEnc"><div class="col-xs-6 mayuscula eleNom">${elem.cliApellidos}, ${elem.cliNombres}</div>
+				$('#rowUsuarioEncontrado').append(`<div class="row rowEnc"><div class="col-xs-6 mayuscula eleNom">${elem.cliApellidos}, ${elem.cliNombres}</div>
 					<div class="hidden eleIdCli" >${elem.idCliente}</div>
 					<div class="hidden eleDire">${elem.cliDireccion}</div>
 					<div class="hidden eleCorr">${elem.cliCorreo}</div>
@@ -1369,6 +1543,27 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 		
 		
 	}
+});
+$('#txtBuscarProducto').keyup(function (e) {var code = e.which;
+	if(code==13 && $('#txtBuscarProducto').val()!=''  ){	e.preventDefault();
+		//console.log('enter')
+		$('#rowUsuarioEncontrado').children().remove();
+		$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {campo:$('#txtBuscarProducto').val() }}).done(function (resp) { //console.log(resp)
+			dato = JSON.parse(resp); console.log(dato)
+			$.each(dato, function(i, elem){
+				$('#rowProductoEncontrado').append(`<div class="row"><div class="col-xs-4 mayuscula">${elem.prodnombre}</div>
+					<div class="col-xs-3 mayuscula eleNom">${elem.cliapellidos}, ${elem.clinombres}</div>
+					<div class="col-xs-2">${moment(elem.prodfecharegistro).format('DD/MM/YYYY')}</div>
+					<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
+					<div class="col-xs-1"><button class="btn btn-negro btn-outline btnSelectProd" id="${elem.idproducto}"><i class="icofont icofont-tick-mark"></i></button></div></div>`)
+			});
+			
+			$('.modal-mostrarResultadosProducto').modal('show');
+		});
+	}
+});
+$('.modal-mostrarResultadosProducto').on('click', '.btnSelectProd', function () {
+	window.location.href = "aplicativo.php?idprod=" + $(this).attr('id');
 });
 $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 	//console.log($(this).attr('id'));
@@ -1388,7 +1583,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 	$('#rowWellCambiante').children().remove();
 
 	$.ajax({ url: 'php/solicitarProductoPorCliente.php', type: 'POST', data: {idCli: $('.rowEnc').eq(indice).find('.eleIdCli').text() }}). done(function (resp) {
-		console.log(JSON.parse(resp))
+		//console.log(JSON.parse(resp))
 		moment.locale('es');
 		$.each(JSON.parse(resp), function (i, dato) {
 			//var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(), dato.prodMontoDado, dato.prodInteres )
@@ -1426,7 +1621,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 				if(parseInt(dato.prodActivo) ==1){
 					botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
 					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+					/*<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>*/
 					<button class="btn btn-indigo btn-outline btn-FinalizarImpuestoMovil"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 					<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
 					<button class="btn btn-danger btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
@@ -1441,7 +1636,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 					</div>
 					<div class="col-sm-8 col-sm-offset-2">
 					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-					<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>
+					/*<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>*/
 				</div>`;}
 
 				$('#rowWellCambiante').append(`<div class="row well" >
@@ -1450,7 +1645,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 				<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent">${parseFloat(respu[1].acumulado).toFixed(0)}</span>%</span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio">${moment(dato.prodFechaInicial).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaInicioNum">${dato.prodFechaInicial}</span></div>
 				<div class="col-sm-6 hidden"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin">${moment(dato.prodFechaVencimiento).format('dddd[,] DD MMMM YYYY')}</span> <span class="sr-only" id="spanFechaFinNum">${dato.prodFechaVencimiento}</span></div>
-				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Período hasta hoy: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
+				<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Registrado: </label> <span class="text-success" id="spanPeriodo2">${respu[0].periodo}</span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">${parseFloat(dato.prodMontoDado).toFixed(2)}</span></span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">${intge}</span></span></div>
 				<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Total al día de hoy: </label> <span class="text-success">S/. <span id="spanPagar">${parseFloat(respu[1].monto).toFixed(2)}</span></span></div>
@@ -1489,8 +1684,6 @@ $('#btn-FinalizarPrestamoFijo').click(function () {
 	$('#montoSeguro').text($('#rowWellFijo #spanPagar').text());
 	$('.modal-EstaSeguro').modal('show');
 
-
-	
 });
 $('#btn-FinalizarImpuestoFijo').click(function () {
 	var iProd=$('#rowWellFijo #lblIdProductosEnc').text();
@@ -1519,7 +1712,7 @@ $('#btnSeguroFinalizar').click(function () {
 
 	console.log(iProd)
 	
-	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor }}).done(function (resp) { console.log(resp)
+	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor, nombreUser: $.JsonUsuario[0].nombre }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){
 			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
 			$('.modal-EstaSeguro').modal('hide');
@@ -2019,7 +2212,7 @@ $('#txtMiPassNuevo2').focusout(function () {
 });
 $('#someSwitchOptionWarning').change(function (e) {
 	if($(this).is(':checked')){//true
-		$('#lblSWQueEs').text('Producto es una compra sin intereses').css('color', '#5CB85C');
+		$('#lblSWQueEs').text('Producto como compra sin intereses').css('color', '#5CB85C');
 		$('#dtpFechaVencimiento').attr("disabled", 'true');
 		$('#divSimulado').addClass('sr-only');
 		$('#btnGuardarDatos').addClass('sr-only');
@@ -2027,7 +2220,7 @@ $('#someSwitchOptionWarning').change(function (e) {
 
 
 	}else{//false
-		$('#lblSWQueEs').text('Artículo con intereses').css('color', '#606bdc');
+		$('#lblSWQueEs').text('Artículo de empeño con intereses.').css('color', '#606bdc');
 		$('#dtpFechaVencimiento').removeAttr("disabled");
 		$('#divSimulado').removeClass('sr-only');
 		$('#btnGuardarDatos').removeClass('sr-only');
@@ -2094,6 +2287,117 @@ $('#btnPagarACuenta').click(function () {
 		var interes= $('#sr-montIntv3').text();
 		if(interes<= $('#txtPagarACuenta').val() ){}
 	}
+});
+$('#divListaPorConfirmar').on('click','.btn-verInfoFinalizado', function (argument) {
+	var aBuscar= $(this).attr('id');
+	$.ajax({url:'php/listarProductoEspecificoCliente.php', type: 'POST', data: { idProd: aBuscar }}).done(function (resp) {
+		//console.log(resp);
+		$.each(JSON.parse(resp), function (i, dato) {
+			$('#txtFindni').val(dato.cliDni);
+			$('#txtFinapellido').val(dato.cliApellidos + ', '+dato.cliNombres);
+			$('#txtFinproducto').val(dato.prodNombre);
+			$('#txtFinmonto').val(parseFloat(dato.prodMontoEntregado).toFixed(2));
+			$('#txtFinfecha').val(moment(dato.prodFechaRegistro).format('LLLL'));
+		});
+		$('.modal-detalleFinalizadosCliente').modal('show');
+	});
+});
+$('#btnFiltrarMovimientos').click(function () {
+	if($('#dtpFechaListarMovimientos').val() !=''){
+		var campo=moment($('#dtpFechaListarMovimientos').val(), 'DD/MM/YYYY').format('YYYY-MM-DD');
+		$('#rowMovimientoEncontradoFecha').children().remove();
+		$.ajax({url: 'php/listarMovimientosFechaDia.php', type: 'POST', data: {fecha: campo}}).done(function (resp) {
+			dato2=JSON.parse(resp);  
+			if(dato2.length==0){
+				$('#rowMovimientoEncontradoFecha').append('<p>No se registraron movimientos de salida.</p>');
+			}else{
+				$.each(dato2, function (i, elem) {
+				$('#rowMovimientoEncontradoFecha').append(`
+					<div class="row">
+						<div class="col-xs-5 mayuscula"><strong><button class="btn btn-outline btn-negro btn-sm btnAceptarGuardado" id="${elem.idproducto}"><i class="icofont icofont-eye"></i></button> 
+						${$('#rowMovimientoEncontradoFecha .row').length+1}.</strong> ${elem.prodNombre}</div>
+						<div class="col-xs-3">${elem.repoDescripcion}</div>
+						<div class="col-xs-2 mayuscula">${elem.repoUsuario}</div>
+						<div class="col-xs-2">S/. ${parseFloat(elem.repoValorMonetario).toFixed(2)}</div>
+					</div>`);
+				});
+			}
+			
+			$('.modal-mostrarMovimientosProductoFecha').modal('show');
+		});
+		$.ajax({url: 'php/listarMovimientosRegistradosFechaDia.php', type: 'POST', data: {fecha: campo}}).done(function (resp) {//console.log(resp)
+			dato3=JSON.parse(resp); // console.log(dato3);
+			if(dato3.length==0){
+				$('#rowMovimientoEncontradoFecha').append('<p>No se encontraron productos nuevos registrados.</p>');
+			}else{
+				$.each(dato3, function (i, elem) {
+				$('#rowMovimientoEncontradoFecha').append(`
+					<div class="row">
+						<div class="col-xs-5 mayuscula"><button class="btn btn-outline btn-negro btn-sm btnAceptarGuardado" id="${elem.idproducto}"><i class="icofont icofont-eye"></i></button> 
+						<strong>${$('#rowMovimientoEncontradoFecha .row').length+1}.</strong> ${elem.prodNombre}</div>
+						<div class="col-xs-3">${elem.repoDescripcion}</div>
+						<div class="col-xs-2 mayuscula">${elem.usuNombres}</div>
+						<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}
+						</div>
+					</div>`);
+				});
+			}
+			
+			$('.modal-mostrarMovimientosProductoFecha').modal('show');
+		});
+	}
+});
+$('#btnCronogramaPagosVer').click(function () {
+	var valor=0;
+	$('#rowInteresesProyectado').children().remove();
+	if( $('#txtMontoEntregado').val()=='' || $('#txtMontoEntregado').val()<=0 ){
+		valor=0;
+	}else{
+		valor= $('#txtMontoEntregado').val();
+		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy='+1, type: 'GET' }).done(function (resp) {
+		
+		dato=JSON.parse(resp);
+		console.log(dato)
+
+		if(valor<=5000){
+			$('#rowInteresesProyectado').append(`<div class="row">
+				<div class="col-xs-6 text-center">1 al 14</div>
+				<div class="col-xs-6">S/. ${dato[1][14-1].intAcum}</div>
+				</div>`);
+			for (i=15; i <=30 ; i++) { 
+			$('#rowInteresesProyectado').append(`<div class="row">
+				<div class="col-xs-6 text-center">${dato[1][i].numDia}</div>
+				<div class="col-xs-6">S/. ${dato[1][i].intAcum}</div>
+				</div>`);
+			}
+		}else{
+			$('#rowInteresesProyectado').append(`<div class="row">
+				<div class="col-xs-6 text-center">1 al 24</div>
+				<div class="col-xs-6">${dato[1][24-1].intAcum}</div>
+				</div>`);
+			for (i=25; i <=30 ; i++) { 
+			$('#rowInteresesProyectado').append(`<div class="row">
+				<div class="col-xs-6 text-center">${dato[1][i].numDia}</div>
+				<div class="col-xs-6">${dato[1][i].intAcum}</div>
+				</div>`);
+			}
+		}
+
+		
+		$('.modal-mostrarProyectadoIntereses').modal('show');
+	});
+	}
+	
+});
+$('#btnImprTicketInterProyect').click(function (argument) {
+	$.ajax({url: 'http://localhost/perucash/printTicketInteresAcumulado.php?inicial='+$('#txtMontoEntregado').val()+'&numhoy=1', type: 'POST', data: {
+		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+		articulo: $('#rowWellFijo #spanProducto').text(),
+		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
+		obs: $('#rowWellFijo #spanObservacion').text(),
+		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+		usuario: $.JsonUsuario[0].nombre
+	}}).done(function(resp){console.log(resp);});
 });
 </script>
 </body>

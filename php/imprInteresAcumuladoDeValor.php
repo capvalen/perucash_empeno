@@ -17,7 +17,7 @@ tr, .table-condensed>tbody>tr>td{
 
 <div class="col-xs-4">
 <strong>Pago Intereses</strong>
-	<p><strong>Monto inicial: S/. <?php echo $_GET['inicial']; ?></strong></p>
+	<p><strong>Monto inicial: S/. <?php echo $_GET['inicio']; ?></strong></p>
 	<table class="table-condensed">
 	<thead>
 	  <tr>
@@ -40,7 +40,7 @@ por defecto el mínimo 10%
 
 
 $montoInicial=0; $DiadeHoy=0;
-$montoInicial=$_GET['inicial'];// $montoInicial =5001;
+$montoInicial=$_GET['inicio'];// $montoInicial =5001;
 $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
 
 if($montoInicial<=5000){$interesDiario=0.006;}
@@ -70,12 +70,12 @@ if($DiadeHoy!=0){
 	if($montoInicial<=5000){
 		/**/
 		echo '<tr> <td> 1 al 14: </td> <td>S/. '.$filas[1][14-1]['intAcum'].'</td> </tr>';
-		for ($i=15; $i <=31 ; $i++) { 
+		for ($i=15; $i <=30 ; $i++) { 
 			echo '<tr> <td> '.$i.': </td> <td>S/. '.$filas[1][$i-1]['intAcum'].'</td> </tr>';
 		}
 	}else{
 		echo '<tr> <td> 1 al 24: </td> <td>S/. '.$filas[1][24-1]['intAcum'].'</td> </tr>';
-		for ($i=25; $i <=31 ; $i++) { 
+		for ($i=25; $i <=30 ; $i++) { 
 			echo '<tr> <td> '.$i.': </td> <td>S/. '.$filas[1][$i-1]['intAcum'].'</td> </tr>';
 		}
 		

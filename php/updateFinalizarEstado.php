@@ -5,7 +5,7 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call updateFinalizarEstado(".$_POST['idProd'].", '".$_SESSION['Atiende']."' , ".$_POST['monto'].");");
+$log = mysqli_query($conection,"call updateFinalizarEstado(".$_POST['idProd'].", '".$_POST['nombreUser']."' , ".$_POST['monto'].");");
 //echo "call updateFinalizarEstado(".$_POST['idProd'].", '".$_SESSION['Atiende']."' , ".$_POST['monto'].");";
 
 /* cerrar la conexión */
