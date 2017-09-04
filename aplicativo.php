@@ -96,7 +96,7 @@ if(isset($_SESSION['Atiende'])){?>
 						</div>
 						<div class="col-sm-6"><label>Monto entregado (S/.):</label> <input type="number" id="txtMontoEntregado" class="form-control" placeholder="Monto S/." min ="0" step="1"></div>
 						<div class="col-sm-6 hidden"><label>Interés (%):</label> <input type="number" id="txtMontoInteres" class="form-control" placeholder="% de Interés" value="10" min ="0" step="1" disabled></div>
-						<div class="col-sm-6 hidden"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
+						<div class="col-sm-6"><label>Fecha de ingreso:</label> <div class="sandbox-container"><input  id="dtpFechaInicio" type="text" class="form-control"></div></div>
 						<div class="col-sm-6 hidden "><label>Vencimiento:</label> <div class="sandbox-container"><input  id="dtpFechaVencimiento" type="text" class="form-control"></div></div>
 						<div class="col-sm-6"><label>Observaciones o datos extras:</label> <textarea  class="form-control mayuscula" id="txtObservaciones" rows="3" placeholder="¿Alguna observación o dato extra que desees recordar luego?"></textarea></div>
 						
