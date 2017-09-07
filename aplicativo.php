@@ -110,7 +110,8 @@ if(isset($_SESSION['Atiende'])){?>
 						</div>
 					
 					<div class="col-sm-12">
-						<p style="color: #1976d2"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos cálculos</em></strong> <br>
+						<p style="color: #1976d2; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos cálculos</em></strong>
+						<br>
 						De S/. 1 a S/. 5000 de préstamo tiene 2 semanas para cancelar el 10% luego de ello, se sumará el 6% diario.<br>
 						De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
 						</p>
@@ -123,9 +124,9 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			
 			<div class="row col-sm-6 col-sm-offset-3">
-				<div class="pull-left"><button class="btn btn-success" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
-				<div class="text-center"><button class="btn btn-primary" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
-					<button class="btn btn-primary sr-only" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+				<div class="pull-left"><button class="btn btn-success btn-lg btn-outline" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
+				<div class="text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
+					<button class="btn btn-primary sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
 				</div>
 			</div>
 		
@@ -261,7 +262,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
 				<button class="btn btn-indigo btn-outline" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 				<button class="btn btn-indigo btn-outline" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-				<button class="btn btn-indigo btn-outline" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Pago a cuenta (En desarrollo)</button>
+				<button class="btn btn-indigo btn-outline" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Amortizar pago (En desarrollo)</button>
 				<button class="btn btn-danger btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 			</div>
 		</div>
@@ -798,11 +799,11 @@ if(isset($_SESSION['Atiende'])){?>
 		<div class="modal-content">
 			<div class="modal-header-wysteria">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Pago a cuenta</h4>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Amortizar pago</h4>
 			</div>
 			<div class="modal-body">
-				¿Cuántos S/. está adelatando el cliente?
-				<span class="sr-only" id="sr-idProdv3"></span><span class="sr-only" id="sr-MontInicv3"></span><span class="sr-only" id="sr-montIntv3"></span>
+				El artículo actual tiene una deuda de S/. <span id="spanAmortizarDeuda"></span> ¿Cuánto se está adelatando el cliente?
+				<span class="sr-only" id="sr-idProductov3"></span><span class="sr-only" id="sr-MontInicialv3"></span><span class="sr-only" id="sr-montInteresv3"></span>
 				<input type="number" class="form-control text-center" id="txtPagarACuenta" min="0" value="0" step="1">
 			</div>
 			<div class="modal-footer"> 
@@ -842,12 +843,14 @@ if(isset($_SESSION['Atiende'])){?>
 				<strong><i class="icofont icofont-social-smugmug"></i> Enhorabuena,</strong> sus datos fueron guardados correctamente.
 			</div>
 			<div class="modal-footer"> 
-			<button class="btn btn-primary btn-outline btnAceptarGuardado" data-dismiss="modal" ><i class="icofont icofont-check"></i> Ok, aceptar</button></div>
+			<button class="btn btn-primary btn-outline btnAceptarGuardado" data-dismiss="modal" ><i class="icofont icofont-check"></i> Ok, aceptar</button>
+			<button class="btn btn-primary btn-outline btnCompraGuardado sr-only" data-dismiss="modal" ><i class="icofont icofont-check"></i> Ok, aceptar</button>
+			</div>
 		</div>
 		</div>
 	</div>
-	
 </div>
+
 <!-- Modal para indicar que falta completar campos o datos con error -->
 <div class="modal fade modal-faltaCompletar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
@@ -963,7 +966,7 @@ if(isset($_SESSION['Atiende'])){?>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/impotem.js"></script>
+<script type="text/javascript" src="js/impotem.js?version?1.0.2"></script>
 <script type="text/javascript" src="js/jquery.printPage.js"></script>
 <script type="text/javascript" src="js/bootstrap-table.min.js"></script>
 <script>
@@ -971,6 +974,7 @@ $(document).ready(function () {
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('#dtpFechaVencimiento').val(moment().add(1, 'days').format('DD/MM/YYYY'));
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
+	var idCompra=<?php if (isset($_GET["idcompr"])) { echo $_GET["idcompr"]; }else{ echo 0;} ?>;
 	$.idOficina=0;
 	if( <?php echo $_SESSION['idSucursal']; ?> !=3){ $.idOficina =  <?php echo $_SESSION['idSucursal']; ?> }
 	else{$.idOficina=$('#cmbOficinasTotal').val();}
@@ -979,7 +983,7 @@ $(document).ready(function () {
 	$.JsonUsuario.push({'sucursal':'<?php echo $_SESSION['idSucursal']; ?>', 'nombre': '<?php echo $_SESSION['Atiende']; ?>', 'idusuario': '<?php echo $_SESSION['idUsuario']; ?>',
 		'idoficina': '<?php echo $_SESSION['oficina']; ?>'
 	 });
-;	
+	
 	
 	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
 	if(parseInt(idNew)==0){ }//console.log('nada')
@@ -1016,7 +1020,6 @@ $(document).ready(function () {
 				}
 			
 				//respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
-
 				if(dato[0].prodActivo==0){
 					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
 				}else{
@@ -1035,7 +1038,6 @@ $(document).ready(function () {
 					//$('#spanPorcent').text(dato[0].prodInteres);
 				}
 				}
-				
 				// var respu; console.log(dato[0]);
 				// if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
 				// 	respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
@@ -1095,6 +1097,36 @@ $(document).ready(function () {
 
 		})
 		$('.nav-tabs li').eq(1).children('a').click();
+	}
+	if(parseInt(idCompra)==0){}//no hacer nada
+	else{
+
+		$('.nav-tabs li').eq(1).children('a').click();
+		$.ajax({url: 'php/solicitarDatosCompraCliente.php', type: 'POST', data: {idcomp: idCompra }}).done(function (resp) {
+			var dato = JSON.parse(resp);
+			//console.log(dato);
+			moment.locale('es');
+			$('#spanIdCliente').text(dato[0].idCliente);
+			$('#spanApellido').text(dato[0].cliApellidos);
+			$('#spanNombre').text(dato[0].cliNombres);
+			$('#spanDni').text(dato[0].cliDni);
+			$('#spanDireccion').text(dato[0].cliDireccion);
+			$('#spanCorreo').text(dato[0].cliCorreo);
+			$('#spanCelular').text(dato[0].cliCelular);
+
+			$('#spanProducto').text(dato[0].compNombre);
+			$('#spanPorcent').text(0);
+
+
+			$('#rowWellFijo').removeClass('hidden');
+			$('#spanFechaInicio').text(moment(dato[0].compFechaInicial).format('dddd[,] DD MMMM YYYY'));
+			$('#spanPeriodo2').parent().addClass('sr-only');
+			
+			$('#spanMontoDado').text(parseFloat(dato[0].compMontoInicial).toFixed(2));
+			$('#spanAdelanto').parent().parent().addClass('sr-only');
+			$('#spanPagar').parent().parent().addClass('sr-only');
+
+		});
 
 	}
 });
@@ -1188,7 +1220,7 @@ function calcularPeriodo(){
 $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').val())
 	calcularPeriodo();
 	if(verificarTodoRellenado()){
-
+		var fechav3= moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' ' + moment().format('HH:mm:ss');
 		if($('#txtIdCliente').val().length>0){//guardar sólo el producto
 			$.ajax({url: 'php/insertarProductoSolo.php', type: 'POST', data:{
 				productoNombre: $('#txtNombreProducto').val(),
@@ -1198,14 +1230,17 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				feachavencimiento: moment($('#dtpFechaVencimiento').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
-				idCl: $('#txtIdCliente').val()
+				idCl: $('#txtIdCliente').val(),
+				fechaRegistro: fechav3
 				}
 			}).done(function (resp) { console.log(resp) 
-				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
+				$('.modal-ventaGuardada').find('.btnCompraGuardado').addClass('sr-only');
 				limpiarCasillas();
 			}
 			});
 		}else{//guardar ambos productos y cliente
+			
 		$.ajax({url: 'php/insertarProducto.php', type: 'POST', data:{
 				nombre: $('#txtNombres').val(),
 				apellido: $('#txtApellidos').val(),
@@ -1219,10 +1254,12 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 				montopagar: $('#spanMonto').text(),
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				feachavencimiento: moment($('#dtpFechaVencimiento').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
-				observaciones: $('#txtObservaciones').val()
+				observaciones: $('#txtObservaciones').val(),
+				fechaRegistro: fechav3
 				}
 			}).done(function (resp) { console.log(resp) 
-				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
+				$('.modal-ventaGuardada').find('.btnCompraGuardado').addClass('sr-only');
 				limpiarCasillas();
 			}
 			}).error(function () { console.log('error');
@@ -1236,6 +1273,10 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 $('body').on('click','.btnAceptarGuardado',function () {
 	var id= $(this).attr('id');
 	window.location.href = "aplicativo.php?idprod=" +id;
+});
+$('body').on('click','.btnCompraGuardado',function () {
+	var id= $(this).attr('id');
+	window.location.href = "aplicativo.php?idcompr=" +id;
 });
 
 $('#btnLimpiarDatos').click(function () {
@@ -1275,8 +1316,8 @@ function limpiarCasillas(){
 	$('#txtObservaciones').val('');
 }
 function verificarTodoRellenado(){
-	var estado = false;
-	if ( $('#txtApellidos').val()=='' ||  $('#txtNombres').val()=='' ||   $('#txtDni').val()=='' ||  $('#txtDireccion').val()=='' ||  $('#txtCelular').val()=='' ){
+	var estado = false; //||  $('#txtDireccion').val()=='' ||  $('#txtCelular').val()=='' 
+	if ( $('#txtApellidos').val()=='' ||  $('#txtNombres').val()=='' ||   $('#txtDni').val()=='' ){
 		$('#lblFalta').text('Falta ingresar algunos datos importantes del Cliente, por favor revíselos'); $('.modal-faltaCompletar').modal('show'); estado= false;}
 	else if($('#txtNombreProducto').val()==''){$('#lblFalta').text('Estas olvidando poner un nombre al producto que se adquiere'); $('.modal-faltaCompletar').modal('show'); estado= false;}
 	else if($('#txtMontoEntregado').val()=='' || $('#txtMontoEntregado').val()<=0 ){$('#lblFalta').text('Estas olvidando poner el monto entregado al producto que se adquiere'); $('.modal-faltaCompletar').modal('show'); estado= false;}
@@ -1547,9 +1588,9 @@ $('#txtBuscarPersona').keyup(function (e) {var code = e.which;
 $('#txtBuscarProducto').keyup(function (e) {var code = e.which;
 	if(code==13 && $('#txtBuscarProducto').val()!=''  ){	e.preventDefault();
 		//console.log('enter')
-		$('#rowUsuarioEncontrado').children().remove();
+		$('#rowProductoEncontrado').children().remove();
 		$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {campo:$('#txtBuscarProducto').val() }}).done(function (resp) { //console.log(resp)
-			dato = JSON.parse(resp); console.log(dato)
+			dato = JSON.parse(resp); //console.log(dato)
 			$.each(dato, function(i, elem){
 				$('#rowProductoEncontrado').append(`<div class="row"><div class="col-xs-4 mayuscula">${elem.prodnombre}</div>
 					<div class="col-xs-3 mayuscula eleNom">${elem.cliapellidos}, ${elem.clinombres}</div>
@@ -1585,7 +1626,7 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 	$.ajax({ url: 'php/solicitarProductoPorCliente.php', type: 'POST', data: {idCli: $('.rowEnc').eq(indice).find('.eleIdCli').text() }}). done(function (resp) {
 		//console.log(JSON.parse(resp))
 		moment.locale('es');
-		$.each(JSON.parse(resp), function (i, dato) {
+		$.each(JSON.parse(resp), function (i, dato) { //console.log(dato);
 			//var respu= calculoIntereses(moment(dato.prodFechaInicial), moment(), dato.prodMontoDado, dato.prodInteres )
 
 			var hoy = moment();
@@ -1621,7 +1662,6 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 				if(parseInt(dato.prodActivo) ==1){
 					botonAgregar = `<div class="col-sm-8 col-sm-offset-2">
 					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-					/*<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>*/
 					<button class="btn btn-indigo btn-outline btn-FinalizarImpuestoMovil"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 					<button class="btn btn-indigo btn-outline btn-AdelantoPrestamoMovil"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
 					<button class="btn btn-danger btn-outline btn-FinalizarPrestamoMovil"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
@@ -1631,12 +1671,11 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 					<div class="col-xs-12" >
 						<div class="alert-message alert-message-morado">
 								<h4>Producto finalizado</h4>
-								<p>por: <strong><span class="mayuscula" id="QuienFinalizo">${dato.prodQuienFinaliza}</span></strong>, el día: <strong><span id="FechaFinalizo">${moment(dato.prodFechaFinaliza).format('')}</span></strong>, por el monto: S/. <span id="finalizaMonto">${parseFloat(dato.prodCuantoFinaliza).toFixed(2)}</span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
+								<p>por: <strong><span class="mayuscula" id="QuienFinalizo">${dato.prodQuienFinaliza}</span></strong>, el día: <strong><span id="FechaFinalizo">${moment(dato.prodFechaFinaliza).format('LL')}</span></strong>, por el monto: S/. <span id="finalizaMonto">${parseFloat(dato.prodCuantoFinaliza).toFixed(2)}</span> estado de aprobación: <strong><span id="QuienAprueba">Todavía sin aprobación</span></strong>.</p>
 						</div>
 					</div>
 					<div class="col-sm-8 col-sm-offset-2">
 					<button class="btn btn-morado btn-outline btn-imprimirTicketMovil"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
-					/*<button class="btn btn-morado btn-outline btn-imprimirImpresoraMovil"><i class="icofont icofont-print"></i> Voucher en impresora</button>*/
 				</div>`;}
 
 				$('#rowWellCambiante').append(`<div class="row well" >
@@ -2230,16 +2269,19 @@ $('#someSwitchOptionWarning').change(function (e) {
 });
 $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto').val())
 	if(verificarTodoRellenado()){
+		var fechav3= moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' ' + moment().format('HH:mm:ss');
 		if($('#txtIdCliente').val().length>0){//guardar sólo el producto
 			$.ajax({url: 'php/insertarCompraSolo.php', type: 'POST', data:{
 				productoNombre: $('#txtNombreProducto').val(),
 				montoentregado: $('#txtMontoEntregado').val(),
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
-				idCl: $('#txtIdCliente').val()
+				idCl: $('#txtIdCliente').val(),
+				fechaRegistro: fechav3
 				}
 			}).done(function (resp) { console.log(resp) 
-				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
+				$('.modal-ventaGuardada').find('.btnAceptarGuardado').addClass('sr-only');
 				limpiarCasillas();
 			}
 			});
@@ -2254,16 +2296,19 @@ $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto')
 				productoNombre: $('#txtNombreProducto').val(),
 				montoentregado: $('#txtMontoEntregado').val(),
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
-				observaciones: $('#txtObservaciones').val()
+				observaciones: $('#txtObservaciones').val(),
+				fechaRegistro: fechav3
 				}
 			}).done(function (resp) { console.log(resp) 
-				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp);
+				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
+				$('.modal-ventaGuardada').find('.btnAceptarGuardado').addClass('sr-only');
 				limpiarCasillas();
 			}
 			}).error(function () { console.log('error');
 				// body...
 			});
 		}
+		$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 		
 	}//<- fin de if verificarTodoRellenado
 });
@@ -2354,6 +2399,10 @@ $('#btnCronogramaPagosVer').click(function () {
 		valor=0;
 	}else{
 		valor= $('#txtMontoEntregado').val();
+		/*var fechav3= moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')
+		$.ajax({url: 'php/inserttempo.php', type: 'POST', data:{fecha: fechav3+' ' + moment().format('HH:mm:ss') }}).done(function (resp) {
+			console.log(resp);
+		})*/
 		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy='+1, type: 'GET' }).done(function (resp) {
 		
 		dato=JSON.parse(resp);

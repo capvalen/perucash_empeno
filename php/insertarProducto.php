@@ -4,7 +4,7 @@ include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
 
 
-$sql= "call insertarProductoNew ('".$_POST['nombre']."','".$_POST['apellido']."','".$_POST['direccion']."','".$_POST['dni']."', '".$_POST['email']."', '".$_POST['celular']."', '".$_POST['productoNombre']."', ".$_POST['montoentregado'].", ".$_POST['interes'].", ".$_POST['montopagar'].", '".$_POST['fechainicial']."', '".$_POST['feachavencimiento']."', '".$_POST['observaciones']."' , ".$_SESSION['idUsuario']." , ".$_SESSION['idSucursal'].")";
+$sql= "call insertarProductoNew ('".$_POST['nombre']."','".$_POST['apellido']."','".$_POST['direccion']."','".$_POST['dni']."', '".$_POST['email']."', '".$_POST['celular']."', '".$_POST['productoNombre']."', ".$_POST['montoentregado'].", ".$_POST['interes'].", ".$_POST['montopagar'].", '".$_POST['fechainicial']."', '".$_POST['feachavencimiento']."', '".$_POST['observaciones']."' , ".$_SESSION['idUsuario']." , ".$_SESSION['idSucursal'].", '".$_POST['fechaRegistro']."' )";
 //echo $sql;
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	/* obtener el array de objetos */
