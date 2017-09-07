@@ -113,7 +113,10 @@ if(isset($_SESSION['Atiende'])){?>
 						<p style="color: #1976d2; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos cálculos</em></strong>
 						<br>
 						De S/. 1 a S/. 5000 de préstamo tiene 2 semanas para cancelar el 10% luego de ello, se sumará el 6% diario.<br>
-						De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
+						<!-- De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
+						20602337147: EARA93CX
+						20602337147: EARA93CX
+						 -->
 						</p>
 					</div>
 						<div class="col-sm-12 text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button></div>
@@ -125,7 +128,7 @@ if(isset($_SESSION['Atiende'])){?>
 			
 			<div class="row col-sm-6 col-sm-offset-3">
 				<div class="pull-left"><button class="btn btn-success btn-lg btn-outline" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
-				<div class="text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar datos</button>
+				<div class="text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
 					<button class="btn btn-primary sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
 				</div>
 			</div>
@@ -328,6 +331,7 @@ if(isset($_SESSION['Atiende'])){?>
 	<!-- fin de tab pane 3 -->
 	</div>
 	<div class="tab-pane fade" id="tabTodosProductos">
+		<button class="btn btn-morado btn-outline btn-lg" id="btnListaTodosProductosImprimirv3"><i class="icofont icofont-database"></i> Ver todos los productos en una lista</button><br>
 		A continuación se muestran todos los items ordenados alfabéticamente en bloques de 30 items. <br>
 		<nav aria-label="Page navigation">
 					<ul class="pagination">
@@ -966,11 +970,12 @@ if(isset($_SESSION['Atiende'])){?>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/impotem.js?version?1.0.2"></script>
+<script type="text/javascript" src="js/impotem.js?version?1.0.4"></script>
 <script type="text/javascript" src="js/jquery.printPage.js"></script>
 <script type="text/javascript" src="js/bootstrap-table.min.js"></script>
 <script>
 $(document).ready(function () {
+	datosUsuario();
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('#dtpFechaVencimiento').val(moment().add(1, 'days').format('DD/MM/YYYY'));
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
@@ -979,10 +984,10 @@ $(document).ready(function () {
 	if( <?php echo $_SESSION['idSucursal']; ?> !=3){ $.idOficina =  <?php echo $_SESSION['idSucursal']; ?> }
 	else{$.idOficina=$('#cmbOficinasTotal').val();}
 	cambiodeOficina();
-	$.JsonUsuario=[];
-	$.JsonUsuario.push({'sucursal':'<?php echo $_SESSION['idSucursal']; ?>', 'nombre': '<?php echo $_SESSION['Atiende']; ?>', 'idusuario': '<?php echo $_SESSION['idUsuario']; ?>',
-		'idoficina': '<?php echo $_SESSION['oficina']; ?>'
-	 });
+	//$.JsonUsuario=[];
+	// $.JsonUsuario.push({'sucursal':'<?php echo $_SESSION['idSucursal']; ?>', 'nombre': '<?php echo $_SESSION['Atiende']; ?>', 'idusuario': '<?php echo $_SESSION['idUsuario']; ?>',
+	// 	'idoficina': '<?php echo $_SESSION['oficina']; ?>'
+	//  });
 	
 	
 	//console.log('usuario ' + <?php echo $_SESSION['idUsuario']; ?>)
@@ -1221,6 +1226,8 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 	calcularPeriodo();
 	if(verificarTodoRellenado()){
 		var fechav3= moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' ' + moment().format('HH:mm:ss');
+		var idSucu=$.JsonUsuario.idsucursal;
+		if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
 		if($('#txtIdCliente').val().length>0){//guardar sólo el producto
 			$.ajax({url: 'php/insertarProductoSolo.php', type: 'POST', data:{
 				productoNombre: $('#txtNombreProducto').val(),
@@ -1231,7 +1238,7 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 				feachavencimiento: moment($('#dtpFechaVencimiento').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
 				idCl: $('#txtIdCliente').val(),
-				fechaRegistro: fechav3
+				fechaRegistro: fechav3, idSucursal: idSucu
 				}
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
@@ -1255,7 +1262,7 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				feachavencimiento: moment($('#dtpFechaVencimiento').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
-				fechaRegistro: fechav3
+				fechaRegistro: fechav3, idSucursal: idSucu
 				}
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
@@ -1266,6 +1273,7 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 				// body...
 			});
 		}
+	$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});		
 		
 	}//<- fin de if verificarTodoRellenado
 	
@@ -1509,13 +1517,13 @@ $('#divListaPorConfirmar').on('click', '.btnRematarReporteGuar', function () {
 });
 $('#btnAceptarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoAceptar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario[0].nombre }}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoAceptar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario.nombre }}).done(function (resp) {
 	 if(resp==1){
 		$('.modal-EstaSeguroAceptarMovimiento').modal('hide');
 		$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { //console.log(elem)
 			if($(elem).text()==idCamb){
 				$(this).parent().find('.botones').children().remove();
-				$(this).parent().find('.botones').append('<p>Se aceptó el movimiento por <strong>'+$.JsonUsuario[0].nombre +'</strong> </p>' );
+				$(this).parent().find('.botones').append('<p>Se aceptó el movimiento por <strong>'+$.JsonUsuario.nombre +'</strong> </p>' );
 			}
 		})
 	 }
@@ -1523,13 +1531,13 @@ $('#btnAceptarMovimientoModal').click(function () {
 });
 $('#btnRematarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoRematar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario[0].nombre }}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoRematar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario.nombre }}).done(function (resp) {
 	 if(resp==1){
 		$('.modal-EstaSeguroRematarMovimiento').modal('hide');
 		$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
 			if($(elem).text()==idCamb){
 				$(this).parent().find('.botones').children().remove();
-				$(this).parent().find('.botones').append('<p>Se registró como rematado por <strong>'+$.JsonUsuario[0].nombre +'</strong> </p>' );
+				$(this).parent().find('.botones').append('<p>Se registró como rematado por <strong>'+$.JsonUsuario.nombre +'</strong> </p>' );
 			}
 		})
 	 }
@@ -1537,13 +1545,13 @@ $('#btnRematarMovimientoModal').click(function () {
 });
 $('#btnRetirarMovimientoModal').click(function () {
 	var idCamb= $(this).parent().parent().find('.idSelecRow').text();
-	$.ajax({url:'php/updateMovimientoRetirar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario[0].nombre }}).done(function (resp) {
+	$.ajax({url:'php/updateMovimientoRetirar.php', type:'POST', data:{idRepo: idCamb, idUser: $.JsonUsuario.nombre }}).done(function (resp) {
 	 if(resp==1){
 		$('.modal-EstaSeguroRetirarMovimiento').modal('hide');
 		$('#divListaPorConfirmar .idRowReporte').each(function (i, elem ) { console.log(elem)
 			if($(elem).text()==idCamb){
 				$(this).parent().find('.botones').children().remove();
-				$(this).parent().find('.botones').append('<p>Producto retirado por <strong>'+$.JsonUsuario[0].nombre +'</strong> </p>' );
+				$(this).parent().find('.botones').append('<p>Producto retirado por <strong>'+$.JsonUsuario.nombre +'</strong> </p>' );
 			}
 		})
 	 }
@@ -1714,7 +1722,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
 		obs: $('#rowWellFijo #spanObservacion').text(),
 		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-		usuario: $.JsonUsuario[0].nombre
+		usuario: $.JsonUsuario.nombre
 	}}).done(function(resp){console.log(resp);});
 });
 $('#btn-FinalizarPrestamoFijo').click(function () {
@@ -1751,7 +1759,7 @@ $('#btnSeguroFinalizar').click(function () {
 
 	console.log(iProd)
 	
-	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor, nombreUser: $.JsonUsuario[0].nombre }}).done(function (resp) { console.log(resp)
+	$.ajax({url:'php/updateFinalizarEstado.php', type: "POST", data: {idProd: iProd, monto: valor, nombreUser: $.JsonUsuario.nombre }}).done(function (resp) { console.log(resp)
 		if(parseInt(resp)==1){
 			//$('#btn-FinalizarPrestamoFijo').addClass('hide');
 			$('.modal-EstaSeguro').modal('hide');
@@ -1766,7 +1774,7 @@ $('#btnSeguroFinalizar').click(function () {
 			monto: parseFloat($('#rowWellFijo #spanPagar').text()).toFixed(2),
 			obs: $('#rowWellFijo #spanObservacion').text(),
 			hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-			usuario: $.JsonUsuario[0].nombre
+			usuario: $.JsonUsuario.nombre
 		}}).done(function(resp){console.log(resp);});
 		}
 	if( !$('#rowWellCambiante').hasClass('hidden')){
@@ -1779,7 +1787,7 @@ $('#btnSeguroFinalizar').click(function () {
 					monto: parseFloat( $(elem).parent().find('#spanPagar').text() ).toFixed(2),
 					obs: $(elem).parent().find('#spanObservacion').text(),
 					hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-					usuario: $.JsonUsuario[0].nombre
+					usuario: $.JsonUsuario.nombre
 				}}).done(function(resp){console.log(resp);});
 
 				return false;
@@ -1832,7 +1840,7 @@ $('#btnInteresFinalizar').click(function () {
 	articulo: articuloCalc,
 	monto: montoCalc,
 	hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-	usuario: $.JsonUsuario[0].nombre
+	usuario: $.JsonUsuario.nombre
 }}).done(function(resp){console.log(resp);});
 
 	window.location.href = "aplicativo.php?idprod=" +iProd;
@@ -1848,7 +1856,7 @@ $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
 		monto: parseFloat(contenedor.find('#spanMontoDado').text()).toFixed(2),
 		obs: contenedor.find('#spanObservacion').text(),
 		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-		usuario: $.JsonUsuario[0].nombre
+		usuario: $.JsonUsuario.nombre
 	}}).done(function(resp){console.log(resp);});
 });
 $('#rowWellCambiante').on('click', '.btn-FinalizarPrestamoMovil', function () {
@@ -2270,6 +2278,8 @@ $('#someSwitchOptionWarning').change(function (e) {
 $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto').val())
 	if(verificarTodoRellenado()){
 		var fechav3= moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' ' + moment().format('HH:mm:ss');
+		var idSucu=$.JsonUsuario.idsucursal;
+		if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
 		if($('#txtIdCliente').val().length>0){//guardar sólo el producto
 			$.ajax({url: 'php/insertarCompraSolo.php', type: 'POST', data:{
 				productoNombre: $('#txtNombreProducto').val(),
@@ -2277,7 +2287,7 @@ $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto')
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
 				idCl: $('#txtIdCliente').val(),
-				fechaRegistro: fechav3
+				fechaRegistro: fechav3, idSucursal: idSucu
 				}
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
@@ -2297,7 +2307,7 @@ $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto')
 				montoentregado: $('#txtMontoEntregado').val(),
 				fechainicial: moment($('#dtpFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
 				observaciones: $('#txtObservaciones').val(),
-				fechaRegistro: fechav3
+				fechaRegistro: fechav3, idSucursal: idSucu
 				}
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
@@ -2438,15 +2448,25 @@ $('#btnCronogramaPagosVer').click(function () {
 	}
 	
 });
-$('#btnImprTicketInterProyect').click(function (argument) {
+$('#btnImprTicketInterProyect').click(function () {
 	$.ajax({url: 'http://localhost/perucash/printTicketInteresAcumulado.php?inicial='+$('#txtMontoEntregado').val()+'&numhoy=1', type: 'POST', data: {
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),
 		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
 		obs: $('#rowWellFijo #spanObservacion').text(),
 		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-		usuario: $.JsonUsuario[0].nombre
+		usuario: $.JsonUsuario.nombre
 	}}).done(function(resp){console.log(resp);});
+});
+$('#btnListaTodosProductosImprimirv3').click(function () {
+	if($.JsonUsuario.idsucursal==3){
+		window.open('php/imprTodosProductos.php?idSuc=' +$('#cmbOficinasTotal').val(), '_blank');
+	}
+	else{
+		window.open('php/imprTodosProductos.php?idSuc=' +$.JsonUsuario.idsucursal, '_blank');
+		//window.location.href = "php/imprTodosProductos.php?idSuc=" +$.JsonUsuario.idsucursal;
+	}
+	
 });
 </script>
 </body>

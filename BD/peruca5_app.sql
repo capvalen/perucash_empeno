@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.7.3
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 01-09-2017 a las 20:30:53
+-- Tiempo de generación: 07-09-2017 a las 18:54:41
 -- Versión del servidor: 5.6.37
 -- Versión de PHP: 5.6.30
 
@@ -58,6 +58,11 @@ FROM `producto` p
 where prodactivo = 1 and datediff( now(), prodfechainicial )>30
 and idSucursal =idSuc$$
 
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `datosBasicosUsuario` (IN `idUser` INT)  NO SQL
+SELECT idUsuario, usunombres, usuapellido, usupoder, idsucursal 
+FROM usuario
+where idusuario=idUser and usuactivo=1$$
+
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `encontrarCliente` (IN `dni` VARCHAR(8))  NO SQL
 SELECT * FROM `Cliente` WHERE clidni = dni$$
 
@@ -85,7 +90,7 @@ INSERT INTO `reportes_producto`(
 
 end$$
 
-CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarCompraNew` (IN `cliNomb` VARCHAR(50), IN `cliApelli` VARCHAR(50), IN `cliDirec` VARCHAR(200), IN `dni` VARCHAR(50), IN `email` VARCHAR(50), IN `celular` VARCHAR(50), IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `fechainicial` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idSuc` INT)  BEGIN
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarCompraNew` (IN `cliNomb` VARCHAR(50), IN `cliApelli` VARCHAR(50), IN `cliDirec` VARCHAR(200), IN `dni` VARCHAR(50), IN `email` VARCHAR(50), IN `celular` VARCHAR(50), IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `fechainicial` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idSuc` INT, IN `fechaRegistro` TEXT)  BEGIN
 INSERT INTO `peruca5_app`.`Cliente`
 (`idCliente`,
 `cliApellidos`,
@@ -115,14 +120,14 @@ montoentregado,
 fechainicial,
 observaciones,
 @id,
-1, now(), usuario, idSuc);
+1, fechaRegistro, usuario, idSuc);
 
 set @comp=last_insert_id();
 select @comp;
 
 END$$
 
-CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarCompraSolo` (IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `fechainicial` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idCl` INT, IN `idSuc` INT)  NO SQL
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarCompraSolo` (IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `fechainicial` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idCl` INT, IN `idSuc` INT, IN `fechaRegistro` TEXT)  NO SQL
 BEGIN
 
 INSERT INTO `peruca5_app`.`Compras`
@@ -136,14 +141,14 @@ montoentregado,
 fechainicial,
 observaciones,
 idCl,
-1, now(), usuario, idSuc);
+1, fechaRegistro, usuario, idSuc);
 
 set @compr=last_insert_id();
 select @compr;
 
 END$$
 
-CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarProductoNew` (IN `cliNomb` VARCHAR(50), IN `cliApelli` VARCHAR(50), IN `cliDirec` VARCHAR(200), IN `dni` VARCHAR(50), IN `email` VARCHAR(50), IN `celular` VARCHAR(50), IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `interes` FLOAT, IN `montopagar` FLOAT, IN `fechainicial` DATE, IN `feachavencimiento` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idSuc` INT)  BEGIN
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarProductoNew` (IN `cliNomb` VARCHAR(50), IN `cliApelli` VARCHAR(50), IN `cliDirec` VARCHAR(200), IN `dni` VARCHAR(50), IN `email` VARCHAR(50), IN `celular` VARCHAR(50), IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `interes` FLOAT, IN `montopagar` FLOAT, IN `fechainicial` DATE, IN `feachavencimiento` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idSuc` INT, IN `fechaRegistro` TEXT)  BEGIN
 INSERT INTO `peruca5_app`.`Cliente`
 (`idCliente`,
 `cliApellidos`,
@@ -183,14 +188,14 @@ feachavencimiento,
 observaciones,
 montopagar,
 @id,
-1, now(), usuario, idSuc);
+1, fechaRegistro, usuario, idSuc);
 
 set @prod=last_insert_id();
 select @prod;
 
 END$$
 
-CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarProductoSolo` (IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `interes` FLOAT, IN `montopagar` FLOAT, IN `fechainicial` DATE, IN `feachavencimiento` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idCl` INT, IN `idSuc` INT)  NO SQL
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `insertarProductoSolo` (IN `nomProd` VARCHAR(200), IN `montoentregado` FLOAT, IN `interes` FLOAT, IN `montopagar` FLOAT, IN `fechainicial` DATE, IN `feachavencimiento` DATE, IN `observaciones` TEXT, IN `usuario` INT, IN `idCl` INT, IN `idSuc` INT, IN `fechaRegistro` TEXT)  NO SQL
 BEGIN
 
 INSERT INTO `peruca5_app`.`producto`
@@ -214,7 +219,7 @@ feachavencimiento,
 observaciones,
 montopagar,
 idCl,
-1, now(), usuario, idSuc);
+1, fechaRegistro, usuario, idSuc);
 
 set @prod=last_insert_id();
 select @prod;
@@ -230,6 +235,11 @@ INSERT INTO `usuario`(`idUsuario`, `usuNombres`, `usuApellido`,
                       `usuNick`, `usuPass`, `usuPoder`,
                       `idSucursal`, `usuActivo`) 
 VALUES (null,apellido,nombre,nick,md5(pass),poder,idSucur,1)$$
+
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `inserttempo` (IN `fech` TEXT)  NO SQL
+insert into tempo
+(idtempo, fecha)
+values(null, fech)$$
 
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarBuscarNombreProducto` (IN `texto` TEXT)  NO SQL
 select idproducto, prodnombre, cliapellidos, clinombres, prodMontoEntregado, prodfecharegistro
@@ -345,6 +355,17 @@ order by prodFechaInicial asc
 limit desde,hasta;
 end$$
 
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarTodosProductosEnBDSucursal` (IN `idSuc` INT)  NO SQL
+SELECT p.idproducto, prodnombre, prodMontoEntregado, 
+DATE_FORMAT(prodFechaRegistro,'%d/%m/%Y') AS prodFechaRegistro,
+c.cliApellidos, c.cliNombres, u.usuNick as nick
+
+FROM `producto` p
+inner join Cliente c on c.idCliente = p.idcliente
+inner join usuario u on u.idUsuario= p.idusuario
+where p.idSucursal=idSuc
+order by prodFechaRegistro desc$$
+
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `listarTodosProductosNoFinalizados` (IN `idSuc` INT)  NO SQL
 SELECT c.*, p.*, u.usuNombres FROM `producto` p
 inner join Cliente c
@@ -388,6 +409,11 @@ FROM  `producto`
 where idSucursal = idSuc and prodActivo<>0;
 
 end$$
+
+CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `solicitarDatosCompraCliente` (IN `idCompr` INT)  NO SQL
+SELECT * FROM `Compras` co
+ inner join Cliente c on c.idCliente=co.idCliente
+WHERE idcompra =idCompr$$
 
 CREATE DEFINER=`peruca5`@`localhost` PROCEDURE `solicitarProductoPorId` (IN `idProd` INT)  BEGIN
 select c.*, p.*, s.sucNombre
@@ -819,7 +845,24 @@ INSERT INTO `Cliente` (`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cli
 (311, 'bendezu esteban', 'catherine vanesa', '77282601', 'jr hipolito unanue 297', '', '963344138'),
 (312, 'perez torres', 'jorge luis', '72449774', 'av 13 de noviembre 306', '', '985555503'),
 (313, 'garcia canales', 'ana isabel', '19851069', 'jr. libertad 441 el tambo', '', '964444485'),
-(314, 'povis damian', 'miguel angel', '70294199', 'calle venecia mz c lt 15', '', '964710711');
+(314, 'povis damian', 'miguel angel', '70294199', 'calle venecia mz c lt 15', '', '964710711'),
+(315, 'ticse aranda', 'luis carlos', '43577829', 'av. leoncio prado 107', '', '956762326'),
+(316, 'duran contreras', 'luis angel', '46855876', 'av. la esperanza 773 el tambo', '', '954976041'),
+(317, 'mucha rivera', 'diego', '47051288', 'psje san fernando 251', 'forever_ciatisesa@hotmail.com', '982444406'),
+(318, 'rivera paitan', 'gladis teresa', '41372707', 'jr antonio razuri 115-piopata', '', '947558755'),
+(319, 'sotomayor chirinos', 'raul', '29636784', 'calle real plaza vea', 'rkhanac@gmail.com', '960926759'),
+(320, 'auqui benito', 'alejandro', '42992326', 'psje francisco de zela 259', 'abauqui@hotmail.com', '964143264'),
+(321, 'arroyo flores', 'carlos daniel', '72743978', 'psje marticorena 111', 'carlosdx21@hotmail.com', '937597396'),
+(322, 'canaler puente', 'luis fernando', '47580115', 'jorge chaves pilcomayo sta rosa', 'luis_16_500@hotmail.com', '945513123'),
+(323, 'aguirre sulca', 'laime', '72785249', 'gonzales prada 636', 'luchoar_2@hotmail.com', '939032393'),
+(324, 'cordova torres', 'miriam', '19870743', 'jr las violetas mzd lt15', 'miriam@hotmail.com', '965047013'),
+(325, 'gamboa cardenas', 'jimmy arthur', '77080979', 'ica antigua 1420', 'gamboa_cardenasj@gmail.com', '931247646'),
+(326, 'palacios meza', 'jeunisse merylin', '45426800', 'prol. san antonio 112 - san carlos', '', '976129898'),
+(327, 'huaypar quispe', 'patricia', '48412322', 'pj. ignacio baldeon 135', '', '933716863'),
+(328, 'aroni mansilla', 'magno', '40250634', 'jr. huaytapallana 294', '', '995566887'),
+(329, 'bravo lozano', 'jose antonio', '42105676', 'jr. moquegua 485 - hyo', '', '932036194'),
+(330, 'pariona', 'carlos', '99998888', '', '', ''),
+(331, 'de la cruz', 'fiorella', '43163395', 'av. 13 de noviembre #1148', '', '990867971');
 
 -- --------------------------------------------------------
 
@@ -845,8 +888,8 @@ CREATE TABLE `Compras` (
 --
 
 INSERT INTO `Compras` (`idCompra`, `compNombre`, `compMontoInicial`, `compFechaInicial`, `compObservaciones`, `idCliente`, `compActivo`, `compFechaRegistro`, `idUsuario`, `idSucursal`) VALUES
-(1, 'libro para remate', 32, '2017-07-04', '', 54, b'1', '2017-07-04 13:57:14', 9, 2),
-(2, 'libro para remate', 32, '2017-07-04', '', 54, b'1', '2017-07-04 13:57:18', 9, 2);
+(1, 'camara nikon + filmadora canon', 600, '2017-09-07', '', 331, b'1', '2017-09-07 12:35:02', 3, 1),
+(2, 'billetera', 10, '2017-09-07', '', 54, b'1', '2017-09-07 17:52:43', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -1245,7 +1288,7 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (304, 'celular samsung galaxy j2', 150, 4, '2017-07-04', '2017-08-04', '', 180, 0, 234, b'0', b'1', '2017-07-04 18:12:36', 3, 1, '', 0, '', '', b'0', ''),
 (305, 'licuadora rena ware', 700, 4, '2017-08-04', '2017-08-05', 'Se canceló el interés S/. 140.00 de el día 04/08/2017<br>', 840, 0, 235, b'0', b'1', '2017-07-05 17:43:32', 3, 1, '04/08/2017', 0, '', '', b'0', ''),
 (306, 'piano yamaha', 200, 4, '2017-07-05', '2017-08-05', 'piano costal', 240, 0, 236, b'0', b'1', '2017-07-05 21:09:13', 13, 1, '', 0, '', '', b'0', ''),
-(307, 'plancha thomas + moto3g', 230, 4, '2017-07-05', '2017-08-05', '', 276, 0, 237, b'0', b'1', '2017-07-05 21:11:58', 13, 1, '', 0, '', '', b'0', ''),
+(307, 'plancha thomas + moto3g', 230, 4, '2017-07-05', '2017-08-05', '', 276, 0, 237, b'0', b'0', '2017-07-05 21:11:58', 13, 1, '', 312.8, 'Aumbbel', '2017-09-05 17:19:05', b'0', ''),
 (308, 'celular de prueba', 500, 4, '2017-06-23', '2017-07-08', '', 560, 0, 54, b'0', b'0', '2017-07-07 12:09:14', 9, 2, '', 560, 'demo', '2017-07-12 17:05:58', b'0', ''),
 (309, 'laptop hp 240 g1', 104.4, 4, '2017-07-07', '2017-08-07', 'Dejó la laptop como pago del interés generado por sus 2 Artículos empeñados anteriormente ( monitor aoC E960 S/.48 y cpu micronics S/. 56.4 )', 125.28, 0, 238, b'0', b'1', '2017-07-07 14:07:54', 14, 1, '', 0, '', '', b'0', ''),
 (310, 'guitarra eléctrica jt 690 -fr', 280, 4, '2017-07-08', '2017-07-09', '', 308, 0, 121, b'0', b'0', '2017-07-08 12:33:01', 12, 1, '', 358.4, 'Yuri Paola', '2017-08-25 17:31:45', b'0', ''),
@@ -1263,7 +1306,7 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (322, 'cpu antryx', 100, 4, '2017-07-18', '2017-08-18', '', 120, 0, 242, b'0', b'1', '2017-07-18 19:35:23', 3, 1, '', 0, '', '', b'0', ''),
 (323, 'laptop hp', 300, 4, '2017-07-19', '2017-08-19', '', 360, 0, 47, b'0', b'0', '2017-07-19 10:35:59', 3, 1, '', 360, 'Aumbbel', '2017-08-19 20:04:32', b'0', ''),
 (324, 'celular s6 edge', 200, 4, '2017-07-19', '2017-08-19', '', 240, 0, 243, b'0', b'0', '2017-07-19 17:52:26', 3, 1, '', 240, 'Aumbbel', '2017-08-19 20:05:21', b'0', ''),
-(325, 'licuadora oster classic+dni', 40, 4, '2017-07-19', '2017-08-19', '', 48, 0, 244, b'0', b'1', '2017-07-19 18:09:41', 3, 1, '', 0, '', '', b'0', ''),
+(325, 'licuadora oster classic+dni', 40, 4, '2017-07-19', '2017-08-19', '', 48, 0, 244, b'0', b'0', '2017-07-19 18:09:41', 3, 1, '', 51.2, 'Aumbbel', '2017-09-05 19:17:10', b'0', ''),
 (326, 'bluray samsung + multitester', 70, 4, '2017-07-20', '2017-08-20', '', 84, 0, 245, b'0', b'1', '2017-07-20 18:27:51', 3, 1, '', 0, '', '', b'0', ''),
 (327, 'moto scuter pleasure', 400, 4, '2017-07-20', '2017-08-20', '', 480, 0, 246, b'0', b'0', '2017-07-20 18:51:17', 3, 1, '', 440, 'Yuri Paola', '2017-08-03 18:59:33', b'0', ''),
 (328, 'skil+bauker+dremel3000', 130, 4, '2017-07-21', '2017-08-21', '', 156, 0, 247, b'0', b'1', '2017-07-21 13:30:52', 3, 1, '', 0, '', '', b'0', ''),
@@ -1277,7 +1320,7 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (336, 'laptop advance i3', 250, 4, '2017-07-28', '2017-08-28', '', 300, 0, 227, b'0', b'0', '2017-07-28 18:09:42', 3, 1, '', 275, 'Yuri Paola', '2017-08-02 12:39:37', b'0', ''),
 (337, 'celular moto g play', 50, 4, '2017-07-27', '2017-08-27', '', 60, 0, 253, b'0', b'0', '2017-07-29 11:03:31', 13, 1, '', 55, 'Yuri Paola', '2017-08-02 11:12:18', b'0', ''),
 (338, 'tv lg 42 pulgadas smartv', 380, 4, '2017-07-27', '2017-08-27', '', 456, 0, 254, b'0', b'1', '2017-07-29 11:04:44', 13, 1, '', 0, '', '', b'0', ''),
-(339, 'equipo de sonido', 180, 4, '2017-07-27', '2017-08-27', '', 216, 0, 255, b'0', b'1', '2017-07-29 11:09:32', 13, 1, '', 0, '', '', b'0', ''),
+(339, 'equipo de sonido', 180, 4, '2017-07-27', '2017-08-27', '', 216, 0, 255, b'0', b'0', '2017-07-29 11:09:32', 13, 1, '', 223.2, 'Yuri Paola', '2017-09-05 15:50:00', b'0', ''),
 (340, 'laptop sony, reloj casio, iphone 4, smartwacht', 1000, 4, '2017-07-27', '2017-08-27', '', 1200, 0, 256, b'0', b'0', '2017-07-29 11:12:43', 13, 1, '', 1100, 'Yuri Paola', '2017-08-02 11:07:29', b'0', ''),
 (341, 'laptop', 200, 4, '2017-07-26', '2017-08-26', '', 240, 0, 257, b'0', b'1', '2017-07-29 11:16:28', 13, 1, '', 0, '', '', b'0', ''),
 (342, 'camara canon', 40, 4, '2017-08-28', '2017-08-28', 'Se canceló el interés S/. 8.00 de el día 28/08/2017<br>', 48, 0, 15, b'0', b'1', '2017-07-29 11:18:55', 13, 1, '28/08/2017', 0, '', '', b'0', ''),
@@ -1321,21 +1364,21 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (380, 'impresora canon', 30, 4, '2017-08-19', '2017-08-20', '', 33, 0, 281, b'0', b'1', '2017-08-19 11:52:03', 12, 1, '', 0, '', '', b'0', ''),
 (381, 'laptop toshiba satellite l55', 200, 4, '2017-08-21', '2017-09-21', '', 240, 0, 282, b'0', b'1', '2017-08-21 16:35:37', 3, 1, '', 0, '', '', b'0', ''),
 (382, 'revolver ranger cal 38', 500, 4, '2017-08-21', '2017-09-21', '', 600, 0, 283, b'0', b'1', '2017-08-21 16:39:58', 3, 1, '', 0, '', '', b'0', ''),
-(383, 'celular iphone 6s', 500, 4, '2017-08-21', '2017-09-21', '', 600, 0, 284, b'0', b'1', '2017-08-21 16:53:39', 3, 1, '', 0, '', '', b'0', ''),
+(383, 'celular iphone 6s', 500, 4, '2017-09-04', '2017-09-21', 'Se canceló el interés S/. 50.00 de el día 04/09/2017<br>', 600, 0, 284, b'0', b'1', '2017-08-21 16:53:39', 3, 1, '04/09/2017', 0, '', '', b'0', ''),
 (384, 'moto pulsar negro 3700-8w', 700, 4, '2017-08-21', '2017-09-21', '', 840, 0, 285, b'0', b'0', '2017-08-21 17:35:54', 3, 1, '', 770, 'Beatriz', '2017-08-22 13:40:13', b'0', ''),
-(385, 'lavadora samsung', 250, 4, '2017-08-21', '2017-09-21', '', 300, 0, 250, b'0', b'1', '2017-08-21 19:07:43', 3, 1, '', 0, '', '', b'0', ''),
+(385, 'lavadora samsung', 250, 4, '2017-08-21', '2017-09-21', '', 300, 0, 250, b'0', b'0', '2017-08-21 19:07:43', 3, 1, '', 280, 'Aumbbel', '2017-09-06 21:14:11', b'0', ''),
 (386, 'laptop lenovo core i 7', 850, 4, '2017-08-21', '2017-09-21', '', 1020, 0, 286, b'0', b'1', '2017-08-21 19:14:23', 3, 1, '', 0, '', '', b'0', ''),
-(387, 'laptop lenovo core i 7', 850, 4, '2017-08-21', '2017-09-21', '', 1020, 0, 287, b'0', b'1', '2017-08-21 19:14:27', 3, 1, '', 0, '', '', b'0', ''),
+(387, 'laptop lenovo core i 7', 850, 4, '2017-08-21', '2017-09-21', '', 1020, 0, 287, b'0', b'0', '2017-08-21 19:14:27', 3, 1, '', 952, 'Aumbbel', '2017-09-06 19:06:18', b'0', ''),
 (388, 'laptop i5 hp', 450, 4, '2017-08-17', '2017-09-17', '', 540, 0, 288, b'0', b'0', '2017-08-22 10:19:04', 3, 1, '', 495, 'Yuri Paola', '2017-08-24 12:02:40', b'0', ''),
 (389, '23 piezas en rena ware(ollas)', 3000, 4, '2017-08-22', '2017-09-23', '', 3600, 0, 289, b'0', b'1', '2017-08-22 11:43:13', 3, 1, '', 0, '', '', b'0', ''),
 (390, 'celular j5', 150, 4, '2017-08-23', '2017-09-23', '', 180, 0, 290, b'0', b'1', '2017-08-23 12:43:00', 3, 1, '', 0, '', '', b'0', ''),
 (391, 'monitor+mini notebook+ 2 tajeta de video+disco duro 1tb+2 lectora interna+bateria para laptop', 750, 4, '2017-08-23', '2017-09-23', '', 900, 0, 291, b'0', b'1', '2017-08-23 18:54:11', 3, 1, '', 0, '', '', b'0', ''),
 (392, 'laptop toshiba basico', 100, 4, '2017-08-24', '2017-09-24', '', 120, 0, 292, b'0', b'0', '2017-08-24 10:16:09', 3, 1, '', 110, 'Yuri Paola', '2017-08-28 10:16:10', b'0', ''),
-(393, 'filmadora jvc gy hmz1u', 600, 4, '2017-08-24', '2017-09-24', '', 720, 0, 293, b'0', b'1', '2017-08-24 11:54:18', 3, 1, '', 0, '', '', b'0', ''),
+(393, 'filmadora jvc gy hmz1u', 600, 4, '2017-09-04', '2017-09-24', 'Se canceló el interés S/. 60.00 de el día 04/09/2017<br>', 720, 0, 293, b'0', b'1', '2017-08-24 11:54:18', 3, 1, '04/09/2017', 0, '', '', b'0', ''),
 (394, 'laptop i5 hp', 550, 4, '2017-08-17', '2017-09-17', '', 660, 0, 288, b'0', b'0', '2017-08-24 12:04:23', 3, 1, '', 605, 'Yuri Paola', '2017-08-28 11:38:10', b'0', ''),
-(395, 'lavadora samsung wa15j5730ls', 400, 4, '2017-08-24', '2017-09-24', '', 480, 0, 250, b'0', b'1', '2017-08-24 14:10:18', 3, 1, '', 0, '', '', b'0', ''),
+(395, 'lavadora samsung wa15j5730ls', 400, 4, '2017-08-24', '2017-09-24', '', 480, 0, 250, b'0', b'0', '2017-08-24 14:10:18', 3, 1, '', 440, 'Aumbbel', '2017-09-06 21:14:31', b'0', ''),
 (396, 'computador de escritorio completo', 350, 4, '2017-08-24', '2017-09-24', '', 420, 0, 294, b'0', b'1', '2017-08-24 16:34:48', 3, 1, '', 0, '', '', b'0', ''),
-(397, 'chocolatera renaware, filtro renaware, 2 licuadoras, una cocina repsol de mesa.', 1000, 4, '2017-08-25', '2017-09-25', 'solo al 10%', 1200, 0, 240, b'0', b'1', '2017-08-25 09:35:04', 8, 3, '', 0, '', '', b'0', ''),
+(397, 'chocolatera renaware, filtro renaware, 2 licuadoras, una cocina repsol de mesa.', 1000, 4, '2017-08-25', '2017-09-25', 'solo al 10%', 1200, 0, 240, b'0', b'1', '2017-08-25 09:35:04', 8, 1, '', 0, '', '', b'0', ''),
 (398, 'slyn gym body massager', 1000, 4, '2017-08-25', '2017-09-25', '', 1200, 0, 295, b'0', b'1', '2017-08-25 13:14:57', 3, 1, '', 0, '', '', b'0', ''),
 (399, 'laptop asus', 400, 4, '2017-08-25', '2017-09-25', '', 480, 0, 296, b'0', b'1', '2017-08-25 15:00:09', 3, 1, '', 0, '', '', b'0', ''),
 (400, 'soldadora sol andina + motosierra husqvarna 365', 1000, 4, '2017-08-25', '2017-09-25', '', 1200, 0, 297, b'0', b'1', '2017-08-25 16:49:25', 3, 1, '', 0, '', '', b'0', ''),
@@ -1346,9 +1389,9 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (405, 'laptop hp 14 r011la i5', 500, 4, '2017-08-28', '2017-09-28', '', 600, 0, 302, b'0', b'1', '2017-08-28 09:46:35', 3, 1, '', 0, '', '', b'0', ''),
 (406, 'camioneta hilux w4w-726', 18000, 4, '2017-08-28', '2017-09-28', '', 21600, 0, 303, b'0', b'1', '2017-08-28 10:01:22', 3, 1, '', 0, '', '', b'0', ''),
 (407, 'saxo prof', 700, 4, '2017-08-28', '2017-09-28', '', 840, 0, 304, b'0', b'1', '2017-08-28 12:06:25', 13, 1, '', 0, '', '', b'0', ''),
-(408, 'zapatilla mas microondas', 150, 4, '2017-08-28', '2017-09-28', 'ZAPATILLAS MAS MICROONDAS', 180, 0, 250, b'0', b'1', '2017-08-28 12:09:27', 13, 1, '', 0, '', '', b'0', ''),
+(408, 'zapatilla mas microondas', 150, 4, '2017-08-28', '2017-09-28', 'ZAPATILLAS MAS MICROONDAS', 180, 0, 250, b'0', b'0', '2017-08-28 12:09:27', 13, 1, '', 165, 'Aumbbel', '2017-09-06 21:15:13', b'0', ''),
 (409, 'celular j3', 100, 4, '2017-08-29', '2017-09-29', '', 120, 0, 305, b'0', b'1', '2017-08-29 10:51:28', 3, 1, '', 0, '', '', b'0', ''),
-(410, 'laptop toshiba l755 sin cargador', 400, 4, '2017-08-29', '2017-09-29', '', 480, 0, 306, b'0', b'1', '2017-08-29 10:58:57', 3, 1, '', 0, '', '', b'0', ''),
+(410, 'laptop toshiba l755 sin cargador', 100, 4, '2017-09-05', '2017-09-29', 'Se adelantó S/. 300.00 de S/. 400.00 el día 05/09/2017<br>Se canceló el interés S/. 40.00 de el día 05/09/2017<br>', 480, 300, 306, b'0', b'1', '2017-08-29 10:58:57', 3, 1, '05/09/2017', 0, '', '', b'0', ''),
 (411, 'laptop hp 14', 200, 4, '2017-08-29', '2017-09-29', '', 240, 0, 307, b'0', b'1', '2017-08-29 11:18:14', 3, 1, '', 0, '', '', b'0', ''),
 (412, 'tablet samsung t210', 70, 4, '2017-08-29', '2017-09-29', '', 84, 0, 308, b'0', b'1', '2017-08-29 13:49:46', 3, 1, '', 0, '', '', b'0', ''),
 (413, 'laptop lenovo i3', 300, 4, '2017-08-30', '2017-09-30', '', 360, 0, 309, b'0', b'1', '2017-08-30 10:04:15', 3, 1, '', 0, '', '', b'0', ''),
@@ -1358,7 +1401,31 @@ INSERT INTO `producto` (`idProducto`, `prodNombre`, `prodMontoEntregado`, `prodI
 (417, 'laptop hp con cargador', 900, 4, '2017-09-01', '2017-10-01', '', 1080, 0, 312, b'0', b'1', '2017-09-01 10:40:28', 3, 1, '', 0, '', '', b'0', ''),
 (418, 'laptop lenovo g550', 150, 4, '2017-09-01', '2017-10-01', '', 180, 0, 313, b'0', b'1', '2017-09-01 12:18:25', 3, 1, '', 0, '', '', b'0', ''),
 (419, 'celular lg v10', 300, 4, '2017-09-01', '2017-10-01', '', 360, 0, 252, b'0', b'1', '2017-09-01 16:01:19', 3, 1, '', 0, '', '', b'0', ''),
-(420, 'bajo electroco+ llanta', 700, 4, '2017-09-01', '2017-09-02', '', 770, 0, 314, b'0', b'1', '2017-09-01 18:11:15', 3, 1, '', 0, '', '', b'0', '');
+(420, 'bajo electroco+ llanta', 700, 4, '2017-09-01', '2017-09-02', '', 770, 0, 314, b'0', b'1', '2017-09-01 18:11:15', 3, 1, '', 0, '', '', b'0', ''),
+(421, 'laptop toshhiba,pistola, generador electrico', 1500, 4, '2017-09-02', '2017-09-03', 'laptop sin cargador ', 1650, 0, 268, b'0', b'1', '2017-09-02 12:54:57', 12, 1, '', 0, '', '', b'0', ''),
+(422, 'tv smart lg 42lb5800', 450, 4, '2017-09-04', '2017-09-05', '', 495, 0, 156, b'0', b'1', '2017-09-04 10:26:13', 3, 1, '', 0, '', '', b'0', ''),
+(423, 'moto yamaha 2757-4b sin casco', 1000, 4, '2017-09-04', '2017-09-05', '', 1100, 0, 315, b'0', b'1', '2017-09-04 15:43:19', 3, 1, '', 0, '', '', b'0', ''),
+(424, 'guitarra prs + pedal pod hd 500x', 1000, 4, '2017-09-04', '2017-09-05', '', 1100, 0, 316, b'0', b'1', '2017-09-04 17:43:38', 3, 1, '', 0, '', '', b'0', ''),
+(425, 'carro great wall', 3000, 4, '2017-09-04', '2017-09-05', '', 3300, 0, 317, b'0', b'1', '2017-09-04 18:01:29', 13, 1, '', 0, '', '', b'0', ''),
+(426, 'motocarga kamax ka250w-e', 1500, 4, '2017-09-04', '2017-09-05', '', 1650, 0, 299, b'0', b'1', '2017-09-04 18:53:34', 3, 1, '', 0, '', '', b'0', ''),
+(427, 'bluray philips wifi + bluray lg', 150, 4, '2017-09-05', '2017-09-06', '', 165, 0, 156, b'0', b'1', '2017-09-05 12:54:50', 3, 1, '', 0, '', '', b'0', ''),
+(428, 'laptop hp i5 - 15 bs032la', 500, 4, '2017-09-05', '2017-09-06', '', 550, 0, 318, b'0', b'1', '2017-09-05 15:08:06', 3, 1, '', 0, '', '', b'0', ''),
+(429, 'ipod 16gb 5ta generacion', 100, 4, '2017-09-05', '2017-09-06', '', 110, 0, 319, b'0', b'1', '2017-09-05 17:39:07', 13, 1, '', 0, '', '', b'0', ''),
+(430, 'ipod 16gb 5ta generacion', 100, 4, '2017-08-23', '2017-09-06', '', 110, 0, 319, b'0', b'1', '2017-09-05 17:40:14', 13, 1, '', 0, '', '', b'0', ''),
+(442, 'celular k10 + celular huawei', 500, 4, '2017-09-05', '2017-09-06', '', 550, 0, 326, b'0', b'1', '2017-09-05 19:45:17', 3, 1, '', 0, '', '', b'0', ''),
+(433, 'laptop hp corei5', 350, 4, '2017-08-17', '2017-09-06', '', 616, 0, 288, b'0', b'1', '2017-08-17 17:46:13', 13, 1, '', 0, '', '', b'0', ''),
+(434, 'laptop hp negra', 900, 4, '2017-09-01', '2017-09-06', '', 990, 0, 312, b'0', b'1', '2017-09-05 17:48:54', 13, 1, '', 0, '', '', b'0', ''),
+(435, 'laptop reloj adidas', 250, 4, '2017-08-31', '2017-09-06', '', 275, 0, 251, b'0', b'1', '2017-09-05 17:50:51', 13, 1, '', 0, '', '', b'0', ''),
+(436, 'carro great wall 4x2', 3000, 4, '2017-09-03', '2017-09-06', '', 3300, 0, 317, b'0', b'1', '2017-09-05 17:52:03', 13, 1, '', 0, '', '', b'0', ''),
+(437, 'laptop hp pavilion amd a8', 400, 4, '2017-08-19', '2017-09-06', '', 448, 0, 321, b'0', b'1', '2017-08-19 17:57:16', 13, 1, '', 0, '', '', b'0', ''),
+(438, 'celuyular j2', 240, 4, '2017-08-19', '2017-09-06', '', 268.8, 0, 322, b'0', b'1', '2017-08-19 18:01:17', 13, 1, '', 0, '', '', b'0', ''),
+(439, 'calculadora programable', 100, 4, '2017-08-23', '2017-09-06', '', 110, 0, 323, b'0', b'1', '2017-09-05 18:16:52', 13, 1, '', 0, '', '', b'0', ''),
+(440, 'laptop hp corei3', 350, 4, '2017-08-19', '2017-09-06', '', 392, 0, 324, b'0', b'1', '2017-09-05 18:20:35', 13, 1, '', 0, '', '', b'0', ''),
+(441, 'camara canon negro', 500, 4, '2017-08-11', '2017-09-06', 'se revisara en la hoja ', 580, 0, 325, b'0', b'1', '2017-08-11 18:23:31', 13, 1, '', 0, '', '', b'0', ''),
+(443, 'tv samsung 32\" j4300', 350, 4, '2017-09-07', '2017-09-08', '', 385, 0, 327, b'0', b'1', '2017-09-07 09:39:27', 3, 1, '', 0, '', '', b'0', ''),
+(444, 'celular p9 lite', 150, 4, '2017-09-07', '2017-09-08', '', 165, 0, 328, b'0', b'1', '2017-09-07 09:47:16', 3, 1, '', 0, '', '', b'0', ''),
+(445, 'tv lg 42lb5610 + bluray philips', 450, 4, '2017-09-07', '2017-09-08', '', 495, 0, 250, b'0', b'1', '2017-09-07 09:56:01', 3, 1, '', 0, '', '', b'0', ''),
+(446, 'laptop toshiba marron i5', 500, 4, '2017-09-06', '2017-09-08', '', 550, 0, 329, b'0', b'1', '2017-09-06 11:17:17', 3, 1, '', 0, '', '', b'0', '');
 
 -- --------------------------------------------------------
 
@@ -1529,35 +1596,46 @@ INSERT INTO `reportes_producto` (`idReporte`, `idProducto`, `idDetalleReporte`, 
 (156, 303, 3, 1664, '2017-08-14 15:17:34', '', '', '2017-08-31 09:55:46', 5, 'Aumbbel'),
 (157, 361, 3, 5500, '2017-08-15 11:03:13', 'Yuri Paola', '', '2017-08-31 14:05:12', 5, 'Aumbbel'),
 (158, 197, 3, 372, '2017-08-15 11:28:47', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(159, 315, 3, 600, '2017-08-16 10:02:48', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(160, 199, 1, 300, '2017-08-16 17:09:51', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(161, 238, 1, 60, '2017-08-17 17:13:56', ' ', '', '', 4, 'Todavía sin aprobación'),
+(159, 315, 3, 600, '2017-08-16 10:02:48', 'Yuri Paola', '', '2017-09-06 20:13:21', 5, 'Aumbbel'),
+(160, 199, 1, 300, '2017-08-16 17:09:51', ' Yuri Paola', '', '2017-09-06 19:47:43', 7, 'Aumbbel'),
+(161, 238, 1, 60, '2017-08-17 17:13:56', ' ', '', '2017-09-06 19:47:40', 7, 'Aumbbel'),
 (162, 365, 3, 220, '2017-08-17 17:44:35', '', '', '', 4, 'Todavía sin aprobación'),
 (163, 354, 3, 330, '2017-08-17 17:45:07', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(164, 323, 3, 360, '2017-08-19 20:04:32', 'Aumbbel', '', '', 4, 'Todavía sin aprobación'),
+(164, 323, 3, 360, '2017-08-19 20:04:32', 'Aumbbel', '', '2017-09-06 19:47:15', 5, 'Aumbbel'),
 (165, 324, 3, 240, '2017-08-19 20:05:21', 'Aumbbel', '', '', 4, 'Todavía sin aprobación'),
-(166, 320, 3, 620, '2017-08-21 10:36:37', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(167, 384, 3, 770, '2017-08-22 13:40:13', 'Beatriz', '', '', 4, 'Todavía sin aprobación'),
-(168, 281, 1, 40, '2017-08-22 18:16:54', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(169, 347, 3, 168, '2017-08-22 18:31:45', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(170, 334, 3, 232, '2017-08-22 18:31:59', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(171, 376, 3, 275, '2017-08-23 15:47:38', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(172, 388, 3, 495, '2017-08-24 12:02:40', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(173, 351, 3, 2240, '2017-08-24 12:50:13', '', '', '', 4, 'Todavía sin aprobación'),
+(166, 320, 3, 620, '2017-08-21 10:36:37', 'Yuri Paola', '', '2017-09-06 19:07:56', 5, 'Aumbbel'),
+(167, 384, 3, 770, '2017-08-22 13:40:13', 'Beatriz', '', '2017-09-06 19:19:07', 5, 'Aumbbel'),
+(168, 281, 1, 40, '2017-08-22 18:16:54', ' Yuri Paola', '', '2017-09-06 19:23:50', 7, 'Aumbbel'),
+(169, 347, 3, 168, '2017-08-22 18:31:45', 'Yuri Paola', '', '2017-09-06 19:21:01', 5, 'Aumbbel'),
+(170, 334, 3, 232, '2017-08-22 18:31:59', 'Yuri Paola', '', '2017-09-06 19:27:02', 5, 'Aumbbel'),
+(171, 376, 3, 275, '2017-08-23 15:47:38', 'Yuri Paola', '', '2017-09-06 19:34:26', 5, 'Aumbbel'),
+(172, 388, 3, 495, '2017-08-24 12:02:40', 'Yuri Paola', '', '2017-09-06 19:55:43', 5, 'Aumbbel'),
+(173, 351, 3, 2240, '2017-08-24 12:50:13', '', '', '2017-09-06 19:46:43', 5, 'Aumbbel'),
 (174, 313, 3, 1280, '2017-08-25 09:29:11', 'Aumbbel', '', '', 4, 'Todavía sin aprobación'),
 (175, 310, 3, 358.4, '2017-08-25 17:31:45', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(176, 403, 1, 60, '2017-08-25 19:10:10', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(177, 392, 3, 110, '2017-08-28 10:16:10', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(178, 276, 1, 80, '2017-08-28 11:20:37', ' ', '', '', 4, 'Todavía sin aprobación'),
-(179, 394, 3, 605, '2017-08-28 11:38:10', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
-(180, 402, 3, 330, '2017-08-28 11:44:47', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(176, 403, 1, 60, '2017-08-25 19:10:10', ' Yuri Paola', '', '2017-09-06 20:07:11', 7, 'Aumbbel'),
+(177, 392, 3, 110, '2017-08-28 10:16:10', 'Yuri Paola', '', '2017-09-06 20:28:19', 5, 'Aumbbel'),
+(178, 276, 1, 80, '2017-08-28 11:20:37', ' ', '', '2017-09-06 20:28:28', 7, 'Aumbbel'),
+(179, 394, 3, 605, '2017-08-28 11:38:10', 'Yuri Paola', '', '2017-09-06 20:28:43', 5, 'Aumbbel'),
+(180, 402, 3, 330, '2017-08-28 11:44:47', 'Yuri Paola', '', '2017-09-06 20:29:43', 5, 'Aumbbel'),
 (181, 342, 1, 8, '2017-08-28 13:23:12', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
 (182, 345, 3, 18000, '2017-08-29 12:47:20', 'Yuri Paola', '', '2017-08-30 13:16:20', 5, 'Aumbbel'),
-(183, 184, 3, 372, '2017-08-29 18:59:11', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(183, 184, 3, 372, '2017-08-29 18:59:11', 'Yuri Paola', '', '2017-09-06 20:44:20', 5, 'Aumbbel'),
 (184, 240, 3, 1184, '2017-08-30 13:11:03', 'Aumbbel', '', '2017-08-30 13:12:22', 6, 'Aumbbel'),
-(185, 266, 3, 42, '2017-08-30 13:30:08', 'Aumbbel', '', '', 4, 'Todavía sin aprobación'),
+(185, 266, 3, 42, '2017-08-30 13:30:08', 'Aumbbel', '', '2017-09-06 20:49:42', 5, 'Aumbbel'),
 (186, 416, 3, 110, '2017-08-31 16:51:51', 'demo', '', '', 4, 'Todavía sin aprobación'),
-(187, 374, 3, 56, '2017-09-01 10:13:56', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación');
+(187, 374, 3, 56, '2017-09-01 10:13:56', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(188, 393, 1, 60, '2017-09-04 13:08:54', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(189, 383, 1, 50, '2017-09-04 16:38:36', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(190, 410, 1, 40, '2017-09-05 14:16:10', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(191, 410, 2, 300, '2017-09-05 14:16:33', ' Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(192, 339, 3, 223.2, '2017-09-05 15:50:00', 'Yuri Paola', '', '', 4, 'Todavía sin aprobación'),
+(193, 307, 3, 312.8, '2017-09-05 17:19:05', 'Aumbbel', '', '2017-09-05 19:17:28', 5, 'Aumbbel'),
+(194, 325, 3, 51.2, '2017-09-05 19:17:10', 'Aumbbel', '', '2017-09-05 19:17:20', 5, 'Aumbbel'),
+(195, 387, 3, 952, '2017-09-06 19:06:18', 'Aumbbel', '', '2017-09-06 19:06:29', 5, 'Aumbbel'),
+(196, 385, 3, 280, '2017-09-06 21:14:11', 'Aumbbel', '', '2017-09-06 21:15:29', 5, 'Aumbbel'),
+(197, 395, 3, 440, '2017-09-06 21:14:31', 'Aumbbel', '', '2017-09-06 21:15:31', 5, 'Aumbbel'),
+(198, 408, 3, 165, '2017-09-06 21:15:13', 'Aumbbel', '', '2017-09-06 21:15:34', 5, 'Aumbbel');
 
 -- --------------------------------------------------------
 
@@ -1585,6 +1663,52 @@ INSERT INTO `sucursal` (`idSucursal`, `sucNombre`, `sucLugar`, `sucActivo`) VALU
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tempo`
+--
+
+CREATE TABLE `tempo` (
+  `idtempo` int(11) NOT NULL,
+  `fecha` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tempo`
+--
+
+INSERT INTO `tempo` (`idtempo`, `fecha`) VALUES
+(1, '2017-09-07 11:37:18'),
+(2, '0000-00-00 00:00:00'),
+(3, '0000-00-00 00:00:00'),
+(4, '0000-00-00 00:00:00'),
+(5, '2017-09-07 11:41:50');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipoProceso`
+--
+
+CREATE TABLE `tipoProceso` (
+  `idTipoProceso` int(11) NOT NULL,
+  `tipoDescripcion` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tipoProceso`
+--
+
+INSERT INTO `tipoProceso` (`idTipoProceso`, `tipoDescripcion`) VALUES
+(1, 'Entrada stock'),
+(2, 'Venta'),
+(3, 'Crédito nuevo'),
+(4, 'Pérdida'),
+(5, 'Egreso'),
+(6, 'Ingreso'),
+(7, 'Amortización');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuario`
 --
 
@@ -1605,7 +1729,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`idUsuario`, `usuNombres`, `usuApellido`, `usuNick`, `usuPass`, `usuPoder`, `idSucursal`, `usuActivo`) VALUES
 (1, 'Carlos Alex', 'Pariona Valencia', 'cpariona', 'b84d8185d9fc5d64de366cc8a06d8ef1', 1, 3, b'1'),
-(2, 'Yuri Paola', 'Huaycuch Valenzuela', 'sucursal1', '69447f927b74151c1aeb626f31202e0a', 2, 1, b'1'),
+(2, 'Yuri Paola', 'Huaycuch Valenzuela', 'phuaycuch', '69447f927b74151c1aeb626f31202e0a', 2, 1, b'1'),
 (3, 'Yuri Paola', 'Huaycuch Valenzuela', 'yhuaycuch', 'ce3ae197dd86341cbe2ed2ae9e30e145', 2, 1, b'1'),
 (10, 'Aumbbel', 'Manrique', 'amo', '43e423ee04be24b417b0c5eb71ad4464', 1, 3, b'1'),
 (9, 'demo', 'demo', 'demo', 'fe01ce2a7fbac8fafaed7c982a04e229', 2, 2, b'1'),
@@ -1669,6 +1793,18 @@ ALTER TABLE `sucursal`
   ADD PRIMARY KEY (`idSucursal`);
 
 --
+-- Indices de la tabla `tempo`
+--
+ALTER TABLE `tempo`
+  ADD PRIMARY KEY (`idtempo`);
+
+--
+-- Indices de la tabla `tipoProceso`
+--
+ALTER TABLE `tipoProceso`
+  ADD PRIMARY KEY (`idTipoProceso`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -1682,7 +1818,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `Cliente`
 --
 ALTER TABLE `Cliente`
-  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=315;
+  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=332;
 --
 -- AUTO_INCREMENT de la tabla `Compras`
 --
@@ -1707,17 +1843,27 @@ ALTER TABLE `poder`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
+  MODIFY `idProducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=447;
 --
 -- AUTO_INCREMENT de la tabla `reportes_producto`
 --
 ALTER TABLE `reportes_producto`
-  MODIFY `idReporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `idReporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=199;
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
   MODIFY `idSucursal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT de la tabla `tempo`
+--
+ALTER TABLE `tempo`
+  MODIFY `idtempo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT de la tabla `tipoProceso`
+--
+ALTER TABLE `tipoProceso`
+  MODIFY `idTipoProceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
