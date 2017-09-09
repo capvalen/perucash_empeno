@@ -15,7 +15,7 @@ window.location.hash = e.target.hash;
 });
 
 function datosUsuario(){
-	$.ajax({ url: 'php/datosBasicosUsuario.php', type: 'POST'}).done(function (resp) { console.log(resp)
+	$.ajax({ url: 'php/datosBasicosUsuario.php', type: 'POST'}).done(function (resp) { //console.log(resp)
 		$.JsonUsuario=JSON.parse(resp)[0]; //contiene los datos principales del usuario
 		//console.log($.JsonUsuario);
 	});

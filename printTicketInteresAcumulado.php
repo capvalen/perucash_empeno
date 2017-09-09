@@ -18,7 +18,7 @@ $montoInicial=0; $DiadeHoy=0;
 $montoInicial=$_GET['inicial'];// $montoInicial =5001;
 $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
 
-if($montoInicial<=5000){$interesDiario=0.006;}
+if($montoInicial<=5000){$interesDiario=0.007;}
 else{$interesDiario=0.004;}
 
 $interesAcumulado=$montoInicial;

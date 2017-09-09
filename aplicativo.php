@@ -24,7 +24,7 @@ if(isset($_SESSION['Atiende'])){?>
 <div class="container formulario col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 <div class="text-center hidden-print">
 <img src="images/logo.png">
-<h3>PerúCa$h<small> Sistema de préstamos y empeños</small></h3></div>
+<h3>Perú Cash<small> Sistema de préstamos y empeños</small></h3></div>
 <?php if ( $_SESSION['Power']== 1){ ?>
 <div class="row">
 	<div class="col-xs-6 col-md-offset-3"><div><label for="">Ud. está visualizando los datos de:</label> <select class="form-control" name="Achinga" id="cmbOficinasTotal">
@@ -73,6 +73,13 @@ if(isset($_SESSION['Atiende'])){?>
 					</div>
 				</div>
 			</div>
+			<div class="panel panel-cielo">
+				<div class="panel-heading"><h3 class="panel-title">Opciones extras de caja</h3></div>
+				<div class="panel-body">
+					<button class="btn btn-lg btn-success btn-outline" id="btnIngresoDineroExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso de dinero</button>
+					<button class="btn btn-lg btn-danger btn-outline" id="btnEgresoDineroExtra"><i class="icofont icofont-ui-rate-remove"></i> Salida de dinero</button>
+				</div>
+			</div>
 		</div>
 
 		<div class="col-sm-6">
@@ -110,16 +117,20 @@ if(isset($_SESSION['Atiende'])){?>
 						</div>
 					
 					<div class="col-sm-12">
-						<p style="color: #1976d2; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos cálculos</em></strong>
+						<p style="color: #d27f19/*1976d2*/; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Nuevos porcentajes</em></strong>
 						<br>
-						De S/. 1 a S/. 5000 de préstamo tiene 2 semanas para cancelar el 10% luego de ello, se sumará el 6% diario.<br>
+						Para un empeño tiene 2 semanas para cancelar el <strong>9.8%</strong> luego de ello, se sumará el 0.7% diario.<br>
 						<!-- De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
 						20602337147: EARA93CX
 						20602337147: EARA93CX
 						 -->
 						</p>
 					</div>
-						<div class="col-sm-12 text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button></div>
+						<div class="col-sm-12 text-center">
+							<button class="btn btn-primary btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
+							<button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
+							<button class="btn btn-primary sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+						</div>
 					</div>
 
 				</div>
@@ -127,9 +138,8 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			
 			<div class="row col-sm-6 col-sm-offset-3">
-				<div class="pull-left"><button class="btn btn-success btn-lg btn-outline" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div>
-				<div class="text-center"><button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
-					<button class="btn btn-primary sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+				<!-- <div class="pull-left"><button class="btn btn-success btn-lg btn-outline" id="btnLimpiarDatos"><i class="icofont icofont-eraser"></i> Limpiar datos</button></div> -->
+				<div class="text-center">
 				</div>
 			</div>
 		
@@ -176,7 +186,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-sm-6"><label><i class="icofont icofont-ui-tag"></i> Interés: </label> <span class="text-success"><span id="spanPorcent"></span>%</span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Fecha de inicio: </label> <span class="text-success" id="spanFechaInicio"> <span class="sr-only" id="spanFechaInicioNum"></span></span></div>
 			<div class="col-sm-6 hidden"><label><i class="icofont icofont-tasks-alt"></i> Fecha de límite de pago: </label> <span class="text-success" id="spanFechaFin"></span> <span class="sr-only" id="spanFechaFinNum"></span></div>
-			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Registrado: </label> <span class="text-success" id="spanPeriodo2"></span></div>
+			<div class="col-sm-6"><label><i class="icofont icofont-tasks-alt"></i> Registrado: </label> <span class="text-success" id="spanPeriodo2"></span> <small id="smallPeriodo"></small></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Monto entregado: </label> <span class="text-success">S/. <span id="spanMontoDado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Intereses generados: </label> <span class="text-success">S/. <span id="spanIntGenerado">0.00</span></span></div>
 			<div class="col-sm-6"><label><i class="icofont icofont-pie-chart"></i> Total al día de hoy: </label> <span class="text-success">S/. <span id="spanPagar">0.00</span></span></div>
@@ -245,7 +255,7 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			<div class="col-xs-12 sr-only" id="contenedorExpiro" >
 				<div class="alert-message alert-message-danger">
-					<h4>Artículo expirado: <small>El artículo se encuentra más de un mes, se sugiere <strong>rematar</strong></small></h4>
+					<h4>Artículo expirado: <small>El artículo se encuentra fuera de los plazos razonales, se sugiere <strong>rematar</strong> </small> <small id="spanValordeMeses"></small></h4>
 				</div>
 			</div>
 			<div class="col-xs-12 sr-only" id="contenedorAdelantos" >
@@ -263,9 +273,9 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-sm-8 col-sm-offset-2 hidden" id="divBotonesFijos">
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
-				<button class="btn btn-indigo btn-outline" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
-				<button class="btn btn-indigo btn-outline" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-				<button class="btn btn-indigo btn-outline" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Amortizar pago (En desarrollo)</button>
+				<button class="btn btn-indigo btn-outline sr-only" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
+				<button class="btn btn-indigo btn-outline sr-only" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
+				<button class="btn btn-indigo btn-outline" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Amortizar pago</button>
 				<button class="btn btn-danger btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 			</div>
 		</div>
@@ -648,7 +658,50 @@ if(isset($_SESSION['Atiende'])){?>
 		</div>
 	</div>
 
- <!-- Modal para indicar que se guardó con éxito -->
+<!-- Modal para Ingresar dinero -->
+	<div class="modal fade modal-IngresarDineroExtra" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-success">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Ingreso de dinero a caja</h4>
+			</div>
+			<div class="modal-body container-fluid text-center">
+				<p>¿Qué monto ingresa a caja?</p>
+				<input type="number" class="form-control text-center" id="txtModalMontoIngresoCaja" step="1" min="0" value='0.00'>
+				<p>¿Motivo por que ingresa?</p>
+				<input type="text" class="form-control text-center mayuscula" id="txtModalRazonIngresoCaja" >
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cerrar</button>
+			<button class="btn btn-success btn-outline" id="btnIngresarDineroSuma" ><i class="icofont icofont-check"></i> Agregar a caja</button></div>
+		</div>
+		</div>
+	</div>
+<!-- Modal para Retirar dinero -->
+	<div class="modal fade modal-EgresarDineroExtra" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-warning">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Retiro de dinero de caja</h4>
+			</div>
+			<div class="modal-body container-fluid text-center">
+				<p>¿Qué monto se retira de caja?</p>
+				<input type="number" class="form-control text-center" id="txtModalMontoEgresoCaja" step="1" min="0" value='0.00'>
+				<p>¿Motivo por que egresa?</p>
+				<input type="text" class="form-control text-center mayuscula" id="txtModalRazonEgresoCaja" >
+			</div>
+			<div class="modal-footer"> 
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-close"></i> Cerrar</button>
+			<button class="btn btn-warning btn-outline" id="btnEgresarDineroSuma" ><i class="icofont icofont-check"></i> Retirar de caja</button></div>
+		</div>
+		</div>
+	</div>
+
+
+
+<!-- Modal para indicar que se guardó con éxito -->
 	<div class="modal fade modal-adelantarPago" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 	<div class="modal-dialog " role="document">
 		<div class="modal-content">
@@ -668,7 +721,7 @@ if(isset($_SESSION['Atiende'])){?>
 		</div>
 	</div>
 	
-</div>
+
 
  <!-- Modal para indicar que esta seguro de retirando -->
 	<div class="modal fade modal-EstaSeguroRetirarMovimiento" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -806,7 +859,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Amortizar pago</h4>
 			</div>
 			<div class="modal-body">
-				El artículo actual tiene una deuda de S/. <span id="spanAmortizarDeuda"></span> ¿Cuánto se está adelatando el cliente?
+				El cliente tiene una deuda de S/. <span id="spanAmortizarDeuda"></span> por el producto: «<span class="mayuscula" id="spanProdDeuda"></span>» ¿Cuánto se está adelatando el cliente?
 				<span class="sr-only" id="sr-idProductov3"></span><span class="sr-only" id="sr-MontInicialv3"></span><span class="sr-only" id="sr-montInteresv3"></span>
 				<input type="number" class="form-control text-center" id="txtPagarACuenta" min="0" value="0" step="1">
 			</div>
@@ -841,7 +894,7 @@ if(isset($_SESSION['Atiende'])){?>
 		<div class="modal-content">
 			<div class="modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Adquisición guardada</h4>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Datos guardados</h4>
 			</div>
 			<div class="modal-body">
 				<strong><i class="icofont icofont-social-smugmug"></i> Enhorabuena,</strong> sus datos fueron guardados correctamente.
@@ -853,6 +906,25 @@ if(isset($_SESSION['Atiende'])){?>
 		</div>
 		</div>
 	</div>
+
+
+<!-- Modal para solo aceptar que se guardo un dato -->
+<div class="modal fade modal-datoGuardado" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Datos guardados exitósamente</h4>
+		</div>
+		<div class="modal-body">
+			<strong><i class="icofont icofont-social-smugmug"></i> Enhorabuena,</strong> sus datos fueron guardados correctamente. <p id="pDatoGuardadoInfo"></p>
+		</div>
+		<div class="modal-footer"> 
+		
+		<button class="btn btn-primary btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-check"></i> Ok</button>
+		</div>
+	</div>
+</div>
 </div>
 
 <!-- Modal para indicar que falta completar campos o datos con error -->
@@ -998,7 +1070,7 @@ $(document).ready(function () {
 
 		console.log('solcitar producto con id: ' + idNew);
 		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
-			var dato = JSON.parse(resp);
+			var dato = JSON.parse(resp);  //console.log(dato)
 
 			$('#spanIdCliente').text(dato[0].idCliente);
 			$('#spanApellido').text(dato[0].cliApellidos);
@@ -1016,33 +1088,49 @@ $(document).ready(function () {
 				var hoy = moment();
 				var fechaIni =moment(dato[0].prodFechaInicial);
 				var fechaFin=moment(dato[0].prodFechaVencimiento);
-				var differencia=hoy.diff(fechaIni, 'days');
+				var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
 				console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
-				if(parseInt(differencia)>30){
+				if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
 					$('#contenedorExpiro').removeClass('sr-only');
+
+					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
+						var dato1= JSON.parse(resp)
+						//console.log(dato1);
+						$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
+						$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
+						$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
+						$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() )
+					});
 				}else{
-					$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(31-differencia));
+					$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
+						var dato2= JSON.parse(resp)
+						//console.log(dato2);
+						$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
+						$('#spanPagar').text(parseFloat(dato2[2][0].pagarAHoy).toFixed(2));
+						$('#spanIntGenerado').text(parseFloat(dato2[2][0].pagarAHoy-dato2[0][0].montoInicial).toFixed(2));
+					});
 				}
 			
 				//respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
-				if(dato[0].prodActivo==0){
-					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
-				}else{
-				if( hoy.diff(fechaIni, 'days') <=14){
+				// if(dato[0].prodActivo==0){
+				// 	respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
+				// }else{
+				// if( hoy.diff(fechaIni, 'days') <=14){
 					
-					if(dato[0].prodUltimaFechaInteres==moment().format('DD/MM/YYYY')){ 
-						respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
-					}
-					else{respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 10);}
+				// 	if(dato[0].prodUltimaFechaInteres==moment().format('DD/MM/YYYY')){ 
+				// 		respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 0);
+				// 	}
+				// 	else{respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, 10);}
 
 					
-					//$('#spanPorcent').text(10);
-				}
-				else{
-					respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
-					//$('#spanPorcent').text(dato[0].prodInteres);
-				}
-				}
+				// 	//$('#spanPorcent').text(10);
+				// }
+				// else{
+				// 	respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
+				// 	//$('#spanPorcent').text(dato[0].prodInteres);
+				// }
+				// }
 				// var respu; console.log(dato[0]);
 				// if(hoy.diff(fechaFin, 'days')<=0){//diferencia entre dias, cuando es negativo quiere recir que faltan días para que venza el producto, si es positivo, ya venció su fecha límite
 				// 	respu=calculoIntereses(fechaIni, fechaFin, dato[0].prodMontoEntregado, dato[0].prodInteres);
@@ -1050,18 +1138,19 @@ $(document).ready(function () {
 				// else{//seccion cuando el producto ya paso su fecha límite
 				// 	respu=calculoIntereses(fechaIni, hoy, dato[0].prodMontoEntregado, dato[0].prodInteres);
 				// 	$('#spanObservacion').append('<p class="text-danger">Se exedió en ' + hoy.diff(fechaFin, 'days')+ ' días</p>');				}
-				$('#spanPorcent').text(parseFloat(respu[1].acumulado).toFixed(0));
-				$('#spanPeriodo2').text(respu[0].periodo); //(moment(fechaIni).fromNow());
-				$('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
-				$('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
+				// $('#spanPorcent').text(parseFloat(respu[1].acumulado).toFixed(0));
+				// $('#spanPeriodo2').text(respu[0].periodo); //(moment(fechaIni).fromNow());
+				// $('#spanPagar').text(parseFloat(respu[1].monto).toFixed(2));
+				// $('#spanIntGenerado').text(parseFloat(parseFloat(respu[1].monto)-parseFloat(dato[0].prodMontoEntregado)).toFixed(2));
 
 				moment.locale('es');
 				$('#spanProducto').text(dato[0].prodNombre);
-				//$('#spanPorcent').text(dato[0].prodInteres);
 				$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
 				$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
 				$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
 				$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
+				$('#spanPeriodo2').text(moment(fechaIni).fromNow());
+				$('#smallPeriodo').text('('+differencia +' días)');
 				
 				$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
 				$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
@@ -1077,7 +1166,7 @@ $(document).ready(function () {
 					$('#contenedorFinalizados').removeClass('sr-only');
 					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
 						dato2=JSON.parse(resp); 
-						console.log(dato2)
+						//console.log(dato2)
 						
 						if(dato2.length==0){$('#finalizaMonto').parent().addClass('hidden');}
 						else{
@@ -1267,14 +1356,14 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
 				$('.modal-ventaGuardada').find('.btnCompraGuardado').addClass('sr-only');
+				$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 				limpiarCasillas();
 			}
 			}).error(function () { console.log('error');
 				// body...
 			});
 		}
-	$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});		
-		
+	
 	}//<- fin de if verificarTodoRellenado
 	
 });
@@ -1284,7 +1373,7 @@ $('body').on('click','.btnAceptarGuardado',function () {
 });
 $('body').on('click','.btnCompraGuardado',function () {
 	var id= $(this).attr('id');
-	window.location.href = "aplicativo.php?idcompr=" +id;
+	window.location.href = "aplicativo.php?idprod=" +id;
 });
 
 $('#btnLimpiarDatos').click(function () {
@@ -2328,19 +2417,32 @@ $('#btn-PagoACuentaFijo').click(function () {
 	var contenedor = $(this).parent().parent();
 	var iProd=contenedor.find('#lblIdProductosEnc').text();
 
-	console.log(contenedor.find('#spanProducto').text());
-	console.log($('#spanApellido').text()+', '+$('#spanNombre').text());
-
-	$('#sr-idProdv3').text(iProd);
-	$('#sr-MontInicv3').text(contenedor.find('#spanMontoDado').text());
-	$('#sr-montIntv3').text(contenedor.find('#spanIntGenerado').text());
+	//console.log(contenedor.find('#spanMontoDado').text());
+	
+	$('#spanAmortizarDeuda').text(contenedor.find('#spanPagar').text());
+	$('#spanProdDeuda').text(contenedor.find('#spanProducto').text());
+	$('#sr-idProductov3').text(iProd);
+	$('#sr-MontInicialv3').text(contenedor.find('#spanMontoDado').text());
+	$('#sr-montInteresv3').text(contenedor.find('#spanIntGenerado').text());
 	$('.modal-PagoACuenta').modal('show');
 });
 $('#btnPagarACuenta').click(function () {
 	if( parseInt($('#txtPagarACuenta').val())>0 || $('#txtPagarACuenta').val()!='' ){
-		console.log( 'guardar '+ $('#txtPagarACuenta').val())
-		var interes= $('#sr-montIntv3').text();
-		if(interes<= $('#txtPagarACuenta').val() ){}
+		//console.log( 'guardar '+ $('#txtPagarACuenta').val())
+		var loquepaga=parseFloat($('#txtPagarACuenta').val()).toFixed(1);
+		var montoInical= parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
+		var interes=  parseFloat($('#sr-montInteresv3').text()).toFixed(1);
+		var totalDeuda= parseFloat(montoInical) + parseFloat(interes);
+		var idpro=$('#sr-idProductov3').val();
+		//console.log(parseFloat(interes));
+
+		if(loquepaga>= totalDeuda){ console.log('pago toda su deuda, se libera');}
+		else if(loquepaga >= parseFloat(interes) ){
+			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
+			var sobra=parseFloat(loquepaga)-parseFloat(interes)
+			console.log('restar del capital: '+ sobra.toFixed(2))
+		}
+		else if(loquepaga <= parseFloat(interes) ){ console.log('solo amortigua una parte de interés')}
 	}
 });
 $('#divListaPorConfirmar').on('click','.btn-verInfoFinalizado', function (argument) {
@@ -2467,6 +2569,44 @@ $('#btnListaTodosProductosImprimirv3').click(function () {
 		//window.location.href = "php/imprTodosProductos.php?idSuc=" +$.JsonUsuario.idsucursal;
 	}
 	
+});
+$('#btnIngresoDineroExtra').click(function () {
+	$('#txtModalMontoIngresoCaja').val('0.00');
+	$('#txtModalRazonIngresoCaja').val('');
+	$('.modal-IngresarDineroExtra').modal('show');
+});
+$('#btnIngresarDineroSuma').click(function () {
+	//console.log($.JsonUsuario);
+	var idSucu=$.JsonUsuario.idsucursal;
+	if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
+
+	$.ajax({url: 'php/ingresarDineroEntrada.php', type: 'POST', data:{valor: $('#txtModalMontoIngresoCaja').val(), mensaje: $('#txtModalRazonIngresoCaja').val(), idUser: $.JsonUsuario.idUsuario, idSucursal: idSucu }}).done(function (resp) { //console.log(resp)
+		if(parseInt(resp)>0){
+			$('.modal-IngresarDineroExtra').modal('hide');
+			$('#pDatoGuardadoInfo').text('S/. '+parseFloat($('#txtModalMontoIngresoCaja').val()).toFixed(2)+' por «'+$('#txtModalRazonIngresoCaja').val()+'»');
+			$('.modal-datoGuardado').modal('show');
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+		}
+	});
+});
+$('#btnEgresoDineroExtra').click(function () {
+	$('#txtModalMontoEgresoCaja').val('0.00');
+	$('#txtModalRazonEgresoCaja').val('');
+	$('.modal-EgresarDineroExtra').modal('show');
+});
+$('#btnEgresarDineroSuma').click(function () {
+	//console.log($.JsonUsuario);
+	var idSucu=$.JsonUsuario.idsucursal;
+	if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
+
+	$.ajax({url: 'php/ingresarDineroSalida.php', type: 'POST', data:{valor: $('#txtModalMontoEgresoCaja').val(), mensaje: $('#txtModalRazonEgresoCaja').val(), idUser: $.JsonUsuario.idUsuario, idSucursal: idSucu }}).done(function (resp) { //console.log(resp)
+		if(parseInt(resp)>0){
+			$('.modal-EgresarDineroExtra').modal('hide');
+			$('#pDatoGuardadoInfo').text('Retiro S/. '+parseFloat($('#txtModalMontoIngresoCaja').val()).toFixed(2)+' por «'+$('#txtModalRazonIngresoCaja').val()+'»');
+			$('.modal-datoGuardado').modal('show');
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+		}
+	});
 });
 </script>
 </body>

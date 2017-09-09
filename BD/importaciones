@@ -1,0 +1,13 @@
+/*  Importar tabla prestamo */
+INSERT INTO `prestamo`(`idPrestamo`, `idProducto`, `idCliente`, `preCapital`, `preFechaInicio`, `idSucursal`, `idUsuario`, `presActivo`, `presObservaciones`, `preIdEstado`)
+
+select `idProducto`,`idProducto`,`idCliente`, prodmontoentregado, `prodFechaRegistro`, `idSucursal`, `idUsuario`,1,'',1
+from producto where idProducto=448
+
+
+
+/*  Importar tabla desembolso */
+INSERT INTO `desembolso`(`idDesembolso`, `desCapital`, `desFechaContarInteres`, `desFechaRegistro`, `desActivo`, `desUsuario`) SELECT `idPrestamo`, `preCapital`, p.prodFechaInicial, `preFechaInicio`, 1, pre.`idUsuario`
+FROM `prestamo` pre
+inner join producto p on p.idProducto = pre.`idProducto`
+where pre.idProducto=448
