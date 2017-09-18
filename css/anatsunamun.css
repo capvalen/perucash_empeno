@@ -589,13 +589,8 @@ body {
 {
     color: #444;
 }
-.alert-message-morado
-{
-    background-color: #fff;
-    border-color: #694D9F;
-}
-.alert-message-morado h4
-{
-    color: #694D9F;
-}
+.alert-message-morado { background-color: #fff; border-color: #694D9F;}
+.alert-message-morado h4{color: #694D9F; }
 .alert-message-morado p{color: #555; font-size: 14px}
+.alert-message-primary { background-color: #fff; border-color:#547fe0;}
+.alert-message-primary h4{color: #547fe0; }
