@@ -42,6 +42,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<li><a href="#tabDetalle" data-toggle="tab"><i class="icofont icofont-favourite"></i> Artículos vencidos <span class="badge" id="spanContarVenc"></span></a></li>
 			<li><a href="#tabNoFinalizados" data-toggle="tab"><i class="icofont icofont-favourite"></i> Listado de no finalizados <span class="badge" id="spanContarNoFin"></span></a></li>
 			<li><a href="#tabTodosProductos" data-toggle="tab"><i class="icofont icofont-favourite"></i> Todos los artículos</a></li>
+			<li><a href="#tabCajaCuadre" data-toggle="tab"><i class="icofont icofont-calculator"></i> Caja</a></li>
 			<?php if ( $_SESSION['Power']== 1){ ?>
 			<li><a href="#tabCrearUsuario" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de usuarios</a></li>
 			<li><a href="#tabCrearOficina" data-toggle="tab"><i class="icofont icofont-badge"></i> Gestión de oficinas</a></li>
@@ -184,8 +185,9 @@ if(isset($_SESSION['Atiende'])){?>
 			<span class="hidden" id="lblIdProductosEnc"><?php echo $_GET['idprod']; ?></span>
 			<div class="col-xs-12">
 				<div class="alert-message alert-message-primary">
-					<h3 class="text-primary mayuscula" id="spanProducto"></h3> <h3><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></h3>
+					<h3 style="display: inline-block;" class="text-primary mayuscula" id="spanProducto"> </h3> <h3 style="display: inline-block;"><small id="smallh3Producto"></small></h3>
 					<h5><strong>Capital:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <strong>Registrado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
+					<p><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></p>
 
 				</div>
 				<div class="col-xs-12 " id="contenedorPrestamos"></div>
@@ -382,6 +384,73 @@ if(isset($_SESSION['Atiende'])){?>
 				</nav>
 			<div class="row " id="divTotalProductos"><div class="fa-spin text-left"><i class="icofont icofont-spinner"></i> </div></div>
 	</div>
+
+	<div class="tab-pane fade" id="tabCajaCuadre">
+		<!-- inicio de tab pane caja -->
+		
+			<h2>Cuadre de Caja <small class="mayuscula" id="h1Usuario"></small></h2>
+		<div class="row">
+			<div class="col-xs-6">
+				<h4 class="text-center" style="color: #c70000;">Egresos de caja</h4>
+				<table class="" data-toggle="table" style=" font-size: 13px; background: #ff5d5d; color: white;">
+					<thead>
+					<tr >
+						<th>Hora</th>
+						<th>Monto S/.</th>
+						<th>Detalle</th>
+						<th>Observaciones</th>
+					</tr>
+					</thead>
+					<tbody  style="background-color: white; color: #c70000;">
+					<tr>
+						<td>
+						   Cuenta 1
+						</td>
+						<td>122</td>
+						<td>An extended Bootstrap table with radio, checkbox</td>
+						<td>Demo</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-xs-6">
+				<h4 class="text-center" style=" color: #006bc7;">Entradas a caja</h4>
+				<table class="" data-toggle="table" style="font-size: 13px; background: #5d96ff; color: white;">
+					<thead>
+					<tr >
+						<th>Hora</th>
+						<th>Monto S/.</th>
+						<th>Detalle</th>
+						<th>Observaciones</th>
+					</tr>
+					</thead>
+					<tbody  style="background-color: white; color: #006bc7;">
+					<tr>
+						<td>
+						   Cuenta 1
+						</td>
+						<td>122</td>
+						<td>An extended Bootstrap table with radio, checkbox</td>
+						<td>Demo</td>
+					</tr>
+					<tr>
+						<td>
+							Cuenta 2
+						</td>
+						<td>11</td>
+						<td>Show/hide password plugin for twitter bootstrap.
+						<td>Demo</td>
+						</td>
+					</tr>
+
+					</tbody>
+				</table>
+			</div>
+		
+		</div>
+		<!-- fin de tab pane caja -->
+	</div>
+
 	<?php if ( $_SESSION['Power']== 1){ ?>
 	<div class="tab-pane fade" id="tabCrearUsuario">
 		<div class="row well">
@@ -1086,6 +1155,8 @@ $(document).ready(function () {
 			$('#spanDireccion').text(dato[0].cliDireccion);
 			$('#spanCorreo').text(dato[0].cliCorreo);
 			$('#spanCelular').text(dato[0].cliCelular);
+			$('#spanProducto').text(dato[0].prodNombre)
+			
 			var fechaReg =moment(dato[0].prodFechaRegistro);
 			var differencia=moment().diff(fechaReg, 'days');
 			var sumaCapital=0;
@@ -1104,31 +1175,44 @@ $(document).ready(function () {
 					$.each(JSON.parse(resp), function (i, jresp) {
 						coleccionIDs+=jresp.idPrestamo+',';
 						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning" id="${jresp.idPrestamo}">
-					<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
-					<div class="col-xs-12">
-					<table class="" data-toggle="table">
-					<thead style="background-color: #ffcd87; color: #9a6b29;">
-					<tr >
-						<th>Descripción</th>
-						<th>Fecha</th>
-						<th>Cantidad</th>
-						<th>Responsable</th>
-					</tr>
-					</thead>
-					<tbody  style="background-color: white;">
-					</tbody>
-				</table></div>
-				</div>`);
+						<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
+						<div class="col-xs-12">
+						<table class="" data-toggle="table">
+						<thead style="background-color: #ffcd87; color: #9a6b29;">
+						<tr >
+							<th>Descripción</th>
+							<th>Fecha</th>
+							<th>Cantidad</th>
+							<th>Responsable</th>
+						</tr>
+						</thead>
+						<tbody  style="background-color: white;">
+						</tbody>
+					</table></div>
+					</div>`);
 					});
 					//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
-					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { console.log(resp);
+					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
 						$.each(JSON.parse(resp), function (i,jresp2) {
+							
 							sumaCapital+=jresp2.desCapital;
 							$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								<tr><td>Desembolso</td>
 								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY')}</td>
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
+							var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
+							//console.log('hasta hoy: '+ hastaHoyDias);
+							console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+								//console.log(resp)
+								var jsonInteres=JSON.parse(resp); //console.log(jsonInteres[2])
+								$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+								<tr style="color: #f7221d"><td>Interés pendiente de ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
+								<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
+								<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy).toFixed(2)}</td>
+								<td>-</td></tr>`);
+							});
 						});
 						$(`#contenedorPrestamos `).find('table').bootstrapTable();
 						$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
@@ -1143,7 +1227,9 @@ $(document).ready(function () {
 				//var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
 				console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
 				if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
-					$('#contenedorExpiro').removeClass('sr-only');
+					$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
+					$('#btn-imprimirTicketFijo').addClass('sr-only');
+					//$('#contenedorExpiro').removeClass('sr-only');
 
 					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
 						var dato1= JSON.parse(resp)
@@ -1151,10 +1237,12 @@ $(document).ready(function () {
 						$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
 						$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
 						$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
-						$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() )
+						$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() );
 					});
 				}else if(differencia==0){
-					$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+					$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+					$('#btn-imprimirTicketFijo').removeClass('sr-only');
+					//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
 					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
 						var dato2= JSON.parse(resp)
 						$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
@@ -1164,7 +1252,9 @@ $(document).ready(function () {
 				}
 				else
 				{
-					$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+					$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+					$('#btn-imprimirTicketFijo').removeClass('sr-only');
+					//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
 					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
 						var dato3= JSON.parse(resp)
 						$('#spanPorcent').text(parseFloat(dato3[2][0].intDiarioHoy*100).toFixed(2));
@@ -1189,12 +1279,12 @@ $(document).ready(function () {
 				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
 
 				if(dato[0].prodActivo==0){
-					$('#divBotonesFijos').addClass('hidden');
+					/*$('#divBotonesFijos').addClass('hidden');
 					$('#btn-imprimirTicketFijo').addClass('hidden');
 					$('#btn-imprimirImpresoraFijo').addClass('hidden');
 					$('#btn-AdelantoPrestamoFijo').addClass('hidden');
 					$('#btn-FinalizarImpuestoFijo').addClass('hidden');
-					$('#btn-FinalizarPrestamoFijo').addClass('hidden');
+					$('#btn-FinalizarPrestamoFijo').addClass('hidden');*/
 					$('#contenedorFinalizados').removeClass('sr-only');
 					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
 						dato2=JSON.parse(resp); 
@@ -1622,6 +1712,9 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 					</div>`)
 			})
 		});
+	 }
+	 if(target=='#tabCajaCuadre'){
+		$('#h1Usuario').text($.JsonUsuario.usuapellido+', '+$.JsonUsuario.usunombres)
 	 }
 });
 
