@@ -151,7 +151,7 @@ if(isset($_SESSION['Atiende'])){?>
 	</div>
 	<div class="tab-pane fade  " id="tabBusqueda">
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-4 hidden">
 				<label>Búsqueda por propietario del producto:</label>
 				<input type="text" class="form-control" id="txtBuscarPersona" placeholder="Ingrese Nombre o Dni del cliente">
 			</div>
@@ -186,7 +186,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-xs-12">
 				<div class="alert-message alert-message-primary">
 					<h3 style="display: inline-block;" class="text-primary mayuscula" id="spanProducto"> </h3> <h3 style="display: inline-block;"><small id="smallh3Producto"></small></h3>
-					<h5><strong>Capital:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <strong>Registrado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
+					<h5><strong>Valorizado:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <span class="sr-only" id="spanSrCapital"></span> <span class="sr-only" id="spanSrInteres">0</span> <strong>Registrado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
 					<p><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></p>
 
 				</div>
@@ -279,8 +279,9 @@ if(isset($_SESSION['Atiende'])){?>
 				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
 				<button class="btn btn-indigo btn-outline sr-only" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 				<button class="btn btn-indigo btn-outline sr-only" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
-				<button class="btn btn-indigo btn-outline hidden" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Amortizar pago</button>
-				<button class="btn btn-danger btn-outline" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+				<button class="btn btn-indigo btn-outline sr-only" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Amortizar pago</button>
+				<button class="btn btn-danger btn-outline sr-only" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
+				<button class="btn btn-danger btn-outline sr-only" id="btn-RetirarPrestamoFijo"><i class="icofont icofont-rocket"></i> Retirar artículo</button>
 			</div>
 		</div>
 		<div id="rowWellCambiante">
@@ -890,7 +891,7 @@ if(isset($_SESSION['Atiende'])){?>
 		</div>
 	</div>
 
- <!-- Modal para indicar que se guardó con éxito -->
+ <!-- Modal para cambiar contraseña -->
 	<div class="modal fade modal-cambiarMiContraseña" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
@@ -933,7 +934,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Amortizar pago</h4>
 			</div>
 			<div class="modal-body">
-				El cliente tiene una deuda de S/. <span id="spanAmortizarDeuda"></span> por el producto: «<span class="mayuscula" id="spanProdDeuda"></span>» ¿Cuánto se está adelatando el cliente?
+				El cliente tiene una deuda de <strong>S/. <span id="spanAmortizarDeuda"></span></strong> por el producto: «<span class="mayuscula" id="spanProdDeuda"></span>» ¿Cuánto está amortizando el cliente?
 				<span class="sr-only" id="sr-idProductov3"></span><span class="sr-only" id="sr-MontInicialv3"></span><span class="sr-only" id="sr-montInteresv3"></span>
 				<input type="number" class="form-control text-center" id="txtPagarACuenta" min="0" value="0" step="1">
 			</div>
@@ -981,6 +982,24 @@ if(isset($_SESSION['Atiende'])){?>
 		</div>
 	</div>
 
+<!-- Modal para solo aceptar que se no guardo nignun dato -->
+<div class="modal fade modal-datoNoGuardado" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Hubo un problema guardando</h4>
+		</div>
+		<div class="modal-body">
+			<strong><i class="icofont icofont-social-smugmug"></i> Lo sentimos,</strong> hubo un error interno, porfavor comunícalo.
+		</div>
+		<div class="modal-footer"> 
+		
+		<button class="btn btn-primary btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-close"></i> Salir</button>
+		</div>
+	</div>
+</div>
+</div>
 
 <!-- Modal para solo aceptar que se guardo un dato -->
 <div class="modal fade modal-datoGuardado" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -996,6 +1015,27 @@ if(isset($_SESSION['Atiende'])){?>
 		<div class="modal-footer"> 
 		
 		<button class="btn btn-primary btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-check"></i> Ok</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal para confirmar si deseas remover de la lista de prestamos? -->
+<div class="modal fade modal-retirarPrestamoConfirmar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Retirar artículo</h4>
+		</div>
+		<div class="modal-body"><span class="sr-only" id="idPrestamoAct"></span>
+			<p>Estas por de retirar el artículo <strong><span class="mayuscula" id="spanModalRetirarProducto"></span></strong>. Capital: S/. <span id="spanCapitalRetiro"></span>, se valorizó en S/. <span id="spanValorizadoRetirar"></span> a la fecha ¿Con cuánto deseas retirarlo?</p>
+			<input type="number" class="form-control text-center" id="txtModalRetirarPrestamo" value="0.00" min=0 step=1>
+			<p class="text-danger" id="pErrorRetirarPrestamo"></p>
+		</div>
+		<div class="modal-footer">
+		<button class="btn btn-danger btn-outline" data-dismiss="modal"><i class="icofont icofont-close"></i> Cancelar</button>
+		<button class="btn btn-danger btn-outline" id="btnModalRetirarPrestamo"><i class="icofont icofont-alarm"></i> Sí, retirar</button>
 		</div>
 	</div>
 </div>
@@ -1050,10 +1090,8 @@ if(isset($_SESSION['Atiende'])){?>
 				<input type="text" class="form-control" id="txtFinfecha" disabled>
 			</div>
 			</div>
-			
-			
+
 		</div>
-			
 		<div class="modal-footer">
 			<button class="btn btn-morita btn-outline" id="btnActualizarDataCliente" data-dismiss="modal"><i class="icofont icofont-social-meetme"></i> Aceptar</button>
 			</div>
@@ -1159,7 +1197,7 @@ $(document).ready(function () {
 			
 			var fechaReg =moment(dato[0].prodFechaRegistro);
 			var differencia=moment().diff(fechaReg, 'days');
-			var sumaCapital=0;
+			var sumaCapital=0, sumaIntereses=0;
 			$('#spanPeriodo2').text(moment(dato[0].prodFechaRegistro).fromNow());
 			$('#smallPeriodo').text('('+differencia +' días)');
 
@@ -1175,93 +1213,124 @@ $(document).ready(function () {
 					$.each(JSON.parse(resp), function (i, jresp) {
 						coleccionIDs+=jresp.idPrestamo+',';
 						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning" id="${jresp.idPrestamo}">
-						<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
-						<div class="col-xs-12">
-						<table class="" data-toggle="table">
-						<thead style="background-color: #ffcd87; color: #9a6b29;">
-						<tr >
-							<th>Descripción</th>
-							<th>Fecha</th>
-							<th>Cantidad</th>
-							<th>Responsable</th>
-						</tr>
-						</thead>
-						<tbody  style="background-color: white;">
-						</tbody>
-					</table></div>
-					</div>`);
+							<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
+							<div class="col-xs-12">
+							<table class="" data-toggle="table">
+							<thead style="background-color: #ffcd87; color: #9a6b29;">
+							<tr >
+								<th>Descripción</th>
+								<th>Fecha</th>
+								<th>Cantidad</th>
+								<th>Responsable</th>
+							</tr>
+							</thead>
+							<tbody  style="background-color: white;">
+							</tbody>
+						</table></div>
+						</div>`);
+						if(jresp.preIdEstado==11){
+							$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.cajafecha).fromNow());
+							$('#btn-imprimirTicketFijo').addClass('sr-only');
+							$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
+							$('#btn-RetirarPrestamoFijo').addClass('sr-only');
+						}
+						else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
+							$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
+							$('#btn-imprimirTicketFijo').addClass('sr-only');
+							$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
+							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
+
+							//$('#contenedorExpiro').removeClass('sr-only');
+
+							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
+							// 	var dato1= JSON.parse(resp)
+							// 	//console.log(dato1);
+							// 	$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
+							// 	$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
+							// 	$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
+							// 	$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() );
+							// });
+						}else if(differencia==0){
+							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+							$('#btn-imprimirTicketFijo').removeClass('sr-only');
+							$('#btn-PagoACuentaFijo').removeClass('sr-only');
+							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
+							// 	var dato2= JSON.parse(resp)
+							// 	$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
+							// 	$('#spanPagar').text(parseFloat(dato2[2][0].pagarAHoy).toFixed(2));
+							// 	$('#spanIntGenerado').text(parseFloat(dato2[2][0].pagarAHoy-dato2[0][0].montoInicial).toFixed(2));
+							// });
+						}
+						else
+						{
+							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+							$('#btn-imprimirTicketFijo').removeClass('sr-only');
+							$('#btn-PagoACuentaFijo').removeClass('sr-only');
+							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
+							// 	var dato3= JSON.parse(resp)
+							// 	$('#spanPorcent').text(parseFloat(dato3[2][0].intDiarioHoy*100).toFixed(2));
+							// 	$('#spanPagar').text(parseFloat(dato3[2][0].pagarAHoy).toFixed(2));
+							// 	$('#spanIntGenerado').text(parseFloat(dato3[2][0].pagarAHoy-dato3[0][0].montoInicial).toFixed(2));
+							// });
+						}
+
 					});
 					//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
 					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
 						$.each(JSON.parse(resp), function (i,jresp2) {
-							
-							sumaCapital+=jresp2.desCapital;
+							$('#spanSrCapital').text(parseFloat(jresp2.desCapital).toFixed(2));
+							sumaCapital+=parseFloat(jresp2.desCapital);
 							$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-								<tr><td>Desembolso</td>
+								<tr><td>Capital o desembolso</td>
 								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY')}</td>
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
 							var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
 							//console.log('hasta hoy: '+ hastaHoyDias);
-							console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+							//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+							if(hastaHoyDias>90){hastaHoyDias=90;}
 							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
 								//console.log(resp)
-								var jsonInteres=JSON.parse(resp); //console.log(jsonInteres[2])
+								var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
 								$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-								<tr style="color: #f7221d"><td>Interés pendiente de ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
+								<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por ${hastaHoyDias} días.</td>
 								<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
-								<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy).toFixed(2)}</td>
+								<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy-jresp2.desCapital).toFixed(2)}</td>
 								<td>-</td></tr>`);
+								sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy-jresp2.desCapital);
+								sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy-jsonInteres[0][0].montoInicial);
+								$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
+								$('#spanSrInteres').text(sumaIntereses);
+
+								$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: jresp2.idDesembolso }}).done(function (resp) {
+									$.each(JSON.parse(resp), function (i, jsonCaja) {
+										//console.log(jsonCaja)
+										$(`#contenedorPrestamos #${jsonCaja.idProducto}`).find('tbody').append(`
+									<tr><td>${jsonCaja.tipoDescripcion}</td>
+									<td>${moment(jsonCaja.cajaFecha).fromNow()}</td>
+									<td>S/. ${parseFloat(jsonCaja.cajaValor).toFixed(2)}</td>
+									<td>${jsonCaja.usuNombres}</td></tr>`);
+									});
+
+									
+								});
 							});
 						});
 						$(`#contenedorPrestamos `).find('table').bootstrapTable();
-						$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
-					})
+					});
+					
 				});
 
 				/*Fin Código para de préstamos*/
 
-				var hoy = moment();
-				var fechaIni =moment(dato[0].prodFechaInicial);
-				var fechaFin=moment(dato[0].prodFechaVencimiento);
+				// var hoy = moment();
+				// var fechaIni =moment(dato[0].prodFechaInicial);
+				// var fechaFin=moment(dato[0].prodFechaVencimiento);
 				//var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
 				console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
-				if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
-					$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
-					$('#btn-imprimirTicketFijo').addClass('sr-only');
-					//$('#contenedorExpiro').removeClass('sr-only');
-
-					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
-						var dato1= JSON.parse(resp)
-						//console.log(dato1);
-						$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
-						$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
-						$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
-						$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() );
-					});
-				}else if(differencia==0){
-					$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
-					$('#btn-imprimirTicketFijo').removeClass('sr-only');
-					//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
-					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
-						var dato2= JSON.parse(resp)
-						$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
-						$('#spanPagar').text(parseFloat(dato2[2][0].pagarAHoy).toFixed(2));
-						$('#spanIntGenerado').text(parseFloat(dato2[2][0].pagarAHoy-dato2[0][0].montoInicial).toFixed(2));
-					});
-				}
-				else
-				{
-					$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
-					$('#btn-imprimirTicketFijo').removeClass('sr-only');
-					//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
-					$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
-						var dato3= JSON.parse(resp)
-						$('#spanPorcent').text(parseFloat(dato3[2][0].intDiarioHoy*100).toFixed(2));
-						$('#spanPagar').text(parseFloat(dato3[2][0].pagarAHoy).toFixed(2));
-						$('#spanIntGenerado').text(parseFloat(dato3[2][0].pagarAHoy-dato3[0][0].montoInicial).toFixed(2));
-					});
-				}
+				
 			
 			
 
@@ -1949,7 +2018,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 		monto: parseFloat($('#rowWellFijo #spanMontoDado').text()).toFixed(2),
 		obs: $('#rowWellFijo #spanObservacion').text(),
 		hora : moment().format('h:mm a dddd DD MMMM YYYY'),
-		usuario: $.JsonUsuario.nombre
+		usuario: $.JsonUsuario.usunombres
 	}}).done(function(resp){console.log(resp);});
 });
 $('#btn-FinalizarPrestamoFijo').click(function () {
@@ -1958,6 +2027,16 @@ $('#btn-FinalizarPrestamoFijo').click(function () {
 	$('#montoSeguro').text($('#rowWellFijo #spanPagar').text());
 	$('.modal-EstaSeguro').modal('show');
 
+});
+$('#btn-RetirarPrestamoFijo').click(function () {
+	var contenedor=$(this).parent().parent();
+	var iProd=contenedor.find('#lblIdProductosEnc').text();
+	//console.log(iProd);
+	$('#spanModalRetirarProducto').text(contenedor.find('#spanProducto').text());
+	$('#spanCapitalRetiro').text(contenedor.find('#spanSrCapital').text());
+	$('#spanValorizadoRetirar').text(contenedor.find('#spanMontoDado').text());
+	$('#idPrestamoAct').text(iProd);
+	$('.modal-retirarPrestamoConfirmar').modal('show');
 });
 $('#btn-FinalizarImpuestoFijo').click(function () {
 	var iProd=$('#rowWellFijo #lblIdProductosEnc').text();
@@ -1979,6 +2058,26 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarImpuestoMovil', function () {
 	$('#srNombreSeg').text($('#spanApellido').text()+', '+$('#spanNombre').text());
 	$('.modal-InteresSeguro').modal('show');
 
+});
+$('#btnModalRetirarPrestamo').click(function () {
+	var valor=$('#txtModalRetirarPrestamo').val();
+	if(valor<=0){ $('#pErrorRetirarPrestamo').removeClass('sr-only').text('No se puede ingresar valores negativos.');}
+	else if(! $('#btnModalRetirarPrestamo').hasClass('disabled') ) {
+		//guardar
+		$('#btnModalRetirarPrestamo').addClass('disabled');
+		$('#pErrorRetirarPrestamo').addClass('sr-only');
+		var idSucu=$.JsonUsuario.idsucursal;
+		if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
+		$.ajax({url:'php/updateFinalizarPrestamo.php', type: 'POST', data:{idProd: $('#idPrestamoAct').text() , monto:$('#spanCapitalRetiro').text() , idUser: $.JsonUsuario.idUsuario, valor: $('#spanValorizadoRetirar').text(),idSuc:idSucu, usuario:$.JsonUsuario.usunombres  }}).done(function (resp) { console.log(resp)
+			$('.modal-InteresSeguro').modal('hide');
+			if(resp=='1'){
+				window.location.href = "aplicativo.php?idprod=" +$('#idPrestamoAct').text();
+			}else{
+				$('.modal-retirarPrestamoConfirmar').modal('hide');
+				$('.modal-datoNoGuardado').modal('show');
+			}
+		});
+	}
 });
 $('#btnSeguroFinalizar').click(function () {
 	var iProd=$('#idEstaseguro').text();
@@ -2557,11 +2656,11 @@ $('#btn-PagoACuentaFijo').click(function () {
 
 	//console.log(contenedor.find('#spanMontoDado').text());
 	
-	$('#spanAmortizarDeuda').text(contenedor.find('#spanPagar').text());
+	$('#spanAmortizarDeuda').text(contenedor.find('#spanMontoDado').text());
 	$('#spanProdDeuda').text(contenedor.find('#spanProducto').text());
 	$('#sr-idProductov3').text(iProd);
 	$('#sr-MontInicialv3').text(contenedor.find('#spanMontoDado').text());
-	$('#sr-montInteresv3').text(contenedor.find('#spanIntGenerado').text());
+	$('#sr-montInteresv3').text(contenedor.find('#spanSrInteres').text());
 	$('.modal-PagoACuenta').modal('show');
 });
 $('#btnPagarACuenta').click(function () {
@@ -2575,7 +2674,9 @@ $('#btnPagarACuenta').click(function () {
 		var faltaPagar=0;
 		//console.log(loquepaga);
 
-		if(parseFloat(loquepaga)>= parseFloat(totalDeuda)){ console.log('pago toda su deuda, se libera');}
+		if(parseFloat(loquepaga).toFixed(1)>= parseFloat(totalDeuda).toFixed(1)){ console.log('pago toda su deuda, se libera');
+			//$.ajax({url:'php/'})
+		}
 		else if(parseFloat(loquepaga) >= parseFloat(interes) ){
 			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
 			var sobra=parseFloat(loquepaga)-parseFloat(interes);
@@ -2591,7 +2692,7 @@ $('#btnPagarACuenta').click(function () {
 $('#divListaPorConfirmar').on('click','.btn-verInfoFinalizado', function (argument) {
 	var aBuscar= $(this).attr('id');
 	$.ajax({url:'php/listarProductoEspecificoCliente.php', type: 'POST', data: { idProd: aBuscar }}).done(function (resp) {
-		//console.log(resp);
+		moment().locale('es');
 		$.each(JSON.parse(resp), function (i, dato) {
 			$('#txtFindni').val(dato.cliDni);
 			$('#txtFinapellido').val(dato.cliApellidos + ', '+dato.cliNombres);

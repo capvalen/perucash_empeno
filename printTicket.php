@@ -27,17 +27,17 @@ try {
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n\n");
-    $printer -> text("   ".$_POST['hora']."\n\n");
-    $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n\n");
+    $printer -> text("  ".$_POST['hora']."\n\n");
+    $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
-    $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n\n");
-    $printer -> text("Monto entregado: S/. ".$_POST['monto']."\n\n");
+    $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n");
+    $printer -> text("Monto entregado: S/. ".$_POST['monto']."\n");
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
     $printer -> text("Usuario: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("      Celular: # 943 798696\n");
     $printer -> text("      Web: www.perucash.com\n");
-    $printer -> text("   Gracias por tu preferencia\n\n");
+    $printer -> text("   Gracias por tu preferencia\n");
     $printer -> cut();
 
     /* Close printer */
