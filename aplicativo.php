@@ -185,7 +185,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<span class="hidden" id="lblIdProductosEnc"><?php echo $_GET['idprod']; ?></span>
 			<div class="col-xs-12">
 				<div class="alert-message alert-message-primary">
-					<h3 style="display: inline-block;" class="text-primary mayuscula" id="spanProducto"> </h3> <h3 style="display: inline-block;"><small id="smallh3Producto"></small></h3>
+					<h3 style="display: inline-block;" class="text-primary mayuscula" id="spanProducto"> </h3> <h3 style="display: inline-block;"><span class="sr-only" id="spanVigenciaProducto"></span><small id="smallh3Producto"></small></h3>
 					<h5><strong>Valorizado:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <span class="sr-only" id="spanSrCapital"></span> <span class="sr-only" id="spanSrInteres">0</span> <strong>Registrado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
 					<p><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></p>
 
@@ -1212,7 +1212,7 @@ $(document).ready(function () {
 					//console.log(resp)
 					$.each(JSON.parse(resp), function (i, jresp) {
 						coleccionIDs+=jresp.idPrestamo+',';
-						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning" id="${jresp.idPrestamo}">
+						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning divContUnPrestamo" id="${jresp.idPrestamo}">
 							<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
 							<div class="col-xs-12">
 							<table class="" data-toggle="table">
@@ -1229,10 +1229,11 @@ $(document).ready(function () {
 						</table></div>
 						</div>`);
 						if(jresp.preIdEstado==11){
-							$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.cajafecha).fromNow());
+							$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.repoFechaOcurrencia).fromNow()+ ' por '+ jresp.repoUsuario);
 							$('#btn-imprimirTicketFijo').addClass('sr-only');
 							$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
 							$('#btn-RetirarPrestamoFijo').addClass('sr-only');
+							$('#spanVigenciaProducto').text('11');
 						}
 						else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
 							$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
@@ -1254,6 +1255,7 @@ $(document).ready(function () {
 							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
 							$('#btn-imprimirTicketFijo').removeClass('sr-only');
 							$('#btn-PagoACuentaFijo').removeClass('sr-only');
+							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
 							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
 							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
 							// 	var dato2= JSON.parse(resp)
@@ -1267,6 +1269,7 @@ $(document).ready(function () {
 							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
 							$('#btn-imprimirTicketFijo').removeClass('sr-only');
 							$('#btn-PagoACuentaFijo').removeClass('sr-only');
+							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
 							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
 							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
 							// 	var dato3= JSON.parse(resp)
@@ -1287,36 +1290,43 @@ $(document).ready(function () {
 								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY')}</td>
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
-							var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
-							//console.log('hasta hoy: '+ hastaHoyDias);
-							//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
-							if(hastaHoyDias>90){hastaHoyDias=90;}
-							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
-								//console.log(resp)
-								var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
-								$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-								<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por ${hastaHoyDias} días.</td>
-								<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
-								<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy-jresp2.desCapital).toFixed(2)}</td>
-								<td>-</td></tr>`);
-								sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy-jresp2.desCapital);
-								sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy-jsonInteres[0][0].montoInicial);
-								$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
-								$('#spanSrInteres').text(sumaIntereses);
 
-								$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: jresp2.idDesembolso }}).done(function (resp) {
+							if($('#spanVigenciaProducto').text()!=11){
+								var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
+								//console.log('hasta hoy: '+ hastaHoyDias);
+								//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+								if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+								$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+									//console.log(resp)
+									var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
+									// console.log(jsonInteres[2][0].pagarAHoy.replace(",",''))
+									// console.log(jresp2.desCapital)
+									$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+									<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por ${hastaHoyDias} días.</td>
+									<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
+									<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
+									<td>-</td></tr>`);
+									sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital);
+									sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial);
+									$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
+									$('#spanSrInteres').text(sumaIntereses);
+
+									
+								});
+							}
+							$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { console.log(resp)
 									$.each(JSON.parse(resp), function (i, jsonCaja) {
 										//console.log(jsonCaja)
-										$(`#contenedorPrestamos #${jsonCaja.idProducto}`).find('tbody').append(`
+										$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
 									<tr><td>${jsonCaja.tipoDescripcion}</td>
 									<td>${moment(jsonCaja.cajaFecha).fromNow()}</td>
 									<td>S/. ${parseFloat(jsonCaja.cajaValor).toFixed(2)}</td>
 									<td>${jsonCaja.usuNombres}</td></tr>`);
+
 									});
 
 									
 								});
-							});
 						});
 						$(`#contenedorPrestamos `).find('table').bootstrapTable();
 					});
@@ -1329,7 +1339,7 @@ $(document).ready(function () {
 				// var fechaIni =moment(dato[0].prodFechaInicial);
 				// var fechaFin=moment(dato[0].prodFechaVencimiento);
 				//var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
-				console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
+				//console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
 				
 			
 			
@@ -2060,15 +2070,15 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarImpuestoMovil', function () {
 
 });
 $('#btnModalRetirarPrestamo').click(function () {
-	var valor=$('#txtModalRetirarPrestamo').val();
-	if(valor<=0){ $('#pErrorRetirarPrestamo').removeClass('sr-only').text('No se puede ingresar valores negativos.');}
+	var cuantoPaga=$('#txtModalRetirarPrestamo').val();
+	if(cuantoPaga<=0){ $('#pErrorRetirarPrestamo').removeClass('sr-only').text('No se puede ingresar valores negativos.');}
 	else if(! $('#btnModalRetirarPrestamo').hasClass('disabled') ) {
 		//guardar
 		$('#btnModalRetirarPrestamo').addClass('disabled');
 		$('#pErrorRetirarPrestamo').addClass('sr-only');
 		var idSucu=$.JsonUsuario.idsucursal;
 		if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
-		$.ajax({url:'php/updateFinalizarPrestamo.php', type: 'POST', data:{idProd: $('#idPrestamoAct').text() , monto:$('#spanCapitalRetiro').text() , idUser: $.JsonUsuario.idUsuario, valor: $('#spanValorizadoRetirar').text(),idSuc:idSucu, usuario:$.JsonUsuario.usunombres  }}).done(function (resp) { console.log(resp)
+		$.ajax({url:'php/updateFinalizarPrestamo.php', type: 'POST', data:{idProd: $('#idPrestamoAct').text() , monto:$('#spanCapitalRetiro').text() , idUser: $.JsonUsuario.idUsuario, valor: $('#spanValorizadoRetirar').text(),idSuc:idSucu, usuario:$.JsonUsuario.usunombres, paga: cuantoPaga }}).done(function (resp) { console.log(resp)
 			$('.modal-InteresSeguro').modal('hide');
 			if(resp=='1'){
 				window.location.href = "aplicativo.php?idprod=" +$('#idPrestamoAct').text();
@@ -2666,21 +2676,24 @@ $('#btn-PagoACuentaFijo').click(function () {
 $('#btnPagarACuenta').click(function () {
 	if( parseInt($('#txtPagarACuenta').val())>0 || $('#txtPagarACuenta').val()!='' ){
 		//console.log( 'guardar '+ $('#txtPagarACuenta').val())
-		var loquepaga=parseFloat($('#txtPagarACuenta').val()).toFixed(1);
-		var montoInical= parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
-		var interes=  parseFloat($('#sr-montInteresv3').text()).toFixed(1);
-		var totalDeuda= parseFloat(montoInical) + parseFloat(interes);
+		var loquepaga=parseFloat($('#txtPagarACuenta').val());
+		var totalDeuda= parseFloat($('#sr-MontInicialv3').text()) ;//parseFloat(montoInical) + parseFloat(interes);
+		var interes= parseFloat($('#sr-montInteresv3').text());
+		var montoInical=parseFloat(totalDeuda)-parseFloat(interes); //parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
 		var idpro=$('#sr-idProductov3').val();
 		var faltaPagar=0;
-		//console.log(loquepaga);
+		//console.log(totalDeuda);
+		/* Nota: No se puede redondear a 1 decimal y comprarlarlo porque lo considera como texto y no como número, no se puede comprar textos*/
 
-		if(parseFloat(loquepaga).toFixed(1)>= parseFloat(totalDeuda).toFixed(1)){ console.log('pago toda su deuda, se libera');
-			//$.ajax({url:'php/'})
-		}
+		if(parseFloat(loquepaga)>= parseFloat(totalDeuda)){ console.log('pago toda su deuda, se libera');
+			$.ajax({url:'php/insertarAmortizacionTodo.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:loquepaga, idUser: $.JsonUsuario.idUsuario, idProd: '', usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {
+				console.log(resp)
+			});
+ 		}
 		else if(parseFloat(loquepaga) >= parseFloat(interes) ){
 			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
 			var sobra=parseFloat(loquepaga)-parseFloat(interes);
-			console.log('restar del capital: '+ sobra.toFixed(2));
+			console.log('restar del capital: '+ sobra.toFixed(2)); 
 		}
 		else if(parseFloat(loquepaga) <= parseFloat(interes) ){
 			faltaPagar= parseFloat(interes) -parseFloat(loquepaga);

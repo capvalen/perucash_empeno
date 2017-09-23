@@ -7,7 +7,13 @@ from producto where idProducto=448
 
 
 /*  Importar tabla desembolso */
-INSERT INTO `desembolso`(`idDesembolso`, `desCapital`, `desFechaContarInteres`, `desFechaRegistro`, `desActivo`, `desUsuario`) SELECT `idPrestamo`, `preCapital`, p.prodFechaInicial, `preFechaInicio`, 1, pre.`idUsuario`
+INSERT INTO `desembolso`(`idDesembolso`, `idPrestamo`, `desCapital`, `desFechaContarInteres`, `desFechaRegistro`, `desActivo`, `desUsuario`) SELECT `idPrestamo`, `idPrestamo`, `preCapital`, p.prodFechaInicial, `preFechaInicio`, 1, pre.`idUsuario`
 FROM `prestamo` pre
 inner join producto p on p.idProducto = pre.`idProducto`
-where pre.idProducto=448
+where 1
+
+
+
+
+//Analizar: http://codeseven.github.io/toastr/demo.html
+//https://eonasdan.github.io/bootstrap-datetimepicker/Options/

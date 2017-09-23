@@ -5,7 +5,7 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call updateFinalizarPrestamo(".$_POST['idProd'].", ".$_POST['monto']." , ".$_POST['idUser'].", ".$_POST['valor'].", ".$_POST['idSuc'].", '".$_POST['usuario']."' );");
+$log = mysqli_query($conection,"call updateFinalizarPrestamo(".$_POST['idProd'].", ".$_POST['monto']." , ".$_POST['idUser'].", ".$_POST['valor'].", ".$_POST['idSuc'].", '".$_POST['usuario']."', ".$_POST['paga']."  );");
 //echo "call updateFinalizarPrestamo(".$_POST['idProd'].", ".$_POST['monto']." , ".$_POST['idUser'].", ".$_POST['valor'].", ".$_POST['idSuc'].", '".$_POST['usuario']."' );";
 
 /* cerrar la conexión */
