@@ -74,6 +74,8 @@ input[type=number] {-moz-appearance:textfield;}
 .panel.with-nav-tabs .nav-justified{
 	margin-bottom: -1px;
 }
+#divListaPorConfirmar .row{padding-top: 5px; padding-bottom: 5px;}
+#divListaPorConfirmar .row:hover{background-color: #eee;}
 /********************************************************************/
 /*** PANEL DEFAULT ***/
 .with-nav-tabs.panel-default .nav-tabs > li > a,

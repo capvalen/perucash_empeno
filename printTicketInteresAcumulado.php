@@ -4,7 +4,6 @@ session_start();
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-
 /**
  * Assuming your printer is available at LPT1,
  * simpy instantiate a WindowsPrintConnector to it.
@@ -17,15 +16,11 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 $montoInicial=0; $DiadeHoy=0;
 $montoInicial=$_GET['inicial'];// $montoInicial =5001;
 $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
-
-if($montoInicial<=5000){$interesDiario=0.007;}
+if($montoInicial<=5000){$interesDiario=$_GET['inter'];}
 else{$interesDiario=0.004;}
-
 $interesAcumulado=$montoInicial;
-
 //echo 'Monto incial: '. $montoInicial.'<br>';
 $filas=array();
-
 $filas[0][]=array(
 		'montoInicial' => $montoInicial,
 		'diaHoy'=> $DiadeHoy
@@ -61,19 +56,17 @@ if($DiadeHoy!=0){
 			$textoInteres=$textoInteres.$i.":  S/. ".$filas[1][$i-1]['intAcum']."\n";
 		}
 	}
-
 }else{$textoInteres='Vacio';}
-echo $textoInteres;
+//echo $textoInteres;
 	$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
 	
 	// A FilePrintConnector will also work, but on non-Windows systems, writes
 	// to an actual file called 'LPT1' rather than giving a useful error.
 	// $connector = new FilePrintConnector("LPT1");
-
 	/* Print a "Hello world" receipt" */
 	$printer = new Printer($connector);
-	$printer -> text("       * Pago de interes acumulado *\n\n");
+	$printer -> text("       * Pago de interes *\n\n");
 	$printer -> text("Monto inicial: S/. ".$_GET['inicial']."\n");
 	$printer -> text("--  Dia   -------  Monto  ----------"."\n");
 	$printer -> text($textoInteres);
@@ -82,7 +75,6 @@ try {
 	$printer -> text("         Web: www.perucash.com\n");
 	$printer -> text("       Gracias por tu preferencia\n\n");
 	$printer -> cut();
-
 	/* Close printer */
 	$printer -> close();
 } catch (Exception $e) {

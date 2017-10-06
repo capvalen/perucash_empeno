@@ -1,6 +1,6 @@
 <?php 
 /*--------- Reglas -------------
-Monto: 1 - 5000 = 0.7% diario (0.007)
+Monto: 1 - 5000 = 0.683% diario (0.00683)
 Monto: 5001 - 15000 = 0.4 % diario  (0.004)
 por defecto el mínimo 10%
 --------- Reglas -------------*/
@@ -11,7 +11,7 @@ $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
 $maximoDias=90;
 
 
-if($montoInicial<=5000){$interesDiario=0.007;}
+if($montoInicial<=5000){$interesDiario=0.00683;}
 else{$interesDiario=0.004;}
 
 $interesAcumulado=$montoInicial;

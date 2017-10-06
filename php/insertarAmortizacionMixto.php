@@ -3,7 +3,7 @@ include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
 
 
-$sql= "call insertarAmortizacionTodo (".$_POST['idDese'].", ".$_POST['montInicial'].", ".$_POST['montInteres']." , ".$_POST['montPago'].", ".$_POST['idUser'].", ".$_POST['idProd'].", '".$_POST['usuario']."', ".$_POST['idSuc']." )";
+$sql= "call insertarAmortizacionMixto (".$_POST['idDese'].", ".$_POST['montInicial'].", ".$_POST['montInteres']." , ".$_POST['montPago'].", ".$_POST['idUser'].", ".$_POST['idProd'].", '".$_POST['usuario']."', ".$_POST['idSuc']." )";
 
 //echo $sql;
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
