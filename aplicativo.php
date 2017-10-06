@@ -16,7 +16,7 @@ if(isset($_SESSION['Atiende'])){?>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.7">
 	<link rel="stylesheet" type="text/css" href="css/icofont.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
 
@@ -991,11 +991,11 @@ if(isset($_SESSION['Atiende'])){?>
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Hubo un problema guardando</h4>
 		</div>
 		<div class="modal-body">
-			<strong><i class="icofont icofont-social-smugmug"></i> Lo sentimos,</strong> hubo un error interno, porfavor comunícalo.
+			<strong><i class="icofont icofont-cat-alt-4"></i> Lo sentimos,</strong> hubo un error interno, porfavor comunícalo.
 		</div>
 		<div class="modal-footer"> 
 		
-		<button class="btn btn-primary btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-close"></i> Salir</button>
+		<button class="btn btn-danger btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-close"></i> Salir</button>
 		</div>
 	</div>
 </div>
@@ -1505,7 +1505,7 @@ function calcularPeriodo(){
 		console.log('a pagar ' + montoaPagar);*/
 		$('#spanIntGene').text((montoInteres*100)+'%');
 		$('#spanInteres').text('S/. '+ parseFloat(montoDado*montoInteres).toFixed(2))
-		$('#spanMonto').text(montoaPagar.toFixed(2))
+		$('#spanMonto').text(montoDado.toFixed(2))
 		
 	}
 	else{
@@ -1533,11 +1533,11 @@ $('#btnGuardarDatos').click(function () { //console.log($('#txtNombreProducto').
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', resp).removeClass('sr-only');
 				$('.modal-ventaGuardada').find('.btnCompraGuardado').addClass('sr-only');
+				$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 				limpiarCasillas();
-			}
+				}
 			});
 		}else{//guardar ambos productos y cliente
-			
 		$.ajax({url: 'php/insertarProducto.php', type: 'POST', data:{
 				nombre: $('#txtNombres').val(),
 				apellido: $('#txtApellidos').val(),
@@ -2628,6 +2628,7 @@ $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto')
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
 				$('.modal-ventaGuardada').find('.btnAceptarGuardado').addClass('sr-only');
+				$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 				limpiarCasillas();
 			}
 			});
@@ -2648,13 +2649,14 @@ $('#btnGuardarCompra').click(function () { //console.log($('#txtNombreProducto')
 			}).done(function (resp) { console.log(resp) 
 				if(parseInt(resp)>=1){ $('.modal-ventaGuardada').modal('show'); $('.modal-ventaGuardada').find('.btnCompraGuardado').attr('id', resp).removeClass('sr-only');
 				$('.modal-ventaGuardada').find('.btnAceptarGuardado').addClass('sr-only');
+				$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 				limpiarCasillas();
 			}
 			}).error(function () { console.log('error');
 				// body...
 			});
 		}
-		$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+		
 		
 	}//<- fin de if verificarTodoRellenado
 });
@@ -2680,16 +2682,56 @@ $('#btnPagarACuenta').click(function () {
 		var totalDeuda= parseFloat($('#sr-MontInicialv3').text()) ;//parseFloat(montoInical) + parseFloat(interes);
 		var interes= parseFloat($('#sr-montInteresv3').text());
 		var montoInical=parseFloat(totalDeuda)-parseFloat(interes); //parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
-		var idpro=$('#sr-idProductov3').val();
+		var idpro=$('#sr-idProductov3').text();
 		var faltaPagar=0;
 		//console.log(totalDeuda);
 		/* Nota: No se puede redondear a 1 decimal y comprarlarlo porque lo considera como texto y no como número, no se puede comprar textos*/
 
 		if(parseFloat(loquepaga)>= parseFloat(totalDeuda)){ console.log('pago toda su deuda, se libera');
-			$.ajax({url:'php/insertarAmortizacionTodo.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:loquepaga, idUser: $.JsonUsuario.idUsuario, idProd: '', usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {
-				console.log(resp)
+			$.ajax({url:'php/insertarAmortizacionTodo.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:loquepaga, idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
+				if(parseInt(resp)>0){
+					$('.modal-PagoACuenta').modal('hide');
+					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
+					$('.modal-ventaGuardada').modal('show');
+					$.ajax({url: 'http://localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
+						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+						articulo: $('#spanProducto').text(),
+						monto: parseFloat( loquepaga ).toFixed(2),
+						obs: '',
+						hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+						usuario: $.JsonUsuario.usunombres
+					}}).done(function(resp){console.log(resp);
+						$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+						window.location.href = "aplicativo.php?idprod=" +idpro;});}
+				else{
+					$('.modal-PagoACuenta').modal('hide');
+					$('.modal-datoNoGuardado').modal('show');}
 			});
  		}
+		else if(parseFloat(loquepaga) == parseFloat(interes) ){
+			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
+			$.ajax({url:'php/insertarAmortizacionSoloInteres.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:loquepaga, idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
+				if(parseInt(resp)>0){
+					$('.modal-PagoACuenta').modal('hide');
+					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
+					$('.modal-ventaGuardada').modal('show');
+					$.ajax({url: 'http://localhost/perucash/printTicketFinalizado.php', type: 'POST', data: {
+						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+						articulo: $('#spanProducto').text(),
+						monto: parseFloat( loquepaga ).toFixed(2),
+						obs: '',
+						hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+						usuario: $.JsonUsuario.usunombres
+					}}).done(function(resp){console.log(resp);
+						$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+						window.location.href = "aplicativo.php?idprod=" +idpro;});}
+				else{
+					$('.modal-PagoACuenta').modal('hide');
+					$('.modal-datoNoGuardado').modal('show');}
+			});
+
+			
+		}
 		else if(parseFloat(loquepaga) >= parseFloat(interes) ){
 			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
 			var sobra=parseFloat(loquepaga)-parseFloat(interes);
@@ -2697,7 +2739,7 @@ $('#btnPagarACuenta').click(function () {
 		}
 		else if(parseFloat(loquepaga) <= parseFloat(interes) ){
 			faltaPagar= parseFloat(interes) -parseFloat(loquepaga);
-			console.log('solo amortigua una parte de interés S/. '+ parseFloat(loquepaga).toFixed(2) + ' falta pagar '+faltaPagar);
+			console.log('solo amortizar una parte de interés S/. '+ parseFloat(loquepaga).toFixed(2) + ' falta pagar '+faltaPagar);
 			//if()
 		}
 	}
