@@ -28,6 +28,7 @@ try {
     $printer -> text("   ----------------------------------\n");
     $printer -> text("           * Pago Finalizado *\n");
     $printer -> text("  ".$_POST['hora']."\n\n");
+    $printer -> text("Código Producto: ".ucwords($_POST['cod'])."\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
     $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n");

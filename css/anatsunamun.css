@@ -75,7 +75,7 @@ input[type=number] {-moz-appearance:textfield;}
 	margin-bottom: -1px;
 }
 #divListaPorConfirmar .row{padding-top: 5px; padding-bottom: 5px;}
-#divListaPorConfirmar .row:hover{background-color: #eee;}
+#divListaPorConfirmar .row:hover, #rowProductoEncontrado .row {background-color: #eee;}
 /********************************************************************/
 /*** PANEL DEFAULT ***/
 .with-nav-tabs.panel-default .nav-tabs > li > a,
