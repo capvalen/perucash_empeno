@@ -13,7 +13,7 @@
       attr : "href",
       url : false,
       showMessage: true,
-      message: "Please wait while we create your document" ,
+      message: "Su documento está siendo creado" ,
       afterCallback: null,
       beforeCallBack: null,
       urlCallBack: false

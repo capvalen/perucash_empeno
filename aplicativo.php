@@ -192,6 +192,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<div class="alert-message alert-message-primary">
 					<h3 style="display: inline-block;" class="text-primary mayuscula" id="spanProducto"> </h3> <h3 style="display: inline-block;"><span class="sr-only" id="spanVigenciaProducto"></span><small id="smallh3Producto"></small></h3>
 					<h5><strong>Valorizado:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <span class="sr-only" id="spanSrCapital"></span> <span class="sr-only" id="spanSrInteres">0</span> <strong>Actualizado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
+					<h5><strong>Intereses:</strong> S/. <span id="h5SrInteres">0</span> <span id="h5DetalleInteres"></span></h5>
 					<p><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></p>
 
 				</div>
@@ -281,6 +282,7 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			<div class="col-sm-8 col-sm-offset-2 hidden" id="divBotonesFijos">
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
+				<button class="btn btn-morado btn-outline" id="btn-imprimirHojaControl"><i class="icofont icofont-copy-alt"></i> Hoja de control</button>
 				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
 				<button class="btn btn-indigo btn-outline sr-only" id="btn-FinalizarImpuestoFijo"><i class="icofont icofont-pie-chart"></i> Cancelar interés</button>
 				<button class="btn btn-indigo btn-outline sr-only" id="btn-AdelantoPrestamoFijo"><i class="icofont icofont-rocket"></i> Adelantar pago</button>
@@ -468,7 +470,7 @@ if(isset($_SESSION['Atiende'])){?>
 		<p><strong>Creación de usuarios</strong></p>
 			<div class="col-xs-12 col-sm-6"><strong>Apellidos</strong> <input type="text" class="form-control mayuscula" id="txtApellUser" placeholder="Apellidos del usuario"></div>
 			<div class="col-xs-12 col-sm-6"><strong>Nombres</strong> <input type="text" class="form-control mayuscula" id="txtNombrUser" placeholder="Nombres del usuario"></div>
-			<div class="col-xs-12 col-sm-6"><strong>Nick</strong> <input type="text" class="form-control" id="txtNickUser" placeholder="Nick del usuario para ingresar al sistema"></div>
+			<div class="col-xs-12 col-sm-6"><strong>Nick</strong> <input type="text" class="form-control" id="txtNickUser" placeholder="Nick del usuario para ingresar al sistema" disabled></div>
 			<div class="col-xs-12 col-sm-6"><strong>Contraseña</strong> <input type="password" class="form-control" id="txtPassUser" placeholder="Contraseña"></div>
 			<div class="col-xs-12 col-sm-6"><strong>Repita la contraseña</strong> <input type="password" class="form-control" id="txtPassUser2" placeholder="Confirmar la contraseña"></div>
 			<div class="col-xs-12 col-sm-6"><strong>Nivel</strong> 
@@ -1192,7 +1194,7 @@ $(document).ready(function () {
 		$('#rowWellCambiante').addClass('hidden');
 
 		console.log('solcitar producto con id: ' + idNew);
-		var coleccionIDs='';
+		var coleccionIDs=''; var contarDesde='';
 		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
 			var dato = JSON.parse(resp);  //console.log(dato)
 			moment.locale('es');
@@ -1206,10 +1208,10 @@ $(document).ready(function () {
 			$('#spanCelular').text(dato[0].cliCelular);
 			$('#spanProducto').text(dato[0].prodNombre)
 			
-			var fechaReg =moment(dato[0].prodFechaRegistro);
+			var fechaReg =moment(dato[0].desFechaContarInteres); //console.log(dato[0].desFechaContarInteres);
 			var differencia=moment().diff(fechaReg, 'days');
 			var sumaCapital=0, sumaIntereses=0;
-			$('#spanPeriodo2').text(moment(dato[0].prodFechaRegistro).fromNow());
+			$('#spanPeriodo2').text(moment(dato[0].desFechaContarInteres).fromNow());
 			$('#smallPeriodo').text('('+differencia +' días)');
 
 			if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?> ||  <?php echo $_SESSION['Power']  ?>==1){// console.log('misma sucursal');
@@ -1220,9 +1222,10 @@ $(document).ready(function () {
 
 				/*Nuevo Código para de préstamos*/
 				$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
-					//console.log(resp)
+					console.log(resp)
 					$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
-						coleccionIDs+=jresp.idPrestamo+',';
+						coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
+						contarDesde=moment(jresp.desFechaContarInteres);
 						//console.log($(`.divContUnPrestamo #${jresp.idPrestamo}`).length)
 						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning divContUnPrestamo" id="${jresp.idPrestamo}">
 							<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
@@ -1295,6 +1298,31 @@ $(document).ready(function () {
 
 					});
 					//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
+					$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
+						var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
+						$('#spanMontoDado').text(parseFloat(jsonRespActual[0].preCapital).toFixed(2));
+						if($('#spanVigenciaProducto').text()!=11){
+							var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres),'days');
+							//var montoIniciov2=resp;
+							//console.log('hasta hoy: '+ hastaHoyDias);
+							//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+							if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jsonRespActual[0].preCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+								var jsonInteres=JSON.parse(resp);
+								// $(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+								// <tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
+								// <td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
+								// <td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
+								// <td>-</td></tr>`);
+								var calcInt=parseFloat(parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial)).toFixed(2);
+								$('#spanSrInteres').text(calcInt);
+								$('#h5SrInteres').text(calcInt);
+								$('#h5DetalleInteres').text(' por '+ differencia +' días.');
+							});
+
+							
+						}
+					})
 					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
 						$.each(JSON.parse(resp), function (i,jresp2) {
 							$('#spanSrCapital').text(parseFloat(jresp2.desCapital).toFixed(2));
@@ -1305,32 +1333,38 @@ $(document).ready(function () {
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
 
-							if($('#spanVigenciaProducto').text()!=11){
-								var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
-								console.log('hasta hoy: '+ hastaHoyDias);
-								//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
-								if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
-								$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
-									//console.log(resp)
-									var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
-									// console.log(jsonInteres[2][0].pagarAHoy.replace(",",''))
-									// console.log(jresp2.desCapital)
-									$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-									<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por ${hastaHoyDias} días.</td>
-									<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
-									<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
-									<td>-</td></tr>`);
-									sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital);
-									sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial);
-									$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
-									$('#spanSrInteres').text(parseFloat(sumaIntereses).toFixed(2));
+							// if($('#spanVigenciaProducto').text()!=11){
+							// 	var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
+							// 	console.log('hasta hoy: '+ hastaHoyDias);
+							// 	//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+							// 	if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+							// 	$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+							// 		//console.log(resp)
+							// 		var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
+							// 		// console.log(jsonInteres[2][0].pagarAHoy.replace(",",''))
+							// 		// console.log(jresp2.desCapital)
+							// 		$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+							// 		<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
+							// 		<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
+							// 		<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
+							// 		<td>-</td></tr>`);
+							// 		sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital);
+							// 		sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial);
+							// 		$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
+							// 		$('#spanSrInteres').text(parseFloat(sumaIntereses).toFixed(2));
 
-								});
-							}
-							$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { console.log(resp)
+							// 	});
+							// }
+							$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { //console.log(resp)
 								//console.log(getObjects(,jresp2.desCapital))
 									$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
 										console.log(jsonCaja)
+										var diff=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
+										if(jsonCaja.idTipoProceso==9 && diff>=0){
+											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+											$('#spanSrInteres').text(inte);
+											$('#h5SrInteres').text(inte);
+										}
 										$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
 									<tr><td>${jsonCaja.tipoDescripcion}</td>
 									<td>${moment(jsonCaja.cajaFecha).fromNow()}</td>
@@ -2753,14 +2787,14 @@ $('#btnPagarACuenta').click(function () {
 					$('.modal-datoNoGuardado').modal('show');}
 			});
  		}
-		else if(parseFloat(loquepaga) == parseFloat(interes) ){
-			console.log('solo canceló todo interés'); //Escenario que hay que ver cuanto hay de dinero
+ 		else if(parseFloat(loquepaga) == parseFloat(interes) ){
+			console.log('canceló todo interés'); //Escenario que hay que ver cuanto hay de dinero
 			$.ajax({url:'php/insertarAmortizacionSoloInteres.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/perucash/printTicketInteresCancelado.php', type: 'POST', data: {
+					/*$.ajax({url: 'http://localhost/perucash/printTicketInteresCancelado.php', type: 'POST', data: {
 						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
@@ -2770,20 +2804,20 @@ $('#btnPagarACuenta').click(function () {
 						usuario: $.JsonUsuario.usunombres
 					}}).done(function(resp){console.log(resp);
 						$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
-						window.location.href = "aplicativo.php?idprod=" +idpro;});}
+						window.location.href = "aplicativo.php?idprod=" +idpro;});*/
+				}
 				else{
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-datoNoGuardado').modal('show');}
 			});
+		} 
+ 		else if(parseFloat(loquepaga) >= parseFloat(interes) ){
+			console.log('canceló todo su interés y'); //Escenario que hay que ver cuanto hay de dinero
+			var sobraAmort=parseFloat(loquepaga)-parseFloat(interes);
+			console.log('restar del capital: '+ sobraAmort.toFixed(2));
+			//console.log(sobraAmort);
 
-			
-		}
-		else if(parseFloat(loquepaga) >= parseFloat(interes) ){
-			console.log('canceló todo su interés'); //Escenario que hay que ver cuanto hay de dinero
-			var sobra=parseFloat(loquepaga)-parseFloat(interes);
-			console.log('restar del capital: '+ sobra.toFixed(2));
-
-			$.ajax({url:'php/insertarAmortizacionMixto.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
+			$.ajax({url:'php/insertarAmortizacionMixto.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, sobra: sobraAmort, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
@@ -3002,6 +3036,16 @@ $('#btnEgresarDineroSuma').click(function () {
 	});
 });
 $('.btnSoloPrint').click(function () { 	window.print(); });
+/*$(window).on('beforeunload', function (e) {
+	mensaje = 'Estas seguro de salir, ¿es correcto?';
+	e.returnValue = mensaje;
+	return mensaje;
+});*/
+$('#btn-imprimirHojaControl').printPage({
+	url: "hojaControl.php?idProd="+<?php echo $_GET['idprod']; ?>,
+	attr: "href",
+	message:"Tu documento está siendo generado"
+});
 $('#btn-EliminarDB')
 </script>
 </body>
