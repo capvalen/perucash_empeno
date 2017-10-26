@@ -1,5 +1,6 @@
 <?php
-
+ini_set("session.cookie_lifetime","7200");
+ini_set("session.gc_maxlifetime","7200");
 session_start();
 require 'php/conkarl.php';
 if(isset($_SESSION['Atiende'])){?>
@@ -735,7 +736,7 @@ if(isset($_SESSION['Atiende'])){?>
 					<div class="col-xs-2">Fecha ocurrencia</div>
 					<div class="col-xs-2">Monto inicial</div></strong>
 				</div>
-				<div class="row container-fluid" id="rowProductoEncontrado">
+				<div class="" id="rowProductoEncontrado">
 					
 				</div>
 				
@@ -1013,6 +1014,26 @@ if(isset($_SESSION['Atiende'])){?>
 	</div>
 </div>
 </div>
+
+<!-- Modal para Eliminar un producto de la BD -->
+<div class="modal fade modal-eliminarProducto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Eliminar producto</h4>
+		</div>
+		<div class="modal-body">
+			<p>¿Deseas eliminar el producto de la BD?</p>
+		</div>
+		<div class="modal-footer"> 
+		<button class="btn btn-default btn-outline" data-dismiss="modal" data-dismiss="modal"><i class="icofont icofont-close"></i> Salir</button>
+		<button class="btn btn-danger btn-outline" id="btnModalEliminarDB" data-dismiss="modal"><i class="icofont icofont-close"></i> Eliminar</button>
+		</div>
+	</div>
+</div>
+</div>
+
 
 <!-- Modal para solo aceptar que se guardo un dato -->
 <div class="modal fade modal-datoGuardado" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -1301,6 +1322,7 @@ $(document).ready(function () {
 					$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
 						var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
 						$('#spanMontoDado').text(parseFloat(jsonRespActual[0].preCapital).toFixed(2));
+						$('#spanSrCapital').text(parseFloat(jsonRespActual[0].preCapital).toFixed(2));
 						if($('#spanVigenciaProducto').text()!=11){
 							var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres),'days');
 							//var montoIniciov2=resp;
@@ -1325,11 +1347,11 @@ $(document).ready(function () {
 					})
 					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
 						$.each(JSON.parse(resp), function (i,jresp2) {
-							$('#spanSrCapital').text(parseFloat(jresp2.desCapital).toFixed(2));
+							
 							sumaCapital+=parseFloat(jresp2.desCapital);
 							$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								<tr><td>Capital o desembolso</td>
-								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY')}</td>
+								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY hh:mm a')}</td>
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
 
@@ -1360,10 +1382,21 @@ $(document).ready(function () {
 									$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
 										console.log(jsonCaja)
 										var diff=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
+										//console.log(diff)
 										if(jsonCaja.idTipoProceso==9 && diff>=0){
 											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
 											$('#spanSrInteres').text(inte);
 											$('#h5SrInteres').text(inte);
+										}
+										if(jsonCaja.idTipoProceso==10 && diff==0 ){
+											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+											$('#spanSrInteres').text(0);
+											$('#h5SrInteres').text(0);
+										}
+										if(jsonCaja.idTipoProceso==10 && diff>0 ){
+											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+											$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
+											$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
 										}
 										$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
 									<tr><td>${jsonCaja.tipoDescripcion}</td>
@@ -1691,7 +1724,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 		$('#divProdAVencerse').children().remove();
 		$.ajax({url: ' php/listarProductosVencidos.php', type: 'POST', data: {idSucursal: $.idOficina} }). done(function (resp) {
 			var montSimpleAcum=0, montIntAcum=0;
-			var dato = JSON.parse(resp);
+			var dato = JSON.parse(resp); //console.log(dato)
 			$('#cuadroPanelVencidos').find('.spandia').text(moment().format('DD/MM/YYYY'));
 			$('#cuadroPanelVencidos').find('.spanCuadrProd').text(dato.length);
 			$('#divSoloParaPrint').children().remove()
@@ -1706,7 +1739,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 				montIntAcum+=parseFloat(respu[1].monto)
 
 				$('#divProdAVencerse').append(`<div class="row">
-			<div class="col-xs-4 mayuscula"><strong class="visible-xs-block hidden-print">Producto: </strong>${$('#divProdAVencerse .row').length+1}. ${elem.prodNombre}</div>
+			<div class="col-xs-4 mayuscula"><strong class="visible-xs-block hidden-print">Producto: </strong>${elem.idproducto}. ${elem.prodNombre}</div>
 			<div class="col-xs-1"><strong class="visible-xs-block hidden-print">Monto: </strong>${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
 			<div class="col-xs-1"><strong class="visible-xs-block hidden-print">Monto: </strong>${parseFloat(respu[1].monto).toFixed(2)}</div>
 			<div class="col-xs-3 mayuscula"><strong class="visible-xs-block hidden-print">Dueño: </strong>${elem.propietario}</div>
@@ -1954,6 +1987,7 @@ $('#txtBuscarPersona2').keyup(function (e) {var code = e.which;
 	if(code==13 && $('#txtBuscarPersona').val()!=''  ){	e.preventDefault();
 		//console.log('enter')
 		$('#rowUsuarioEncontrado').children().remove();
+		$('#rowProductoEncontrado').children().remove();
 		$.ajax({url: 'php/listarProductosPorClienteODni.php', type: 'POST', data: {texto:$('#txtBuscarPersona2').val() }}).done(function (resp) {
 			//console.log(resp);
 			dato = JSON.parse(resp); console.log(dato)
@@ -1972,19 +2006,33 @@ $('#txtBuscarPersona2').keyup(function (e) {var code = e.which;
 $('#txtBuscarProducto').keyup(function (e) {var code = e.which;
 	if(code==13 && $('#txtBuscarProducto').val()!=''  ){	e.preventDefault();
 		//console.log('enter')
+		var valorTexto=$('#txtBuscarProducto').val();
 		$('#rowProductoEncontrado').children().remove();
-		$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {campo:$('#txtBuscarProducto').val() }}).done(function (resp) { //console.log(resp)
-			dato = JSON.parse(resp); //console.log(dato)
-			$.each(dato, function(i, elem){
-				$('#rowProductoEncontrado').append(`<div class="row"><div class="col-xs-4 mayuscula">${elem.prodnombre}</div>
-					<div class="col-xs-3 mayuscula eleNom">${elem.cliapellidos}, ${elem.clinombres}</div>
-					<div class="col-xs-2">${moment(elem.prodfecharegistro).format('DD/MM/YYYY')}</div>
-					<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
-					<div class="col-xs-1"><button class="btn btn-negro btn-outline btnSelectProd" id="${elem.idproducto}"><i class="icofont icofont-tick-mark"></i></button></div></div>`);
+		if($.isNumeric(valorTexto)){
+			$.ajax({url: 'php/listarBuscarIdProducto.php', type: 'POST', data: {campo:$('#txtBuscarProducto').val() }}).done(function (resp) { //console.log(resp)
+				dato = JSON.parse(resp); //console.log(dato)
+				$.each(dato, function(i, elem){
+					$('#rowProductoEncontrado').append(`<div class="row"><div class="col-xs-4 mayuscula">${elem.prodnombre}</div>
+						<div class="col-xs-3 mayuscula eleNom">${elem.cliapellidos}, ${elem.clinombres}</div>
+						<div class="col-xs-2">${moment(elem.prodfecharegistro).format('DD/MM/YYYY')}</div>
+						<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
+						<div class="col-xs-1"><button class="btn btn-negro btn-outline btnSelectProd" id="${elem.idproducto}"><i class="icofont icofont-tick-mark"></i></button></div></div>`);
+				});
+				$('.modal-mostrarResultadosProducto').modal('show');
 			});
-			
-			$('.modal-mostrarResultadosProducto').modal('show');
-		});
+		}else{
+			$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {campo:$('#txtBuscarProducto').val() }}).done(function (resp) { //console.log(resp)
+				dato = JSON.parse(resp); //console.log(dato)
+				$.each(dato, function(i, elem){
+					$('#rowProductoEncontrado').append(`<div class="row"><div class="col-xs-4 mayuscula">${elem.prodnombre}</div>
+						<div class="col-xs-3 mayuscula eleNom">${elem.cliapellidos}, ${elem.clinombres}</div>
+						<div class="col-xs-2">${moment(elem.prodfecharegistro).format('DD/MM/YYYY')}</div>
+						<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
+						<div class="col-xs-1"><button class="btn btn-negro btn-outline btnSelectProd" id="${elem.idproducto}"><i class="icofont icofont-tick-mark"></i></button></div></div>`);
+				});
+				$('.modal-mostrarResultadosProducto').modal('show');
+			});
+		}
 	}
 });
 $('.modal-mostrarResultadosProducto').on('click', '.btnSelectProd', function () {
@@ -3042,11 +3090,19 @@ $('.btnSoloPrint').click(function () { 	window.print(); });
 	return mensaje;
 });*/
 $('#btn-imprimirHojaControl').printPage({
-	url: "hojaControl.php?idProd="+<?php echo $_GET['idprod']; ?>,
+	url: "hojaControl.php?idProd="+<?php if( isset ($_GET['idprod']) ){echo $_GET['idprod'];}else{echo 0;} ?>,
 	attr: "href",
 	message:"Tu documento está siendo generado"
 });
-$('#btn-EliminarDB')
+$('#btn-EliminarDB').click(function () {
+	$('.modal-eliminarProducto').modal('show');
+});
+$('#btnModalEliminarDB').click(function () {
+	$.ajax({url:'php/eliminarProductoBD.php', type: 'POST', data:{idProd: <?php if( isset ($_GET['idprod']) ){echo $_GET['idprod'];}else{echo 0;} ?> }}).done(function (resp) {
+		//console.log(resp)
+		window.location.href = "aplicativo.php";
+	});
+});
 </script>
 </body>
 </html>
