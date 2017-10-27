@@ -163,7 +163,7 @@ if(isset($_SESSION['Atiende'])){?>
 			</div>
 			<div class="col-sm-4">
 				<label>Búsqueda por producto:</label>
-				<input type="text" class="form-control" id="txtBuscarProducto" placeholder="Ingrese el producto">
+				<input type="text" class="form-control" id="txtBuscarProducto" placeholder="Ingrese el producto o código">
 			</div>
 			<div class="col-sm-4">
 				<label>Listar movimientos por fecha:</label>
@@ -1065,6 +1065,8 @@ if(isset($_SESSION['Atiende'])){?>
 		<div class="modal-body"><span class="sr-only" id="idPrestamoAct"></span>
 			<p>Estas por de retirar el artículo <strong><span class="mayuscula" id="spanModalRetirarProducto"></span></strong>. Capital: S/. <span id="spanCapitalRetiro"></span>, se valorizó en S/. <span id="spanValorizadoRetirar"></span> a la fecha ¿Con cuánto deseas retirarlo?</p>
 			<input type="number" class="form-control text-center" id="txtModalRetirarPrestamo" value="0.00" min=0 step=1>
+			<p>¿Desea agregar algún comentario extra?</p>
+			<input type="text" class="form-control mayuscula" id="txtComentarioextraPrestamo">
 			<p class="text-danger" id="pErrorRetirarPrestamo"></p>
 		</div>
 		<div class="modal-footer">
@@ -2191,14 +2193,14 @@ $('#rowWellCambiante').on('click', '.btn-FinalizarImpuestoMovil', function () {
 });
 $('#btnModalRetirarPrestamo').click(function () {
 	var cuantoPaga=$('#txtModalRetirarPrestamo').val();
-	if(cuantoPaga<=0){ $('#pErrorRetirarPrestamo').removeClass('sr-only').text('No se puede ingresar valores negativos.');}
+	if(cuantoPaga<0){ $('#pErrorRetirarPrestamo').removeClass('sr-only').text('No se puede ingresar valores negativos.');}
 	else if(! $('#btnModalRetirarPrestamo').hasClass('disabled') ) {
 		//guardar
 		$('#btnModalRetirarPrestamo').addClass('disabled');
 		$('#pErrorRetirarPrestamo').addClass('sr-only');
 		var idSucu=$.JsonUsuario.idsucursal;
 		if(idSucu==3){idSucu=$('#cmbOficinasTotal').val();}
-		$.ajax({url:'php/updateFinalizarPrestamo.php', type: 'POST', data:{idProd: $('#idPrestamoAct').text() , monto:$('#spanCapitalRetiro').text() , idUser: $.JsonUsuario.idUsuario, valor: $('#spanValorizadoRetirar').text(),idSuc:idSucu, usuario:$.JsonUsuario.usunombres, paga: cuantoPaga }}).done(function (resp) { console.log(resp)
+		$.ajax({url:'php/updateFinalizarPrestamo.php', type: 'POST', data:{idProd: $('#idPrestamoAct').text() , monto:$('#spanCapitalRetiro').text() , idUser: $.JsonUsuario.idUsuario, valor: $('#spanValorizadoRetirar').text(),idSuc:idSucu, usuario:$.JsonUsuario.usunombres, paga: cuantoPaga, comentario: $('#txtComentarioextraPrestamo').val() }}).done(function (resp) { console.log(resp)
 			$('.modal-InteresSeguro').modal('hide');
 			if(resp=='1'){
 				window.location.href = "aplicativo.php?idprod=" +$('#idPrestamoAct').text();
