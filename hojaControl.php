@@ -65,7 +65,8 @@ hr{
 		<strong class="elemPrintGrande">Cliente:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliApellidos'].' '.$row['cliNombres']; ?></span></p>
 	</div>
 	<div class="row">
-		<p class="mayuscula"><strong class="elemPrintGrande">Dirección:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDireccion']; ?></span></p>
+		<p class="mayuscula"><strong class="elemPrintGrande">D.N.I.:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDni']; ?></span>
+		<strong class="elemPrintGrande">Dirección:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDireccion']; ?></span></p>
 	</div>
 	<div class="row">
 		<div class="col-xs-6">
@@ -129,7 +130,8 @@ hr{
 		<strong class="elemPrintGrande">Cliente:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliApellidos'].' '.$row['cliNombres']; ?></span></p>
 	</div>
 	<div class="row">
-		<p class="mayuscula"><strong class="elemPrintGrande">Dirección:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDireccion']; ?></span></p>
+		<p class="mayuscula"><strong class="elemPrintGrande">D.N.I.:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDni']; ?></span>
+		<strong class="elemPrintGrande">Dirección:</strong> <span class="elemPrintGrande elemRecuadro"><?php echo $row['cliDireccion']; ?></span></p>
 	</div>
 	<div class="row">
 		<div class="col-xs-6">
