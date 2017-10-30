@@ -311,7 +311,7 @@ if(isset($_SESSION['Atiende'])){?>
 			<div class="col-sm-1">Monto S/.</div>
 			<div class="col-sm-1">Más interés</div>
 			<div class="col-sm-3">Dueño</div>
-			<div class="col-sm-2">Fecha Registro</div></strong>
+			<div class="col-sm-2">Fecha último pago</div></strong>
 		</div>
 		<div id="divProdAVencerse">
 			<p>Sin elementos que mostrar</p>
@@ -1077,6 +1077,29 @@ if(isset($_SESSION['Atiende'])){?>
 </div>
 </div>
 
+<!-- Modal para agregar capital al articulo -->
+<div class="modal fade modal-desembolsoCapital" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-success">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Desembolso a artículo</h4>
+		</div>
+		<div class="modal-body"><span class="sr-only" id="idPrestamoAct"></span>
+			<p>Estas por de desembolsar dinero a el artículo «<strong><span class="mayuscula" id="spanModalDesembolsoProducto"></span></strong>». Capital inicial: S/. <span id="spanCapitalBase"></span> ¿Cuánto deseas aumentar?</p>
+			<input type="number" class="form-control text-center" id="txtModalRetirarPrestamo" value="0.00" min=0 step=1>
+			<p>¿Desea agregar algún comentario extra?</p>
+			<input type="text" class="form-control mayuscula" id="txtComentarioextraPrestamo">
+			<p class="text-danger" id="pErrorRetirarPrestamo"></p>
+		</div>
+		<div class="modal-footer">
+		<button class="btn btn-success btn-outline" data-dismiss="modal"><i class="icofont icofont-close"></i> Cancelar</button>
+		<button class="btn btn-success btn-outline" id="btnModalRetirarPrestamo"><i class="icofont icofont-alarm"></i> Sí, retirar</button>
+		</div>
+	</div>
+</div>
+</div>
+
 <!-- Modal para indicar que falta completar campos o datos con error -->
 <div class="modal fade modal-faltaCompletar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
@@ -1341,7 +1364,7 @@ $(document).ready(function () {
 								var calcInt=parseFloat(parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial)).toFixed(2);
 								$('#spanSrInteres').text(calcInt);
 								$('#h5SrInteres').text(calcInt);
-								$('#h5DetalleInteres').text(' por '+ differencia +' días.');
+								$('#h5DetalleInteres').text(' por '+ differencia +' días.'); console.log(calcInt)
 							});
 
 							
@@ -1349,11 +1372,12 @@ $(document).ready(function () {
 					})
 					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
 						$.each(JSON.parse(resp), function (i,jresp2) {
+							console.log(jresp2.desFechaContarInteres)
 							
 							sumaCapital+=parseFloat(jresp2.desCapital);
 							$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								<tr><td>Capital o desembolso</td>
-								<td>${moment(jresp2.desFechaContarInteres).format('DD/MM/YYYY hh:mm a')}</td>
+								<td>${moment(jresp2.desFechaRegistro).format('DD/MM/YYYY hh:mm a')}</td>
 								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
 								<td>${jresp2.usuNick}</td></tr>`);
 
@@ -1382,20 +1406,21 @@ $(document).ready(function () {
 							$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { //console.log(resp)
 								//console.log(getObjects(,jresp2.desCapital))
 									$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
-										console.log(jsonCaja)
-										var diff=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
-										//console.log(diff)
-										if(jsonCaja.idTipoProceso==9 && diff>=0){
+										console.log(jsonCaja.cajaFecha)
+										var diffBD=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
+										var diffHoy=moment().diff(contarDesde, 'days');
+										console.log(contarDesde)
+										if(jsonCaja.idTipoProceso==9 && diffBD>=0){
 											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
 											$('#spanSrInteres').text(inte);
 											$('#h5SrInteres').text(inte);
 										}
-										if(jsonCaja.idTipoProceso==10 && diff==0 ){
+										if(jsonCaja.idTipoProceso==10 && diffBD==0 && diffHoy==0 ){
 											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
 											$('#spanSrInteres').text(0);
 											$('#h5SrInteres').text(0);
 										}
-										if(jsonCaja.idTipoProceso==10 && diff>0 ){
+										if(jsonCaja.idTipoProceso==10 && diffBD>0 ){
 											var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
 											$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
 											$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
@@ -1731,10 +1756,10 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			$('#cuadroPanelVencidos').find('.spanCuadrProd').text(dato.length);
 			$('#divSoloParaPrint').children().remove()
 
-			$.each(dato, function (i, elem) { moment.locale('es');
-				var limite = moment(elem.prodFechainicial);
+			$.each(dato, function (i, elem) { moment.locale('es'); //console.log(elem)
+				var limite = moment(elem.desFechaContarInteres);
 				var hoy = moment();
-				var fechaIni =moment(elem.prodFechainicial);
+				var fechaIni =moment(elem.desFechaContarInteres);
 				respu=calculoIntereses(fechaIni, hoy, elem.prodMontoEntregado, 4);
 				//console.log(respu)
 				montSimpleAcum+=parseFloat(elem.prodMontoEntregado);
@@ -3111,6 +3136,11 @@ $('#btnModalEliminarDB').click(function () {
 		//console.log(resp)
 		window.location.href = "aplicativo.php";
 	});
+});
+$('#btn-DesembolsoFijo').click(function () {
+	$('#spanModalDesembolsoProducto').text($('#spanProducto').text());
+	$('#spanCapitalBase').text($('#spanSrCapital').text());
+	$('.modal-desembolsoCapital').modal('show');
 });
 </script>
 </body>

@@ -14,7 +14,8 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodNombre' => $row['prodNombre'],
 		'prodMontoEntregado' => $row['prodMontoEntregado'],		
 		'propietario' => $row['propietario'],
-		'prodFechainicial' => $row['prodFechainicial']
+		'prodFechainicial' => $row['prodFechainicial'],
+		'desFechaContarInteres' => $row['desFechaContarInteres']
 	);
 	
 }
