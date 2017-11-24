@@ -1,6 +1,6 @@
 <?php
-ini_set("session.cookie_lifetime","7200");
-ini_set("session.gc_maxlifetime","7200");
+// ini_set("session.cookie_lifetime","7200");
+// ini_set("session.gc_maxlifetime","7200");
 session_start();
 require 'php/conkarl.php';
 if(isset($_SESSION['Atiende'])){?>
@@ -1244,120 +1244,135 @@ $(document).ready(function () {
 		var dato = JSON.parse(resp);  console.log(dato)
 			
 		if(dato.length>0){
+		moment.locale('es');
+
+		$('#spanIdCliente').text(dato[0].idCliente);
+		$('#spanApellido').text(dato[0].cliApellidos);
+		$('#spanNombre').text(dato[0].cliNombres);
+		$('#spanDni').text(dato[0].cliDni);
+		$('#spanDireccion').text(dato[0].cliDireccion);
+		$('#spanCorreo').text(dato[0].cliCorreo);
+		$('#spanCelular').text(dato[0].cliCelular);
+		$('#spanProducto').text(dato[0].prodNombre)
+		
+		var fechaReg =moment(dato[0].desFechaContarInteres); //console.log(dato[0].desFechaContarInteres);
+		var sumaCapital=0, sumaIntereses=0;
+
+		if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?> ||  <?php echo $_SESSION['Power']  ?>==1){// console.log('misma sucursal');
+			
+			if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
+
 			moment.locale('es');
 
-			$('#spanIdCliente').text(dato[0].idCliente);
-			$('#spanApellido').text(dato[0].cliApellidos);
-			$('#spanNombre').text(dato[0].cliNombres);
-			$('#spanDni').text(dato[0].cliDni);
-			$('#spanDireccion').text(dato[0].cliDireccion);
-			$('#spanCorreo').text(dato[0].cliCorreo);
-			$('#spanCelular').text(dato[0].cliCelular);
-			$('#spanProducto').text(dato[0].prodNombre)
-			
-			var fechaReg =moment(dato[0].desFechaContarInteres); //console.log(dato[0].desFechaContarInteres);
-			var sumaCapital=0, sumaIntereses=0;
+			/*Nuevo Código para de préstamos*/
+			$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
+				console.log(resp)
+				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
+					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
+					var differencia=moment().diff(jresp.desFechaContarInteres, 'days');
+					
+					$('#spanCodProd').text(idNew);
+					$('#spanPeriodo2').text(moment(jresp.desFechaContarInteres).fromNow());
+					$('#smallPeriodo').text('('+differencia +' días)');
+					contarDesde=moment(jresp.desFechaContarInteres);
+					//console.log($(`.divContUnPrestamo #${jresp.idPrestamo}`).length)
+					$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning divContUnPrestamo" id="${jresp.idPrestamo}">
+						<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
+						<div class="col-xs-12">
+						<table class="" data-toggle="table">
+						<thead style="background-color: #ffcd87; color: #9a6b29;">
+						<tr >
+							<th>Descripción</th>
+							<th>Fecha</th>
+							<th>Cantidad</th>
+							<th>Responsable</th>
+						</tr>
+						</thead>
+						<tbody  style="background-color: white;">
+						</tbody>
+					</table></div>
+					</div>`);
+					if(jresp.preIdEstado==11){
+						$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.preFechaInicio).fromNow()+ ' por '+ jresp.usunick);
+						$('#btn-imprimirTicketFijo').addClass('sr-only');
+						$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').addClass('sr-only');
+						$('#spanVigenciaProducto').text('11');
+					}
+					else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
+						$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
+						$('#btn-imprimirTicketFijo').addClass('sr-only');
+						$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
 
-			if( dato[0].idSucursal==  <?php echo $_SESSION['idSucursal'] ?> ||  <?php echo $_SESSION['Power']  ?>==1){// console.log('misma sucursal');
-				
-				if(dato[0].prodObservaciones ==''){$('#spanObservacion').text('Ninguna');}else{$('#spanObservacion').html(dato[0].prodObservaciones);}
+						//$('#contenedorExpiro').removeClass('sr-only');
 
-				moment.locale('es');
+						// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
+						// 	var dato1= JSON.parse(resp)
+						// 	//console.log(dato1);
+						// 	$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
+						// 	$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
+						// 	$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
+						// 	$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() );
+						// });
+					}else if(differencia==0){
+						$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+						$('#btn-imprimirTicketFijo').removeClass('sr-only');
+						$('#btn-DesembolsoFijo').removeClass('sr-only');
+						$('#btn-PagoACuentaFijo').removeClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
+						//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+						// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
+						// 	var dato2= JSON.parse(resp)
+						// 	$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
+						// 	$('#spanPagar').text(parseFloat(dato2[2][0].pagarAHoy).toFixed(2));
+						// 	$('#spanIntGenerado').text(parseFloat(dato2[2][0].pagarAHoy-dato2[0][0].montoInicial).toFixed(2));
+						// });
+					}
+					else
+					{
+						$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+						$('#btn-imprimirTicketFijo').removeClass('sr-only');
+						$('#btn-DesembolsoFijo').removeClass('sr-only');
+						$('#btn-PagoACuentaFijo').removeClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
+						//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
+						// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
+						// 	var dato3= JSON.parse(resp)
+						// 	$('#spanPorcent').text(parseFloat(dato3[2][0].intDiarioHoy*100).toFixed(2));
+						// 	$('#spanPagar').text(parseFloat(dato3[2][0].pagarAHoy).toFixed(2));
+						// 	$('#spanIntGenerado').text(parseFloat(dato3[2][0].pagarAHoy-dato3[0][0].montoInicial).toFixed(2));
+						// });
+					}
 
-				/*Nuevo Código para de préstamos*/
-				$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
-					console.log(resp)
-					$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
-						coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
-						var differencia=moment().diff(jresp.desFechaContarInteres, 'days');
-						
-						$('#spanCodProd').text(idNew);
-						$('#spanPeriodo2').text(moment(jresp.desFechaContarInteres).fromNow());
-						$('#smallPeriodo').text('('+differencia +' días)');
-						contarDesde=moment(jresp.desFechaContarInteres);
-						//console.log($(`.divContUnPrestamo #${jresp.idPrestamo}`).length)
-						$('#contenedorPrestamos').append(`<div class="row alert-message alert-message-warning divContUnPrestamo" id="${jresp.idPrestamo}">
-							<h4>Préstamo #${i+1}: <small class="mayuscula">asociado a: ${$('#rowWellFijo #spanProducto').text()}</small></h4>
-							<div class="col-xs-12">
-							<table class="" data-toggle="table">
-							<thead style="background-color: #ffcd87; color: #9a6b29;">
-							<tr >
-								<th>Descripción</th>
-								<th>Fecha</th>
-								<th>Cantidad</th>
-								<th>Responsable</th>
-							</tr>
-							</thead>
-							<tbody  style="background-color: white;">
-							</tbody>
-						</table></div>
-						</div>`);
-						if(jresp.preIdEstado==11){
-							$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.preFechaInicio).fromNow()+ ' por '+ jresp.usunick);
-							$('#btn-imprimirTicketFijo').addClass('sr-only');
-							$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
-							$('#btn-RetirarPrestamoFijo').addClass('sr-only');
-							$('#spanVigenciaProducto').text('11');
+				});
+				//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
+				$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
+					var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
+					var preCapi=parseFloat(jsonRespActual[0].preCapital);
+					$('#spanMontoDado').text(preCapi.toFixed(2));
+					$('#spanSrCapital').text(preCapi.toFixed(2));
+					if($('#spanVigenciaProducto').text()!=11){
+						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres),'days');
+
+						var calcInt=0, interesVigente=0;
+						//var montoIniciov2=resp;
+						//console.log('hasta hoy: '+ hastaHoyDias);
+						//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+						if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+						if(hastaHoyDias<=28){ console.log('menos de 28')
+							interesVigente=0.04;
+							calcInt=preCapi*interesVigente;
+							
+							$('#spanSrInteres').text(parseFloat(calcInt).toFixed(2));
+							$('#h5SrInteres').text(parseFloat(calcInt).toFixed(2));
 						}
-						else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
-							$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
-							$('#btn-imprimirTicketFijo').addClass('sr-only');
-							$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
-							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
-
-							//$('#contenedorExpiro').removeClass('sr-only');
-
-							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+90, type:'POST'}).done(function (resp) {
-							// 	var dato1= JSON.parse(resp)
-							// 	//console.log(dato1);
-							// 	$('#spanPorcent').text(parseFloat(dato1[2][0].intDiarioHoy*100).toFixed(2));
-							// 	$('#spanPagar').text(parseFloat(dato1[2][0].pagarAHoy).toFixed(2));
-							// 	$('#spanIntGenerado').text(parseFloat(dato1[2][0].pagarAHoy-dato1[0][0].montoInicial).toFixed(2));
-							// 	$('#spanValordeMeses').text( '. Se sugiere una valorización de S/. ' +$('#spanPagar').text() );
-							// });
-						}else if(differencia==0){
-							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
-							$('#btn-imprimirTicketFijo').removeClass('sr-only');
-							$('#btn-DesembolsoFijo').removeClass('sr-only');
-							$('#btn-PagoACuentaFijo').removeClass('sr-only');
-							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
-							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
-							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+1, type:'POST'}).done(function (resp) {
-							// 	var dato2= JSON.parse(resp)
-							// 	$('#spanPorcent').text(parseFloat(dato2[2][0].intDiarioHoy*100).toFixed(2));
-							// 	$('#spanPagar').text(parseFloat(dato2[2][0].pagarAHoy).toFixed(2));
-							// 	$('#spanIntGenerado').text(parseFloat(dato2[2][0].pagarAHoy-dato2[0][0].montoInicial).toFixed(2));
-							// });
-						}
-						else
-						{
-							$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
-							$('#btn-imprimirTicketFijo').removeClass('sr-only');
-							$('#btn-DesembolsoFijo').removeClass('sr-only');
-							$('#btn-PagoACuentaFijo').removeClass('sr-only');
-							$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
-							//$('#contenedorVigente').removeClass('sr-only'); $('#contDiasPosRem').text(parseInt(90-differencia));
-							// $.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+dato[0].prodMontoEntregado+'&numhoy='+differencia, type:'POST'}).done(function (resp) {
-							// 	var dato3= JSON.parse(resp)
-							// 	$('#spanPorcent').text(parseFloat(dato3[2][0].intDiarioHoy*100).toFixed(2));
-							// 	$('#spanPagar').text(parseFloat(dato3[2][0].pagarAHoy).toFixed(2));
-							// 	$('#spanIntGenerado').text(parseFloat(dato3[2][0].pagarAHoy-dato3[0][0].montoInicial).toFixed(2));
-							// });
-						}
-
-					});
-					//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
-					$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
-						var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
-						$('#spanMontoDado').text(parseFloat(jsonRespActual[0].preCapital).toFixed(2));
-						$('#spanSrCapital').text(parseFloat(jsonRespActual[0].preCapital).toFixed(2));
-						if($('#spanVigenciaProducto').text()!=11){
-							var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres),'days');
-							//var montoIniciov2=resp;
-							//console.log('hasta hoy: '+ hastaHoyDias);
-							//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
-							if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
-							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jsonRespActual[0].preCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+						if(hastaHoyDias>28){ console.log('mas de 28')
+							if(hastaHoyDias>30){}
+							interesVigente=1.04;
+							var nuevoCapital=preCapi*interesVigente;
+							//console.log(nuevoCapital)
+							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+nuevoCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
 								var jsonInteres=JSON.parse(resp); // console.log(jsonInteres)
 								// $(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								// <tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
@@ -1365,138 +1380,138 @@ $(document).ready(function () {
 								// <td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
 								// <td>-</td></tr>`);
 								//.replace(",",'')
-								var calcInt=parseFloat(parseFloat(jsonInteres[2][0].pagarAHoy-jsonInteres[0][0].montoInicial));
+								calcInt=parseFloat(parseFloat(jsonInteres[2][0].pagarAHoy-jsonInteres[0][0].montoInicial));
 								$('#spanSrInteres').text(parseFloat(calcInt).toFixed(2));
 								$('#h5SrInteres').text(parseFloat(calcInt).toFixed(2));
+								
 								//$('#h5DetalleInteres').text(' por '+ differencia +' días.'); console.log(calcInt)
 							});
-
-							
 						}
-					})
-					$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
-						$.each(JSON.parse(resp), function (i,jresp2) {
-							//console.log(jresp2.desFechaContarInteres)
-							
-							sumaCapital+=parseFloat(jresp2.desCapital);
-							$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-								<tr><td>Capital o desembolso</td>
-								<td>${moment(jresp2.preFechaInicio).format('DD/MM/YYYY hh:mm a')}</td>
-								<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
-								<td>${jresp2.usuNick}</td></tr>`);
-
-							// if($('#spanVigenciaProducto').text()!=11){
-							// 	var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
-							// 	console.log('hasta hoy: '+ hastaHoyDias);
-							// 	//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
-							// 	if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
-							// 	$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
-							// 		//console.log(resp)
-							// 		var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
-							// 		// console.log(jsonInteres[2][0].pagarAHoy.replace(",",''))
-							// 		// console.log(jresp2.desCapital)
-							// 		$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
-							// 		<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
-							// 		<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
-							// 		<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
-							// 		<td>-</td></tr>`);
-							// 		sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital);
-							// 		sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial);
-							// 		$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
-							// 		$('#spanSrInteres').text(parseFloat(sumaIntereses).toFixed(2));
-
-							// 	});
-							// }
-							$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { //console.log(resp)
-								//console.log(getObjects(,jresp2.desCapital))
-								$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
-									console.log(jsonCaja)
-									var diffBD=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
-									var diffHoy=moment().diff(contarDesde, 'days');
-									//console.log(contarDesde)
-									if(jsonCaja.idTipoProceso==9 && diffBD>=0){
-										var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
-										$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
-										$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
-									}
-									if(jsonCaja.idTipoProceso==10 && diffBD==0 && diffHoy==0 ){
-										var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
-										$('#spanSrInteres').text(0);
-										$('#h5SrInteres').text(0);
-									}
-									if(jsonCaja.idTipoProceso==10 && diffBD>0 ){
-										var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
-										$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
-										$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
-									}
-									$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
-								<tr><td>${jsonCaja.tipoDescripcion}</td>
-								<td>${moment(jsonCaja.cajaFecha).format('DD/MM/YYYY hh:mm a')}</td>
-								<td>S/. ${parseFloat(jsonCaja.cajaValor).toFixed(2)}</td>
-								<td>${jsonCaja.usuNombres}</td></tr>`);
-
-								});
-
-									
-								});
-						});
-						$(`#contenedorPrestamos `).find('table').bootstrapTable();
-					});
-					
-				});
-
-				/*Fin Código para de préstamos*/
-
-				// var hoy = moment();
-				// var fechaIni =moment(dato[0].prodFechaInicial);
-				// var fechaFin=moment(dato[0].prodFechaVencimiento);
-				//var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
-				//console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
-				
-				moment.locale('es');
-				//$('#spanProducto').text(dato[0].prodNombre);
-				$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
-				$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
-				$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
-				$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
-				//$('#spanPeriodo2').text(moment(fechaIni).fromNow());
-				//$('#smallPeriodo').text('('+differencia +' días)');
-				
-				//$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
-				$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
-				$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
-
-				if(dato[0].prodActivo==0){
-					/*$('#divBotonesFijos').addClass('hidden');
-					$('#btn-imprimirTicketFijo').addClass('hidden');
-					$('#btn-imprimirImpresoraFijo').addClass('hidden');
-					$('#btn-AdelantoPrestamoFijo').addClass('hidden');
-					$('#btn-FinalizarImpuestoFijo').addClass('hidden');
-					$('#btn-FinalizarPrestamoFijo').addClass('hidden');*/
-					$('#contenedorFinalizados').removeClass('sr-only');
-					$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
-						dato2=JSON.parse(resp); 
-						//console.log(dato2)
+					}
+				})
+				$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
+					$.each(JSON.parse(resp), function (i,jresp2) {
+						//console.log(jresp2.desFechaContarInteres)
 						
-						if(dato2.length==0){$('#finalizaMonto').parent().addClass('hidden');}
-						else{
-							$('#contenedorExpiro').addClass('sr-only');
-							$('#QuienFinalizoFin').text(dato2[0].repoUsuario);
-							$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
-							$('#QuienApruebaFin').text(dato2[0].repoQuienConfirma);
+						sumaCapital+=parseFloat(jresp2.desCapital);
+						$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+							<tr><td>Capital o desembolso</td>
+							<td>${moment(jresp2.preFechaInicio).format('DD/MM/YYYY hh:mm a')}</td>
+							<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
+							<td>${jresp2.usuNick}</td></tr>`);
 
-							$('#finalizaMonto').text(parseFloat(dato2[0].repoValorMonetario).toFixed(2));
-							$('#FechaFinalizo').text(moment(dato2[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm a'));
-						}
+						// if($('#spanVigenciaProducto').text()!=11){
+						// 	var hastaHoyDias=moment().diff(moment(jresp2.desFechaContarInteres),'days');
+						// 	console.log('hasta hoy: '+ hastaHoyDias);
+						// 	//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
+						// 	if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+						// 	$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
+						// 		//console.log(resp)
+						// 		var jsonInteres=JSON.parse(resp); //console.log(jsonInteres) //style="color: #f7221d"
+						// 		// console.log(jsonInteres[2][0].pagarAHoy.replace(",",''))
+						// 		// console.log(jresp2.desCapital)
+						// 		$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+						// 		<tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
+						// 		<td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
+						// 		<td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
+						// 		<td>-</td></tr>`);
+						// 		sumaCapital+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital);
+						// 		sumaIntereses+=parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jsonInteres[0][0].montoInicial);
+						// 		$('#spanMontoDado').text(parseFloat(sumaCapital).toFixed(2));
+						// 		$('#spanSrInteres').text(parseFloat(sumaIntereses).toFixed(2));
+
+						// 	});
+						// }
+						$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { //console.log(resp)
+							//console.log(getObjects(,jresp2.desCapital))
+							$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
+								console.log(jsonCaja)
+								var diffBD=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
+								var diffHoy=moment().diff(contarDesde, 'days');
+								//console.log(contarDesde)
+								if(jsonCaja.idTipoProceso==9 && diffBD>=0){
+									var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+									$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
+									$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
+								}
+								if(jsonCaja.idTipoProceso==10 && diffBD==0 && diffHoy==0 ){
+									var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+									$('#spanSrInteres').text(0);
+									$('#h5SrInteres').text(0);
+								}
+								if(jsonCaja.idTipoProceso==10 && diffBD>0 ){
+									var inte=parseFloat($('#spanSrInteres').text())-jsonCaja.cajaValor;
+									$('#spanSrInteres').text(parseFloat(inte).toFixed(2));
+									$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
+								}
+								$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
+							<tr><td>${jsonCaja.tipoDescripcion}</td>
+							<td>${moment(jsonCaja.cajaFecha).format('DD/MM/YYYY hh:mm a')}</td>
+							<td>S/. ${parseFloat(jsonCaja.cajaValor).toFixed(2)}</td>
+							<td>${jsonCaja.usuNombres}</td></tr>`);
+
+							});
+
+								
+							});
 					});
-					//console.log(moment().diff(fechaIni, 'days'))
-				}
-				else{$('#divBotonesFijos').removeClass('hidden');}
+					$(`#contenedorPrestamos `).find('table').bootstrapTable();
+				});
+				
+			});
+
+			/*Fin Código para de préstamos*/
+
+			// var hoy = moment();
+			// var fechaIni =moment(dato[0].prodFechaInicial);
+			// var fechaFin=moment(dato[0].prodFechaVencimiento);
+			//var differencia=hoy.diff(fechaIni, 'days'); //La diferencia en días desde el día de inicio de conteo de intereses
+			//console.log('Tantos dias desde fecha incial a hoy: '+ differencia);
+			
+			moment.locale('es');
+			//$('#spanProducto').text(dato[0].prodNombre);
+			$('#spanFechaInicio').text(moment(dato[0].prodFechaInicial).format('dddd[,] DD MMMM YYYY'));
+			$('#spanFechaFin').text(moment(dato[0].prodFechaVencimiento).format('dddd[,] DD MMMM YYYY'));
+			$('#spanFechaInicioNum').text(dato[0].prodFechaInicial);
+			$('#spanFechaFinNum').text(dato[0].prodFechaVencimiento);
+			//$('#spanPeriodo2').text(moment(fechaIni).fromNow());
+			//$('#smallPeriodo').text('('+differencia +' días)');
+			
+			//$('#spanMontoDado').text(parseFloat(dato[0].prodMontoEntregado).toFixed(2));
+			$('#spanAdelanto').text(parseFloat(dato[0].prodAdelanto).toFixed(2));
+			$('#spanDeudaFinal').text( parseFloat($('#spanPagar').text()- parseFloat( $('#spanAdelanto').text())).toFixed(2));
+
+			if(dato[0].prodActivo==0){
+				/*$('#divBotonesFijos').addClass('hidden');
+				$('#btn-imprimirTicketFijo').addClass('hidden');
+				$('#btn-imprimirImpresoraFijo').addClass('hidden');
+				$('#btn-AdelantoPrestamoFijo').addClass('hidden');
+				$('#btn-FinalizarImpuestoFijo').addClass('hidden');
+				$('#btn-FinalizarPrestamoFijo').addClass('hidden');*/
+				$('#contenedorFinalizados').removeClass('sr-only');
+				$.ajax({url: 'php/listarMovimientoFinal.php', type: 'POST', data: {idProd: idNew }}).done(function (resp) {
+					dato2=JSON.parse(resp); 
+					//console.log(dato2)
+					
+					if(dato2.length==0){$('#finalizaMonto').parent().addClass('hidden');}
+					else{
+						$('#contenedorExpiro').addClass('sr-only');
+						$('#QuienFinalizoFin').text(dato2[0].repoUsuario);
+						$('#estadoAprobacionFin').text(dato2[0].prodQuienFinaliza);
+						$('#QuienApruebaFin').text(dato2[0].repoQuienConfirma);
+
+						$('#finalizaMonto').text(parseFloat(dato2[0].repoValorMonetario).toFixed(2));
+						$('#FechaFinalizo').text(moment(dato2[0].prodFechaFinaliza).format('dddd[,] DD MMMM YYYY [a las] hh:mm a'));
+					}
+				});
+				//console.log(moment().diff(fechaIni, 'days'))
 			}
-			else{console.log('otra sucrusal');
-			$('#rowWellFijo').html(`<div class="alert alert-danger ">
-				<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto no está asignado a tu sucursal, se encuentra en «${dato[0].sucNombre}».
-						</div>`);
+			else{$('#divBotonesFijos').removeClass('hidden');}
+		}
+		else{console.log('otra sucrusal');
+		$('#rowWellFijo').html(`<div class="alert alert-danger ">
+			<i class="icofont icofont-animal-cat-alt-4" style="font-size:24px"></i> <strong>¡Oh lo sentimos!</strong> Éste producto no está asignado a tu sucursal, se encuentra en «${dato[0].sucNombre}».
+					</div>`);
 		}
 	}//fin de if lenght dato
 	else{
@@ -2171,9 +2186,9 @@ $('#rowUsuarioEncontrado').on('click', '.btnSelectUser', function () {
 });
 $('#btn-imprimirTicketFijo').click(function () {
 	moment.locale('es');
-	//console.log($('#rowWellFijo #spanProducto').text())
-	//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
-	$.ajax({url: 'http://192.168.1.107/perucash/printTicket.php', type: 'POST', data: {
+	//console.log($('#rowWellFijo #spanProducto').text()) 123
+	//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'}); http://192.168.1.107
+	$.ajax({url: '\\perucash-caja/perucash/printTicket.php', type: 'POST', data: {
 		cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),
