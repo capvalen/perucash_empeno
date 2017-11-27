@@ -31,6 +31,7 @@ input[type=number] {-moz-appearance:textfield;}
 .btnIcono{    padding: 0px 7px;
     margin-bottom: 9px;
     font-size: 21px;}
+#h5DetalleInteres, #smallPeriodo{color: #949494; font-size: 95%!important;}
 
 .btn-negro, .btn-negro:hover{border-color: #434A54; color: #fff; background-color: #434A54;}.btn-negro:active {background-color: #1f2123;} .btn-negro:focus {color: #fff;}
 .btn-morado, .btn-morado:hover{border-color: #694D9F; color: #fff; background-color: #694D9F;}.btn-morado:active {background-color: #694D9F;} .btn-morado:focus {color: #fff;}

@@ -15,7 +15,7 @@ if(isset($_SESSION['Atiende'])){?>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="shortcut icon" href="images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.14">
+	<link rel="stylesheet" type="text/css" href="css/anatsunamun.css?version=2.0.18">
 	<link rel="stylesheet" type="text/css" href="css/icofont.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-table.css">
 </head>
@@ -120,9 +120,14 @@ if(isset($_SESSION['Atiende'])){?>
 						</div>
 					
 					<div class="col-sm-12">
-						<p style="color: #d27f19/*1976d2*/; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Interes compuesto</em></strong>
+						<p style="color: #d27f19/*1976d2*/; padding-top: 20px;"> <i class="icofont icofont-exclamation-circle" style="color: #f57f17"></i> <strong >Última actualización: <em>Interés simple y compuesto</em></strong>
 						<br>
-						Para un empeño tiene 2 semanas para cancelar el <strong>9.5% acumulado</strong> lueg, se sumará el 0.683% diario.<br>
+						* InteresDiario= 4%/7 = 0.04/7 <br>
+* Día 1 al 7: 4% interés mínimo por defecto<br>
+* Día 7 al 28: El cálculo del interés se hace hasta el día exacto= montoInicial * Suma Días * InteresDiario<br>
+* Día 29 a más: Interés compuesto de: montoInicial * 28 * 16%<br>
+
+						<!-- Para un empeño tiene 2 semanas para cancelar el <strong>9.5% acumulado</strong> lueg, se sumará el 0.683% diario.<br> -->
 						<!-- De S/. 5001 a más de préstamo tiene 24 días para cancelar el 10% luego de ello, se sumará el 4% diario.<br>
 						20602337147: EARA93CX
 						20602337147: EARA93CX
@@ -1224,6 +1229,7 @@ $(document).ready(function () {
 	$('#dtpFechaVencimiento').val(moment().add(1, 'days').format('DD/MM/YYYY'));
 	var idNew = <?php if (isset($_GET["idprod"])) { echo $_GET["idprod"]; }else{ echo 0;} ?>;
 	var idCompra=<?php if (isset($_GET["idcompr"])) { echo $_GET["idcompr"]; }else{ echo 0;} ?>;
+	$.interesGlobal=0.04;
 	$.idOficina=0;
 	if( <?php echo $_SESSION['idSucursal']; ?> !=3){ $.idOficina =  <?php echo $_SESSION['idSucursal']; ?> }
 	else{$.idOficina=$('#cmbOficinasTotal').val();}
@@ -1269,10 +1275,12 @@ $(document).ready(function () {
 				console.log(resp)
 				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
 					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
-					var differencia=moment().diff(jresp.desFechaContarInteres, 'days');
+					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days');
+					var diaInicial= moment(jresp.desFechaContarInteres).format('YYYY-MM-DD');
 					
 					$('#spanCodProd').text(idNew);
-					$('#spanPeriodo2').text(moment(jresp.desFechaContarInteres).fromNow());
+					if(diaInicial>=31){$('#spanPeriodo2').text(moment(diaInicial).fromNow());}
+					
 					$('#smallPeriodo').text('('+differencia +' días)');
 					contarDesde=moment(jresp.desFechaContarInteres);
 					//console.log($(`.divContUnPrestamo #${jresp.idPrestamo}`).length)
@@ -1353,36 +1361,47 @@ $(document).ready(function () {
 					$('#spanMontoDado').text(preCapi.toFixed(2));
 					$('#spanSrCapital').text(preCapi.toFixed(2));
 					if($('#spanVigenciaProducto').text()!=11){
-						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres),'days');
+						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres).format('YYYY-MM-DD'),'days');
 
 						var calcInt=0, interesVigente=0;
 						//var montoIniciov2=resp;
-						//console.log('hasta hoy: '+ hastaHoyDias);
+						// console.log('hasta hoy: '+ hastaHoyDias);
 						//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
 						if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
-						if(hastaHoyDias<=28){ console.log('menos de 28')
-							interesVigente=0.04;
+						if(hastaHoyDias<=7){
+							interesVigente=$.interesGlobal;
 							calcInt=preCapi*interesVigente;
 							
 							$('#spanSrInteres').text(parseFloat(calcInt).toFixed(2));
 							$('#h5SrInteres').text(parseFloat(calcInt).toFixed(2));
+							$('#h5DetalleInteres').html(' por interés <strong>simple</strong> al 4% mínimo (del día 1 al 7).');
 						}
-						if(hastaHoyDias>28){ console.log('mas de 28')
+						if(hastaHoyDias<=28 && hastaHoyDias>7 ){ 
+							interesVigente=$.interesGlobal/7;
+							calcInt=preCapi*interesVigente*hastaHoyDias;
+							
+							$('#spanSrInteres').text(parseFloat(calcInt).toFixed(2));
+							$('#h5SrInteres').text(parseFloat(calcInt).toFixed(2));
+							$('#h5DetalleInteres').html(' ('+parseFloat(interesVigente*hastaHoyDias*100).toFixed(2)+'%) por interés <strong>simple</strong> al 4% semanal (del día 3 al 28).');
+						}
+						if(hastaHoyDias>28){ 
 							if(hastaHoyDias>30){}
-							interesVigente=1.04;
+							interesVigente=1.16;
 							var nuevoCapital=preCapi*interesVigente;
-							//console.log(nuevoCapital)
+							console.log('Nuevo capi: '+nuevoCapital)
 							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+nuevoCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
-								var jsonInteres=JSON.parse(resp); // console.log(jsonInteres)
+								var jsonInteres=JSON.parse(resp); console.log(jsonInteres);
 								// $(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								// <tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
 								// <td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>
 								// <td>S/. ${parseFloat(jsonInteres[2][0].pagarAHoy.replace(",",'')-jresp2.desCapital).toFixed(2)}</td>
 								// <td>-</td></tr>`);
 								//.replace(",",'')
-								calcInt=parseFloat(parseFloat(jsonInteres[2][0].pagarAHoy-jsonInteres[0][0].montoInicial));
+								console.log(jsonInteres[1][hastaHoyDias-28-1]);
+								calcInt=parseFloat(parseFloat(jsonInteres[1][hastaHoyDias-28-1].intAcum-preCapi));
 								$('#spanSrInteres').text(parseFloat(calcInt).toFixed(2));
 								$('#h5SrInteres').text(parseFloat(calcInt).toFixed(2));
+								$('#h5DetalleInteres').html(' por interés <strong>acumulado</strong> al 4% diario (mayor a 29 días).');
 								
 								//$('#h5DetalleInteres').text(' por '+ differencia +' días.'); console.log(calcInt)
 							});
@@ -1425,7 +1444,7 @@ $(document).ready(function () {
 						$.ajax({url:'php/listarMovimientosCajaPorIdProducto.php', type:'POST', data: {idProd: idNew }}).done(function (resp) { //console.log(resp)
 							//console.log(getObjects(,jresp2.desCapital))
 							$.each(JSON.parse(resp), function (i, jsonCaja) {// console.log(sumaCapital)
-								console.log(jsonCaja)
+								//console.log(jsonCaja)
 								var diffBD=moment(jsonCaja.cajaFecha).diff(contarDesde, 'days');
 								var diffHoy=moment().diff(contarDesde, 'days');
 								//console.log(contarDesde)

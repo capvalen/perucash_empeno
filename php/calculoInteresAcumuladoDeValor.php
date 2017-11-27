@@ -11,7 +11,7 @@ $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
 $maximoDias=90;
 
 
-if($montoInicial<=5000){$interesDiario=0.00683;}
+if($montoInicial<=5000){$interesDiario=0.004;}
 else{$interesDiario=0.004;}
 
 $interesAcumulado=$montoInicial;
