@@ -12,8 +12,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
  * data from the command-line first:
  *  echo "Hello World" > LPT1
  */
-    // $connector = new WindowsPrintConnector("Guest/TM-U220");
-$connector = new WindowsPrintConnector("\\perucash-caja/TM-U220");
+    $connector = new WindowsPrintConnector("smb://perucash-caja/TM-U220");
     /*$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");*/
 try {
     
@@ -24,6 +23,13 @@ try {
     $printer = new Printer($connector);
     $printer -> text("                PeruCash\n");
     $printer -> text("      Casa de Préstamos y Empeños\n");
+	$printer -> text("           Amotización\n");
+	$printer -> text("20/10/2017 10:54 am\n");
+	$printer -> text("Artículo: Refrigerador Samsung\n");
+	$printer -> text("Cliente:  Areche Zapata, Edith Janeth\n");
+	$printer -> text("Monto: S/. 300.00\n");
+	
+	
     $printer -> text("       Gracias por tu preferencia\n");
     $printer -> cut();
     /* Close printer */

@@ -2207,7 +2207,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 	moment.locale('es');
 	//console.log($('#rowWellFijo #spanProducto').text()) 123
 	//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'}); http://192.168.1.107
-	$.ajax({url: '\\perucash-caja/perucash/printTicket.php', type: 'POST', data: {
+	$.ajax({url: 'http://localhost/perucash/printTicket.php', type: 'POST', data: {
 		cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),
@@ -2290,7 +2290,7 @@ $('#btnSeguroFinalizar').click(function () {
 	});
 
 	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: '+ $('#rowWellFijo #spanProducto').text());
-		$.ajax({url: 'http://192.168.1.107/perucash/printTicketFinalizado2.php', type: 'POST', data: {
+		$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
 			cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 			cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 			articulo: $('#rowWellFijo #spanProducto').text(),
@@ -2304,7 +2304,7 @@ $('#btnSeguroFinalizar').click(function () {
 		$.each($('#rowWellCambiante #lblIdProductosEnc'), function (i, elem) {
 			if($(elem).text()==iProd){
 					
-				$.ajax({url: 'http://localhost/192.168.1.107/printTicketFinalizado2.php', type: 'POST', data: {
+				$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
 					cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 					cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 					articulo: $(elem).parent().find('#spanProducto').text(),
@@ -2359,7 +2359,7 @@ $('#btnInteresFinalizar').click(function () {
 	});
 	//console.log(articuloCalc+'\n'+montoCalc)
 
-	$.ajax({url: 'http://localhost/192.168.1.107/printTicketInteres.php', type: 'POST', data: {
+	$.ajax({url: 'http://localhost/perucash/printTicketInteres.php', type: 'POST', data: {
 	cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 	cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 	articulo: articuloCalc,
@@ -2375,7 +2375,7 @@ $('#rowWellCambiante').on('click', '.btn-imprimirTicketMovil', function () {
 	var contenedor = $(this).parent().parent();
 	// console.log('nombre: '+ contenedor.find('#spanProducto').text());
 
-	$.ajax({url: 'http://localhost/192.168.1.107/printTicket.php', type: 'POST', data: {
+	$.ajax({url: 'http://localhost/perucash/printTicket.php', type: 'POST', data: {
 		cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: contenedor.find('#spanProducto').text(),
@@ -2885,7 +2885,7 @@ $('#btnPagarACuenta').click(function () {
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/192.168.1.107/printTicketFinalizado2.php', type: 'POST', data: {
+					$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
 						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
@@ -2936,7 +2936,7 @@ $('#btnPagarACuenta').click(function () {
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/192.168.1.107/printTicketAmortizando.php', type: 'POST', data: {
+					$.ajax({url: 'http://localhost/perucash/printTicketAmortizando.php', type: 'POST', data: {
 						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
@@ -2961,7 +2961,7 @@ $('#btnPagarACuenta').click(function () {
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/192.168.1.107/printTicketInteresAdelanto.php', type: 'POST', data: {
+					$.ajax({url: 'http://localhost/perucash/printTicketInteresAdelanto.php', type: 'POST', data: {
 						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
@@ -3091,7 +3091,7 @@ $('#btnCronogramaPagosVer').click(function () {
 	
 });
 $('#btnImprTicketInterProyect').click(function () {
-	$.ajax({url: 'http://localhost/192.168.1.107/printTicketInteresAcumulado.php?inicial='+$('#txtMontoEntregado').val()+'&numhoy=1&inter='+'0.00683', type: 'POST', data: {
+	$.ajax({url: 'http://localhost/perucash/printTicketInteresAcumulado.php?inicial='+$('#txtMontoEntregado').val()+'&numhoy=1&inter='+'0.00683', type: 'POST', data: {
 		cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),

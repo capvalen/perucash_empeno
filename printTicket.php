@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /* Change to the correct path if you copy this example! */
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
@@ -22,17 +22,23 @@ try {
     // $connector = new FilePrintConnector("LPT1");
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connector);
+    $printer -> setEmphasis(true);
     $printer -> text("                PeruCash\n");
+    $printer -> setEmphasis(false);
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n");
+    $printer -> setEmphasis(true);
 	$printer -> text("   ******* Producto Registrado ******\n");
+    $printer -> setEmphasis(false);
     $printer -> text("  ".$_POST['hora']."\n\n");
-    $printer -> text("Código Producto: ".ucwords($_POST['cod'])."\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
+    $printer -> text("Cod. Int.: ".$_POST['codArt']."\n");
     $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n");
+    $printer -> setEmphasis(true);
     $printer -> text("Monto entregado: S/. ".$_POST['monto']."\n");
+    $printer -> setEmphasis(false);
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
     $printer -> text("Usuario: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");

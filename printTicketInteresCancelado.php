@@ -21,16 +21,22 @@ try {
     // $connector = new FilePrintConnector("LPT1");
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connector5);
+    $printer -> setEmphasis(true);
     $printer -> text("                PeruCash\n");
+    $printer -> setEmphasis(false);
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N 1\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("          * Adelanto de Interés *\n");
+    $printer -> setEmphasis(true);
+    $printer -> text("        * Interés Cancelado *\n");
+    $printer -> setEmphasis(false);
     $printer -> text("   ".$_POST['hora']."\n\n");
-    $printer -> text("Código Producto: ".ucwords($_POST['cod'])."\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
+    $printer -> text("Cod. Int.: ".$_POST['codArt']."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
+    $printer -> setEmphasis(true);
     $printer -> text("Monto interes: S/. ".$_POST['monto']."\n");
+    $printer -> setEmphasis(false);
     $printer -> text("Atendido por: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("         Celular: # 943 798696\n");
