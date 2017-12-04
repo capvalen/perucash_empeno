@@ -12,5 +12,8 @@ Version 2.10
 * Día 32 al inf: agregar S/. 10 por gastos adminstrativos.
 
 
+Version 2.11
+* Corregido conteo días en los intereses
+* Agrego nuevo boton de imprimir ticket de articulo retirado
 */
  ?>

@@ -28,7 +28,7 @@ try {
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("           * Pago Finalizado *\n");
+    $printer -> text("          * Prestamo Finalizado *\n");
     $printer -> text("  ".$_POST['hora']."\n\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
     $printer -> text("Cod. Int.: ".$_POST['codArt']."\n");

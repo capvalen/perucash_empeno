@@ -297,6 +297,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<button class="btn btn-indigo btn-outline sr-only" id="btn-PagoACuentaFijo"><i class="icofont icofont-pie-chart"></i> Ingreso de dinero</button>
 				<button class="btn btn-danger btn-outline sr-only" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 				<button class="btn btn-danger btn-outline sr-only" id="btn-RetirarPrestamoFijo"><i class="icofont icofont-rocket"></i> Retirar artículo</button>
+				<button class="btn btn-morado btn-outline sr-only" id="btn-imprimirRetiro"><i class="icofont icofont-animal-cat-alt-4"></i> Imprimir ticket retirado</button>
 				<?php 
 				if ($_SESSION['Power']==1){
 					?> <button class="btn btn-danger btn-outline" id="btn-EliminarDB"><i class="icofont icofont-snowy-thunder"></i> Eliminar de la BD</button>
@@ -1275,12 +1276,12 @@ $(document).ready(function () {
 				console.log(resp)
 				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
 					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
-					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days');
+					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days')+1; /*console.log(differencia)*/
 					var diaInicial= moment(jresp.desFechaContarInteres).format('YYYY-MM-DD');
 					
 					$('#spanCodProd').text(idNew);
 					if(diaInicial>=31){$('#spanPeriodo2').text(moment(diaInicial).fromNow());}
-					
+					// if(differencia==0){differencia=1;}
 					$('#smallPeriodo').text('('+differencia +' días)');
 					contarDesde=moment(jresp.desFechaContarInteres);
 					//console.log($(`.divContUnPrestamo #${jresp.idPrestamo}`).length)
@@ -1306,6 +1307,7 @@ $(document).ready(function () {
 						$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
 						$('#btn-RetirarPrestamoFijo').addClass('sr-only');
 						$('#spanVigenciaProducto').text('11');
+						$('#btn-imprimirRetiro').removeClass('sr-only');
 					}
 					else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
 						$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
@@ -1361,13 +1363,13 @@ $(document).ready(function () {
 					$('#spanMontoDado').text(preCapi.toFixed(2));
 					$('#spanSrCapital').text(preCapi.toFixed(2));
 					if($('#spanVigenciaProducto').text()!=11){
-						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres).format('YYYY-MM-DD'),'days');
+						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres).format('YYYY-MM-DD'),'days')+1;
 
 						var calcInt=0, interesVigente=0;
 						//var montoIniciov2=resp;
 						// console.log('hasta hoy: '+ hastaHoyDias);
 						//console.log('php/calculoInteresAcumuladoDeValor.php?inicio='+jresp2.desCapital+'&numhoy='+hastaHoyDias);
-						if(hastaHoyDias>90){hastaHoyDias=90;} if(hastaHoyDias==0){hastaHoyDias=1;}
+						if(hastaHoyDias>90){hastaHoyDias=90;} /*if(hastaHoyDias==0 ){hastaHoyDias=1;}*/
 						if(hastaHoyDias<=7){
 							interesVigente=$.interesGlobal;
 							calcInt=preCapi*interesVigente;
@@ -2291,7 +2293,7 @@ $('#btnSeguroFinalizar').click(function () {
 
 	if( !$('#rowWellFijo').hasClass('hidden')){ console.log( 'Buscar Datos en fijo: '+ $('#rowWellFijo #spanProducto').text());
 		$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
-			cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+			cod: $('#spanCodProd').text(),
 			cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 			articulo: $('#rowWellFijo #spanProducto').text(),
 			monto: parseFloat($('#rowWellFijo #spanPagar').text()).toFixed(2),
@@ -2305,7 +2307,7 @@ $('#btnSeguroFinalizar').click(function () {
 			if($(elem).text()==iProd){
 					
 				$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
-					cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+					cod: $('#spanCodProd').text(),
 					cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 					articulo: $(elem).parent().find('#spanProducto').text(),
 					monto: parseFloat( $(elem).parent().find('#spanPagar').text() ).toFixed(2),
@@ -2871,8 +2873,8 @@ $('#btnPagarACuenta').click(function () {
 		$('.modal-PagoACuenta').find('.text-danger').addClass('hidden');
 		//console.log( 'guardar '+ $('#txtPagarACuenta').val())
 		var loquepaga=parseFloat($('#txtPagarACuenta').val());
-		var totalDeuda= parseFloat($('#sr-MontInicialv3').text()) ;//parseFloat(montoInical) + parseFloat(interes);
-		var interes= parseFloat($('#sr-montInteresv3').text());
+		var totalDeuda= parseFloat($('#sr-MontInicialv3').text()) ;//parseFloat(montoInical) + parseFloat(interes)
+;		var interes= parseFloat($('#sr-montInteresv3').text());
 		var montoInical=parseFloat(totalDeuda)-parseFloat(interes); //parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
 		var idpro=$('#sr-idProductov3').text();
 		var faltaPagar=0;
@@ -2880,13 +2882,14 @@ $('#btnPagarACuenta').click(function () {
 		/* Nota: No se puede redondear a 1 decimal y comprarlarlo porque lo considera como texto y no como número, no se puede comprar textos*/
 
 		if(parseFloat(loquepaga)>= parseFloat(totalDeuda)){ console.log('pago toda su deuda, se libera');
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 			$.ajax({url:'php/insertarAmortizacionTodo.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
-						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+					$.ajax({url: 'http://192.168.1.131/perucash/printTicketFinalizado2.php', type: 'POST', data: {
+						codArt: $('#spanCodProd').text(),
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
 						monto: parseFloat( loquepaga ).toFixed(2),
@@ -2894,7 +2897,7 @@ $('#btnPagarACuenta').click(function () {
 						hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 						usuario: $.JsonUsuario.usunombres
 					}}).done(function(resp){console.log(resp);
-						//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+						
 						window.location.href = "aplicativo.php?idprod=" +idpro;});}
 				else{
 					$('.modal-PagoACuenta').modal('hide');
@@ -2903,13 +2906,14 @@ $('#btnPagarACuenta').click(function () {
  		}
  		else if(parseFloat(loquepaga) == parseFloat(interes) ){
 			console.log('canceló todo interés'); //Escenario que hay que ver cuanto hay de dinero
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 			$.ajax({url:'php/insertarAmortizacionSoloInteres.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					/*$.ajax({url: 'http://localhost/perucash/printTicketInteresCancelado.php', type: 'POST', data: {
-						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+					$.ajax({url: 'http://192.168.1.131/perucash/printTicketInteresCancelado.php', type: 'POST', data: {
+						codArt: $('#spanCodProd').text(),
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
 						monto: parseFloat( loquepaga ).toFixed(2),
@@ -2918,7 +2922,7 @@ $('#btnPagarACuenta').click(function () {
 						usuario: $.JsonUsuario.usunombres
 					}}).done(function(resp){console.log(resp);
 						$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
-						window.location.href = "aplicativo.php?idprod=" +idpro;});*/
+						window.location.href = "aplicativo.php?idprod=" +idpro;});
 				}
 				else{
 					$('.modal-PagoACuenta').modal('hide');
@@ -2930,23 +2934,34 @@ $('#btnPagarACuenta').click(function () {
 			var sobraAmort=parseFloat(loquepaga)-parseFloat(interes);
 			console.log('restar del capital: '+ sobraAmort.toFixed(2));
 			//console.log(sobraAmort);
-
+			//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 			$.ajax({url:'php/insertarAmortizacionMixto.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, sobra: sobraAmort, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/perucash/printTicketAmortizando.php', type: 'POST', data: {
-						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+					$.ajax({url: 'http://192.168.1.131/perucash/printTicketInteresCancelado.php', type: 'POST', data: {
+						codArt: $('#spanCodProd').text(),
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
-						monto: parseFloat( loquepaga ).toFixed(2),
+						monto: parseFloat( interes ).toFixed(2),
+						obs: '',
+						hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+						usuario: $.JsonUsuario.usunombres
+					}}).done(function(resp){console.log(resp);});
+					$.ajax({url: 'http://192.168.1.131/perucash/printTicketAmortizando.php', type: 'POST', data: {
+						codArt: $('#spanCodProd').text(),
+						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+						articulo: $('#spanProducto').text(),
+						monto: parseFloat( sobraAmort ).toFixed(2),
 						obs: '',
 						hora : moment().format('h:mm a dddd DD MMMM YYYY'),
 						usuario: $.JsonUsuario.usunombres
 					}}).done(function(resp){console.log(resp);
 						//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
-						window.location.href = "aplicativo.php?idprod=" +idpro;});}
+						window.location.href = "aplicativo.php?idprod=" +idpro;});
+				}
+
 				else{
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-datoNoGuardado').modal('show');}
@@ -2956,13 +2971,14 @@ $('#btnPagarACuenta').click(function () {
 		else if(parseFloat(loquepaga) < parseFloat(interes) ){
 			faltaPagar= parseFloat(interes) -parseFloat(loquepaga);
 			console.log('solo restar una parte de interés S/. '+ parseFloat(loquepaga).toFixed(2) + ' falta pagar '+faltaPagar);
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
 			$.ajax({url:'php/insertarAmortizacionPocoInteres.php', type:'POST', data:{idDese: $('.divContUnPrestamo').attr('id'), montInicial:montoInical, montInteres: interes, montPago:parseFloat(loquepaga).toFixed(2), idUser: $.JsonUsuario.idUsuario, idProd: idpro, usuario: $.JsonUsuario.usunombres, idSuc: $.JsonUsuario.idsucursal}}).done(function (resp) {// console.log(resp)
 				if(parseInt(resp)>0){
 					$('.modal-PagoACuenta').modal('hide');
 					$('.modal-ventaGuardada').find('.btnAceptarGuardado').attr('id', idpro).removeClass('sr-only');
 					$('.modal-ventaGuardada').modal('show');
-					$.ajax({url: 'http://localhost/perucash/printTicketInteresAdelanto.php', type: 'POST', data: {
-						cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
+					$.ajax({url: 'http://192.168.1.131/perucash/printTicketInteresAdelanto.php', type: 'POST', data: {
+						codArt: $('#spanCodProd').text(),
 						cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 						articulo: $('#spanProducto').text(),
 						monto: parseFloat( loquepaga ).toFixed(2),
@@ -3191,11 +3207,41 @@ $('#btnModalAgregarDesembolso').click(function () {
 		$('#pErrorDesembolso').addClass('hidden');
 		
 		$.ajax({url: 'php/updateDesembolsar.php', type: 'POST', data: { idProd: <?php if( isset ($_GET['idprod']) ){echo $_GET['idprod'];}else{echo 0;} ?>, nuevoDesembolso: montoNuevo, idUser: $.JsonUsuario.idUsuario , idSuc: <?php echo $_SESSION['idSucursal']; ?>, comentExtra: comentExtr }}).done(function (resp) {
+			$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'});
+			$.ajax({url: 'http://localhost/perucash/printTicketDesembolso.php', type: 'POST', data: {
+				hora : moment().format('h:mm a dddd DD MMMM YYYY'),
+				cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+				articulo: $('#rowWellFijo #spanProducto').text(),
+				codArt: $('#spanCodProd').text(),
+				monto: $('#spanSrCapital').text(),
+				desemb: montoNuevo.toFixed(2),
+				nuevoCap: parseFloat(montoNuevo+parseFloat($('#spanSrCapital').text())).toFixed(2),
+				usuario: $.JsonUsuario.usunombres }}).done(function (resp) {
+					// body...
+				});
 			if(resp>0){
-				location.reload();
+				/*location.reload();*/
 			}
 		})
 	}else{ $('#pErrorDesembolso').removeClass('hidden').text('No se puede agregar montos negativos o ceros'); }
+});
+$('#btn-imprimirRetiro').click(function () {
+	var contenedor=$('.divContUnPrestamo tr').last();
+	/*console.log(contenedor.children()[1]);*/
+
+	fechaRetiro=$(contenedor.children()[1]).text();
+	pagado=$(contenedor.children()[2]).text();
+	usuario=$(contenedor.children()[3]).text();
+	/*console.log(pagado)*/
+
+	$.ajax({url: 'http://localhost/perucash/printTicketFinalizado2.php', type: 'POST', data: {
+			codArt: $('#spanCodProd').text(),
+			cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
+			articulo: $('#rowWellFijo #spanProducto').text(),
+			monto: pagado,
+			hora : fechaRetiro,
+			usuario: usuario
+		}}).done(function(resp){console.log(resp);});
 });
 </script>
 </body>
