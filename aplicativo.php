@@ -200,6 +200,7 @@ if(isset($_SESSION['Atiende'])){?>
 					<h5 class="text-primary"><strong>Código del Producto: # <span id="spanCodProd"></span></strong></h5>
 					<h5><strong>Valorizado:</strong> <span>S/. </span><span id="spanMontoDado">0.00</span> <span class="sr-only" id="spanSrCapital"></span> <span class="sr-only" id="spanSrInteres">0</span> <strong>Actualizado:</strong> <span id="spanPeriodo2"></span> <span id="smallPeriodo"></span> </h5>
 					<h5><strong>Intereses:</strong> S/. <span id="h5SrInteres">0</span> <span id="h5DetalleInteres"></span></h5>
+					<h5 class="sr-only" id="h5contCargoAdmin"><strong>Cargos administrativos:</strong> S/. <span id="h5CargoAdmin">10.00</span> </h5>
 					<p><small>Obs.</small> <small class="mayuscula" id="spanObservacion">Ninguna</small></p>
 
 				</div>
@@ -954,7 +955,12 @@ if(isset($_SESSION['Atiende'])){?>
 				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Amortizar pago</h4>
 			</div>
 			<div class="modal-body">
-				El cliente tiene una deuda de <strong>S/. <span id="spanAmortizarDeuda"></span></strong> por el producto <strong>«<span class="mayuscula" id="spanProdDeuda"></span>»</strong>, con un interés generado de <strong>S/. <span id="spanInteresAmortizaDeuda"></span></strong>:  ¿Cuánto está amortizando el cliente?
+				¿Cuánto está amortizando el cliente? Pendientes por el producto <strong>«<span class="mayuscula" id="spanProdDeuda">camara digital nikon coopix p530</span>»</strong>:
+				<ul>
+					<li>Capital: S/. <span id="spanAmortizarDeuda">300.00</span></li>
+					<li>Interés: S/. <span id="spanInteresAmortizaDeuda"></span></li>
+					<li>Gastos adm.: S/. <span id="spanDeudaGastos"></span></li>
+				</ul>
 				<span class="sr-only" id="sr-idProductov3"></span><span class="sr-only" id="sr-MontInicialv3"></span><span class="sr-only" id="sr-montInteresv3"></span>
 				<input type="number" class="form-control text-center" id="txtPagarACuenta" min="0" value="0" step="1">
 				<p class="text-danger hidden"></p>
@@ -1276,7 +1282,7 @@ $(document).ready(function () {
 				console.log(resp)
 				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
 					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
-					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days')+1; /*console.log(differencia)*/
+					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days'); /*console.log(differencia)*/
 					var diaInicial= moment(jresp.desFechaContarInteres).format('YYYY-MM-DD');
 					
 					$('#spanCodProd').text(idNew);
@@ -1308,6 +1314,14 @@ $(document).ready(function () {
 						$('#btn-RetirarPrestamoFijo').addClass('sr-only');
 						$('#spanVigenciaProducto').text('11');
 						$('#btn-imprimirRetiro').removeClass('sr-only');
+					}
+					else if(parseInt(differencia)<31){
+						$('#h5CargoAdmin').text('0.00');
+						$('#h5contCargoAdmin').addClass('sr-only');
+					}
+					else if(parseInt(differencia)>=32){
+						$('#h5CargoAdmin').text('10.00');
+						$('#h5contCargoAdmin').removeClass('sr-only');
 					}
 					else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
 						$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
@@ -1363,7 +1377,7 @@ $(document).ready(function () {
 					$('#spanMontoDado').text(preCapi.toFixed(2));
 					$('#spanSrCapital').text(preCapi.toFixed(2));
 					if($('#spanVigenciaProducto').text()!=11){
-						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres).format('YYYY-MM-DD'),'days')+1;
+						var hastaHoyDias=moment().diff(moment(jsonRespActual[0].desFechaContarInteres).format('YYYY-MM-DD'),'days');
 
 						var calcInt=0, interesVigente=0;
 						//var montoIniciov2=resp;
@@ -2863,6 +2877,7 @@ $('#btn-PagoACuentaFijo').click(function () {
 	$('#spanAmortizarDeuda').text(contenedor.find('#spanMontoDado').text());
 	$('#spanInteresAmortizaDeuda').text(contenedor.find('#spanSrInteres').text());
 	$('#spanProdDeuda').text(contenedor.find('#spanProducto').text());
+	$('#spanDeudaGastos').text(contenedor.find('#h5CargoAdmin').text());
 	$('#sr-idProductov3').text(iProd);
 	$('#sr-MontInicialv3').text(contenedor.find('#spanMontoDado').text());
 	$('#sr-montInteresv3').text(contenedor.find('#spanSrInteres').text());
@@ -3071,7 +3086,7 @@ $('#btnCronogramaPagosVer').click(function () {
 		$.ajax({url:'php/solicitarConfiguraciones.php', type: 'GET' }).done(function (resp) {
 			console.log(resp)
 		});
-		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy='+1, type: 'GET' }).done(function (resp) {
+		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy=', type: 'GET' }).done(function (resp) {
 		
 		dato=JSON.parse(resp);
 		//console.log(dato)
