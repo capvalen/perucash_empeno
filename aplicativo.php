@@ -97,7 +97,7 @@ if(isset($_SESSION['Atiende'])){?>
 
 							</div>
 							<label for="someSwitchOptionWarning" id="lblSWQueEs" style="padding-top: 0;margin-left: 10px; color: #606bdc; transition: all 0.3s ease-in-out;"> Artículo con intereses</label>
-					</div>
+						</div>
 						
 					</div>
 					<div class="row">
@@ -1279,7 +1279,7 @@ $(document).ready(function () {
 
 			/*Nuevo Código para de préstamos*/
 			$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
-				console.log(resp)
+				//console.log(resp)
 				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
 					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
 					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days'); /*console.log(differencia)*/
@@ -1307,7 +1307,9 @@ $(document).ready(function () {
 						</tbody>
 					</table></div>
 					</div>`);
-					if(jresp.preIdEstado==11){
+					console.log('estado: '+jresp.preIdEstado);
+					console.log('diffe: '+differencia);
+					if(jresp.preIdEstado==11){ console.log('entra 11')
 						$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.preFechaInicio).fromNow()+ ' por '+ jresp.usunick);
 						$('#btn-imprimirTicketFijo').addClass('sr-only');
 						$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
@@ -1316,14 +1318,24 @@ $(document).ready(function () {
 						$('#btn-imprimirRetiro').removeClass('sr-only');
 					}
 					else if(parseInt(differencia)<31){
+						$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+						$('#btn-imprimirTicketFijo').removeClass('sr-only');
+						$('#btn-DesembolsoFijo').removeClass('sr-only');
+						$('#btn-PagoACuentaFijo').removeClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
 						$('#h5CargoAdmin').text('0.00');
 						$('#h5contCargoAdmin').addClass('sr-only');
 					}
 					else if(parseInt(differencia)>=32){
+						$('#smallh3Producto').css({'color': '#3cb30e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo Vigente, tiene '+parseInt(90-differencia) +' días para pasar a remate.' );
+						$('#btn-imprimirTicketFijo').removeClass('sr-only');
+						$('#btn-DesembolsoFijo').removeClass('sr-only');
+						$('#btn-PagoACuentaFijo').removeClass('sr-only');
+						$('#btn-RetirarPrestamoFijo').removeClass('sr-only');
 						$('#h5CargoAdmin').text('10.00');
 						$('#h5contCargoAdmin').removeClass('sr-only');
 					}
-					else if(parseInt(differencia)>90){ //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
+					else if(parseInt(differencia)>90){ console.log('entra 90') //tiene máximo 90 días, = 3 meses para recoger y generar intereses, luego ya no calcula
 						$('#smallh3Producto').css({'color': '#f7221d'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo expirado, se sugiere rematar, pasó el límite de 3 meses en almacén. ');
 						$('#btn-imprimirTicketFijo').addClass('sr-only');
 						$('#btn-FinalizarPrestamoFijo').addClass('sr-only');
@@ -3086,7 +3098,7 @@ $('#btnCronogramaPagosVer').click(function () {
 		$.ajax({url:'php/solicitarConfiguraciones.php', type: 'GET' }).done(function (resp) {
 			console.log(resp)
 		});
-		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy=', type: 'GET' }).done(function (resp) {
+		$.ajax({url:'php/calculoInteresAcumuladoDeValor.php?inicio='+valor+'&numhoy='+1, type: 'GET' }).done(function (resp) {
 		
 		dato=JSON.parse(resp);
 		//console.log(dato)
