@@ -5,11 +5,13 @@ include 'conkarl.php';
 
 
 $filas=array();
+
 $log = mysqli_query($conection,"call solicitarProductoPorId(".$_POST['idProd'].");");
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {
+	// $filas[]= $row;
 	$filas[]= array('idProducto' => $row['idProducto'],
 		'prodNombre' => $row['prodNombre'],
 		'prodMontoEntregado' => $row['prodMontoEntregado'],
@@ -36,11 +38,6 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodCuantoFinaliza' => $row['prodCuantoFinaliza'],
 		'prodUltimaFechaInteres' => $row['prodUltimaFechaInteres'],
 		'desFechaContarInteres' => $row['desFechaContarInteres']
-
-
-
-
-		
 	);
 	
 }

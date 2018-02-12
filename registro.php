@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -9,7 +10,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Principal: PeruCash</title>
+		<title>Registro: PeruCash</title>
 
 		<!-- Bootstrap Core CSS -->
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,10 +18,12 @@
 		<!-- Custom CSS -->
 		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.2" rel="stylesheet">
+		<link href="css/estilosElementosv3.css?version=3.0.28" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="shortcut icon" href="images/peto.png" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
+		<link href="css/bootstrap-select.min.css" rel="stylesheet">
 		
 </head>
 
@@ -35,10 +38,10 @@
 			<div class="logoEmpresa ocultar-mostrar-menu">
 				<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
 			</div>
-			<li class="active">
+			<li>
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
-			<li>
+			<li class="active">
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
@@ -92,14 +95,13 @@
 					</ul>
 					<ul class="nav navbar-nav pull-right">
 						 <li>
-							<div class="btn-group has-clear hidden"><label for="txtBuscarNivelGod" class="text-muted visible-xs">Buscar algo:</label>
-								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xeded;">
-								<span class="form-control-clear glyphicon glyphicon-remove-circle form-control-feedback hidden"></span>
+							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs">Buscar algo:</label>
+								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;">
+								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color:#777;padding-top: 9px;"></span>
 							</div>
 						 </li>
-						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario">Pariona Valencia, Carlos Alex</span></p></a></li>
-							
-		<li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
+						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
+						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
 						
 				</div>
@@ -113,49 +115,76 @@
 		<div class="row">
 			<div class="col-lg-12 contenedorDeslizable">
 			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Registro de cliente y producto</h2>
+				<h2 class="purple-text text-lighten-1">Registro de cliente y productos nuevos</h2>
 			<!-- Fin de contenido principal -->
 			</div>
 		</div>
-		<div class="">
-			<div class="col-lg-6 contenedorDeslizable contenedorDatosCliente">
+		<div class="row">
+			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2 -->
 				<div class="row">
-					<div class="col-sm-4"><label>D.N.I.:</label><input type="number" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos"></div>
 				</div>
 				<div class="row">
-						<div class="col-sm-6"><label>Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos"></div>
-					<div class="col-sm-6"><label>Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos"></div>
+						
 					<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente"></div>
-					<div class="col-sm-6"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente"></div>
-					<div class="col-sm-6"><label>Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular(es)"></div>
+					<div class="col-sm-3"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente"></div>
+					
+				</div>
+				<div class="row">
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra"></div>
 				</div>
 			<!-- Fin de contenido 2 -->
 			</div>
-			<div class="col-lg-6 contenedorDeslizable contenedorDatosProductos">
+			<div class="col-lg-12 contenedorDeslizable contenedorDatosProductos noselect">
 			<!-- Empieza a meter contenido 2 -->
-				<div class="container">
-					<div class="material-switch pull-left ">
+				<div class="container" style="padding-top: 20px;">
+					<div class="material-switch pull-left " >
 						<input id="someSwitchOptionWarning" type="checkbox"/>
 						<label for="someSwitchOptionWarning" class="label-success" ></label>
 
 					</div>
-					<label for="someSwitchOptionWarning" id="lblSWQueEs" style="padding-top: 0;margin-left: 10px; color: #606bdc; transition: all 0.3s ease-in-out;"> Artículo(s) con intereses</label>
+					<label for="someSwitchOptionWarning" id="lblSWQueEs" style="padding-top: 0;margin-left: 10px; color: #0082ff; transition: all 0.3s ease-in-out;"> Empeño: Todos los items son empeños con interés.</label>
 				</div>
 				<div class="row">
-						<div class="col-sm-12">
-						<div class="row text-center">
-							<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Agregar producto</button>
-						</div>
+						<div class="col-sm-12 ">
+						<div class="row text-center hidden">
+							<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
+						</div><br>
 							
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias aperiam velit perspiciatis animi cum qui, modi labore totam cumque, accusantium, aut sed eius quia obcaecati earum assumenda necessitatibus rem ad!</p>
-						
+						<div class="row">
+						<div class="col-xs-12" style="">
+							<div class="panel panel-default list-group-panel">
+							<div class="panel-body">
+								<ul class="list-group list-group-header">
+									<li class="list-group-item list-group-body">
+									<div class="row"><strong>
+										<div class="col-xs-8 text-left">Nombre producto</div>
+										<div class="col-xs-2 text-center">Precio</div>
+										<div class="col-xs-2 text-center">Porcentaje</div></strong>
+									</div>
+									</li>
+								</ul>
+								<ul class="list-group list-group-body" id="ulListadoProductos">
+									<div class="row text-center">
+										<div class="container-fluid" id="conjuntoElementos"></div>
+										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
+										</div>
+										<div class="col-xs-2 text-left"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
+									</div>
+								</ul>
+							</div>
+							</div>
+						</div>
+						</div>
 					
-					
-						<div class="col-sm-12 text-center">
-							<button class="btn btn-primary btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
-							<button class="btn btn-primary btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
-							<button class="btn btn-primary sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+						<div class="col-sm-12 text-right">
+							<button class="btn btn-azul btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
+							<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
+							<button class="btn btn-azul sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
 						</div>
 					</div>
 			<!-- Fin de contenido 2 -->
@@ -175,61 +204,46 @@
 		</div>
 		<div class="modal-body">
 			<div class="container-fluid">
-			<div class="row">
-				<div class="col-xs-6"><label for="">Tipo de producto</label> <input type="text" class="form-control"></div>
-				<div class="col-xs-6"><label for="">Cantidad</label> <input type="number" class="form-control"></div>
+			<div class="row"> <span class="sr-only" id="iddeLi">-1</span>
+				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label> 
+					<div  id="divSelectProductoListado">
+						<select class="selectpicker mayuscula" id="sltProductoListado" title="Tipo de producto..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php require 'php/listarProductosTipos.php'; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-8"><label for="">Nombre del artículo</label> <input type="text" class="form-control"></div>
-				<div class="col-xs-4"><label for="">Marca</label> <input type="text" class="form-control"></div>
+				<div class="col-xs-8"><label for="">Nombre del artículo <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc"></div>
+				<div class="col-xs-4"><label for="">Marca <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtBrandProduc"></div>
 				
 			</div>
 			<div class="row">
-				<div class="col-xs-4"><label for="">Capital</label> <input type="number" class="form-control" value="0.00"></div>
-				<div class="col-xs-4"><label for="">Interés a aplicar (%)</label> <input type="number" class="form-control" value="4"></div>
-				<div class="col-xs-4"><label for="">Fecha de ingreso</label>
+				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00"></div>
+				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4"></div>
+				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
 					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center"></div>	
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12"><label for="">Observación</label> <textarea  type="text" class="form-control" cols=2></textarea></div>
+				<div class="col-xs-12"><label for="">¿Más características?</label> <textarea  type="text" class="form-control mayuscula" id="txtObservacionProduc" cols=2 placeholder="¿Algún comentario que rescatar?"></textarea></div>
 			</div>
+
 		</div>
-        </div>
+		</div>
 			
 		<div class="modal-footer">
-			<button class="btn btn-success btn-outline" data-dismiss="modal" ><i class="icofont icofont-social-meetme"></i> Aceptar</button>
+			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
+			<button class="btn btn-morado btn-outline hidden" id='btnActualizarItem' ><i class="icofont icofont-refresh"></i> Actualizar item</button>
+			<button class="btn btn-morado btn-outline" id='btnAgregarItem' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
 		</div>
 	</div>
 	</div>
 </div>
 </div>
 
-<!-- Modal para decir Bienvenido  -->
-<div class="modal fade modal-Bienvenido" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-<div class="modal-dialog modal-sm" role="document">
-	<div class="modal-content">
-		<div class="modal-header-success">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Saludos</h4>
-		</div>
-		<div class="modal-body">
-			<div class="container-fluid">
-			<div class="row">
-			<p><strong>Bienvenido!</strong> Gracias por usar el panel deslizable</p>
-			</div>
-		</div>
-        </div>
-			
-		<div class="modal-footer">
-			<button class="btn btn-success btn-outline" data-dismiss="modal" ><i class="icofont icofont-social-meetme"></i> Aceptar</button>
-		</div>
-	</div>
-	</div>
-</div>
-</div>
-
-	
+<?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
@@ -237,19 +251,236 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script src="js/inicializacion.js?version=1.0.1"></script>
+<script src="js/inicializacion.js?version=1.0.3"></script>
+<script src="js/bootstrap-select.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
-
+$.interesGlobal=4;
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
+	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });
 $('#btnBienvenido').click(function () {
 	$('.modal-Bienvenido').modal('show');
 });
 $('#btnAddNewProd').click(function () {
+//divSelectProductoListado
+	$('#iddeLi').text('-1')
+	$('#txtQProduc').val(1);
+	$('#txtNameProduc').val('');
+	$('#txtBrandProduc').val('');
+	$('#txtCapitalProduc').val('0.00');
+	$('#txtInteresProduc').val($.interesGlobal);
+	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
+	$('#txtObservacionProduc').val('')
+	$('.modal-nuevoProductoLista .divError').addClass('hidden');
+	$('#sltProductoListado').selectpicker('val','');
 	$('.modal-nuevoProductoLista').modal('show');
+});
+$('#btnAgregarItem').click(function () {
+	var cantItem=$('#txtQProduc').val();
+	var nomItem=$('#txtNameProduc').val();
+	var capiItem=$('#txtCapitalProduc').val();
+	var interesItem=$('#txtInteresProduc').val();
+	var fechaItem=$('#dtpFechaInicio').val();
+	var marcaItem=$('#txtBrandProduc').val();
+	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
+	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
+	
+	var observaItem='';
+	if($('#txtObservacionProduc').val()==''){
+		observaItem='Sin observaciones';
+	}else{
+		observaItem=$('#txtObservacionProduc').val();
+	}
+	
+
+	if(tipoItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que seleccionar un tipo de producto'); }
+	else if(cantItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('La cantidad No puede ser negativa o cero'); }
+	else if(nomItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese un nombre de producto'); }
+	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
+	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
+	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
+	else if(marcaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una marca al producto'); }
+	else if( $('#iddeLi').text()!='-1'){console.log('repe')}
+	else{
+		$('#conjuntoElementos').append(`<li class="list-group-item">
+				<div class="row rowProduct">
+					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
+					<span class="sr-only spanfechaIngresov3">${fechaItem}</span> <span class="sr-only spanMarcav3">${marcaItem}</span> </div>
+					<div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+					<div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
+				</div><button class="btn btn-xs btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
+				</li>`);
+		calcularTotalesParc();
+	
+	$('.modal-nuevoProductoLista').modal('hide');
+	}
+
+});
+$('.colNewProduct').click(function () {
+	$('.modal-nuevoProductoLista #btnActualizarItem').addClass('hidden');
+	$('.modal-nuevoProductoLista #btnAgregarItem').removeClass('hidden');
+	$('#btnAddNewProd').click();
+});
+$('#conjuntoElementos').on('click', '.rowProduct', function () { 
+	$('#iddeLi').text($(this).parent().index())
+	$('#txtQProduc').val($(this).find('.spanCantidadv3').text());
+	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipoStrv3').text());
+	$('#txtNameProduc').val($(this).find('.spanNomProductov3').text());
+	$('#txtBrandProduc').val($(this).find('.spanMarcav3').text());
+	$('#txtCapitalProduc').val($(this).find('.spanPrecioEmpv3').text());
+	$('#txtInteresProduc').val($(this).find('.spanInteresv3').text());
+	$('#dtpFechaInicio').val($(this).find('.spanfechaIngresov3').text());
+	$('#txtObservacionProduc').val($(this).find('.spanObservacionv3').text());
+
+
+	$('.modal-nuevoProductoLista #btnActualizarItem').removeClass('hidden');
+	$('.modal-nuevoProductoLista #btnAgregarItem').addClass('hidden');
+	$('.modal-nuevoProductoLista .divError').addClass('hidden');
+	$('.modal-nuevoProductoLista').modal('show');
+	/*var nomItem=$('#txtNameProduc').val();
+	var capiItem=$('#txtCapitalProduc').val();
+	var interesItem=$('#txtInteresProduc').val();
+	var fechaItem=$('#dtpFechaInicio').val();
+	var marcaItem=$('#txtBrandProduc').val();
+	var observaItem=$('#txtObservacionProduc').val();
+	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();*/
+});
+function calcularTotalesParc() {
+	var sumaTotales=0;
+	if(  $('.spanPrecioEmpv3').length==0 ){
+		$('.spanTotalSumasv3').text('0.00');
+	}
+	$.each( $('.spanPrecioEmpv3'), function (i, elem) {console.log($(elem).text())
+		sumaTotales+=parseFloat($(elem).text());
+		$('.spanTotalSumasv3').text(sumaTotales.toFixed(2));
+	});
+}
+$('#ulListadoProductos').on('click', '.btnBorrarFila', function () {
+	$(this).parent().remove();
+	$('.modal-nuevoProductoLista').modal('hide');
+	calcularTotalesParc();
+});
+$('#btnActualizarItem').click(function () {
+	
+	var cantItem=$('#txtQProduc').val();
+	var nomItem=$('#txtNameProduc').val();
+	var capiItem=$('#txtCapitalProduc').val();
+	var interesItem=$('#txtInteresProduc').val();
+	var fechaItem=$('#dtpFechaInicio').val();
+	var marcaItem=$('#txtBrandProduc').val();
+	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
+	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
+	
+	var observaItem='';
+	if($('#txtObservacionProduc').val()==''){
+		observaItem='Sin observaciones';
+	}else{
+		observaItem=$('#txtObservacionProduc').val();
+	}
+	
+
+	if(tipoItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que seleccionar un tipo de producto'); }
+	else if(cantItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('La cantidad No puede ser negativa o cero'); }
+	else if(nomItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese un nombre de producto'); }
+	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
+	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
+	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
+	else if(marcaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una marca al producto'); }
+	else{
+		$('#conjuntoElementos').children($('#iddeLi').text()).remove();
+		$('#conjuntoElementos').append(`<li class="list-group-item">
+				<div class="row rowProduct">
+					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
+					<span class="sr-only spanfechaIngresov3">${fechaItem}</span> <span class="sr-only spanMarcav3">${marcaItem}</span> </div>
+					<div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+					<div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% <button class="btn btn-xs btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button></div>
+				</div>
+				</li>`);
+		calcularTotalesParc();
+	
+	$('.modal-nuevoProductoLista').modal('hide');
+	}
+});
+$('#someSwitchOptionWarning').change(function (e) {
+	if($(this).is(':checked')){//true
+		$('#lblSWQueEs').text('Compras: Todos los productos son compras sin interés.').css('color', '#5CB85C');
+		$('#dtpFechaVencimiento').attr("disabled", 'true');
+		$('#divSimulado').addClass('sr-only');
+		$('#btnGuardarDatos').addClass('sr-only');
+		$('#btnGuardarCompra').removeClass('sr-only');
+
+
+	}else{//false
+		$('#lblSWQueEs').text('Empeño: Todos los items son empeños con interés.').css('color', '#0082ff');
+		$('#dtpFechaVencimiento').removeAttr("disabled");
+		$('#divSimulado').removeClass('sr-only');
+		$('#btnGuardarDatos').removeClass('sr-only');
+		$('#btnGuardarCompra').addClass('sr-only');
+	}
+	$('#txtNombreProducto').focus();
+});
+$('#txtDni').focusout(function () {
+	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {
+		// console.log(JSON.parse(resp).length)
+		if(JSON.parse(resp).length==1){
+			$.each(JSON.parse(resp), function (i, dato) {
+				$('#txtIdCliente').val(dato.idCliente); /*.attr("disabled", 'true')*/
+				$('#txtApellidos').val(dato.cliApellidos); /*.attr("disabled", 'true')*/
+				$('#txtNombres').val(dato.cliNombres); /*.attr("disabled", 'true')*/
+				$('#txtDireccion').val(dato.cliDireccion); /*.attr("disabled", 'true')*/
+				$('#txtCorreo').val(dato.cliCorreo); /*.attr("disabled", 'true')*/
+				$('#txtCelular').val(dato.cliCelular); /*.attr("disabled", 'true')*/
+			})
+		}
+		/*else{
+			$('#txtIdCliente').val('').removeAttr("disabled");
+				$('#txtApellidos').val('').removeAttr("disabled");
+				$('#txtNombres').val('').removeAttr("disabled");
+				$('#txtDireccion').val('').removeAttr("disabled");
+				$('#txtCorreo').val('').removeAttr("disabled");
+				$('#txtCelular').val('').removeAttr("disabled");
+		}*/
+		
+	});
+});
+$('#btnGuardarDatos').click(function () {
+	if( $('#txtDni').val().length<8){
+		$('#spanMalo').text('El DNI no es correcto');
+		$('.modal-GuardadoError').modal('show');
+	}
+	else if( $('#txtApellidos').val()=='' || $('#txtApellidos').val()==''){
+		$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
+		$('.modal-GuardadoError').modal('show');
+	}
+	else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
+		$('#spanMalo').text('Ingese un teléfono fijo y un celular.');
+		$('.modal-GuardadoError').modal('show');
+	}else if($('.rowProduct').length==0){
+		$('#spanMalo').text('La lista de items no puede estar vacía.');
+		$('.modal-GuardadoError').modal('show');
+	}
+});
+$('#txtBuscarNivelGod').keyup(function (e) {
+	var code = e.which; // recommended to use e.which, it's normalized across browsers
+	var valor= $(this).val();
+
+    if(code==13){
+    	e.preventDefault();
+    	if($.isNumeric(valor)){
+    		//Buscar código interno, DNI's, celulares o teléfonos
+    		$.ajax({url:'php/buscarConNumeros.php', type:'POST' data: {campo: valor}}).done(function (resp) {
+    			// body...
+    		});
+    	}else{
+    		//Buscar descripciones, apellidos
+    	}
+    }
+
 });
 </script>
 

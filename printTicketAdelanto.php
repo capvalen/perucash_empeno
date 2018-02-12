@@ -25,11 +25,11 @@ try {
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("    *******  Pago Finalizado  ******\n");
+    $printer -> text("    *******  Cancela Interés  ******\n");
     $printer -> text("   Lunes 11/12/2017 10:31 a.m.\n\n");
-    $printer -> text("Cliente: Martinez Vitor, Manuel David\n\n");
-    $printer -> text("Artículo: Auto Nissan Sentra Ack-188\n");
-    $printer -> text("Monto: S/. 3980.00\n\n");
+    $printer -> text("Cliente: Rivera Zamudio, Raul Angel\n\n");
+    $printer -> text("Artículo: Extractora Rena Ware\n");
+    $printer -> text("Monto: S/. 156.20\n\n");
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
     $printer -> text("Usuario: Giordan Manrique\n");
     $printer -> text("   ----------------------------------\n");

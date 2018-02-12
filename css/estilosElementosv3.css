@@ -11,11 +11,12 @@ main, .contenedorDeslizable{background-color: #fff; border-radius:8px; margin-bo
 
 
 
-/*.btn-circle{width: 40px; height: 40px; text-align: center; padding: 6px 0; font-size: 12px; line-height: 1.42; border-radius: 35px;}
+.btn-circle{width: 40px; height: 40px; text-align: center; padding: 6px 0; font-size: 12px; line-height: 1.42; border-radius: 35px;}
+.btn-circle-mediano{width: 50px; height: 50px; text-align: center; padding: 6px 0; font-size: 23px; line-height: 1.42; border-radius: 50px;}
 .btn-circle:hover,.btn-circle-grande:hover{box-shadow:0 5px 5px 0 rgba(0,0,0,0.18),0 5px 5px 0 rgba(0,0,0,0.15);}
-.btn-circle-grande{width: 80px; height: 80px; text-align: center; padding: 16px 0; font-size: 36px; line-height: 1.42; border-radius: 65px; }*/
+.btn-circle-grande{width: 80px; height: 80px; text-align: center; padding: 16px 0; font-size: 36px; line-height: 1.42; border-radius: 65px; }
 a{text-decoration: none;display: inline-block;}
-.panel-negro { bordec-olor: #434A54;}
+.panel-negro { border-color: #434A54;}
 .panel-negro > .panel-heading {color: #fff; background-color: #434A54; border-color: #434A54;}
 .panel-negro > .panel-heading + .panel-collapse > .panel-body {border-top-color: #bce8f1;}
 .panel-negro > .panel-heading .badge {color: #fff; background-color: #434A54;}
@@ -65,17 +66,26 @@ input[type=number] {-moz-appearance:textfield;}
                                   not supported by any browser */
 }
 .btn-negro, .btn-negro:hover{border-color: #434A54; color: #fff; background-color: #434A54;}.btn-negro:active {background-color: #1f2123;} .btn-negro:focus {color: #fff;}
+.btn-dark, .btn-dark:hover{border-color: #656d78!important; color: #fff; background-color: #656d78;}.btn-dark:active {background-color: #656d78;} .btn-dark:focus {color: #fff;}
+.btn-azul, .btn-azul:hover{border-color: #0078D7!important; color: #fff; background-color: #0078D7;}.btn-azul:active {background-color: #0078D7;} .btn-azul:focus {color: #fff;}
 .btn-morado, .btn-morado:hover{border-color: #694D9F; color: #fff; background-color: #694D9F;}.btn-morado:active {background-color: #47346b;} .btn-morado:focus {color: #fff;}
 .btn-indigo, .btn-indigo:hover{border-color: #3E50B4; color: #fff; background-color: #3E50B4;}.btn-indigo:active {background-color: #3748a2;} .btn-indigo:focus {color: #fff;}
 .btn-morita, .btn-morita:hover{border-color: #9B26AF; color: #fff; background-color: #9B26AF;}.btn-morita:active {background-color: #7c1e8c;} .btn-morita:focus {color: #fff;}
 .btn-rosaKit, .btn-rosaKit:hover{border-color: #e91e63; color: #fff; background-color: #e91e63;}.btn-rosaKit:active {background-color: #a31545;} .btn-rosaKit:focus {color: #fff;}
 
+.btn-primary:hover {
+    background-color: #157ad0;
+    border-color: #065ca5;
+}
+
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{outline: 0 none;}
-.btn-outline {background-color: transparent; color: inherit;transition: all .5s;}
-.btn-primary.btn-outline {color: #428bca;}
+.btn-outline {background-color: #fff; color: inherit;transition: all .5s;}
+.btn-primary.btn-outline {color: #157ad0;border-color: #157ad0;}
 .btn-success.btn-outline {color: #5cb85c;}
 .btn-info.btn-outline {color: #5bc0de;}
 .btn-warning.btn-outline {color: #f0ad4e;}
+.btn-azul.btn-outline { color: #0078D7;border-color: #0078D7;}
+.btn-dark.btn-outline { color: #656d78;border-color: #656d78;}
 .btn-danger.btn-outline {color: #d9534f;}
 .btn-negro.btn-outline{color:#37474F;}
 .btn-morado.btn-outline{color:#694D9F;}
@@ -88,6 +98,7 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-primary.btn-outline:hover,.btn-success.btn-outline:hover,.btn-info.btn-outline:hover,.btn-warning.btn-outline:hover,.btn-danger.btn-outline:hover,
 /*.btn-negro.btn-outline:focus,*/.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover,/*.btn-morado.btn-outline:focus,*/
 .btn-morado.btn-outline:active,.btn-morado.btn-outline:hover, .btn-indigo.btn-outline:active,.btn-indigo.btn-outline:hover,
+.btn-azul.btn-outline:active,.btn-azul.btn-outline:hover,.btn-dark.btn-outline:active,.btn-dark.btn-outline:hover,
 .btn-morita.btn-outline:active,.btn-morita.btn-outline:hover,.btn-rosaKit.btn-outline:active,.btn-rosaKit.btn-outline:hover
 {color: white;}
 .btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: : black;}
@@ -108,7 +119,7 @@ input[type=number] {-moz-appearance:textfield;}
     width: 40px;  
 }
 .material-switch > label::before {
-    background: rgb(53, 42, 224); /*rgb(0, 0, 0);*/
+    background: #0082ff; /*rgb(0, 0, 0);*/
     box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     content: '';
@@ -120,7 +131,7 @@ input[type=number] {-moz-appearance:textfield;}
     width: 40px;
 }
 .material-switch > label::after {
-    background: rgb(78, 92, 187);/*rgb(255, 255, 255);*/
+    background: #0082ff;/*rgb(255, 255, 255);*/
     border-radius: 16px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     content: '';
@@ -141,5 +152,52 @@ input[type=number] {-moz-appearance:textfield;}
     left: 20px;
 }
 
+.list-group-item{
+    border: 0;
+    padding-left: 0;
+    border-top: 2px solid;
+    border-color: rgba(37,40,43,0.1);
+    transition: all 0.3s ease-in-out;
+}
+.list-group-item:hover{
+    transition: all 0.3s ease-in-out;
+    background-color: #f9f9f9;cursor: pointer;
+    
+}
+.list-group .list-group-item:first-child{
+    border:0;
+}
+.list-group .list-group-item p{
+    color: #2895F1;
+    
+    text-decoration: none;
+}
+.list-group .list-group-item .tipProducto{
+	color: #8a8a8a;    padding-left: 18px;
+}
+.list-group.list-group-header{
+    padding:0;
+    margin:0;
+}
+.list-group.list-group-body .glyphicon {
+ font-size: 25px; vertical-align: middle;
+}
+
+
 /*Código personalizado por cada proyecto*/
-.contenedorDatosCliente input, .contenedorDatosProductos input{padding-bottom: 5px;    margin-bottom: 10px;}
+.contenedorDatosCliente input, .contenedorDatosProductos input,
+.modal-nuevoProductoLista input
+{padding-bottom: 5px; margin-bottom: 10px;}
+.divError, .txtObligatorio{color: rgb(213, 0, 0);}
+.divError i{font-size: 20px;}
+#ulListadoProductos{font-size: 14px}
+#ulListadoProductos .icoMedia{font-size: 18px}
+.colNewProduct p{color: #f12855!important;}
+.btn-sinBorde{border-color: transparent!important;}
+.contenedorDatosCliente input::placeholder{ font-size: 12px;}
+
+.btnBorrarFila{background-color: transparent;margin-top: -50px;}
+.colNewProduct{cursor: pointer;}
+label{color: #424242;}
+.spanTotalSumasv3{font-size: 23px;}
+.spanCantidadv3, .spanUnd{color: #8a8a8a;}

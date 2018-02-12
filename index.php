@@ -21,12 +21,12 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12 text-center" style="color: #192335;">
-			<div class="wello login-box">
+			<div class="wello login-box"  >
 				<h2 class="text-center" style="font-weight:300; color:#2b3f63">PeruCash</h2>
 				<legend><small style="color: #3b475d;">Casa de préstamos y empeños</small></legend>
 				
 			<div class="form-group text-center">
-				<label for="username">Usuario:</label>
+				<label for="username">Usuarioa:</label>
 				<input class="form-control" value='' id="username" placeholder="Ingrese su nombre de usuario" type="text"  />
 			</div>
 			<div class="form-group text-center">
@@ -41,6 +41,8 @@
 				<label for="password">Elija una modalidad:</label>
 				<select name="" id="cmbMod" class="form-control">
 					<option value="2">Asistente administrativo</option>
+					<option value="3">Consultor</option>
+					<!-- <option value="4">Caja</option> -->
 					<option value="1">Director operativo</option>
 					
 				</select>
@@ -50,8 +52,10 @@
 				<select name="" id="office" class="form-control">
 					<option value="0">Seleccione una oficina</option>
 					<?php include 'php/listarSucursales.php'; ?>
-					
 				</select>
+			</div>
+			<div id="laCaptcha">
+				<div id="recaptcha" class="g-recaptcha" data-sitekey="6LfjkkIUAAAAAOPma1KCI7mSbsY56rq_oC4XiwzM" ></div><br>
 			</div>
 			<div class="form-group text-center text-danger hidden" id="divError">Error en alguno de los datos, complételos todos cuidadosamente.</div>
 			<div class="form-group text-center">
@@ -67,8 +71,10 @@
 
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<script type="text/javascript" src="js/impotem.js"></script>
 	<script type="text/javascript">
+	
 	$.ajax({url: 'php/desconectar.php'});
 	$(document).ready(function () {
 		$('#username').focus();
@@ -87,13 +93,28 @@
 			$('#office').find('option[value=3]').addClass('hidden');
 		}
 	});
-	$('#btnIniciar').click(function () {
+	$('#btnIniciar').click(function (event ) {
+		var $captcha = $( '#recaptcha' ),
+      response = grecaptcha.getResponse();
+  
+
+
+
 		$('#btnIniciar').find('.icono').addClass('sr-only');
 		$('#btnIniciar').find('.fa-spin').removeClass('sr-only');
 
 		if($('#username').val()=='' || $('#passw').val()=='' || $('#office').val()==0){$('#divError').removeClass('hidden');
 			$('#btnIniciar').find('.icono').removeClass('sr-only');
 			$('#btnIniciar').find('.fa-spin').addClass('sr-only');}
+		else if (response.length === 0) {
+			$('#divError').text('La captcha es obligatoria para acceder').removeClass('hidden');
+			$('#btnIniciar').find('.icono').removeClass('sr-only');
+			$('#btnIniciar').find('.fa-spin').addClass('sr-only');
+		}/* else {
+		    $( '.msg-error' ).text('');
+		    $captcha.removeClass( "error" );
+		    alert( 'reCAPTCHA marked' );
+		  }*/
 		else{
 			$.ajax({url: 'php/validarSesion.php', type: 'POST', data: {
 			user: $('#username').val(),
@@ -106,7 +127,7 @@
 				
 			console.log(resp);
 			if(resp==''){
-				$('#divError').removeClass('hidden');
+				$('#divError').text('Usuario o contraseña es incorrecto').removeClass('hidden');
 				$('#btnIniciar').find('.icono').removeClass('sr-only');
 				$('#btnIniciar').find('.fa-spin').addClass('sr-only');
 			}
@@ -122,4 +143,4 @@
 	});
 	</script>
 </body>
-</html>
+</html

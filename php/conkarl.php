@@ -2,9 +2,9 @@
 $server="localhost";
 
 /* Net	*/
-	$username="peruca5_root";
-	$password="*123456*";
-	$db='peruca5_demo';
+	$username="perucash_root";
+	$password="pr6sTuFru5*ePHE#eq*";
+	$db='perucash_app';
 //*/
 /* Local
 	$username="root";

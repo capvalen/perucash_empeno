@@ -288,7 +288,9 @@ if(isset($_SESSION['Atiende'])){?>
 						<p>Por: <strong><span class="mayuscula" id="QuienFinalizoFin"></span></strong>, el día: <strong><span id="FechaFinalizo"></span></strong> Monto: S/. <span id="finalizaMonto"></span> por: <strong><span id="QuienApruebaFin"></span>, <span id="estadoAprobacionFin"></span></strong>.</p>
 				</div>
 			</div>
+			
 			<div class="col-sm-8 col-sm-offset-2 hidden" id="divBotonesFijos">
+				<?php if( $_SESSION['Power']<>3 ){ ?>
 				<button class="btn btn-morado btn-outline" id="btn-imprimirTicketFijo"><i class="icofont icofont-price"></i> Voucher en ticketera</button>
 				<button class="btn btn-morado btn-outline" id="btn-imprimirHojaControl"><i class="icofont icofont-copy-alt"></i> Hoja de control</button>
 				<!-- <button class="btn btn-morado btn-outline" id="btn-imprimirImpresoraFijo"><i class="icofont icofont-print"></i> Voucher en impresora</button> -->
@@ -299,6 +301,7 @@ if(isset($_SESSION['Atiende'])){?>
 				<button class="btn btn-danger btn-outline sr-only" id="btn-FinalizarPrestamoFijo"><i class="icofont icofont-rocket"></i> Finalizar préstamo</button>
 				<button class="btn btn-danger btn-outline sr-only" id="btn-RetirarPrestamoFijo"><i class="icofont icofont-rocket"></i> Retirar artículo</button>
 				<button class="btn btn-morado btn-outline sr-only" id="btn-imprimirRetiro"><i class="icofont icofont-animal-cat-alt-4"></i> Imprimir ticket retirado</button>
+				<?php } ?>
 				<?php 
 				if ($_SESSION['Power']==1){
 					?> <button class="btn btn-danger btn-outline" id="btn-EliminarDB"><i class="icofont icofont-snowy-thunder"></i> Eliminar de la BD</button>
@@ -1253,7 +1256,7 @@ $(document).ready(function () {
 
 		console.log('solcitar producto con id: ' + idNew);
 		var coleccionIDs=''; var contarDesde='';
-		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) {
+		$.ajax({url: 'php/solicitarProductoPorId.php',type:'POST', data: {idProd: idNew}}). done(function (resp) { console.log(resp)
 		var dato = JSON.parse(resp);  console.log(dato)
 			
 		if(dato.length>0){
@@ -1280,7 +1283,7 @@ $(document).ready(function () {
 			/*Nuevo Código para de préstamos*/
 			$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
 				//console.log(resp)
-				$.each(JSON.parse(resp), function (i, jresp) { //console.log(jresp)
+				$.each(JSON.parse(resp), function (i, jresp) { // console.log(jresp)
 					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
 					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days'); /*console.log(differencia)*/
 					var diaInicial= moment(jresp.desFechaContarInteres).format('YYYY-MM-DD');
@@ -1492,7 +1495,7 @@ $(document).ready(function () {
 									$('#h5SrInteres').text(parseFloat(inte).toFixed(2));
 								}
 								$(`#contenedorPrestamos #${jsonCaja.idPrestamo}`).find('tbody').append(`
-							<tr><td>${jsonCaja.tipoDescripcion}</td>
+							<tr><td class="hidden idCajaTd">${jsonCaja.idCaja}</td> <td>${jsonCaja.tipoDescripcion}</td>
 							<td>${moment(jsonCaja.cajaFecha).format('DD/MM/YYYY hh:mm a')}</td>
 							<td>S/. ${parseFloat(jsonCaja.cajaValor).toFixed(2)}</td>
 							<td>${jsonCaja.usuNombres}</td></tr>`);
@@ -2901,7 +2904,7 @@ $('#btnPagarACuenta').click(function () {
 		//console.log( 'guardar '+ $('#txtPagarACuenta').val())
 		var loquepaga=parseFloat($('#txtPagarACuenta').val());
 		var totalDeuda= parseFloat($('#sr-MontInicialv3').text()) ;//parseFloat(montoInical) + parseFloat(interes)
-;		var interes= parseFloat($('#sr-montInteresv3').text());
+		var interes= parseFloat($('#sr-montInteresv3').text());
 		var montoInical=parseFloat(totalDeuda)-parseFloat(interes); //parseFloat( $('#sr-MontInicialv3').text()).toFixed(1);
 		var idpro=$('#sr-idProductov3').text();
 		var faltaPagar=0;
@@ -3247,7 +3250,7 @@ $('#btnModalAgregarDesembolso').click(function () {
 					// body...
 				});
 			if(resp>0){
-				/*location.reload();*/
+				location.reload();
 			}
 		})
 	}else{ $('#pErrorDesembolso').removeClass('hidden').text('No se puede agregar montos negativos o ceros'); }

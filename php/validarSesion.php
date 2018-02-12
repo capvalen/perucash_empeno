@@ -16,6 +16,7 @@ if ($row['idUsuario']>=1){
 	$_SESSION['idSucursal']=$row['idSucursal'];
 	$_SESSION['Sucursal']=$row['sucLugar'];
 	$_SESSION['Atiende']=$row['usuNombres'];
+	$_SESSION['nomCompleto']=$row['usuNombres'].', '.$row['usuApellido'];
 	$_SESSION['Power']=$row['usuPoder'];
 	$_SESSION['idUsuario']=$row['idUsuario'];
 	$_SESSION['oficina']=$_POST['offi'];
