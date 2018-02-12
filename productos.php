@@ -18,7 +18,7 @@
 		<!-- Custom CSS -->
 		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.32" rel="stylesheet">
+		<link href="css/estilosElementosv3.css?version=3.0.31" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="shortcut icon" href="images/peto.png" />
@@ -46,6 +46,15 @@
 	.divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
 	.divImagen img{border-radius: 7px;}
 	.divBotonesAccion{margin: 15px 0;}
+	.tab-pane li{list-style: none;}
+	.tab-pane li{margin:5px 0;text-indent: -.7em;}
+	.tab-pane li::before {
+		content: "• ";
+		color: #ab47bc;
+	}
+	.contenedorDatosCliente a{
+		color: #ab47bc;
+	}
 </style>
 <div id="wrapper">
 
@@ -130,37 +139,77 @@
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid noSelect">				 
-		<div class="row">
-			<div class="col-lg-12 contenedorDeslizable">
-			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Reporte de productos</h2>
-			<!-- Fin de contenido principal -->
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente">
+
+		<div class="row continer-fluid">
+			<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
 			<!-- Empieza a meter contenido 2.1 -->
-				<h2 class="h3Apellidos">Producto nuevo 001</h2>
-				<div class="divBotonesAccion">
-					<button class="btn btn-negro btn-circle-mediano btn-outline"><i class="icofont icofont-navigation-menu"></i></button>
+				<div class="container row" style="margin-bottom: 20px;">
+					<h2 class="h3Apellidos purple-text text-lighten-1">Nombre producto nuevo 001</h2>
+					<div class="divBotonesEdicion" style="margin-bottom: 10px">
+						<div class="btn-group">
+						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="icofont icofont-settings"></i> <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu">
+							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+						  </ul>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4 divImagen">
+						<img src="images/imgBlanca.png" class="img-responsive" alt="">
+					</div>
+					<div class="col-xs-12 col-sm-7 divDatosProducto">
+						<p>Código de producto: #<span>155</span></p>
+						<p>Dueño: <a href="cliente.php" class="spanDueno">Carlos Alex, Pariona Valencia</a></p>
+						<p>Registrado: <span>Lunes, 13 de enero de 2018</span></p>
+						<p>Cantidad: <span>5</span> unds.</p>
+						<p>Estado del producto: <strong class="blue-text text-accent-3">En almacén</strong></p>
+						<p>Estado del sub-préstamo: <strong class="blue-text text-accent-3">Vigente</strong></p>
+						<p>Adquisición: <span>Por alquiler</span></p>
+						<p>Último pago: <span>Aún no hay pago</span></p>
+					</div>
 				</div>
-				<div class="col-xs-12 col-sm-4 divImagen">
-					<img src="images/imgBlanca.png" class="img-responsive" alt="">
+				<div class="container row">
+					<ul class="nav nav-tabs">
+					<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
+					<li><a href="#tabMovEstados" data-toggle="tab">Estados</a></li>
+					<li><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
+					
+					</ul>
+					<div class="tab-content">
+					<!--tab content-->
+						<div class="tab-pane fade in active container-fluid" id="tabIntereses">
+						<!--Inicio de pestaña interior 01-->
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion intereses</h4>
+							<ul>
+								<li>Capital pendiente: <span>S/. 150.00</span></li>
+								<li>Tiempo de intereses: <span>7 días</span></li>
+								<li>Razón del cálculo: <span>Interés acumulado al 4% diario (mayor a 29 días).</span></li>
+								<li>Interés: <span>4% = S/. 6.00</span></li>
+								<li>Deuda total: <span><strong>S/. 156.00</strong></span></li>
+							</ul>
+						<!--Fin de pestaña interior 01-->
+						</div>
+						<div class="tab-pane fade container-fluid" id="tabMovEstados">
+						<!--Inicio de pestaña interior 02-->
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion de estados</h4>
+							<ul>
+								<li>Registrado	13/01/2018 03:37 p.m.	bmanrique</li>
+								<li>En almacén	13/01/2018 03:50 p.m.	giordan</li>
+							</ul>
+						<!--Fin de pestaña interior 02-->
+						</div>
+						<div class="tab-pane fade container-fluid" id="tabMovFinancieros">
+						<!--Inicio de pestaña interior 03-->
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion Financiera</h4>
+							<ul>
+								<li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li>
+							</ul>
+						<!--Fin de pestaña interior 03-->
+						</div>
+					<!-- Fin de tab content -->
+	            	</div>
 				</div>
-				<div class="col-xs-12 col-sm-7 divDatosProducto">
-					<p>Código de producto: #<span>155</span></p>
-					<p>Dueño: <a href="#!" class="spanDueno">Carlos Alex, Pariona Valencia</a></p>
-					<p>Registrado: <span>Lunes, 13 de enero de 2018</span></p>
-					<p>Estado: <span>En almacén</span></p>
-					<p>Capital vigente: <span>S/. 150.00</span></p>
-					<p>Adquisición: <span>Por alquiler</span></p>
-					<p>Último pago: <span>Aún no hay pago</span></p>
-					<p>Tiempo de intereses: <span>7 días</span></p>
-					<p>Interés: <span>4% = S/. 6.00</span></p>
-					<p>Deuda total: <span><strong>S/. 156.00</strong></span></p>
-				</div>
-				
-			<!-- Fin de contenido 2.1 -->
 			</div>
 			
 		</div>
@@ -192,6 +241,17 @@ $(document).ready(function(){
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });
 
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	var target = $(e.target).attr("href");
+	//console.log(target);
+	if(target=='#tabIntereses'){
+		//$.queMichiEs='nada'; console.log('tabnada')
+		
+	}
+	if(target=='#tabMovEstados'){
+		
+	}
+});
 </script>
 
 </body>

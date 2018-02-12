@@ -18,7 +18,7 @@
 		<!-- Custom CSS -->
 		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.28" rel="stylesheet">
+		<link href="css/estilosElementosv3.css?version=3.0.33" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="shortcut icon" href="images/peto.png" />
@@ -119,23 +119,22 @@
 			<!-- Fin de contenido principal -->
 			</div>
 		</div>
-		<div class="row">
+		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2 -->
 				<div class="row">
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
 				</div>
 				<div class="row">
-						
-					<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente"></div>
-					<div class="col-sm-3"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente"></div>
+					<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente" autocomplete="off"></div>
+					<div class="col-sm-3"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente" autocomplete="off"></div>
 					
 				</div>
 				<div class="row">
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
+					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
 				</div>
 			<!-- Fin de contenido 2 -->
 			</div>
@@ -173,7 +172,7 @@
 										<div class="container-fluid" id="conjuntoElementos"></div>
 										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
 										</div>
-										<div class="col-xs-2 text-left"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
+										<div class="col-xs-2 text-left purple-text text-lighten-1"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
 									</div>
 								</ul>
 							</div>
@@ -212,18 +211,16 @@
 						</select>
 					</div>
 				</div>
-				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc"></div>
+				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off"></div>
+			</div>
+			<div class="row ">
+				<div class="col-xs-8"><label for="">Nombre del artículo y características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-8"><label for="">Nombre del artículo <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc"></div>
-				<div class="col-xs-4"><label for="">Marca <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtBrandProduc"></div>
-				
-			</div>
-			<div class="row">
-				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00"></div>
-				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4"></div>
+				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
+				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
-					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center"></div>	
+					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
 				</div>
 			</div>
 			<div class="row">
@@ -252,7 +249,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
-<script src="js/bootstrap-select.js"></script>
+<script src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
@@ -271,7 +268,7 @@ $('#btnAddNewProd').click(function () {
 	$('#iddeLi').text('-1')
 	$('#txtQProduc').val(1);
 	$('#txtNameProduc').val('');
-	$('#txtBrandProduc').val('');
+	
 	$('#txtCapitalProduc').val('0.00');
 	$('#txtInteresProduc').val($.interesGlobal);
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
@@ -286,7 +283,7 @@ $('#btnAgregarItem').click(function () {
 	var capiItem=$('#txtCapitalProduc').val();
 	var interesItem=$('#txtInteresProduc').val();
 	var fechaItem=$('#dtpFechaInicio').val();
-	var marcaItem=$('#txtBrandProduc').val();
+	
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
 	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
 	
@@ -304,16 +301,15 @@ $('#btnAgregarItem').click(function () {
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
 	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
-	else if(marcaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una marca al producto'); }
 	else if( $('#iddeLi').text()!='-1'){console.log('repe')}
 	else{
 		$('#conjuntoElementos').append(`<li class="list-group-item">
 				<div class="row rowProduct">
 					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
-					<span class="sr-only spanfechaIngresov3">${fechaItem}</span> <span class="sr-only spanMarcav3">${marcaItem}</span> </div>
+					<span class="sr-only spanfechaIngresov3">${fechaItem}</span>  </div>
 					<div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
 					<div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
-				</div><button class="btn btn-xs btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
+				</div><button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
 				</li>`);
 		calcularTotalesParc();
 	
@@ -331,7 +327,7 @@ $('#conjuntoElementos').on('click', '.rowProduct', function () {
 	$('#txtQProduc').val($(this).find('.spanCantidadv3').text());
 	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipoStrv3').text());
 	$('#txtNameProduc').val($(this).find('.spanNomProductov3').text());
-	$('#txtBrandProduc').val($(this).find('.spanMarcav3').text());
+	
 	$('#txtCapitalProduc').val($(this).find('.spanPrecioEmpv3').text());
 	$('#txtInteresProduc').val($(this).find('.spanInteresv3').text());
 	$('#dtpFechaInicio').val($(this).find('.spanfechaIngresov3').text());
@@ -346,7 +342,6 @@ $('#conjuntoElementos').on('click', '.rowProduct', function () {
 	var capiItem=$('#txtCapitalProduc').val();
 	var interesItem=$('#txtInteresProduc').val();
 	var fechaItem=$('#dtpFechaInicio').val();
-	var marcaItem=$('#txtBrandProduc').val();
 	var observaItem=$('#txtObservacionProduc').val();
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();*/
 });
@@ -366,13 +361,13 @@ $('#ulListadoProductos').on('click', '.btnBorrarFila', function () {
 	calcularTotalesParc();
 });
 $('#btnActualizarItem').click(function () {
+	var index=$(this).parent().parent().index();
 	
 	var cantItem=$('#txtQProduc').val();
 	var nomItem=$('#txtNameProduc').val();
 	var capiItem=$('#txtCapitalProduc').val();
 	var interesItem=$('#txtInteresProduc').val();
 	var fechaItem=$('#dtpFechaInicio').val();
-	var marcaItem=$('#txtBrandProduc').val();
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
 	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
 	
@@ -390,17 +385,16 @@ $('#btnActualizarItem').click(function () {
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
 	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
-	else if(marcaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una marca al producto'); }
-	else{
-		$('#conjuntoElementos').children($('#iddeLi').text()).remove();
+	else{ console.log(index)
+		$('#conjuntoElementos li').eq(index).remove();
 		$('#conjuntoElementos').append(`<li class="list-group-item">
-				<div class="row rowProduct">
-					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
-					<span class="sr-only spanfechaIngresov3">${fechaItem}</span> <span class="sr-only spanMarcav3">${marcaItem}</span> </div>
-					<div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
-					<div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% <button class="btn btn-xs btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button></div>
-				</div>
-				</li>`);
+			    <div class="row rowProduct">
+			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
+			        <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
+			        <div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+			        <div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
+			    <button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
+			    </li>`);
 		calcularTotalesParc();
 	
 	$('.modal-nuevoProductoLista').modal('hide');
@@ -473,7 +467,7 @@ $('#txtBuscarNivelGod').keyup(function (e) {
     	e.preventDefault();
     	if($.isNumeric(valor)){
     		//Buscar código interno, DNI's, celulares o teléfonos
-    		$.ajax({url:'php/buscarConNumeros.php', type:'POST' data: {campo: valor}}).done(function (resp) {
+    		$.ajax({url:'php/listarBuscarIdProducto.php', type:'POST', data: {campo: valor}}).done(function (resp) {
     			// body...
     		});
     	}else{

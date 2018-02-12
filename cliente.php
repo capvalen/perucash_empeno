@@ -18,7 +18,7 @@
 		<!-- Custom CSS -->
 		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.28" rel="stylesheet">
+		<link href="css/estilosElementosv3.css?version=3.0.29" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="shortcut icon" href="images/peto.png" />
@@ -143,10 +143,11 @@
 		<div class="row contenedorDeslizable">
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
+				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos">Pariona Valencia</h3>
-				<h3 class="h3Nombres">Carlos Alex</h3>
+				<h3 class="h3Nombres">Carlos Alex <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;"><i class="icofont icofont-ui-rating"></i><i class="icofont icofont-ui-rating"></i><i class="icofont icofont-ui-rate-blank"></i><i class="icofont icofont-ui-rate-blank"></i><i class="icofont icofont-ui-rate-blank"></i></span>
-				<h4 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> 4447564</h4>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> 4447564</h5>
 				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-home"></i> Av. Huancavelica 435 - El Tambo - Huancayo</h5>
 				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> 977692108</h5>
 				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i>248151</h5>
@@ -155,21 +156,20 @@
 			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2.2 -->
 				<div class="divPrestamo">
-					<h4>Préstamo #2 <span class="pull-right">S/. 50.00</span></h4>
-					<div class="divBotonesPrestamo">
+					<h4>Préstamo #2</h4>
+					<div class="divBotonesPrestamo" style="margin-bottom: 10px">
 						<div class="btn-group">
 						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<i class="icofont icofont-settings"></i> <span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu">
-							<li><a href="#"><i class="icofont icofont-shopping-cart"></i> Acciones de Caja</a></li>
-							<li><a href="#"><i class="icofont icofont-royal"></i> Acciones de Administrador</a></li>
-							<li><a href="#"><i class="icofont icofont-robot"></i> Acciones de Colaborador</a></li>
+							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
 						  </ul>
 						</div>
 					</div>
 					<div class=" paPrestamo"><strong>
 						<div class="row blue-text text-accent-3">
+							<div class="hidden codRegistro">850</div>
 							<div class="col-xs-5">Producto 001</div>
 							<div class="col-xs-3">S/. 250.00</div>
 							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> En almacén <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
@@ -177,12 +177,14 @@
 					</strong></div>
 					<div class=" paPrestamo"><strong>
 						<div class="row yellow-text text-darken-2">
+							<div class="hidden codRegistro">850</div>
 							<div class="col-xs-5">Producto 002</div>
 							<div class="col-xs-3">S/. 68.00</div>
 							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> Vendido <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
 						</div>
 					</strong></div><div class=" paPrestamo"><strong>
 						<div class="row amber-text text-darken-3">
+							<div class="hidden codRegistro">850</div>
 							<div class="col-xs-5">Producto 003</div>
 							<div class="col-xs-3">S/. 80.00</div>
 							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> En venta <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
@@ -220,7 +222,12 @@ $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });
-
+$('#aaccionesCaja').click(function () {
+	$('.modal-accionesCaja').modal('show');
+});
+$('.paPrestamo').click(function () {
+	window.location='productos.php'
+});
 </script>
 
 </body>
