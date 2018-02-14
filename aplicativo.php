@@ -3,7 +3,9 @@
 // ini_set("session.gc_maxlifetime","7200");
 session_start();
 require 'php/conkarl.php';
-if(isset($_SESSION['Atiende'])){?>
+if(isset($_SESSION['Atiende'])){
+	print_r( $_COOKIE['dato']);
+	?>
 
 
 <!DOCTYPE html>

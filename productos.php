@@ -21,7 +21,7 @@
 		<link href="css/estilosElementosv3.css?version=3.0.31" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/peto.png" />
+		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
 		

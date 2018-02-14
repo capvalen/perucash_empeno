@@ -1,9 +1,6 @@
 <?php 
 // ini_set("session.cookie_lifetime","7200");
 // ini_set("session.gc_maxlifetime","7200");
-session_start([
-    'cookie_lifetime' => 86400
-]);
 //session_start();
 header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
@@ -20,6 +17,15 @@ if ($row['idUsuario']>=1){
 	$_SESSION['Power']=$row['usuPoder'];
 	$_SESSION['idUsuario']=$row['idUsuario'];
 	$_SESSION['oficina']=$_POST['offi'];
+
+	$expira=time()+60*60*24;
+	setcookie('ckidSucursal', $row['idSucursal']);
+	setcookie('ckSucursal', $row['sucLugar']);
+	setcookie('ckAtiende', $row['usuNombres']);
+	setcookie('cknomCompleto', $row['usuNombres'].', '.$row['usuApellido']);
+	setcookie('ckPower', $row['usuPoder']);
+	setcookie('ckidUsuario', $row['idUsuario']);
+	setcookie('ckoficina', $_POST['offi']);
 	echo "Welcome guy!";
 }
 

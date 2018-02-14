@@ -1,3 +1,16 @@
+<?php 
+
+
+if (isset ($_COOKIE["cookUser"]) ){ 
+	if (isset ($_COOKIE["cookPass"]) ){
+		/*Si hay cookie deberia entrar*/
+		//require 'php/validarSesion.php';
+	}
+}
+else{ setcookie("cookUser","naranja"); }
+
+
+?>
 <!DOCTYPE html>
 <html lang="es" style="background-color:transparent;">
 
@@ -131,7 +144,7 @@
 				$('#btnIniciar').find('.icono').removeClass('sr-only');
 				$('#btnIniciar').find('.fa-spin').addClass('sr-only');
 			}
-			if(resp=='Welcome guy!'){window.location.href = 'aplicativo.php'}
+			if(resp=='Welcome guy!'){window.location.href = 'pruebaCookie.php'}
 		}).error(function (err) {console.log(err);
 			// body...
 		});
