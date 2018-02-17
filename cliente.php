@@ -1,7 +1,15 @@
-<?php session_start(); ?>
+<?php session_start();
+require("php/conkarl.php");
+?>
 <!DOCTYPE html>
 <html lang="es">
 
+<?php 
+if( isset($_GET['idCliente'])){
+	$sql = mysqli_query($conection,"SELECT * FROM `Cliente` where idCliente = '".$_GET['idCliente']."';");
+	$rowCliente = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+}
+?>
 <head>
 
 		<meta charset="utf-8">
@@ -144,37 +152,61 @@
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
-				<h3 class="h3Apellidos">Pariona Valencia</h3>
-				<h3 class="h3Nombres">Carlos Alex <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
-				<span class="rate yellow-text text-darken-2" style="font-size: 18px;"><i class="icofont icofont-ui-rating"></i><i class="icofont icofont-ui-rating"></i><i class="icofont icofont-ui-rate-blank"></i><i class="icofont icofont-ui-rate-blank"></i><i class="icofont icofont-ui-rate-blank"></i></span>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> 4447564</h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-home"></i> Av. Huancavelica 435 - El Tambo - Huancayo</h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> 977692108</h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i>248151</h5>
+				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
+				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
+				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
+					<?php
+						for ($i=0; $i <5 ; $i++) { 
+							if($i<$rowCliente['cliCalificacion']){
+								echo '<i class="icofont icofont-ui-rating"></i>';
+							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
+						}
+					 ?></span>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> <?php echo $rowCliente['cliDni']; ?></h5>
+				<h5 class="grey-text text-lighten-1 mayuscula"><i class="icofont icofont-home"></i> <?php echo $rowCliente['cliDireccion']; ?></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> <?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></h5>
 			<!-- Fin de contenido 2.1 -->
 			</div>
 			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2.2 -->
 				<div class="divPrestamo">
-					<h4>Préstamo #2</h4>
-					<div class="divBotonesPrestamo" style="margin-bottom: 10px">
-						<div class="btn-group">
-						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="icofont icofont-settings"></i> <span class="caret"></span>
+				<?php
+				$i=0;
+				if( isset($_GET['idCliente'])){
+					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."';");
+					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+						echo "<h4>Préstamo #{$rowPrestamos['idPrestamo']}</h4>";
+						echo "<div class='divBotonesPrestamo' style='margin-bottom: 10px'>
+						<div class='btn-group'>
+						  <button type='button' class='btn btn-azul btn-outline dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+							<i class='icofont icofont-settings'></i> <span class='caret'></span>
 						  </button>
-						  <ul class="dropdown-menu">
-							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+						  <ul class='dropdown-menu'>
+							<li><a href='#' id=''><i class='icofont icofont-shopping-cart'></i> Agregar nuevo item</a></li>
 						  </ul>
 						</div>
-					</div>
-					<div class=" paPrestamo"><strong>
-						<div class="row blue-text text-accent-3">
-							<div class="hidden codRegistro">850</div>
-							<div class="col-xs-5">Producto 001</div>
-							<div class="col-xs-3">S/. 250.00</div>
-							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> En almacén <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
+					</div>";
+						$i++;
+						$j=0;
+						$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
+						while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
+							echo "<div class=' paPrestamo'><strong>
+						<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
+							<div class='hidden codRegistro'>850</div>
+							<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
+							<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
+							<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right grey-text'><i class='icofont icofont-rounded-right'></i></span></div>
 						</div>
-					</strong></div>
+					</strong></div>";
+							$j++;
+						}
+					}
+					
+				}
+				?>
+					
+					
 					<div class=" paPrestamo"><strong>
 						<div class="row yellow-text text-darken-2">
 							<div class="hidden codRegistro">850</div>
