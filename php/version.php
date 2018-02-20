@@ -4,6 +4,14 @@ echo "Ver. 3.0 Build 2017.12.11";
 /*
 Nuevos cambios en versiones:
 
+Version 3.0
+UPDATE `prestamo` p inner join desembolso d
+on d.idPrestamo=p.idPrestamo
+SET p.`preFechaContarInteres`=d.desFechaContarInteres
+WHERE 1
+Ahora jugamos más con presidTipoProceso de prestamo_producto;
+
+
 Version 2.10
 * InteresDiario= 4%/7 = 0.04/7
 * Día 1 al 7: 4% interés mínimo por defecto

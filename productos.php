@@ -5,7 +5,7 @@ require("php/conkarl.php");
 <html lang="es">
 <?php 
 if( isset($_GET['idProducto'])){
-	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres,' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
+	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
 inner join usuario u on u.idUsuario=p.idUsuario
 WHERE p.idProducto=".$_GET['idProducto'].";");
 $rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -114,9 +114,7 @@ if (!file_exists($carpeta)) {
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
 			</li>
-			<li>
-					<a href="#!" id="aCreditoNuevo"><i class="icofont icofont-ui-love-add"></i> Crédito nuevo</a>
-			</li>
+			
 			<li>
 					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
 			</li>
@@ -216,7 +214,7 @@ if (!file_exists($carpeta)) {
 						<p>Préstamo incial: S/. <?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></p>
 						<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 						<p>Adquisición: <span><?php echo $rowProducto['esCompra']==='0' ? 'Compra' : 'Por alquiler' ?></span></p>
-						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
+						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
 						<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
 					</div>
 				</div>
@@ -225,7 +223,7 @@ if (!file_exists($carpeta)) {
 					<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
 					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
 					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
-					<li><a href="#tabAdvertencias" data-toggle="tab">Advertencias</a></li>
+					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias</a></li>
 					
 					</ul>
 					<div class="tab-content">
@@ -242,13 +240,30 @@ if (!file_exists($carpeta)) {
 							if($rowProducto['prodActivo']==='0'){
 							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
 							}else{
+								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.preFechaContarInteres,datediff( now(), preFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo` p where idProducto=".$_GET['idProducto']);
+								$rowInteres=mysqli_fetch_assoc($sqlIntereses);
 								?>
 							<ul>
-								<li>Saldo pendiente: <span>S/. 150.00</span></li>
-								<li>Tiempo de intereses: <span>7 días</span></li>
-								<li>Razón del cálculo: <span>Interés acumulado al 4% diario (mayor a 29 días).</span></li>
-								<li>Interés: <span>4% = S/. 6.00</span></li>
-								<li>Deuda total: <span><strong>S/. 156.00</strong></span></li>
+								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
+								<li>Tiempo de intereses: <span><?php echo $rowInteres['diferenciaDias']; ?> días</span></li>
+							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=28 ){ ?>
+								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
+								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= $rowInteres['preCapital']*$rowInteres['preInteres']/100; echo $interesJson; ?></span></li>
+							<?php }else { 
+								$_GET['inicio']=floatval($rowInteres['preCapital']);
+								$_GET['numhoy']=$rowInteres['diferenciaDias'];
+								$_GET['interes']=$rowInteres['preInteres'];
+								$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
+								// var_dump($resultado);
+								$interesJson= $resultado[0]['pagarAHoy'];
+								$gastosAdmin=0;
+								?>
+								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más allá del día 29).</span></li>
+								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
+							<?php if($rowInteres['diferenciaDias']>=29 ){ $gastosAdmin=10; ?>
+								<li>Gastos admnistrativos: <span>S/. 10.00</span></li>
+							<?php }} ?>
+								<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
 							</ul>
 							<?php 
 							}
@@ -259,11 +274,11 @@ if (!file_exists($carpeta)) {
 						<!--Inicio de pestaña interior 02-->
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
 							<ul>
-								<li>Registrado por <?php echo $rowProducto['usuNombres']; ?>: <?php echo $rowProducto['prodFechaRegistro']; ?> <button class="btn btn-sm btn-azul btn-outline" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+								<li>Registrado por <?php echo $rowProducto['usuNombres']; ?>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaRegistro']; ?></span> <button class="btn btn-sm btn-azul btn-outline" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 								<?php $i=0; 
 								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `detallereporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
 								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
-									echo "<li>{$rowEstados['repoDescripcion']} por {$rowEstados['repoUsuario']}, con S/. ".number_format($rowEstados['repoValorMonetario'],2).": {$rowEstados['repoFechaOcurrencia']} <button class='btn btn-sm btn-azul btn-outline' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
+									echo "<li>{$rowEstados['repoDescripcion']} por {$rowEstados['repoUsuario']}, con S/. ".number_format($rowEstados['repoValorMonetario'],2).": <span class='spanFechaFormat'>{$rowEstados['repoFechaOcurrencia']}</span> <button class='btn btn-sm btn-azul btn-outline' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
 									$i++;
 								} ?>
 							</ul>
@@ -279,11 +294,18 @@ if (!file_exists($carpeta)) {
 						</div>
 						<div class="tab-pane fade container-fluid" id="tabAdvertencias">
 						<!--Inicio de pestaña interior 04-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Advertencias antes de rematar</h4>
-							
-							<div class="mensaje"><div class="texto"><p><strong>Giordan</strong> <small><i class="icofont icofont-clock-time"></i> 14/05/2018 16:00</small></p> <p class="textoMensaje">Cliente nunca contestó.</p> </div></div>
-							<div class="mensaje"><div class="texto"><p><strong>Beatriz</strong> <small><i class="icofont icofont-clock-time"></i> 13/05/2018 12:00</small></p> <p class="textoMensaje">Cliente dijo que vendrá lunes.</p> </div></div>
-							<div class="dejarMensaje"><input type="text" class="form-control" placeholder="¿Qué mensaje dejó para el cliente?" style="width: 85%; display: inline-block;"> <button class="btn btn-default" style="margin-top: -3px; "><i class="icofont icofont-location-arrow"></i></button></div>
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Observaciones y Advertencias antes de rematar</h4>
+							<?php if($rowProducto['prodObservaciones']<>''){ ?>
+								<div class="mensaje"><div class="texto"><p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
+							<?php } ?>
+							<div class="conjuntoMensajes">
+							<?php
+							$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres FROM `avisos` a inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
+							while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
+								<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['aviMensaje']; ?></p> </div></div>
+							<?php } ?>
+							</div>
+							<div class="dejarMensaje"><input type="text" class="form-control mayuscula" id="txtDejarMensaje" placeholder="¿Qué mensaje dejó para el cliente?" style="width: 85%; display: inline-block;"> <button class="btn btn-default" id="btnDejarMensaje" style="margin-top: -3px;"><i class="icofont icofont-location-arrow"></i></button></div>
 							
 						<!--Fin de pestaña interior 04-->
 						</div>
@@ -300,6 +322,28 @@ if (!file_exists($carpeta)) {
 
 </div>
 
+<!--Modal Para asignar nuevo estado al producto-->
+<div class="modal fade modal-asignarEstado" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-warning">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Asignar un nuevo estado</h4>
+			</div>
+			<div class="modal-body">
+				<div id="cmbEstadoProd">
+				<select class="selectpicker mayuscula" title="Nuevo estado..."  data-width="100%" data-live-search="true" data-size="15">
+					<?php require 'php/detalleReporteOPT.php'; ?>
+				</select></div>
+				<input type="text" class="form-control" id="txtComentarioEstado" placeholder="Comentario extra">
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-warning btn-outline" data-dismiss="modal" id="btnActualizarEstado" ><i class="icofont icofont-check"></i> Actualizar</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 <?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -309,16 +353,23 @@ if (!file_exists($carpeta)) {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
-$.interesGlobal=4;
+datosUsuario();
+
 $(document).ready(function(){
+	moment.locale('es');
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$.each( $('.spanFechaFormat'), function (i, dato) {
+		var nueFecha=moment($(dato).text());
+		$(dato).text(nueFecha.format('LLLL'));
+	});
 });
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
@@ -331,6 +382,44 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	if(target=='#tabMovEstados'){
 		
 	}
+});
+$('#btnDejarMensaje').click(function () {
+	
+	if( $('#txtDejarMensaje').val()!==''){
+		$.ajax({
+			url: 'php/dejarMensaje.php',
+			type:'POST',
+			data: {
+				mensaje: $('#txtDejarMensaje').val(),
+				idUser: $.JsonUsuario.idUsuario,
+				idProducto: <?php echo $_GET['idProducto']; ?>
+			}
+		}).done(function (resp) {
+			moment.locale('es');
+			$('.conjuntoMensajes').append(`<div class="mensaje"><div class="texto"><p><strong>${$.JsonUsuario.usunombres}</strong> <small><i class="icofont icofont-clock-time"></i> ${moment().format('LLLL')}</small></p> <p class="textoMensaje">${ $('#txtDejarMensaje').val()}</p> </div></div>`);
+			$('#txtDejarMensaje').val('');
+		});
+	}
+});
+$('#txtClientePagaMonto').keyup(function (e) {
+	var code = e.which;
+	if(code==13 ){	e.preventDefault();
+		$('#btnDejarMensaje').click();
+	}
+});
+$('.estadoProducto').click(function () {
+	$('.modal-asignarEstado').modal('show');
+});
+$('#btnActualizarEstado').click(function () {
+	var idEstado=$('#cmbEstadoProd').find('li.selected a').attr('data-tokens');
+	$.ajax({url: 'php/cambiarEstadoProducto.php', type: 'POST', data:{
+		estado: idEstado,
+		idProd: <?php echo $_GET['idProducto']; ?>,
+		usuario: $.JsonUsuario.usunombres,
+		comentario: $('#txtComentarioEstado').val()
+	}}).done(function (resp) {
+		console.log(resp);
+	});
 });
 </script>
 

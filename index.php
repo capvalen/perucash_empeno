@@ -76,7 +76,7 @@ else{ setcookie("cookUser","naranja"); }
 				<button class="btn btn-success btn-outline" id="btnIniciar"><div class="fa-spin sr-only"><i class="icofont icofont-spinner"></i> </div> <i class="icofont icofont-key icono"></i> Iniciar</button>
 			</div>
 			
-			<div class="pull-right" ><small>Ver. 2.10 | 2017 <a href="https://info-cat.com/perucash">®  Info-cat</a></small></div>
+			<div class="pull-right" ><small><?php include 'php/version.php' ?> | 2017 <a href="https://info-cat.com/perucash">®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>
@@ -144,7 +144,7 @@ else{ setcookie("cookUser","naranja"); }
 				$('#btnIniciar').find('.icono').removeClass('sr-only');
 				$('#btnIniciar').find('.fa-spin').addClass('sr-only');
 			}
-			if(resp=='Welcome guy!'){window.location.href = 'pruebaCookie.php'}
+			if(resp=='Welcome guy!'){window.location.href = 'registro.php'}
 		}).error(function (err) {console.log(err);
 			// body...
 		});

@@ -51,9 +51,6 @@
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
 			</li>
 			<li>
-					<a href="#!" id="aCreditoNuevo"><i class="icofont icofont-ui-love-add"></i> Crédito nuevo</a>
-			</li>
-			<li>
 					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
 			</li>
 			<li>

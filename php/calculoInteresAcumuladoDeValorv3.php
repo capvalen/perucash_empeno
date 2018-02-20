@@ -7,12 +7,12 @@ por defecto el mínimo 10%
 
 $montoInicial=$_GET['inicio'];// $montoInicial =5001;
 $DiadeHoy=$_GET['numhoy']; //$DiadeHoy=1;
+$intereses=$_GET['interes']/100;
+$maximoDias=200;
 
-$maximoDias=99;
 
-
-if($montoInicial<=5000){$interesDiario=0.04/7;}
-else{$interesDiario=0.04/7;}
+if($montoInicial<=5000){$interesDiario=$intereses/7;}
+else{$interesDiario=$intereses/7;}
 
 $interesAcumulado=$montoInicial;
 $intDiarioAcumulado=0;
@@ -41,7 +41,7 @@ else if($DiadeHoy<=$maximoDias ){$filas[2][]=array('pagarAHoy' => round( $filas[
 
 
 
-return json_encode($filas);
+return ($filas[2]);
 
 
  ?>

@@ -51,7 +51,7 @@ if( isset($_GET['idCliente'])){
 		transition: all 0.6s ease-in-out;
 	}
 	.h3Nombres{margin-top: 0px;}
-	.rate i{padding-left: 3px;}
+	.rate i{padding-left: 3px; cursor: pointer;}
 	.divBotonesPrestamo .dropdown-menu>li>a{color: #0078D7;}
 	.divBotonesPrestamo .dropdown-menu>li>a:focus, .divBotonesPrestamo .dropdown-menu>li>a:hover {
 	    text-decoration: none;
@@ -78,9 +78,6 @@ if( isset($_GET['idCliente'])){
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
-			</li>
-			<li>
-					<a href="#!" id="aCreditoNuevo"><i class="icofont icofont-ui-love-add"></i> Crédito nuevo</a>
 			</li>
 			<li>
 					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
@@ -176,7 +173,7 @@ if( isset($_GET['idCliente'])){
 				if( isset($_GET['idCliente'])){
 					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."';");
 					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-						echo "<h4>Préstamo #{$rowPrestamos['idPrestamo']}</h4>";
+						echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']}</h4>";
 						echo "<div class='divBotonesPrestamo' style='margin-bottom: 10px'>
 						<div class='btn-group'>
 						  <button type='button' class='btn btn-azul btn-outline dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -193,7 +190,7 @@ if( isset($_GET['idCliente'])){
 						while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
 							echo "<div class=' paPrestamo'><strong>
 						<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
-							<div class='hidden codRegistro'>850</div>
+							<div class='hidden codRegistro'>{$rowPrestamosProductos['idProducto']}</div>
 							<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
 							<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
 							<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right grey-text'><i class='icofont icofont-rounded-right'></i></span></div>
@@ -205,9 +202,7 @@ if( isset($_GET['idCliente'])){
 					
 				}
 				?>
-					
-					
-					<div class=" paPrestamo"><strong>
+					<!-- <div class=" paPrestamo"><strong>
 						<div class="row yellow-text text-darken-2">
 							<div class="hidden codRegistro">850</div>
 							<div class="col-xs-5">Producto 002</div>
@@ -222,7 +217,7 @@ if( isset($_GET['idCliente'])){
 							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> En venta <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
 						</div>
 					</strong></div>
-				</div>
+									</div> -->
 			<!-- Fin de contenido 2.2 -->
 			</div>
 			</div>
@@ -249,7 +244,6 @@ if( isset($_GET['idCliente'])){
 
 <!-- Menu Toggle Script -->
 <script>
-$.interesGlobal=4;
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -258,10 +252,23 @@ $('#aaccionesCaja').click(function () {
 	$('.modal-accionesCaja').modal('show');
 });
 $('.paPrestamo').click(function () {
-	window.location='productos.php'
+	var codigo=$(this).find('.codRegistro').text()
+	window.location='productos.php?idProducto='+codigo;
+});
+$('.rate i').click(function () {
+	var calificacion=$(this).index()+1;
+	$.ajax({url:'php/puntarCliente.php', type: 'POST', data: {estrellas: calificacion , idCli: <?php echo $_GET['idCliente']; ?> }}).done(function (resp) {
+		console.log(resp);
+	});
+	$('.rate').children().remove();
+	for (var i = 0; i < 5; i++) {
+		if(i<calificacion){
+			$('.rate').append('<i class="icofont icofont-ui-rating"></i>');
+		}else{
+			$('.rate').append('<i class="icofont icofont-ui-rate-blank"></i>');
+		}
+	}
 });
 </script>
-
 </body>
-
 </html>
