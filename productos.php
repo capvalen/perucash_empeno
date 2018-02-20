@@ -8,7 +8,11 @@ if( isset($_GET['idProducto'])){
 	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres,' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
 inner join usuario u on u.idUsuario=p.idUsuario
 WHERE p.idProducto=".$_GET['idProducto'].";");
-	$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+/*$carpeta = 'images/productos/'.$_GET['idProducto'];
+if (!file_exists($carpeta)) {
+    mkdir($carpeta, 0777, true);
+}*/
 }
 ?>
 
@@ -189,7 +193,21 @@ WHERE p.idProducto=".$_GET['idProducto'].";");
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4 divImagen">
-						<img src="images/imgBlanca.png" class="img-responsive" alt="">
+						
+						<?php 
+						$directorio = "images/productos/".$_GET['idProducto'];
+						if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
+						$cantImg=0;
+						foreach($ficheros as $archivo)
+						{
+							$cantImg++;
+							if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
+						        /*echo $directorio."/".$archivo;*/
+						        echo "<img class='img-responsive' src='".$directorio."/".$archivo."' >";
+						    }
+						}
+						if($cantImg==2){ echo '<img src="images/imgBlanca.png" class="img-responsive" alt="">';}}else{echo '<img src="images/imgBlanca.png" class="img-responsive" alt="">';}
+						?>
 					</div>
 					<div class="col-xs-12 col-sm-7 divDatosProducto">
 						<p>Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></p>
