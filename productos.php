@@ -1,6 +1,16 @@
-<?php session_start(); ?>
+<?php session_start();
+require("php/conkarl.php");
+?>
 <!DOCTYPE html>
 <html lang="es">
+<?php 
+if( isset($_GET['idProducto'])){
+	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres,' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
+inner join usuario u on u.idUsuario=p.idUsuario
+WHERE p.idProducto=".$_GET['idProducto'].";");
+	$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+}
+?>
 
 <head>
 
@@ -55,8 +65,31 @@
 	.contenedorDatosCliente a{
 		color: #ab47bc;
 	}
+	#tabAdvertencias li{width: 85%;}
+	.mensaje{    float: left;    margin-bottom: 10px;
+    width: 85%;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    background: #ab47bc; color: white;box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.13);
+    /* background: whitesmoke; */}
+    .mensaje:before {
+    width: 0;
+    height: 0;
+    content: "";
+    top: -5px;
+    left: -14px;
+    position: relative;
+    border-style: solid;
+    border-width: 0 13px 13px 0;
+    border-color: transparent #ab47bc transparent transparent;
+    /*border-color: transparent whitesmoke transparent transparent;*/
+}
+.textoMensaje{ padding-left: 30px }
+.mensaje small{color: #f7f7f7;/* color: #6b6b6b; */}
+
 </style>
-<div id="wrapper">
+<div class="noselect" id="wrapper">
 
 	<!-- Sidebar -->
 	<div id="sidebar-wrapper">
@@ -144,7 +177,7 @@
 			<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
 			<!-- Empieza a meter contenido 2.1 -->
 				<div class="container row" style="margin-bottom: 20px;">
-					<h2 class="h3Apellidos purple-text text-lighten-1">Nombre producto nuevo 001</h2>
+					<h2 class="h3Apellidos mayuscula purple-text text-lighten-1"><?php echo  $rowProducto['prodNombre']; ?></h2>
 					<div class="divBotonesEdicion" style="margin-bottom: 10px">
 						<div class="btn-group">
 						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -159,53 +192,82 @@
 						<img src="images/imgBlanca.png" class="img-responsive" alt="">
 					</div>
 					<div class="col-xs-12 col-sm-7 divDatosProducto">
-						<p>Código de producto: #<span>155</span></p>
-						<p>Dueño: <a href="cliente.php" class="spanDueno">Carlos Alex, Pariona Valencia</a></p>
-						<p>Registrado: <span>Lunes, 13 de enero de 2018</span></p>
-						<p>Cantidad: <span>5</span> unds.</p>
-						<p>Estado del producto: <strong class="blue-text text-accent-3">En almacén</strong></p>
-						<p>Estado del sub-préstamo: <strong class="blue-text text-accent-3">Vigente</strong></p>
-						<p>Adquisición: <span>Por alquiler</span></p>
-						<p>Último pago: <span>Aún no hay pago</span></p>
+						<p>Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></p>
+						<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
+						<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
+						<p>Préstamo incial: S/. <?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></p>
+						<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
+						<p>Adquisición: <span><?php echo $rowProducto['esCompra']==='0' ? 'Compra' : 'Por alquiler' ?></span></p>
+						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
+						<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
 					</div>
 				</div>
 				<div class="container row">
 					<ul class="nav nav-tabs">
 					<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
-					<li><a href="#tabMovEstados" data-toggle="tab">Estados</a></li>
-					<li><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
+					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
+					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
+					<li><a href="#tabAdvertencias" data-toggle="tab">Advertencias</a></li>
 					
 					</ul>
 					<div class="tab-content">
 					<!--tab content-->
 						<div class="tab-pane fade in active container-fluid" id="tabIntereses">
 						<!--Inicio de pestaña interior 01-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion intereses</h4>
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección intereses</h4>
+						<?php 
+						if($rowProducto['esCompra']===1){
+							?>
+							<ul><li>Ésta compra no genera intereses.</li></ul>
+							<?php
+						}else{
+							if($rowProducto['prodActivo']==='0'){
+							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
+							}else{
+								?>
 							<ul>
-								<li>Capital pendiente: <span>S/. 150.00</span></li>
+								<li>Saldo pendiente: <span>S/. 150.00</span></li>
 								<li>Tiempo de intereses: <span>7 días</span></li>
 								<li>Razón del cálculo: <span>Interés acumulado al 4% diario (mayor a 29 días).</span></li>
 								<li>Interés: <span>4% = S/. 6.00</span></li>
 								<li>Deuda total: <span><strong>S/. 156.00</strong></span></li>
 							</ul>
+							<?php 
+							}
+						} ?>
 						<!--Fin de pestaña interior 01-->
 						</div>
 						<div class="tab-pane fade container-fluid" id="tabMovEstados">
 						<!--Inicio de pestaña interior 02-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion de estados</h4>
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
 							<ul>
-								<li>Registrado	13/01/2018 03:37 p.m.	bmanrique</li>
-								<li>En almacén	13/01/2018 03:50 p.m.	giordan</li>
+								<li>Registrado por <?php echo $rowProducto['usuNombres']; ?>: <?php echo $rowProducto['prodFechaRegistro']; ?> <button class="btn btn-sm btn-azul btn-outline" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+								<?php $i=0; 
+								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `detallereporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
+								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
+									echo "<li>{$rowEstados['repoDescripcion']} por {$rowEstados['repoUsuario']}, con S/. ".number_format($rowEstados['repoValorMonetario'],2).": {$rowEstados['repoFechaOcurrencia']} <button class='btn btn-sm btn-azul btn-outline' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
+									$i++;
+								} ?>
 							</ul>
 						<!--Fin de pestaña interior 02-->
 						</div>
 						<div class="tab-pane fade container-fluid" id="tabMovFinancieros">
 						<!--Inicio de pestaña interior 03-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Seccion Financiera</h4>
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Financiera</h4>
 							<ul>
 								<li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li>
 							</ul>
 						<!--Fin de pestaña interior 03-->
+						</div>
+						<div class="tab-pane fade container-fluid" id="tabAdvertencias">
+						<!--Inicio de pestaña interior 04-->
+							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Advertencias antes de rematar</h4>
+							
+							<div class="mensaje"><div class="texto"><p><strong>Giordan</strong> <small><i class="icofont icofont-clock-time"></i> 14/05/2018 16:00</small></p> <p class="textoMensaje">Cliente nunca contestó.</p> </div></div>
+							<div class="mensaje"><div class="texto"><p><strong>Beatriz</strong> <small><i class="icofont icofont-clock-time"></i> 13/05/2018 12:00</small></p> <p class="textoMensaje">Cliente dijo que vendrá lunes.</p> </div></div>
+							<div class="dejarMensaje"><input type="text" class="form-control" placeholder="¿Qué mensaje dejó para el cliente?" style="width: 85%; display: inline-block;"> <button class="btn btn-default" style="margin-top: -3px; "><i class="icofont icofont-location-arrow"></i></button></div>
+							
+						<!--Fin de pestaña interior 04-->
 						</div>
 					<!-- Fin de tab content -->
 	            	</div>
