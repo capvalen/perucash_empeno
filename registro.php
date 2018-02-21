@@ -57,7 +57,7 @@
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-ui-copy"></i> Reportes</a>
+					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>

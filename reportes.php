@@ -4,12 +4,7 @@ require("php/conkarl.php");
 <!DOCTYPE html>
 <html lang="es">
 
-<?php 
-if( isset($_GET['idCliente'])){
-	$sql = mysqli_query($conection,"SELECT * FROM `Cliente` where idCliente = '".$_GET['idCliente']."';");
-	$rowCliente = mysqli_fetch_array($sql, MYSQLI_ASSOC);
-}
-?>
+
 <head>
 
 		<meta charset="utf-8">
@@ -18,7 +13,7 @@ if( isset($_GET['idCliente'])){
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Cliente: PeruCash</title>
+		<title>Reporte: PeruCash</title>
 
 		<!-- Bootstrap Core CSS -->
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -51,12 +46,13 @@ if( isset($_GET['idCliente'])){
 		transition: all 0.6s ease-in-out;
 	}
 	.h3Nombres{margin-top: 0px;}
-	.rate i{padding-left: 3px; cursor: pointer;}
+	.rate i{padding-left: 3px;}
 	.divBotonesPrestamo .dropdown-menu>li>a{color: #0078D7;}
 	.divBotonesPrestamo .dropdown-menu>li>a:focus, .divBotonesPrestamo .dropdown-menu>li>a:hover {
-	    text-decoration: none;
-	    background-color: #f5f5f5;
+		text-decoration: none;
+		background-color: #f5f5f5;
 	}
+	#tablita th{cursor: pointer;}
 </style>
 <div id="wrapper">
 
@@ -70,7 +66,7 @@ if( isset($_GET['idCliente'])){
 			<li>
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
-			<li class="active">
+			<li >
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
@@ -80,12 +76,15 @@ if( isset($_GET['idCliente'])){
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
 			</li>
 			<li>
+					<a href="#!" id="aCreditoNuevo"><i class="icofont icofont-ui-love-add"></i> Crédito nuevo</a>
+			</li>
+			<li>
 					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
 			</li>
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li>
+			<li class="active">
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
@@ -141,87 +140,33 @@ if( isset($_GET['idCliente'])){
 		<div class="row">
 			<div class="col-lg-12 contenedorDeslizable">
 			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
+				<h2 class="purple-text text-lighten-1">Reporte productos</h2>
+				<div>
+					<p>¿Qué tipo de reporte quieres ver?</p>
+					<div id="cmbEstadoProd">
+					<select class="selectpicker mayuscula" title="Nuevo estado..." id="cmbEstadoCombo"  data-width="100%" data-live-search="true" data-size="15">
+					<?php require 'php/detalleReporteOPT.php'; ?>
+					</select></div>
+				</div>
+				<div class="tablaResultados">
+					<table class="table table-hover" id="tablita">
+					<thead>
+					  <tr>
+						<th data-sort="string">Descripcion producto <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
+					  </tr>
+					</thead>
+					<tbody>
+					</tbody>
+				  </table>
+				</div>
 			<!-- Fin de contenido principal -->
 			</div>
+		
 		</div>
-		<div class="row contenedorDeslizable">
-			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
-			<!-- Empieza a meter contenido 2.1 -->
-				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
-				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
-				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
-				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
-					<?php
-						for ($i=0; $i <5 ; $i++) { 
-							if($i<$rowCliente['cliCalificacion']){
-								echo '<i class="icofont icofont-ui-rating"></i>';
-							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
-						}
-					 ?></span>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> <?php echo $rowCliente['cliDni']; ?></h5>
-				<h5 class="grey-text text-lighten-1 mayuscula"><i class="icofont icofont-home"></i> <?php echo $rowCliente['cliDireccion']; ?></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> <?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></h5>
-			<!-- Fin de contenido 2.1 -->
-			</div>
-			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
-			<!-- Empieza a meter contenido 2.2 -->
-				<div class="divPrestamo">
-				<?php
-				$i=0;
-				if( isset($_GET['idCliente'])){
-					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."' order by idPrestamo desc;");
-					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-						echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']}</h4>";
-						echo "<div class='divBotonesPrestamo' style='margin-bottom: 10px'>
-						<div class='btn-group'>
-						  <button type='button' class='btn btn-azul btn-outline dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-							<i class='icofont icofont-settings'></i> <span class='caret'></span>
-						  </button>
-						  <ul class='dropdown-menu'>
-							<li><a href='#' id=''><i class='icofont icofont-shopping-cart'></i> Agregar nuevo item</a></li>
-						  </ul>
-						</div>
-					</div>";
-						$i++;
-						$j=0;
-						$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
-						while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
-							echo "<div class=' paPrestamo'><strong>
-						<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
-							<div class='hidden codRegistro'>{$rowPrestamosProductos['idProducto']}</div>
-							<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
-							<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
-							<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right grey-text'><i class='icofont icofont-rounded-right'></i></span></div>
-						</div>
-					</strong></div>";
-							$j++;
-						}
-					}
-					
-				}
-				?>
-					<!-- <div class=" paPrestamo"><strong>
-						<div class="row yellow-text text-darken-2">
-							<div class="hidden codRegistro">850</div>
-							<div class="col-xs-5">Producto 002</div>
-							<div class="col-xs-3">S/. 68.00</div>
-							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> Vendido <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
-						</div>
-					</strong></div><div class=" paPrestamo"><strong>
-						<div class="row amber-text text-darken-3">
-							<div class="hidden codRegistro">850</div>
-							<div class="col-xs-5">Producto 003</div>
-							<div class="col-xs-3">S/. 80.00</div>
-							<div class="col-xs-4"><i class="icofont icofont-info-circle"></i> En venta <span class="pull-right grey-text"><i class="icofont icofont-rounded-right"></i></span></div>
-						</div>
-					</strong></div>
-									</div> -->
-			<!-- Fin de contenido 2.2 -->
-			</div>
-			</div>
 		</div>
+		
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
@@ -241,34 +186,39 @@ if( isset($_GET['idCliente'])){
 <script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
+<script type="text/javascript" src="js/stupidtable.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$('#tablita').stupidtable();
 });
-$('#aaccionesCaja').click(function () {
-	$('.modal-accionesCaja').modal('show');
-});
-$('.paPrestamo').click(function () {
-	var codigo=$(this).find('.codRegistro').text()
-	window.location='productos.php?idProducto='+codigo;
-});
-$('.rate i').click(function () {
-	var calificacion=$(this).index()+1;
-	$.ajax({url:'php/puntarCliente.php', type: 'POST', data: {estrellas: calificacion , idCli: <?php echo $_GET['idCliente']; ?> }}).done(function (resp) {
-		console.log(resp);
-	});
-	$('.rate').children().remove();
-	for (var i = 0; i < 5; i++) {
-		if(i<calificacion){
-			$('.rate').append('<i class="icofont icofont-ui-rating"></i>');
-		}else{
-			$('.rate').append('<i class="icofont icofont-ui-rate-blank"></i>');
+$('#cmbEstadoCombo').change(function () {
+	var estado=$('#cmbEstadoProd').find('li.selected a').attr('data-tokens');
+	$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado}}).done(function (resp) {
+		$('tbody').children().remove();
+		if(JSON.parse(resp).length==0){
+			$('tbody').append(`
+			 <tr>
+				<td class="mayuscula">No existen artículos en ésta categoría</td>
+				<td class="mayuscula"></td>
+				<td></td>
+			</tr>`)
 		}
-	}
+		$.each(JSON.parse(resp), function (i, dato) {
+			$('tbody').append(`
+			 <tr>
+				<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+				<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+				<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+			</tr>`)
+		});
+	})
 });
 </script>
+
 </body>
+
 </html>

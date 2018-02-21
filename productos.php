@@ -122,7 +122,7 @@ if (!file_exists($carpeta)) {
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-ui-copy"></i> Reportes</a>
+					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
@@ -401,7 +401,7 @@ $('#btnDejarMensaje').click(function () {
 		});
 	}
 });
-$('#txtClientePagaMonto').keyup(function (e) {
+$('#txtDejarMensaje').keyup(function (e) {
 	var code = e.which;
 	if(code==13 ){	e.preventDefault();
 		$('#btnDejarMensaje').click();
@@ -418,7 +418,7 @@ $('#btnActualizarEstado').click(function () {
 		usuario: $.JsonUsuario.usunombres,
 		comentario: $('#txtComentarioEstado').val()
 	}}).done(function (resp) {
-		console.log(resp);
+		location.reload();;
 	});
 });
 </script>
