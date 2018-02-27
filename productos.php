@@ -38,6 +38,8 @@ if (!file_exists($carpeta)) {
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
+		<link href="css/flexslider.css" rel="stylesheet">
+		<link href="css/lightbox.css" rel="stylesheet">
 		
 </head>
 
@@ -195,17 +197,25 @@ if (!file_exists($carpeta)) {
 						<?php 
 						$directorio = "images/productos/".$_GET['idProducto'];
 						if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
-						$cantImg=0;
-						foreach($ficheros as $archivo)
-						{
-							$cantImg++;
-							if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
-						        /*echo $directorio."/".$archivo;*/
-						        echo "<img class='img-responsive' src='".$directorio."/".$archivo."' >";
-						    }
-						}
-						if($cantImg==2){ echo '<img src="images/imgBlanca.png" class="img-responsive" alt="">';}}else{echo '<img src="images/imgBlanca.png" class="img-responsive" alt="">';}
-						?>
+						$cantImg=0; ?>
+						<div class="flexslider">
+							<ul class="slides">
+							 
+							   <?php 
+									foreach($ficheros as $archivo)
+									{
+										$cantImg++;/*".$directorio."/".$archivo."*/
+										if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
+									        /*echo $directorio."/".$archivo;*/
+									        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
+									    }
+									}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
+									if($cantImg==2){ echo '<a href="images/imgBlanca.png" data-lightbox="image-1" ><img src="images/imgBlanca.png" class="img-responsive" alt=""></a>';}}else{echo '<a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" alt=""></a>';}
+									?>
+							 
+							</ul>
+						</div>
+						
 					</div>
 					<div class="col-xs-12 col-sm-7 divDatosProducto">
 						<p>Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></p>
@@ -274,11 +284,11 @@ if (!file_exists($carpeta)) {
 						<!--Inicio de pestaña interior 02-->
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
 							<ul>
-								<li>Registrado por <?php echo $rowProducto['usuNombres']; ?>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaRegistro']; ?></span> <button class="btn btn-sm btn-azul btn-outline" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaRegistro']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 								<?php $i=0; 
 								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `detallereporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
 								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
-									echo "<li>{$rowEstados['repoDescripcion']} por {$rowEstados['repoUsuario']}, con S/. ".number_format($rowEstados['repoValorMonetario'],2).": <span class='spanFechaFormat'>{$rowEstados['repoFechaOcurrencia']}</span> <button class='btn btn-sm btn-azul btn-outline' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
+									echo "<li>{$rowEstados['repoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['repoUsuario']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['repoValorMonetario'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['repoFechaOcurrencia']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
 									$i++;
 								} ?>
 							</ul>
@@ -357,6 +367,9 @@ if (!file_exists($carpeta)) {
 <script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
+<script src="js/jquery.flexslider.js"></script>
+<script src="js/lightbox.js"></script>
+
 
 <!-- Menu Toggle Script -->
 <script>
@@ -370,8 +383,13 @@ $(document).ready(function(){
 		var nueFecha=moment($(dato).text());
 		$(dato).text(nueFecha.format('LLLL'));
 	});
-});
 
+});
+$(window).load(function() {
+	$('.flexslider').flexslider({
+	 animation: "slide"
+	});
+});
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	var target = $(e.target).attr("href");
 	//console.log(target);
@@ -419,6 +437,40 @@ $('#btnActualizarEstado').click(function () {
 		comentario: $('#txtComentarioEstado').val()
 	}}).done(function (resp) {
 		location.reload();;
+	});
+});
+$('.btnImprimirTicket').click(function () {
+	var queMonto, queTitulo;
+	var queUser = $(this).parent().find('.spanQuienRegistra').text();
+	queMonto=$(this).parent().find('.spanCantv3').text();
+	switch( $(this).attr('data-boton') ){
+		case '0':
+			queTitulo='    * Registro de Producto *';queMonto='0.00'; break;
+		case '1':
+			queTitulo='     * Venta de Producto *'; break;
+		case '2':
+			queTitulo='    * Adelanto de interés *'; break;
+		case '3':
+			queTitulo='    * Crédito finalizado *'; break;
+		case '8':
+			queTitulo='    * Retiro de artículo *'; break;
+	}
+	var queArticulo =$('.h3Apellidos').text();
+	var queDueno = $('.spanDueno').text();
+	if(queUser=='' || queUser==' '){
+		queUser='Sistema PeruCash';
+	}
+	var queFecha = $(this).parent().find('.spanFechaFormat').text();
+	$.ajax({url: 'http://192.168.1.131/perucash/printTicketv3.php', type: 'POST', data: {
+		codigo: "<?php echo $_GET['idProducto']; ?>",
+		titulo: queTitulo,
+		fecha: queFecha.replace('a las ', ''),
+		cliente: queDueno,
+		articulo: queArticulo,
+		monto: queMonto,
+		usuario: queUser
+	} }).done(function (resp) { 
+		// body...
 	});
 });
 </script>
