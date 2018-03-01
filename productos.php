@@ -38,7 +38,7 @@ if (!file_exists($carpeta)) {
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-		<link href="css/flexslider.css" rel="stylesheet">
+		<link href="css/flexslider.css?version=1.0.2" rel="stylesheet">
 		<link href="css/lightbox.css" rel="stylesheet">
 		
 </head>
@@ -93,7 +93,13 @@ if (!file_exists($carpeta)) {
 }
 .textoMensaje{ padding-left: 30px }
 .mensaje small{color: #f7f7f7;/* color: #6b6b6b; */}
-
+.rowFotos{margin: 0 auto;}
+.divFotoGestion{border-color:#f3f3f3; border: dashed 2px #9a9a9a;
+	 border-radius: 5px;
+    width: 22%;
+    height: 100px;
+    margin: 0 5px;padding-right: 5px;
+    padding-left: 5px;padding-top: 5px;}
 </style>
 <div class="noselect" id="wrapper">
 
@@ -188,19 +194,18 @@ if (!file_exists($carpeta)) {
 							<i class="icofont icofont-settings"></i> <span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu">
+							<li><a href="#" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
 						  </ul>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4 divImagen">
-						
 						<?php 
 						$directorio = "images/productos/".$_GET['idProducto'];
 						if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
 						$cantImg=0; ?>
 						<div class="flexslider">
 							<ul class="slides">
-							 
 							   <?php 
 									foreach($ficheros as $archivo)
 									{
@@ -210,12 +215,10 @@ if (!file_exists($carpeta)) {
 									        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
 									    }
 									}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
-									if($cantImg==2){ echo '<a href="images/imgBlanca.png" data-lightbox="image-1" ><img src="images/imgBlanca.png" class="img-responsive" alt=""></a>';}}else{echo '<a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" alt=""></a>';}
-									?>
-							 
+								?>
 							</ul>
 						</div>
-						
+						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 					</div>
 					<div class="col-xs-12 col-sm-7 divDatosProducto">
 						<p>Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></p>
@@ -354,6 +357,55 @@ if (!file_exists($carpeta)) {
 	</div>
 </div>
 
+<!--Modal Para gestionar fotos-->
+<div class="modal fade modal-gestionarFotos" tabindex="-1" role="dialog">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<div class="modal-header-warning">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Gestionar fotos</h4>
+			</div>
+			<div class="modal-body">
+				<div>
+					<div class="row rowFotos"> 
+					<?php if($cantImg<=2){ ?>
+						<div class="col-xs-3 divFotoGestion" id="foto1"></div>
+						<div class="col-xs-3 divFotoGestion" id="foto2"></div>
+						<div class="col-xs-3 divFotoGestion" id="foto3"></div>
+						<div class="col-xs-3 divFotoGestion" id="foto4"></div>
+					<?php }else{
+						foreach($ficheros as $archivo)
+								{
+									$cantImg++;/*".$directorio."/".$archivo."*/
+									if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
+								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><img src='".$directorio."/".$archivo."' class='img-responsive' ></div>";
+								    }else{ echo '<div class="col-xs-3 divFotoGestion" id="foto3"></div>';}
+								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
+						} ?>
+					</div><br>
+					<div class="row ">
+					<?php for ($i=0; $i < 2 ; $i++) { 
+						if($i<=$cantImg){?>
+						<div class="col-xs-3 text-center"><button class="btn btn-azul btn-outline" boton-tag="2"><i class="icofont icofont-cloud-upload"></i></button></div>
+						<?php
+							}else{?>
+						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="2"><i class="icofont icofont-close-circled"></i></button></div>
+						<?php }
+					} ?>
+						
+						
+						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="3"><i class="icofont icofont-close-circled"></i></button></div>
+						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="4"><i class="icofont icofont-close-circled"></i></button></div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-warning btn-outline" data-dismiss="modal" id="btnActualizarEstado" ><i class="icofont icofont-check"></i> Actualizar</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 <?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -472,6 +524,9 @@ $('.btnImprimirTicket').click(function () {
 	} }).done(function (resp) { 
 		// body...
 	});
+});
+$('#liAGestionrFotos').click(function() {
+	$('.modal-gestionarFotos').modal('show');
 });
 </script>
 
