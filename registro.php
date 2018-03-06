@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php  ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -265,7 +265,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
-<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
+<script src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>

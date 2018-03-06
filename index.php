@@ -58,7 +58,7 @@ a:hover{color:#462782;}
 				<div class="row">
 					<div class="col-xs-4"><img src="images/VirtualCorto.png" class="img-responsive" alt=""></div>
 					<div class="col-xs-8"><h3 class="text-center" style="margin-bottom: 0px;">Info-Cat </h3>
-						<div class="text-center"><span >App para «PeruCash» - Retamas1</span></div>
+						<div class="text-center"><span >App para «PeruCash» - Retamas</span></div>
 						<legend  style="color:#7956C1"><small style=" font-size: 70%;"></small></legend></div>
 				</div>
 				
