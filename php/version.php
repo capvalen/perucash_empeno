@@ -1,5 +1,5 @@
 <?php 
-echo "Ver. 3.0 Build 2017.12.11";
+echo "Ver. 3.0.7 Build 2018.03.06";
 
 /*
 Nuevos cambios en versiones:

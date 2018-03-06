@@ -28,6 +28,31 @@
 </head>
 
 <body>
+<style>
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.65); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+   /* Add a pointer on hover */
+}
+#overlay .text{position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 36px;
+    color: white;
+    user-select: none;
+    transform: translate(-50%,-50%);}
+</style>
+<div id="overlay">
+	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
+</div>
 
 <div id="wrapper">
 
@@ -109,16 +134,11 @@
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid">				 
-		<div class="row">
-			<div class="col-lg-12 contenedorDeslizable">
-			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Registro de cliente y productos nuevos</h2>
-			<!-- Fin de contenido principal -->
-			</div>
-		</div>
+		
 		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2 -->
+			<h2 class="purple-text text-lighten-1">Registro de cliente y productos nuevos <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
 				<div class="row">
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
@@ -239,19 +259,20 @@
 
 <?php include 'php/modals.php'; ?>
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
+datosUsuario();
 $.interesGlobal=4;
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
@@ -282,7 +303,7 @@ $('#btnAgregarItem').click(function () {
 	var fechaItem=$('#dtpFechaInicio').val();
 	
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
-	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
+	var tipoItemStr=$('#divSelectProductoListado').children().find('.selected a').attr('data-tokens');
 	
 	var observaItem='';
 	if($('#txtObservacionProduc').val()==''){
@@ -322,7 +343,7 @@ $('.colNewProduct').click(function () {
 $('#conjuntoElementos').on('click', '.rowProduct', function () { 
 	$('#iddeLi').text($(this).parent().index())
 	$('#txtQProduc').val($(this).find('.spanCantidadv3').text());
-	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipoStrv3').text());
+	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipov3').text());
 	$('#txtNameProduc').val($(this).find('.spanNomProductov3').text());
 	
 	$('#txtCapitalProduc').val($(this).find('.spanPrecioEmpv3').text());
@@ -347,7 +368,7 @@ function calcularTotalesParc() {
 	if(  $('.spanPrecioEmpv3').length==0 ){
 		$('.spanTotalSumasv3').text('0.00');
 	}
-	$.each( $('.spanPrecioEmpv3'), function (i, elem) {console.log($(elem).text())
+	$.each( $('.spanPrecioEmpv3'), function (i, elem) {//console.log($(elem).text())
 		sumaTotales+=parseFloat($(elem).text());
 		$('.spanTotalSumasv3').text(sumaTotales.toFixed(2));
 	});
@@ -440,7 +461,34 @@ $('#txtDni').focusout(function () {
 	});
 });
 $('#btnGuardarDatos').click(function () {
-	if( $('#txtDni').val().length<8){
+	$("#overlay").css({display: 'block'});
+	var jsonProductos= new Array();
+	var jsonCliente= new Array();
+	var fechaProducto= '';
+	var idTipo='';
+	jsonCliente.push({dniCli: $('#txtDni').val(), apellidosCli: $('#txtApellidos').val(), nombreCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), cotroCelularCli: $('#txtFono').val() });
+	$.each( $('.rowProduct'), function (i, producto) {
+	
+	if( $(producto).find('.spanfechaIngresov3').text() != moment().format('DD/MM/YYYY')){ fechaProducto = moment( $(producto).find('.spanfechaIngresov3').text(), 'DD-MM-YYYY').format('YYYY-MM-DD')+' '+moment().format('HH:mm'); }else{
+		 fechaProducto =moment().format('YYYY-MM-DD HH:mm');
+	}
+	
+	jsonProductos.push({ cantProd: $(producto).find('.spanCantidadv3').text(), tipoProd: $(producto).find('.spanTipoStrv3').text(), descripProd: $(producto).find('.spanNomProductov3').text(), capitalProd: $(producto).find('.spanPrecioEmpv3').text(), intereProd: $(producto).find('.spanInteresv3').text(), fechaIngProd: fechaProducto, extraProd: $(producto).find('.spanObservacionv3').text().replace('Sin observaciones', '')});
+	});
+
+	
+	$.ajax({url: 'php/insertarProductov3.php', type: 'POST', data: {jCliente:jsonCliente, jdata:jsonProductos, capital: $('.spanTotalSumasv3').text(), jusuario: $.JsonUsuario }}).done(function (resp) { console.log(resp)
+		if(parseInt(resp)>0){
+			location.href = 'cliente.php?idCliente='+resp
+		}else{
+			$('#spanMalo').text('Hubo un error interno y no se pudo guardar.');
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+	$("#overlay").css({display: 'block'});
+
+	
+	/*if( $('#txtDni').val().length<8){
 		$('#spanMalo').text('El DNI no es correcto');
 		$('.modal-GuardadoError').modal('show');
 	}
@@ -454,7 +502,9 @@ $('#btnGuardarDatos').click(function () {
 	}else if($('.rowProduct').length==0){
 		$('#spanMalo').text('La lista de items no puede estar vacía.');
 		$('.modal-GuardadoError').modal('show');
-	}
+	}else{
+		ACA VA EL CONTENIDO DE ARRIBA
+	}*/
 });
 $('#txtBuscarNivelGod').keyup(function (e) {
 	var code = e.which; // recommended to use e.which, it's normalized across browsers
@@ -472,6 +522,9 @@ $('#txtBuscarNivelGod').keyup(function (e) {
     	}
     }
 
+});
+$('#btnCronogramaPagosVer').click(function () {
+	
 });
 </script>
 

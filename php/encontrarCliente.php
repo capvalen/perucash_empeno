@@ -5,7 +5,7 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call encontrarCliente(".$_POST['dniCli'].");");
+$log = mysqli_query($conection,"call encontrarCliente('".$_POST['dniCli']."');");
 
 
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))

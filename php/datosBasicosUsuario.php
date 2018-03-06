@@ -2,7 +2,7 @@
 session_start();
 require("conkarl.php");
 $filas=array();
-$sql = mysqli_query($conection,"call datosBasicosUsuario(".$_SESSION['idUsuario'].");");
+$sql = mysqli_query($conection,"call datosBasicosUsuario(".$_COOKIE['ckidUsuario'].");");
 $i=0;
 // if (!$sql) { ////codigo para ver donde esta el error
 //     printf("Error: %s\n", mysqli_error($conection));

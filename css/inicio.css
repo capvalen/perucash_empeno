@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+/*html {
+    height: 100%;background-color: #2c3e50;
+
+-webkit-box-shadow: inset 0px 2px 179px -9px rgba(41,36,41,1);
+-moz-box-shadow: inset 0px 2px 179px -9px rgba(41,36,41,1);
+box-shadow: inset 0px 2px 179px -9px rgba(41,36,41,1);}
+body{background-color: transparent;
+}
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
+#basic-addon1{padding: 1px 12px; background-color: #ffd180; color:#757575;}
+#divInicio{background-color: white; border-radius: 10px; margin-top: 30px; -webkit-box-shadow: 0px 1px 11px 0px rgba(195,201,147,1);
+-moz-box-shadow: 0px 1px 11px 0px rgba(195,201,147,1);
+box-shadow: 0px 1px 11px 0px rgba(195,201,147,1);}
+#divInicio>a{background-color: #f7c062; color:#616161;}
+.divCabecera{background-color: #f7c062;  border-top-left-radius: 8px; border-top-right-radius: 8px; color:#616161;}*/
+
+body {
+
+    font-family: 'Open Sans', sans-serif;
+}
+.wello{
+    background-color:#fff!important;
+   
+    border:none!important;
+
+}
+
+.wello.login-box {
+    width:400px;
+    margin:0 auto;
+    
+}
+.wello.login-box legend {
+  /*font-size:26px;*/
+  text-align:center;
+  /*font-weight:300;*/
+}
+.wello.login-box label {
+  font-weight:300;
+  font-size:16px;
+  
+}
+.btn-morado, .btn-morado:hover, .btn-morado:focus {border-color: #694D9F; color: #fff; background-color: #694D9F;}.btn-morado:active {background-color: #47346b;} 
+
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{outline: 0 none;}
+.btn-outline {background-color: transparent; color: inherit;transition: all .5s;}
+.btn-primary.btn-outline {color: #428bca;}
+.btn-success.btn-outline {color: #5cb85c;}
+.btn-info.btn-outline {color: #5bc0de;}
+.btn-warning.btn-outline {color: #f0ad4e;}
+.btn-danger.btn-outline {color: #d9534f;}
+.btn-negro.btn-outline{color:#37474F;}
+.btn-morado.btn-outline{color:#694D9F;}
+.btn-indigo.btn-outline{color:#3E50B4;}
+.btn-morita.btn-outline{color:#9B26AF;}
+ 
+ 
+
+.btn-primary.btn-outline:focus,.btn-success.btn-outline:focus,.btn-info.btn-outline:focus,.btn-warning.btn-outline:focus,.btn-danger.btn-outline:focus,
+.btn-primary.btn-outline:active,.btn-success.btn-outline:active,.btn-info.btn-outline:active,.btn-warning.btn-outline:active,.btn-danger.btn-outline:active,
+.btn-primary.btn-outline:hover,.btn-success.btn-outline:hover,.btn-info.btn-outline:hover,.btn-warning.btn-outline:hover,.btn-danger.btn-outline:hover,
+.btn-morado.btn-outline:active,.btn-morado.btn-outline:hover,.btn-morado.btn-outline:focus
+{color: white;}
+
+
+.minuscula{text-transform: lowercase;}
+.capital:first-letter{text-transform: uppercase !important;}
+
+
+.fa-spin {
+-webkit-animation: spin 1000ms infinite linear;
+animation: spin 1000ms infinite linear;
+text-align: center;
+display: inline-block;
+}
+@-webkit-keyframes spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
+@keyframes spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
+
+@keyframes fa-spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}

@@ -4,7 +4,7 @@ $server="localhost";
 /* Net	*/
 	$username="perucash_root";
 	$password="pr6sTuFru5*ePHE#eq*";
-	$db='perucash_app';
+	$db='perucash_demo';
 //*/
 /* Local
 	$username="root";
