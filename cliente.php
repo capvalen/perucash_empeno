@@ -57,6 +57,26 @@ if( isset($_GET['idCliente'])){
 	    text-decoration: none;
 	    background-color: #f5f5f5;
 	}
+	#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.65); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+   /* Add a pointer on hover */
+}
+#overlay .text{position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 36px;
+    color: white;
+    user-select: none;
+    transform: translate(-50%,-50%);}
 </style>
 <div id="wrapper">
 
@@ -138,16 +158,10 @@ if( isset($_GET['idCliente'])){
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid">				 
-		<div class="row">
-			<div class="col-lg-12 contenedorDeslizable">
-			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
-			<!-- Fin de contenido principal -->
-			</div>
-		</div>
 		<div class="row contenedorDeslizable">
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
+				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
 				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
@@ -173,14 +187,14 @@ if( isset($_GET['idCliente'])){
 				if( isset($_GET['idCliente'])){
 					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."' order by idPrestamo desc;");
 					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-						echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']}</h4>";
+						echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']} <span class='hidden h4Prestamo'>{$rowPrestamos['idPrestamo']}</span></h4>";
 						echo "<div class='divBotonesPrestamo' style='margin-bottom: 10px'>
 						<div class='btn-group'>
 						  <button type='button' class='btn btn-azul btn-outline dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
 							<i class='icofont icofont-settings'></i> <span class='caret'></span>
 						  </button>
 						  <ul class='dropdown-menu'>
-							<li><a href='#' id=''><i class='icofont icofont-shopping-cart'></i> Agregar nuevo item</a></li>
+							<li><a href='#' class='btnNuevoItemProdPrestamo'><i class='icofont icofont-shopping-cart'></i> Agregar nuevo item</a></li>
 						  </ul>
 						</div>
 					</div>";
@@ -229,6 +243,53 @@ if( isset($_GET['idCliente'])){
 
 </div>
 
+
+<!-- Modal para agregar nuevo producto  -->
+<div class="modal fade modal-nuevoProductoLista" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog " role="document">
+	<div class="modal-content">
+		<div class="modal-header-morado">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Agregar nuevo producto</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row"> <span class="sr-only" id="deQuePrestamoViene"></span>
+				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label> 
+					<div  id="divSelectProductoListado">
+						<select class="selectpicker mayuscula" id="sltProductoListado" title="Tipo de producto..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php require 'php/listarProductosTipos.php'; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off" value="1"></div>
+			</div>
+			<div class="row ">
+				<div class="col-xs-8"><label for="">Nombre del artículo y características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
+				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4" autocomplete="off"></div>
+				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
+					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12"><label for="">¿Más características?</label> <textarea  type="text" class="form-control mayuscula" id="txtObservacionProduc" cols=2 placeholder="¿Algún comentario que rescatar?"></textarea></div>
+			</div>
+
+		</div>
+		</div>
+			
+		<div class="modal-footer">
+			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
+			<button class="btn btn-morado btn-outline" id='btnGuardarDatos' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
 <?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -238,12 +299,14 @@ if( isset($_GET['idCliente'])){
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
+datosUsuario();
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -268,6 +331,52 @@ $('.rate i').click(function () {
 			$('.rate').append('<i class="icofont icofont-ui-rate-blank"></i>');
 		}
 	}
+});
+$('.btnNuevoItemProdPrestamo').click(function () {
+	$('#deQuePrestamoViene').text( $(this).parent().parent().parent().parent().parent().find('.h4Prestamo').text() );
+	$('.modal-nuevoProductoLista').modal('show');
+});
+$('#btnGuardarDatos').click(function () {
+	//console.log('caso 8')
+	$("#overlay").css({display: 'block'});
+	var jsonProductos= new Array();
+	var fechaProducto= '';
+	var idTipo='';
+	
+	if( $('#dtpFechaInicio').val() != moment().format('DD/MM/YYYY')){ fechaProducto = moment( $('#dtpFechaInicio').val(), 'DD-MM-YYYY').format('YYYY-MM-DD')+' '+moment().format('HH:mm'); }else{
+		 fechaProducto =moment().format('YYYY-MM-DD HH:mm');
+	}
+	
+	jsonProductos.push({ cantProd: $('#txtQProduc').val(), tipoProd: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), descripProd: $('#txtNameProduc').val(), capitalProd: $('#txtCapitalProduc').val(), intereProd: $('#txtInteresProduc').val(), fechaIngProd: fechaProducto, extraProd: $('#txtObservacionProduc').val() });
+
+	//console.log($.JsonUsuario.idUsuario);
+	$.ajax({url: 'php/insertarProductoAlonev3.php', type: 'POST', data: {idCliente: <?php echo $_GET['idCliente']; ?>, jdata:jsonProductos, capital: $('#txtCapitalProduc').val(), idUser: $.JsonUsuario.idUsuario, idPrestamo: $('#deQuePrestamoViene').text() }}).done(function (resp) {// console.log(resp)
+		if(parseInt(resp)>0){
+			location.reload();
+		}else{
+			$('#spanMalo').text('Hubo un error interno y no se pudo guardar.');
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+	$("#overlay").css({display: 'block'});
+	/*
+	if( $('#txtDni').val().length<8){
+		$('#spanMalo').text('El DNI no es correcto');
+		$('.modal-GuardadoError').modal('show');
+	}
+	else if( $('#txtApellidos').val()=='' || $('#txtApellidos').val()==''){
+		$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
+		$('.modal-GuardadoError').modal('show');
+	}
+	else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
+		$('#spanMalo').text('Ingese un teléfono fijo y un celular.');
+		$('.modal-GuardadoError').modal('show');
+	}else if($('.rowProduct').length==0){
+		$('#spanMalo').text('La lista de items no puede estar vacía.');
+		$('.modal-GuardadoError').modal('show');
+	}else{
+//		ACA VA EL CONTENIDO DE ARRIBA
+	}*/
 });
 </script>
 </body>
