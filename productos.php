@@ -197,7 +197,7 @@ if (!file_exists($carpeta)) {
 						  </button>
 						  <ul class="dropdown-menu">
 							<li><a href="#" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+							<li><a href="#" id="liImprimirHojaControl"><i class="icofont icofont-page"></i> Hoja de control</a></li>
 						  </ul>
 						</div>
 					</div>
@@ -423,6 +423,7 @@ if (!file_exists($carpeta)) {
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 <script src="js/jquery.flexslider.js"></script>
 <script src="js/lightbox.js"></script>
+<script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
 
 
 <!-- Menu Toggle Script -->
@@ -529,6 +530,13 @@ $('.btnImprimirTicket').click(function () {
 });
 $('#liAGestionrFotos').click(function() {
 	$('.modal-gestionarFotos').modal('show');
+});
+$('#liImprimirHojaControl').click(function () {
+	loadPrintDocument(this,{
+		url: "hojaControl.php?idProd="+<?php if( isset ($_GET['idProducto']) ){echo $_GET['idProducto'];}else{echo 0;}?>,
+		attr: "href",
+		message:"Tu documento está siendo creado"
+	});
 });
 </script>
 
