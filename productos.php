@@ -119,7 +119,7 @@ if (!file_exists($carpeta)) {
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li class="active">
-					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
@@ -131,7 +131,7 @@ if (!file_exists($carpeta)) {
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li>
+			<li class="hidden">
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>

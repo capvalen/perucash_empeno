@@ -94,7 +94,7 @@ if( isset($_GET['idCliente'])){
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
@@ -105,7 +105,7 @@ if( isset($_GET['idCliente'])){
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li>
+			<li class="hidden">
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>

@@ -1,3 +1,26 @@
+/*Importar prestamo_producto - Version 3*/
+
+ALTER TABLE `prestamo_producto` ADD `desFechaContarInteres` DATETIME NOT NULL AFTER `presidTipoProceso`;
+ALTER TABLE `desembolso` CHANGE `desFechaRegistro` `desFechaRegistro` DATETIME NOT NULL COMMENT 'Ya no funciona en Ver. 3';
+ALTER TABLE `prestamo_producto` ADD `preInteres` INT NOT NULL AFTER `desFechaContarInteres`;
+ALTER TABLE `prestamo_producto` ADD `preCapital` FLOAT NOT NULL AFTER `preInteres`;
+
+INSERT INTO `prestamo_producto`(`idPrestamo`, `idProducto`, `presidTipoProceso`, `desFechaContarInteres`, `preInteres`, `preCapital`) 
+select p.idPrestamo, p.idProducto, preIdEstado, d.desFechaContarInteres, preInteres, p.preCapital  from prestamo p inner join desembolso d on p.idPrestamo=d.idPrestamo where 1
+
+ALTER TABLE `prestamo` CHANGE `idProducto` `idProducto` INT(11) NOT NULL DEFAULT '0';
+
+ALTER TABLE `prestamo` DROP `preFechaContarInteres`;
+
+
+
+
+
+
+
+
+
+
 /*  Importar tabla prestamo */
 INSERT INTO `prestamo`(`idPrestamo`, `idProducto`, `idCliente`, `preCapital`, `preFechaInicio`, `idSucursal`, `idUsuario`, `presActivo`, `presObservaciones`, `preIdEstado`)
 
@@ -7,10 +30,12 @@ from producto where idProducto=448
 
 
 /*  Importar tabla desembolso */
-INSERT INTO `desembolso`(`idDesembolso`, `idPrestamo`, `desCapital`, `desFechaContarInteres`, `desFechaRegistro`, `desActivo`, `desUsuario`) SELECT `idPrestamo`, `idPrestamo`, `preCapital`, p.prodFechaInicial, `preFechaInicio`, 1, pre.`idUsuario`
+INSERT INTO `desembolso`(`idDesembolso`, `idPrestamo`, `desCapital`, `desFechaContarInteres`, `desFechaRegistro`, `desActivo`, `desUsuario`)
+SELECT `idPrestamo`, `idPrestamo`, `preCapital`, p.prodFechaInicial, `preFechaInicio`, 1, pre.`idUsuario`
 FROM `prestamo` pre
 inner join producto p on p.idProducto = pre.`idProducto`
 where 1
+
 
 
 
