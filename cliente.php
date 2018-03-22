@@ -4,7 +4,7 @@ require("php/conkarl.php");
 <!DOCTYPE html>
 <html lang="es">
 
-<?php 
+<?php
 if( isset($_GET['idCliente'])){
 	$sql = mysqli_query($conection,"SELECT * FROM `Cliente` where idCliente = '".$_GET['idCliente']."';");
 	$rowCliente = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -24,7 +24,7 @@ if( isset($_GET['idCliente'])){
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
+		<link href="css/sidebarDeslizable.css?version=1.0.6" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
 		<link href="css/estilosElementosv3.css?version=3.0.29" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
@@ -32,7 +32,7 @@ if( isset($_GET['idCliente'])){
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-		
+
 </head>
 
 <body>
@@ -62,7 +62,7 @@ if( isset($_GET['idCliente'])){
     display: none; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
-    top: 0; 
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -83,7 +83,7 @@ if( isset($_GET['idCliente'])){
 	<!-- Sidebar -->
 	<div id="sidebar-wrapper">
 		<ul class="sidebar-nav">
-			
+
 			<div class="logoEmpresa ocultar-mostrar-menu">
 				<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
 			</div>
@@ -149,7 +149,7 @@ if( isset($_GET['idCliente'])){
 						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
 						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
-						
+
 				</div>
 		</div>
 		</nav>
@@ -157,7 +157,7 @@ if( isset($_GET['idCliente'])){
 </div>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-	<div class="container-fluid">				 
+	<div class="container-fluid">
 		<div class="row contenedorDeslizable">
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
@@ -167,7 +167,7 @@ if( isset($_GET['idCliente'])){
 				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
-						for ($i=0; $i <5 ; $i++) { 
+						for ($i=0; $i <5 ; $i++) {
 							if($i<$rowCliente['cliCalificacion']){
 								echo '<i class="icofont icofont-ui-rating"></i>';
 							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
@@ -213,7 +213,7 @@ if( isset($_GET['idCliente'])){
 							$j++;
 						}
 					}
-					
+
 				}
 				?>
 					<!-- <div class=" paPrestamo"><strong>
@@ -255,7 +255,7 @@ if( isset($_GET['idCliente'])){
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row"> <span class="sr-only" id="deQuePrestamoViene"></span>
-				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label> 
+				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label>
 					<div  id="divSelectProductoListado">
 						<select class="selectpicker mayuscula" id="sltProductoListado" title="Tipo de producto..."  data-width="100%" data-live-search="true" data-size="15">
 							<?php require 'php/listarProductosTipos.php'; ?>
@@ -271,7 +271,7 @@ if( isset($_GET['idCliente'])){
 				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
-					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
+					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>
 				</div>
 			</div>
 			<div class="row">
@@ -280,7 +280,7 @@ if( isset($_GET['idCliente'])){
 
 		</div>
 		</div>
-			
+
 		<div class="modal-footer">
 			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
 			<button class="btn btn-morado btn-outline" id='btnGuardarDatos' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
@@ -342,11 +342,11 @@ $('#btnGuardarDatos').click(function () {
 	var jsonProductos= new Array();
 	var fechaProducto= '';
 	var idTipo='';
-	
+
 	if( $('#dtpFechaInicio').val() != moment().format('DD/MM/YYYY')){ fechaProducto = moment( $('#dtpFechaInicio').val(), 'DD-MM-YYYY').format('YYYY-MM-DD')+' '+moment().format('HH:mm'); }else{
 		 fechaProducto =moment().format('YYYY-MM-DD HH:mm');
 	}
-	
+
 	jsonProductos.push({ cantProd: $('#txtQProduc').val(), tipoProd: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), descripProd: $('#txtNameProduc').val(), capitalProd: $('#txtCapitalProduc').val(), intereProd: $('#txtInteresProduc').val(), fechaIngProd: fechaProducto, extraProd: $('#txtObservacionProduc').val() });
 
 	//console.log($.JsonUsuario.idUsuario);
