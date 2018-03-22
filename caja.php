@@ -16,17 +16,17 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
+		<link href="css/sidebarDeslizable.css?version=1.0.7" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
 		<link href="css/estilosElementosv3.css?version=3.0.33" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="shortcut icon" href="images/favicon.png">
-		
+
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
 		<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.2" />
-		
+
 </head>
 
 <body>
@@ -36,7 +36,7 @@
     display: none; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
-    top: 0; 
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -53,9 +53,9 @@
     transform: translate(-50%,-50%);}
 hr{ margin-bottom: 5px;}
 h3{ margin-top: 5px;}
-.pheader{background-color: #a35bb4;padding: 10px 10px; color: white; font-size: 17px; display: block; 
+.pheader{background-color: #a35bb4;padding: 10px 10px; color: white; font-size: 17px; display: block;
 clear: left; }
-	
+
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
@@ -69,7 +69,7 @@ th{color:#a35bb4}
 	<!-- Sidebar -->
 	<div id="sidebar-wrapper">
 		<ul class="sidebar-nav">
-			
+
 			<div class="logoEmpresa ocultar-mostrar-menu">
 				<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
 			</div>
@@ -135,7 +135,7 @@ th{color:#a35bb4}
 						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
 						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
-						
+
 				</div>
 		</div>
 		</nav>
@@ -143,32 +143,32 @@ th{color:#a35bb4}
 </div>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-	<div class="container-fluid">				 
-		
+	<div class="container-fluid">
+
 		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2 -->
 			<h2 class="purple-text text-lighten-1">Cuadre de caja <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
 			<div class="container-fluid">
-				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Cierre de caja </h3></div> 
+				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Cierre de caja </h3></div>
 			</div>
 			<div class="container-fluid">
 				<div class="col-xs-12 col-sm-8">
 					<p class="pheader">Datos de Cuadre</p>
-				
-				
+
+
 				<div class="panel panel-default ">
 					<div style="padding: 10px;">
 						<p style="color: #a35bb4;">Por: <strong><?php echo $_SESSION['usuario']; ?></strong></p>
 						<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
 					</div>
-				</div>  
+				</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">
 					<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
 					<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
 					<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
-					
+
 				</div>
 			</div>
 
@@ -176,10 +176,10 @@ th{color:#a35bb4}
 				<p class="pheader col-xs-6">Clientes atentidos</p>
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">
-					<thead> 
+					<thead>
 						<tr> <th># Cod.</th> <th>Procedencia</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
-						<?php 
+						<?php
 						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
 							require_once 'php/reporteCajaDiaTR.php';
 						}else{ //sino existe lista la fecha de hoy
@@ -195,7 +195,7 @@ th{color:#a35bb4}
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
-						<?php 
+						<?php
 						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
 							require_once 'php/reporteIngresoDia.php';
 						}else{ //sino existe lista la fecha de hoy
@@ -211,7 +211,7 @@ th{color:#a35bb4}
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
-						<?php 
+						<?php
 						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
 							require_once 'php/reporteEgresoDia.php';
 						}else{ //sino existe lista la fecha de hoy
@@ -227,7 +227,7 @@ th{color:#a35bb4}
 			</div>
 			<!-- Fin de contenido 2 -->
 			</div>
-			
+
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
@@ -252,7 +252,7 @@ th{color:#a35bb4}
 datosUsuario();
 
 
-$('#dtpFechaIniciov3').val('<?php 
+$('#dtpFechaIniciov3').val('<?php
 		if (isset($_GET['fecha'])) { //si existe lista fecha requerida
 			$date = new DateTime($_GET['fecha']);
 			echo  $date->format('d/m/Y');
@@ -273,7 +273,7 @@ $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({
 		format: 'DD/MM/YYYY',
 		lang: 'es',
 		time: false,
-		weekStart: 1, 
+		weekStart: 1,
 		cancelText : 'Cerrar',
 		nowButton : true,
 		switchOnClick : true,
