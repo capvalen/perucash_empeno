@@ -1,5 +1,5 @@
 <?php 
-echo "Ver. 3.0.10 Build 2018.03.06";
+echo "Ver. 3.0 Compilado 2018.10.04";
 
 /*
 Nuevos cambios en versiones:
@@ -10,6 +10,7 @@ on d.idPrestamo=p.idPrestamo
 SET p.`preFechaContarInteres`=d.desFechaContarInteres
 WHERE 1
 Ahora jugamos más con presidTipoProceso de prestamo_producto;
+ALTER TABLE `producto` ADD `idTipoProducto` INT NOT NULL DEFAULT '0' AFTER `prodDioAdelanto`;
 
 
 Version 2.10

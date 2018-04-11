@@ -1,2 +1,6 @@
 Header set Access-Control-Allow-Origin "http://perucash.com"
 Header set Access-Control-Allow-Origin "https://perucash.com"
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

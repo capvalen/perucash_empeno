@@ -5,9 +5,9 @@
 ************* Version: 3.0
 */
 
-html body{ background-color: #eeeeee; font-size: 13px; /*background-color: #191617; background: #191617 url("../images/dark_mosaic.png") repeat scroll 0% 0%;*/}
+html body{ background-color: #f7f6fa;/*#eeeeee*/ font-size: 13px; /*background-color: #191617; background: #191617 url("../images/dark_mosaic.png") repeat scroll 0% 0%;*/}
 
-main, .contenedorDeslizable{background-color: #fff; border-radius:8px; margin-bottom: 20px; padding-bottom: 20px; border: 1px solid #e3e3e3;padding-top: 10px}
+main, .contenedorDeslizable{background-color: #fff; border-radius:0.5rem; margin-bottom: 20px; padding-bottom: 20px; /* border: 1px solid #e3e3e3; */padding-top: 10px}
 
 
 
@@ -186,8 +186,9 @@ input[type=number] {-moz-appearance:textfield;}
 
 /*Código personalizado por cada proyecto*/
 .contenedorDatosCliente input, .contenedorDatosProductos input,
-.modal-nuevoProductoLista input
-{padding-bottom: 5px; margin-bottom: 10px;}
+.modal-nuevoProductoLista input {padding-bottom: 5px; margin-bottom: 20px;}
+
+
 .divError, .txtObligatorio{color: rgb(213, 0, 0);}
 .divError i{font-size: 20px;}
 #ulListadoProductos{font-size: 14px}
@@ -198,7 +199,7 @@ input[type=number] {-moz-appearance:textfield;}
 
 .btnBorrarFila{background-color: transparent;margin-top: -50px;}
 .colNewProduct{cursor: pointer;}
-label{color: #6f6f6f;}
+label{color: #6f6f6f;font-size: 12px;}
 .spanTotalSumasv3{font-size: 23px;}
-.spanCantidadv3, .spanUnd{color: #8a8a8a;}
+.spanCantidadv3, .spanUnd{color: #191c1f;}
 .dropdown-menu>.active>a{background-color: #9658d0;}

@@ -4,7 +4,7 @@ require("php/conkarl.php");
 <!DOCTYPE html>
 <html lang="es">
 
-<?php
+<?php 
 if( isset($_GET['idCliente'])){
 	$sql = mysqli_query($conection,"SELECT * FROM `Cliente` where idCliente = '".$_GET['idCliente']."';");
 	$rowCliente = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -24,7 +24,7 @@ if( isset($_GET['idCliente'])){
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.6" rel="stylesheet">
+		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
 		<link href="css/estilosElementosv3.css?version=3.0.29" rel="stylesheet">
 		<link rel="stylesheet" href="css/colorsmaterial.css">
@@ -32,7 +32,7 @@ if( isset($_GET['idCliente'])){
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-
+		
 </head>
 
 <body>
@@ -57,33 +57,13 @@ if( isset($_GET['idCliente'])){
 	    text-decoration: none;
 	    background-color: #f5f5f5;
 	}
-	#overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.65); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-   /* Add a pointer on hover */
-}
-#overlay .text{position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 36px;
-    color: white;
-    user-select: none;
-    transform: translate(-50%,-50%);}
 </style>
 <div id="wrapper">
 
 	<!-- Sidebar -->
 	<div id="sidebar-wrapper">
 		<ul class="sidebar-nav">
-
+			
 			<div class="logoEmpresa ocultar-mostrar-menu">
 				<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
 			</div>
@@ -94,7 +74,7 @@ if( isset($_GET['idCliente'])){
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
@@ -105,7 +85,7 @@ if( isset($_GET['idCliente'])){
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li class="hidden">
+			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
@@ -149,7 +129,7 @@ if( isset($_GET['idCliente'])){
 						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
 						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
-
+						
 				</div>
 		</div>
 		</nav>
@@ -157,17 +137,23 @@ if( isset($_GET['idCliente'])){
 </div>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-	<div class="container-fluid">
+	<div class="container-fluid">				 
+		<div class="row">
+			<div class="col-lg-12 contenedorDeslizable">
+			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
+				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
+			<!-- Fin de contenido principal -->
+			</div>
+		</div>
 		<div class="row contenedorDeslizable">
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
-				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
 				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
-						for ($i=0; $i <5 ; $i++) {
+						for ($i=0; $i <5 ; $i++) { 
 							if($i<$rowCliente['cliCalificacion']){
 								echo '<i class="icofont icofont-ui-rating"></i>';
 							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
@@ -213,7 +199,7 @@ if( isset($_GET['idCliente'])){
 							$j++;
 						}
 					}
-
+					
 				}
 				?>
 					<!-- <div class=" paPrestamo"><strong>
@@ -243,7 +229,6 @@ if( isset($_GET['idCliente'])){
 
 </div>
 
-
 <!-- Modal para agregar nuevo producto  -->
 <div class="modal fade modal-nuevoProductoLista" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog " role="document">
@@ -254,15 +239,15 @@ if( isset($_GET['idCliente'])){
 		</div>
 		<div class="modal-body">
 			<div class="container-fluid">
-			<div class="row"> <span class="sr-only" id="deQuePrestamoViene"></span>
-				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label>
+			<div class="row"> <span class="sr-only" id="iddeLi">-1</span>
+				<div class="col-xs-8"><label for="">Tipo de producto <span class="txtObligatorio">*</span></label> <span class="hidden" id="deQuePrestamoViene"></span>
 					<div  id="divSelectProductoListado">
 						<select class="selectpicker mayuscula" id="sltProductoListado" title="Tipo de producto..."  data-width="100%" data-live-search="true" data-size="15">
 							<?php require 'php/listarProductosTipos.php'; ?>
 						</select>
 					</div>
 				</div>
-				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off" value="1"></div>
+				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off"></div>
 			</div>
 			<div class="row ">
 				<div class="col-xs-8"><label for="">Nombre del artículo y características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
@@ -271,7 +256,7 @@ if( isset($_GET['idCliente'])){
 				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
-					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>
+					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
 				</div>
 			</div>
 			<div class="row">
@@ -280,10 +265,11 @@ if( isset($_GET['idCliente'])){
 
 		</div>
 		</div>
-
+			
 		<div class="modal-footer">
 			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
-			<button class="btn btn-morado btn-outline" id='btnGuardarDatos' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
+			<button class="btn btn-morado btn-outline hidden" id='btnActualizarItem' ><i class="icofont icofont-refresh"></i> Actualizar item</button>
+			<button class="btn btn-morado btn-outline" id='btnAgregarItem' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
 		</div>
 	</div>
 	</div>
@@ -299,14 +285,12 @@ if( isset($_GET['idCliente'])){
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
-<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
-datosUsuario();
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -335,48 +319,6 @@ $('.rate i').click(function () {
 $('.btnNuevoItemProdPrestamo').click(function () {
 	$('#deQuePrestamoViene').text( $(this).parent().parent().parent().parent().parent().find('.h4Prestamo').text() );
 	$('.modal-nuevoProductoLista').modal('show');
-});
-$('#btnGuardarDatos').click(function () {
-	//console.log('caso 8')
-	$("#overlay").css({display: 'block'});
-	var jsonProductos= new Array();
-	var fechaProducto= '';
-	var idTipo='';
-
-	if( $('#dtpFechaInicio').val() != moment().format('DD/MM/YYYY')){ fechaProducto = moment( $('#dtpFechaInicio').val(), 'DD-MM-YYYY').format('YYYY-MM-DD')+' '+moment().format('HH:mm'); }else{
-		 fechaProducto =moment().format('YYYY-MM-DD HH:mm');
-	}
-
-	jsonProductos.push({ cantProd: $('#txtQProduc').val(), tipoProd: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), descripProd: $('#txtNameProduc').val(), capitalProd: $('#txtCapitalProduc').val(), intereProd: $('#txtInteresProduc').val(), fechaIngProd: fechaProducto, extraProd: $('#txtObservacionProduc').val() });
-
-	//console.log($.JsonUsuario.idUsuario);
-	$.ajax({url: 'php/insertarProductoAlonev3.php', type: 'POST', data: {idCliente: <?php echo $_GET['idCliente']; ?>, jdata:jsonProductos, capital: $('#txtCapitalProduc').val(), idUser: $.JsonUsuario.idUsuario, idPrestamo: $('#deQuePrestamoViene').text() }}).done(function (resp) {// console.log(resp)
-		if(parseInt(resp)>0){
-			location.reload();
-		}else{
-			$('#spanMalo').text('Hubo un error interno y no se pudo guardar.');
-			$('.modal-GuardadoError').modal('show');
-		}
-	});
-	$("#overlay").css({display: 'block'});
-	/*
-	if( $('#txtDni').val().length<8){
-		$('#spanMalo').text('El DNI no es correcto');
-		$('.modal-GuardadoError').modal('show');
-	}
-	else if( $('#txtApellidos').val()=='' || $('#txtApellidos').val()==''){
-		$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
-		$('.modal-GuardadoError').modal('show');
-	}
-	else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
-		$('#spanMalo').text('Ingese un teléfono fijo y un celular.');
-		$('.modal-GuardadoError').modal('show');
-	}else if($('.rowProduct').length==0){
-		$('#spanMalo').text('La lista de items no puede estar vacía.');
-		$('.modal-GuardadoError').modal('show');
-	}else{
-//		ACA VA EL CONTENIDO DE ARRIBA
-	}*/
 });
 </script>
 </body>

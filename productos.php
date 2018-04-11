@@ -5,11 +5,10 @@ require("php/conkarl.php");
 <html lang="es">
 <?php 
 if( isset($_GET['idProducto'])){
-	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto prp on prp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=prp.presidTipoProceso 
+	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
 inner join usuario u on u.idUsuario=p.idUsuario
 WHERE p.idProducto=".$_GET['idProducto'].";");
 $rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
-
 /*$carpeta = 'images/productos/'.$_GET['idProducto'];
 if (!file_exists($carpeta)) {
     mkdir($carpeta, 0777, true);
@@ -62,7 +61,6 @@ if (!file_exists($carpeta)) {
 	.divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; cursor:default; color: #546e7a;}
 	.divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
 	.divImagen img{border-radius: 7px;}
-	.divImagen li{list-style-type:none!important;}
 	.divBotonesAccion{margin: 15px 0;}
 	.tab-pane li{list-style: none;}
 	.tab-pane li{margin:5px 0;text-indent: -.7em;}
@@ -119,7 +117,7 @@ if (!file_exists($carpeta)) {
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li class="active">
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
@@ -131,7 +129,7 @@ if (!file_exists($carpeta)) {
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li class="hidden">
+			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
@@ -197,7 +195,7 @@ if (!file_exists($carpeta)) {
 						  </button>
 						  <ul class="dropdown-menu">
 							<li><a href="#" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-							<li><a href="#" id="liImprimirHojaControl"><i class="icofont icofont-page"></i> Hoja de control</a></li>
+							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
 						  </ul>
 						</div>
 					</div>
@@ -255,19 +253,18 @@ if (!file_exists($carpeta)) {
 							if($rowProducto['prodActivo']==='0'){
 							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
 							}else{
-								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres, datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto']);
+								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.preFechaContarInteres,datediff( now(), preFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo` p where idProducto=".$_GET['idProducto']);
 								$rowInteres=mysqli_fetch_assoc($sqlIntereses);
 								?>
 							<ul>
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
-								<li>Tiempo de intereses: <span><?php if($rowInteres['diferenciaDias']==='0'){echo 1;}else{echo $rowInteres['diferenciaDias'];} ?> días</span></li>
+								<li>Tiempo de intereses: <span><?php echo $rowInteres['diferenciaDias']; ?> días</span></li>
 							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=28 ){ ?>
 								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= $rowInteres['preCapital']*$rowInteres['preInteres']/100; echo $interesJson; ?></span></li>
 							<?php }else { 
 								$_GET['inicio']=floatval($rowInteres['preCapital']);
-								if($rowInteres['diferenciaDias']==='0'){$_GET['numhoy']=1;}else{$_GET['numhoy']=$rowInteres['diferenciaDias'];}
-								
+								$_GET['numhoy']=$rowInteres['diferenciaDias'];
 								$_GET['interes']=$rowInteres['preInteres'];
 								$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
 								// var_dump($resultado);
@@ -312,7 +309,7 @@ if (!file_exists($carpeta)) {
 						<!--Inicio de pestaña interior 04-->
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Observaciones y Advertencias antes de rematar</h4>
 							<?php if($rowProducto['prodObservaciones']<>''){ ?>
-								<div class="mensaje"><div class="texto"><p><strong>Observaciones</strong></p> <p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
+								<div class="mensaje"><div class="texto"><p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
 							<?php } ?>
 							<div class="conjuntoMensajes">
 							<?php
@@ -413,6 +410,7 @@ if (!file_exists($carpeta)) {
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
+
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
@@ -423,7 +421,6 @@ if (!file_exists($carpeta)) {
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 <script src="js/jquery.flexslider.js"></script>
 <script src="js/lightbox.js"></script>
-<script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
 
 
 <!-- Menu Toggle Script -->
@@ -530,13 +527,6 @@ $('.btnImprimirTicket').click(function () {
 });
 $('#liAGestionrFotos').click(function() {
 	$('.modal-gestionarFotos').modal('show');
-});
-$('#liImprimirHojaControl').click(function () {
-	loadPrintDocument(this,{
-		url: "hojaControl.php?idProd="+<?php if( isset ($_GET['idProducto']) ){echo $_GET['idProducto'];}else{echo 0;}?>,
-		attr: "href",
-		message:"Tu documento está siendo creado"
-	});
 });
 </script>
 

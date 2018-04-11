@@ -70,7 +70,7 @@ require("php/conkarl.php");
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>

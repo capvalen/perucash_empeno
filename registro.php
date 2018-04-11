@@ -1,4 +1,4 @@
-<?php  ?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -16,44 +16,27 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
+		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.33" rel="stylesheet">
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.42" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-		<link href="css/bootstrap-select.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" href="css/bootstrap-select.min.css" >
+		<link rel="stylesheet" href="css/animate.css" >
 		
 </head>
 
 <body>
-<style>
-#overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0; 
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.65); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-   /* Add a pointer on hover */
-}
-#overlay .text{position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 36px;
-    color: white;
-    user-select: none;
-    transform: translate(-50%,-50%);}
-</style>
-<div id="overlay">
-	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
-</div>
 
+<style>
+.bootstrap-select button, input{height: 40px; color: #673ab7 !important; margin-bottom: 20px; }
+.btnMasterEntrada{ width: 60%; height: 150px; font-size: 24px; }
+.btnMasterEntrada i{font-size: 48px;}
+.spanNomProductov3{font-size: 17px;}
+.divMonto{color: #191c1f;}
+</style>
 <div id="wrapper">
 
 	<!-- Sidebar -->
@@ -67,13 +50,13 @@
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
 			<li class="active">
-					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
+					<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
 			</li>
 			<li>
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
+					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
 					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
@@ -81,7 +64,7 @@
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li class="hidden">
+			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
@@ -133,13 +116,25 @@
 </div>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-	<div class="container-fluid">				 
-		
+	<div class="container-fluid ">
 		<div class="row noselect">
-			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
+			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido 2 -->
-			<h2 class="purple-text text-lighten-1">Registro de cliente y productos nuevos <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
-				<div class="row">
+			<h2 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
+			<div class="contenedorBienvenida">
+				<h4>Bienvenido a PeruCash, para empezar selecciona que tipo de producto deseas registrar</h4>
+				<div class="row"><br>
+					<div class="col-sm-6 text-center">
+						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Remate</button>
+					</div>
+					<div class="col-sm-6 text-center">
+						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-shopping-cart"></i> <br>Compra</button>
+					</div>
+				</div>
+			</div>
+			<span class="hidden queMichiEs"></span>
+			<div class="contenedorDatosCliente hidden">
+					<div class="row">
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
@@ -153,19 +148,11 @@
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
 					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
 				</div>
+
+				
 			<!-- Fin de contenido 2 -->
 			</div>
-			<div class="col-lg-12 contenedorDeslizable contenedorDatosProductos noselect">
-			<!-- Empieza a meter contenido 2 -->
-				<div class="container" style="padding-top: 20px;">
-					<div class="material-switch pull-left " >
-						<input id="someSwitchOptionWarning" type="checkbox"/>
-						<label for="someSwitchOptionWarning" class="label-success" ></label>
-
-					</div>
-					<label for="someSwitchOptionWarning" id="lblSWQueEs" style="padding-top: 0;margin-left: 10px; color: #0082ff; transition: all 0.3s ease-in-out;"> Empeño: Todos los items son empeños con interés.</label>
-				</div>
-				<div class="row">
+			<div class="row contenedorDatosProductos hidden">
 						<div class="col-sm-12 ">
 						<div class="row text-center hidden">
 							<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
@@ -180,7 +167,7 @@
 									<div class="row"><strong>
 										<div class="col-xs-8 text-left">Nombre producto</div>
 										<div class="col-xs-2 text-center">Precio</div>
-										<div class="col-xs-2 text-center">Porcentaje</div></strong>
+										<div class="col-xs-2 text-center">Porcentaje Semanal</div></strong>
 									</div>
 									</li>
 								</ul>
@@ -189,7 +176,7 @@
 										<div class="container-fluid" id="conjuntoElementos"></div>
 										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
 										</div>
-										<div class="col-xs-2 text-left purple-text text-lighten-1"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
+										<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
 									</div>
 								</ul>
 							</div>
@@ -198,13 +185,14 @@
 						</div>
 					
 						<div class="col-sm-12 text-right">
+							<button class="btn btn-default btn-lg btn-outline pull-left" id="btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
 							<button class="btn btn-azul btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
-							<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar empeño</button>
+							<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar</button>
 							<button class="btn btn-azul sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
 						</div>
 					</div>
-			<!-- Fin de contenido 2 -->
-			</div>
+				</div>
+			
 		</div>
 </div>
 <!-- /#page-content-wrapper -->
@@ -231,7 +219,7 @@
 				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off"></div>
 			</div>
 			<div class="row ">
-				<div class="col-xs-8"><label for="">Nombre del artículo y características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
+				<div class="col-xs-8"><label for="">Nombre, marca o características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
 			</div>
 			<div class="row">
 				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
@@ -239,6 +227,10 @@
 				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
 					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
 				</div>
+			</div>
+			<div class="row container-fluid hidden">
+				<p class="deep-purple-text text-lighten-1">Revisa éstos detalles antes de recibir el artículo:</p>
+				<div class="datosCheck container-fluid"></div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12"><label for="">¿Más características?</label> <textarea  type="text" class="form-control mayuscula" id="txtObservacionProduc" cols=2 placeholder="¿Algún comentario que rescatar?"></textarea></div>
@@ -259,21 +251,22 @@
 
 <?php include 'php/modals.php'; ?>
 <!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script src="js/inicializacion.js?version=1.0.3"></script>
-<script src="js/impotem.js?version=1.0.4"></script>
 <script src="js/bootstrap-select.js?version=1.0.1"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
 <script>
-datosUsuario();
 $.interesGlobal=4;
+datosUsuario();
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -288,7 +281,11 @@ $('#btnAddNewProd').click(function () {
 	$('#txtNameProduc').val('');
 	
 	$('#txtCapitalProduc').val('0.00');
-	$('#txtInteresProduc').val($.interesGlobal);
+	if( $('.queMichiEs').attr('data-id')=='esCompra'){
+		$('#txtInteresProduc').val(0).attr('readonly', true);
+	}else{
+		$('#txtInteresProduc').val($.interesGlobal).attr('readonly', false);
+	}
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('#txtObservacionProduc').val('')
 	$('.modal-nuevoProductoLista .divError').addClass('hidden');
@@ -303,7 +300,8 @@ $('#btnAgregarItem').click(function () {
 	var fechaItem=$('#dtpFechaInicio').val();
 	
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
-	var tipoItemStr=$('#divSelectProductoListado').children().find('.selected a').attr('data-tokens');
+	var tipoItemID=$('#divSelectProductoListado').find('.selected a').attr('data-tokens');
+	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
 	
 	var observaItem='';
 	if($('#txtObservacionProduc').val()==''){
@@ -317,16 +315,16 @@ $('#btnAgregarItem').click(function () {
 	else if(cantItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('La cantidad No puede ser negativa o cero'); }
 	else if(nomItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese un nombre de producto'); }
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
-	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
+	else if(interesItem<=0 && $('.queMichiEs').attr('data-id')=='esRemate' ){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
 	else if( $('#iddeLi').text()!='-1'){console.log('repe')}
 	else{
 		$('#conjuntoElementos').append(`<li class="list-group-item">
 				<div class="row rowProduct">
-					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
+					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 					<span class="sr-only spanfechaIngresov3">${fechaItem}</span>  </div>
-					<div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
-					<div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
+					<div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+					<div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
 				</div><button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
 				</li>`);
 		calcularTotalesParc();
@@ -343,7 +341,7 @@ $('.colNewProduct').click(function () {
 $('#conjuntoElementos').on('click', '.rowProduct', function () { 
 	$('#iddeLi').text($(this).parent().index())
 	$('#txtQProduc').val($(this).find('.spanCantidadv3').text());
-	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipov3').text());
+	$('#sltProductoListado').selectpicker('val', $(this).find('.spanTipoStrv3').text());
 	$('#txtNameProduc').val($(this).find('.spanNomProductov3').text());
 	
 	$('#txtCapitalProduc').val($(this).find('.spanPrecioEmpv3').text());
@@ -379,7 +377,8 @@ $('#ulListadoProductos').on('click', '.btnBorrarFila', function () {
 	calcularTotalesParc();
 });
 $('#btnActualizarItem').click(function () {
-	var index=$(this).parent().parent().index();
+	//var index=$(this).parent().parent().index();
+	var index = $('#iddeLi').text();
 	
 	var cantItem=$('#txtQProduc').val();
 	var nomItem=$('#txtNameProduc').val();
@@ -387,6 +386,7 @@ $('#btnActualizarItem').click(function () {
 	var interesItem=$('#txtInteresProduc').val();
 	var fechaItem=$('#dtpFechaInicio').val();
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
+	var tipoItemID=$('#divSelectProductoListado').find('.selected a').attr('data-tokens');
 	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
 	
 	var observaItem='';
@@ -403,14 +403,14 @@ $('#btnActualizarItem').click(function () {
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
 	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
-	else{ console.log(index)
+	else{ //console.log(index)
 		$('#conjuntoElementos li').eq(index).remove();
-		$('#conjuntoElementos').append(`<li class="list-group-item">
+		$('#conjuntoElementos').append(`<li class="list-group-item animated fadeIn">
 			    <div class="row rowProduct">
-			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula spanNomProductov3">${nomItem}</span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3">${tipoItem}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> - <span class="spanObservacionv3">${observaItem}</span></small> </p>
+			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 			        <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
-			        <div class="col-xs-2" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
-			        <div class="col-xs-2 pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
+			        <div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+			        <div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
 			    <button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
 			    </li>`);
 		calcularTotalesParc();
@@ -437,7 +437,7 @@ $('#someSwitchOptionWarning').change(function (e) {
 	$('#txtNombreProducto').focus();
 });
 $('#txtDni').focusout(function () {
-	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {
+	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) { console.log(resp);
 		// console.log(JSON.parse(resp).length)
 		if(JSON.parse(resp).length==1){
 			$.each(JSON.parse(resp), function (i, dato) {
@@ -461,55 +461,53 @@ $('#txtDni').focusout(function () {
 	});
 });
 $('#btnGuardarDatos').click(function () {
-	$("#overlay").css({display: 'block'});
-	var jsonProductos= new Array();
-	var jsonCliente= new Array();
-	var fechaProducto= '';
-	var idTipo='';
-	jsonCliente.push({dniCli: $('#txtDni').val(), apellidosCli: $('#txtApellidos').val(), nombreCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), cotroCelularCli: $('#txtFono').val() });
-	$.each( $('.rowProduct'), function (i, producto) {
-	
-	if( $(producto).find('.spanfechaIngresov3').text() != moment().format('DD/MM/YYYY')){ fechaProducto = moment( $(producto).find('.spanfechaIngresov3').text(), 'DD-MM-YYYY').format('YYYY-MM-DD')+' '+moment().format('HH:mm'); }else{
-		 fechaProducto =moment().format('YYYY-MM-DD HH:mm');
-	}
-	
-	jsonProductos.push({ cantProd: $(producto).find('.spanCantidadv3').text(), tipoProd: $(producto).find('.spanTipoStrv3').text(), descripProd: $(producto).find('.spanNomProductov3').text(), capitalProd: $(producto).find('.spanPrecioEmpv3').text(), intereProd: $(producto).find('.spanInteresv3').text(), fechaIngProd: fechaProducto, extraProd: $(producto).find('.spanObservacionv3').text().replace('Sin observaciones', '')});
-	});
 
-	
-	$.ajax({url: 'php/insertarProductov3.php', type: 'POST', data: {jCliente:jsonCliente, jdata:jsonProductos, capital: $('.spanTotalSumasv3').text(), jusuario: $.JsonUsuario }}).done(function (resp) { console.log(resp)
-		if(parseInt(resp)>0){
-			location.href = 'cliente.php?idCliente='+resp
-		}else{
-			$('#spanMalo').text('Hubo un error interno y no se pudo guardar.');
-			$('.modal-GuardadoError').modal('show');
-		}
-	});
-	$("#overlay").css({display: 'block'});
-
-	
-	/*if( $('#txtDni').val().length<8){
-		$('#spanMalo').text('El DNI no es correcto');
-		$('.modal-GuardadoError').modal('show');
+	switch( $('.queMichiEs').attr('data-id') ){
+		case 'esCompra':
+			if($('.rowProduct').length==0){
+				$('#spanMalo').text('La lista de items no puede estar vacía.');
+				$('.modal-GuardadoError').modal('show');
+			}else{
+				var jsonProductos= [];
+				$.each( $('.rowProduct'), function (i, elem) {
+					jsonProductos.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
+						tipoProducto: $(elem).find('.spanTipov3ID').text(), montoDado: $(elem).find('.spanPrecioEmpv3').text(), 
+						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD')+' '+moment().format('H:mm'), 
+						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
+					});
+					console.log(jsonProductos);
+					if($('.rowProduct').length-1==i){
+						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
+						console.log(resp)
+						});
+					}
+				});
+				
+			}
+		break;
+		case 'esRemate':
+			if( $('#txtDni').val().length<8){
+				$('#spanMalo').text('El DNI no es correcto'); 
+				$('.modal-GuardadoError').modal('show');
+			}
+			else if( $('#txtApellidos').val()=='' || $('#txtNombres').val()==''){
+				$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
+				$('.modal-GuardadoError').modal('show');
+			}
+			else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
+				$('#spanMalo').text('Falta rellenar ambos números.');
+				$('.modal-GuardadoError').modal('show');
+			}else if($('.rowProduct').length==0){
+				$('#spanMalo').text('La lista de items no puede estar vacía.');
+				$('.modal-GuardadoError').modal('show');
+			}else{
+				//llamar ajax
+			}
+		break;
 	}
-	else if( $('#txtApellidos').val()=='' || $('#txtApellidos').val()==''){
-		$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
-		$('.modal-GuardadoError').modal('show');
-	}
-	else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
-		$('#spanMalo').text('Ingese un teléfono fijo y un celular.');
-		$('.modal-GuardadoError').modal('show');
-	}else if($('.rowProduct').length==0){
-		$('#spanMalo').text('La lista de items no puede estar vacía.');
-		$('.modal-GuardadoError').modal('show');
-	}else{
-		ACA VA EL CONTENIDO DE ARRIBA
-	}*/
 });
 $('#txtBuscarNivelGod').keyup(function (e) {
-	var code = e.which; // recommended to use e.which, it's normalized across browsers
 	var valor= $(this).val();
-
     if(code==13){
     	e.preventDefault();
     	if($.isNumeric(valor)){
@@ -523,8 +521,32 @@ $('#txtBuscarNivelGod').keyup(function (e) {
     }
 
 });
-$('#btnCronogramaPagosVer').click(function () {
-	
+$('.btnMasterEntrada').click(function () {
+	$('.contenedorBienvenida').addClass('hidden');
+	if( $(this).attr('id')=='btnRemateMaster'){
+		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
+		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
+		$('.queMichiEs').attr('data-id', 'esRemate');
+	}else{
+		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
+		$('.queMichiEs').attr('data-id', 'esCompra');
+	}
+});
+$('#btnVolver').click(function () {
+	$('.contenedorBienvenida').removeClass('hidden').addClass('animated fadeInLeft');
+	$('.contenedorDatosCliente').removeClass('animated fadeInRight').addClass('hidden');
+	$('.contenedorDatosProductos').removeClass('animated fadeInRight').addClass('hidden');
+});
+$('#divSelectProductoListado').on('click', '.optProducto ', function () {
+	var tipo = $('#divSelectProductoListado').find('.selected a').attr('data-tokens');
+	$.ajax({url: 'php/listarTipoProductoRecomendaciones.php', type: 'POST', data: {idTipo: tipo }}).done(function (resp) {
+		//console.log(resp)
+		if(resp==''){
+			$('.datosCheck').parent().addClass('hidden');
+		}else{
+			$('.datosCheck').html(resp).parent().addClass('animated fadeIn').removeClass('hidden');
+		}
+	});
 });
 </script>
 

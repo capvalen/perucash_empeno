@@ -3,12 +3,12 @@
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
-@import url('https://fonts.googleapis.com/css?family=Muli');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
 
 
  body {
 	overflow-x: hidden;
-	font-family: 'Muli', sans-serif;
+	font-family: 'Poppins', sans-serif;
  }
 
 /* Toggle Styles */
@@ -33,7 +33,7 @@
 	height: 100%;
 	margin-left: -270px;
 	overflow-y: auto;
-	background: rgba(44,49,68,1);
+	background: rgba(255, 255, 255);
 	-webkit-transition: all 0.5s ease;
 	-moz-transition: all 0.5s ease;
 	-o-transition: all 0.5s ease;
@@ -76,22 +76,24 @@
 .sidebar-nav li a {
 	display: block;
 	text-decoration: none;
-	 color: rgb(123,148,166);transition: all 0.4s ease-in-out;
+	 color: #a35bb4;transition: all 0.4s ease-in-out;
 }
 
 .sidebar-nav li a:hover {
 	text-decoration: none;
-	color: #fff;
+	color: #a35bb4;
 	/*background: rgba(255,255,255,0.2);*/
-	border-bottom: solid #F7FDCA  3px;
+	border-bottom: solid #a35bb4 3px;
 	padding: 0 10px;  margin-left: 25px;
 	margin-right: 30px;
 }
 
 .sidebar-nav .active{
-	background: rgba(39,43,59,1); 
+	background: rgb(163, 91, 180);
+	border-radius: 0 30px 30px 0;
 }
-.sidebar-nav .active a{color:rgb(255,193,74);}
+.sidebar-nav .active a{color:rgb(255, 255, 255);}
+.sidebar-nav .active a:hover{color: #ffffff;}
 
 .sidebar-nav > .sidebar-brand { margin-top: 20px; margin-bottom: 20px;
 	

@@ -42,7 +42,7 @@
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
@@ -56,7 +56,7 @@
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
 			</li>
-			<li class="hidden">
+			<li>
 					<a href="#!"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>

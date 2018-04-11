@@ -57,8 +57,8 @@ a:hover{color:#462782;}
 			<div class="wello login-box " style="color: #673ab7"  >
 				<div class="row">
 					<div class="col-xs-4"><img src="images/VirtualCorto.png" class="img-responsive" alt=""></div>
-					<div class="col-xs-8"><h3 class="text-center" style="margin-bottom: 0px;">Info-Cat </h3>
-						<div class="text-center"><span >App para «PeruCash» - Retamas</span></div>
+					<div class="col-xs-8"><h3 class="text-center" style="margin-top: 10px;margin-bottom: 0px;">Perucash</h3>
+						<div class="text-center"><span >Una web app de «Infocat» <strong>Local: Las Retamas</strong></span></div>
 						<legend  style="color:#7956C1"><small style=" font-size: 70%;"></small></legend></div>
 				</div>
 				
@@ -77,7 +77,7 @@ a:hover{color:#462782;}
 			</div>
 			<div class="form-group text-center text-danger hidden" id="divError">Error en alguno de los datos, complételos todos cuidadosamente.</div>
 			
-			<div class="pull-left" ><small><?php include 'php/version.php' ?> | 2016 - <?php echo date("Y"); ?> <a href="!#"><br>®  Info-cat</a></small></div>
+			<div class="pull-left" ><small><?php include 'php/version.php' ?> | 2016 - <?php echo date("Y"); ?> <a href="https://facebook.com/pg/infocat.soluciones/photos/?tab=album&album_id=2040393179508347"><br>®  Info-cat</a></small></div>
 			</div>
 		</div>
 	</div>
@@ -116,7 +116,7 @@ $('#btnAcceder').click(function() {
 		url: 'php/validarSesion.php',
 		data: {user: $('#txtUser_app').val(), pws: $('#txtPassw').val()},
 		success: function(iduser) {
-			if (iduser!=0){//console.log('el id es '+data)
+			if (parseInt(iduser)>0){//console.log('el id es '+data)
 				//console.log(iduser)
 				window.location="registro.php";
 			}

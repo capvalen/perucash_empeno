@@ -1,7 +1,7 @@
 <?php 
 require("conkarl.php");
 
-$sql = mysqli_query($conection,"SELECT * FROM `detallereporte` where idDetalleReporte>=15 and idDetalleReporte<>22 ORDER BY repoDescripcion ASC;");
+$sql = mysqli_query($conection,"SELECT * FROM `detallereporte` where idDetalleReporte>=15 and idDetalleReporte<>22 ORDER BY repoDescripcion` ASC;");
 
 while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
 {

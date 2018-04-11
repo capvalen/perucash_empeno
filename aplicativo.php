@@ -1286,7 +1286,7 @@ $(document).ready(function () {
 			$.ajax({url:'php/listarPrestamosPorIdProducto.php', type:'POST', data:{idProd: idNew }}).done(function (resp) {
 				//console.log(resp)
 				$.each(JSON.parse(resp), function (i, jresp) { // console.log(jresp)
-					coleccionIDs+=jresp.idPrestamo+','; //console.log(jresp.desFechaContarInteres);
+					coleccionIDs+=jresp.idPrestamo+','; console.log(coleccionIDs);
 					var differencia=moment().diff(moment(jresp.desFechaContarInteres).format('YYYY-MM-DD'), 'days'); /*console.log(differencia)*/
 					var diaInicial= moment(jresp.desFechaContarInteres).format('YYYY-MM-DD');
 					
@@ -1312,8 +1312,8 @@ $(document).ready(function () {
 						</tbody>
 					</table></div>
 					</div>`);
-					console.log('estado: '+jresp.preIdEstado);
-					console.log('diffe: '+differencia);
+					//console.log('estado: '+jresp.preIdEstado);
+					//console.log('diffe: '+differencia);
 					if(jresp.preIdEstado==11){ console.log('entra 11')
 						$('#smallh3Producto').css({'color': '#f0ad4e'}).html('<i class="icofont icofont-chart-pie-alt"></i> Artículo retirado '+moment(jresp.preFechaInicio).fromNow()+ ' por '+ jresp.usunick);
 						$('#btn-imprimirTicketFijo').addClass('sr-only');
@@ -1388,7 +1388,7 @@ $(document).ready(function () {
 
 				});
 				//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
-				$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
+				$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { console.log(resp);
 					var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
 					var preCapi=parseFloat(jsonRespActual[0].preCapital);
 					$('#spanMontoDado').text(preCapi.toFixed(2));
@@ -1442,11 +1442,11 @@ $(document).ready(function () {
 					}
 				})
 				$.ajax({url:'php/listarDesembolsosPorPrestamos.php', type:'POST', data: {idsDesembolso: coleccionIDs.substring(0,coleccionIDs.length-1) }}).done(function (resp) { //console.log(resp);
-					$.each(JSON.parse(resp), function (i,jresp2) {
+					$.each(JSON.parse(resp), function (i,jresp2) { console.log(jresp2)
 						//console.log(jresp2.desFechaContarInteres)
 						
 						sumaCapital+=parseFloat(jresp2.desCapital);
-						$(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
+						$(`#contenedorPrestamos #${jresp2.idPrestamo}`).find('tbody').append(`
 							<tr><td>Capital o desembolso</td>
 							<td>${moment(jresp2.preFechaInicio).format('DD/MM/YYYY hh:mm a')}</td>
 							<td>S/. ${parseFloat(jresp2.desCapital).toFixed(2)}</td>
