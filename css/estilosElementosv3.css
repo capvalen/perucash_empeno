@@ -195,7 +195,7 @@ input[type=number] {-moz-appearance:textfield;}
 #ulListadoProductos .icoMedia{font-size: 18px}
 .colNewProduct p{color: #f12855!important;}
 .btn-sinBorde{border-color: transparent!important;}
-.contenedorDatosCliente input::placeholder{ font-size: 12px;}
+.contenedorDatosCliente input::placeholder, .modal-iniciarSesion input::placeholder{ font-size: 12px;}
 
 .btnBorrarFila{background-color: transparent;margin-top: -50px;}
 .colNewProduct{cursor: pointer;}
@@ -203,3 +203,8 @@ label{color: #6f6f6f;font-size: 12px;}
 .spanTotalSumasv3{font-size: 23px;}
 .spanCantidadv3, .spanUnd{color: #191c1f;}
 .dropdown-menu>.active>a{background-color: #9658d0;}
+.bootstrap-select button, input{height: 40px; color: #673ab7 !important; margin-bottom: 20px; }
+.bootstrap-select .btn-default:focus{background-color: #ffffff;outline: none!important; border-color: #aa89e4;}
+#divSelectVehiculoListado .open>.dropdown-toggle.btn-default:hover, #divSelectVehiculoListado .open>.dropdown-toggle.btn-default
+#divSelectProductoListado .open>.dropdown-toggle.btn-default:hover, #divSelectProductoListado .open>.dropdown-toggle.btn-default
+{background-color: #faf6ff; border-color: #d3cff9;}

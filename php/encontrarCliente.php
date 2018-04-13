@@ -4,6 +4,7 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 
 
+if($_POST['dniCli']<>''){
 $filas=array();
 $log = mysqli_query($conection,"call encontrarCliente(".$_POST['dniCli'].");");
 
@@ -27,4 +28,7 @@ mysqli_free_result($log);
 /* cerrar la conexi贸n */
 mysqli_close($conection);
 echo json_encode($filas);
+}else{
+	echo '';
+}
 ?>

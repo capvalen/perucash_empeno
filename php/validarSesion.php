@@ -4,7 +4,7 @@
 session_start();
 header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
-
+$clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas. Friedrich Nietzsche';
 
 $log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."' and usuActivo=1;");
 
@@ -35,4 +35,4 @@ mysqli_free_result($log);
 /* cerrar la conexión */
 mysqli_close($conection);
 
- ?>
+?>

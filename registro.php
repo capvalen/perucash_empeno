@@ -19,11 +19,11 @@
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.42" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.45" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
-		<link rel="stylesheet" href="css/bootstrap-select.min.css" >
+		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
 		<link rel="stylesheet" href="css/animate.css" >
 		
 </head>
@@ -31,7 +31,6 @@
 <body>
 
 <style>
-.bootstrap-select button, input{height: 40px; color: #673ab7 !important; margin-bottom: 20px; }
 .btnMasterEntrada{ width: 60%; height: 150px; font-size: 24px; }
 .btnMasterEntrada i{font-size: 48px;}
 .spanNomProductov3{font-size: 17px;}
@@ -63,6 +62,9 @@
 			</li>
 			<li>
 					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
+			</li>
+			<li>
+					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
 			</li>
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
@@ -220,6 +222,9 @@
 			</div>
 			<div class="row ">
 				<div class="col-xs-8"><label for="">Nombre, marca o características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
+				<div class="col-xs-4 hidden" id="divParaVehiculos">
+					<label for="">Placa <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula soloLetras" id="txtPlacaProduc" placeholder="" autocomplete="off" style="text-transform:uppercase;">
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
@@ -257,13 +262,14 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script src="js/inicializacion.js?version=1.0.3"></script>
-<script src="js/bootstrap-select.js?version=1.0.1"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.7"></script>
+<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <!-- Menu Toggle Script -->
+<?php include 'php/existeCookie.php'; ?>
 <script>
 $.interesGlobal=4;
 datosUsuario();
@@ -298,6 +304,7 @@ $('#btnAgregarItem').click(function () {
 	var capiItem=$('#txtCapitalProduc').val();
 	var interesItem=$('#txtInteresProduc').val();
 	var fechaItem=$('#dtpFechaInicio').val();
+	var itemPlaca=$('#txtPlacaProduc').val();
 	
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
 	var tipoItemID=$('#divSelectProductoListado').find('.selected a').attr('data-tokens');
@@ -314,6 +321,7 @@ $('#btnAgregarItem').click(function () {
 	if(tipoItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que seleccionar un tipo de producto'); }
 	else if(cantItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('La cantidad No puede ser negativa o cero'); }
 	else if(nomItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese un nombre de producto'); }
+	else if(itemPlaca<1 && $('.queMichiEs').attr('data-id')=='esRemate' && (tipoItemID==1 || tipoItemID==11 || tipoItemID==42) ){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese la placa del vehículo'); }
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
 	else if(interesItem<=0 && $('.queMichiEs').attr('data-id')=='esRemate' ){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
@@ -321,7 +329,7 @@ $('#btnAgregarItem').click(function () {
 	else{
 		$('#conjuntoElementos').append(`<li class="list-group-item">
 				<div class="row rowProduct">
-					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
+					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo " style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 					<span class="sr-only spanfechaIngresov3">${fechaItem}</span>  </div>
 					<div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
 					<div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
@@ -336,6 +344,7 @@ $('#btnAgregarItem').click(function () {
 $('.colNewProduct').click(function () {
 	$('.modal-nuevoProductoLista #btnActualizarItem').addClass('hidden');
 	$('.modal-nuevoProductoLista #btnAgregarItem').removeClass('hidden');
+	$('#txtPlacaProduc').val('').parent().addClass('hidden');
 	$('#btnAddNewProd').click();
 });
 $('#conjuntoElementos').on('click', '.rowProduct', function () { 
@@ -388,6 +397,7 @@ $('#btnActualizarItem').click(function () {
 	var tipoItem=$('#divSelectProductoListado').children().find('.selected').text();
 	var tipoItemID=$('#divSelectProductoListado').find('.selected a').attr('data-tokens');
 	var tipoItemStr=$('#sltProductoListado').selectpicker('val');
+	var itemPlaca=$('#txtPlacaProduc').val();
 	
 	var observaItem='';
 	if($('#txtObservacionProduc').val()==''){
@@ -407,7 +417,7 @@ $('#btnActualizarItem').click(function () {
 		$('#conjuntoElementos li').eq(index).remove();
 		$('#conjuntoElementos').append(`<li class="list-group-item animated fadeIn">
 			    <div class="row rowProduct">
-			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
+			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo mayuscula" style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 			        <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
 			        <div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
 			        <div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
@@ -437,9 +447,10 @@ $('#someSwitchOptionWarning').change(function (e) {
 	$('#txtNombreProducto').focus();
 });
 $('#txtDni').focusout(function () {
-	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) { console.log(resp);
+if($('#txtDni').val()!=''){
+	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {// console.log(resp);
 		// console.log(JSON.parse(resp).length)
-		if(JSON.parse(resp).length==1){
+		if(JSON.parse(resp).length==1 ){
 			$.each(JSON.parse(resp), function (i, dato) {
 				$('#txtIdCliente').val(dato.idCliente); /*.attr("disabled", 'true')*/
 				$('#txtApellidos').val(dato.cliApellidos); /*.attr("disabled", 'true')*/
@@ -447,18 +458,18 @@ $('#txtDni').focusout(function () {
 				$('#txtDireccion').val(dato.cliDireccion); /*.attr("disabled", 'true')*/
 				$('#txtCorreo').val(dato.cliCorreo); /*.attr("disabled", 'true')*/
 				$('#txtCelular').val(dato.cliCelular); /*.attr("disabled", 'true')*/
-			})
+			});
 		}
-		/*else{
+		else{
 			$('#txtIdCliente').val('').removeAttr("disabled");
 				$('#txtApellidos').val('').removeAttr("disabled");
 				$('#txtNombres').val('').removeAttr("disabled");
 				$('#txtDireccion').val('').removeAttr("disabled");
 				$('#txtCorreo').val('').removeAttr("disabled");
 				$('#txtCelular').val('').removeAttr("disabled");
-		}*/
-		
+		}
 	});
+}
 });
 $('#btnGuardarDatos').click(function () {
 
@@ -475,7 +486,7 @@ $('#btnGuardarDatos').click(function () {
 						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD')+' '+moment().format('H:mm'), 
 						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
 					});
-					console.log(jsonProductos);
+					//console.log(jsonProductos);
 					if($('.rowProduct').length-1==i){
 						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
 						console.log(resp)
@@ -495,13 +506,28 @@ $('#btnGuardarDatos').click(function () {
 				$('.modal-GuardadoError').modal('show');
 			}
 			else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
-				$('#spanMalo').text('Falta rellenar ambos números.');
+				$('#spanMalo').text('Tiene que haber dos números de teléfono del cliente y alguna referencia (familiar, amigo, pareja).');
 				$('.modal-GuardadoError').modal('show');
 			}else if($('.rowProduct').length==0){
 				$('#spanMalo').text('La lista de items no puede estar vacía.');
 				$('.modal-GuardadoError').modal('show');
 			}else{
-				//llamar ajax
+				var jsonProductos= [];
+				var jsonCliente= [];
+				jsonCliente.push({dniCli: $('#txtDni').val(), apellidoCli: $('#txtApellidos').val(), nombresCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), fijoCli: $('#txtFono').val() });
+				$.each( $('.rowProduct'), function (i, elem) {
+					jsonProductos.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
+						tipoProducto: $(elem).find('.spanTipov3ID').text(), montoDado: $(elem).find('.spanPrecioEmpv3').text(), 
+						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD')+' '+moment().format('H:mm'), interes: $(elem).find('.spanInteresv3').text(),
+						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
+					});
+					//console.log(jsonProductos);
+					if($('.rowProduct').length-1==i){
+						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
+						console.log(resp)
+						});
+					}
+				});
 			}
 		break;
 	}
@@ -527,6 +553,7 @@ $('.btnMasterEntrada').click(function () {
 		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
 		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esRemate');
+		$('#txtDni').focus();
 	}else{
 		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esCompra');
@@ -539,6 +566,12 @@ $('#btnVolver').click(function () {
 });
 $('#divSelectProductoListado').on('click', '.optProducto ', function () {
 	var tipo = $('#divSelectProductoListado').find('.selected a').attr('data-tokens');
+	
+	if( (tipo==1 || tipo==11 || tipo==42) &&  $('.queMichiEs').attr('data-id')=='esRemate' ){
+		$('#divParaVehiculos').removeClass('hidden');
+	}else{
+		$('#divParaVehiculos').addClass('hidden');
+	}
 	$.ajax({url: 'php/listarTipoProductoRecomendaciones.php', type: 'POST', data: {idTipo: tipo }}).done(function (resp) {
 		//console.log(resp)
 		if(resp==''){
