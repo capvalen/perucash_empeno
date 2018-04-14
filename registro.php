@@ -512,18 +512,18 @@ $('#btnGuardarDatos').click(function () {
 				$('#spanMalo').text('La lista de items no puede estar vacía.');
 				$('.modal-GuardadoError').modal('show');
 			}else{
-				var jsonProductos= [];
+				var jsonProducto= [];
 				var jsonCliente= [];
 				jsonCliente.push({dniCli: $('#txtDni').val(), apellidoCli: $('#txtApellidos').val(), nombresCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), fijoCli: $('#txtFono').val() });
 				$.each( $('.rowProduct'), function (i, elem) {
-					jsonProductos.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
+					jsonProducto.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
 						tipoProducto: $(elem).find('.spanTipov3ID').text(), montoDado: $(elem).find('.spanPrecioEmpv3').text(), 
-						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text()).format('YYYY-MM-DD')+' '+moment().format('H:mm'), interes: $(elem).find('.spanInteresv3').text(),
+						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), interes: $(elem).find('.spanInteresv3').text(),
 						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
 					});
-					//console.log(jsonProductos);
+					console.log(jsonProducto);
 					if($('.rowProduct').length-1==i){
-						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
+						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
 						console.log(resp)
 						});
 					}

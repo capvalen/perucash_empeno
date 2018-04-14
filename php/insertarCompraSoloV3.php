@@ -4,7 +4,7 @@ include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
 
 $productos= $_POST['jsonProductos'];
-
+echo count($productos);
 for ($i=0; $i < count($productos) ; $i++) { 
 	$sql= "call insertarCompraSoloV3 ('".$productos[$i]['nombre']."', ".$productos[$i]['montoDado'].", '".$productos[$i]['fechaIngreso']."', '".$productos[$i]['observaciones']."' , ".$_COOKIE['ckidUsuario'].", '".$productos[$i]['fechaRegistro']."', ".$productos[$i]['tipoProducto'].")";
 	//echo $sql;
