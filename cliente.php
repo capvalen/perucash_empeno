@@ -56,7 +56,7 @@ if( isset($_GET['idCliente'])){
 	.divBotonesPrestamo .dropdown-menu>li>a:focus, .divBotonesPrestamo .dropdown-menu>li>a:hover {
 	    text-decoration: none;
 	    background-color: #f5f5f5;
-	}
+	}.divPrestamo h4{color: #c5c5c5;}
 </style>
 <div id="wrapper">
 
@@ -138,14 +138,10 @@ if( isset($_GET['idCliente'])){
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid">				 
-		<div class="row">
-			<div class="col-lg-12 contenedorDeslizable">
-			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
-				<h2 class="purple-text text-lighten-1">Reporte de cliente</h2>
-			<!-- Fin de contenido principal -->
-			</div>
-		</div>
 		<div class="row contenedorDeslizable">
+			<div class="container-fluid">
+				<h2 class="purple-text text-lighten-1"><i class="icofont icofont-puzzle"></i> Reporte de cliente</h2>
+			</div>
 			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>

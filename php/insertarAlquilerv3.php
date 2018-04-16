@@ -1,54 +1,92 @@
 <?php
-include 'conkarl.php';
+require('conkarl.php');
 header('Content-Type: text/html; charset=utf8');
 
 
 $cliente= $_POST['jsonCliente'];
 
-
 //comprobar si existe el cliente en la BD con su dni
 $sqlClienteExiste="SELECT idCliente FROM `Cliente` where cliDni='{$cliente[0]['dniCli']}';";
 
-$llamadoCliente = $conection->query($sqlClienteExiste);
-$resCliente = $llamadoCliente->fetch_row();
-$numRow = $llamadoCliente->num_rows;
-insertarProductos();
+ $llamadoCliente = $conection->query($sqlClienteExiste);
+ $resCliente = $llamadoCliente->fetch_row();
+ $numRow = $llamadoCliente->num_rows;
 if( $numRow>0){
-	$idCiente=$resCliente[0];
+	$idCliente=$resCliente[0];
+	$llamadoCliente->close();
+	insertarProductos($idCliente, $conection );
+
 	//insertarProductos();
-	//echo 'si existe su id es: '.$idCiente;
+	//echo 'si existe su id es: '.$idCliente;
 }else{
 	//No existe insertar cliente nuevo
 	$sqlCliente="call insertClienteV3('{$cliente[0]['apellidoCli']}', '{$cliente[0]['nombresCli']}', '{$cliente[0]['dniCli']}', '{$cliente[0]['direccionCli']}', '{$cliente[0]['correoCli']}', '{$cliente[0]['celularCli']}', '{$cliente[0]['fijoCli']}' );";
+	//insertarProductos();
 	/*$llamadoClienteNew = $conection->query($sqlCliente);
 	$resClienteNew = $llamadoClienteNew->fetch_row();
 	$numRowCli = $llamadoClienteNew->num_rows;
 	//print_r($resClienteNew);
 	if( $numRowCli>0){
-		$idCiente=$resClienteNew[0];
+		$idCliente=$resClienteNew[0];
 		//insertarProductos();
 	}*/
 	
 }
 
 
+function insertarProductos($idCliente, $conn){
+	// Iniciamos préstamo
+	$consulta = $conn->prepare("call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );");
+	$consulta->execute();
+	$resultado = $consulta->get_result();
+	$numLineas=$resultado->num_rows;
+	$row = $resultado->fetch_array(MYSQLI_ASSOC);
+	$idPrestamo =$row['idnuevoPrestamo'];
+	$consulta->fetch();
+	$consulta->close();
 
-function insertarProductos(){
+
 	//Insertar préstamo_producto y desembolso
 	$productos= $_POST['jsonProductos'];
-	echo 'cant '. count($productos);
+	
 for ($i=0; $i < count($productos) ; $i++) {
-	$sqlProducto= "call insertarProductov3 ('".$productos[$i]['nombre']."', ".$productos[$i]['montoDado'].", ".$productos[$i]['interes'].", '".$productos[$i]['fechaRegistro']."', '".$productos[$i]['observaciones']."', ".$idCiente." , ".$_COOKIE['ckidUsuario'].", '".$productos[$i]['fechaRegistro']."', ".$productos[$i]['tipoProducto'].")";
-	echo $sqlProducto;
-	/*if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
-		// obtener el array de objetos 
-		while ($resultado = $llamadoSQL->fetch_row()) {
-			echo $resultado[0]; //Retorna los resultados via post del procedure
-		}
-		// liberar el conjunto de resultados
-		$llamadoSQL->close();
-	}else{echo mysql_error( $conection);}*/
-}
+	$tipo= $productos[$i]['tipoProducto'];
+	if($tipo=='1' || $tipo=='11' || $tipo=='42' ){
+		$placa = ' Placa: '.$productos[$i]['placa'];
+	}else{
+		$placa='';
+	}
+	
+
+	$sqlProducto= "call insertarProductov3 ('".$productos[$i]['nombre'].$placa."', ".$productos[$i]['montoDado'].", ".$productos[$i]['interes'].", '".$productos[$i]['fechaRegistro']."', '".$productos[$i]['observaciones']."', ".$idCliente." , ".$_COOKIE['ckidUsuario'].", ".$idPrestamo.", ".$productos[$i]['cantidad'].",".$productos[$i]['tipoProducto'].");";
+	//echo $sqlProducto;
+
+	$consultaProd = $conn->prepare($sqlProducto);
+	$consultaProd->execute();
+	$resultadoProd = $consultaProd->get_result();
+	$numLineas=$resultadoProd->num_rows;
+	$row = $resultadoProd->fetch_array(MYSQLI_ASSOC);
+	$idProd=$row['idProd'];
+	$consultaProd->fetch();
+	$consultaProd->close();
+
+
+	
+	if($tipo=='1' || $tipo=='11' || $tipo=='42' ){
+		$sqlCochera ="call insertarPlaca('".$productos[$i]['placa']."', {$tipo}, {$idProd});";
+		
+		$consultaCoche = $conn->prepare($sqlCochera);
+		$consultaCoche->execute();
+		$resultadoCoche = $consultaCoche->get_result();
+		$rowCoche = $resultadoCoche->fetch_array(MYSQLI_ASSOC);
+		//print_r($row);
+		$consultaCoche->fetch();
+		$consultaCoche->close();
+	}
+
 }
 
- ?>
+echo $idCliente;
+}
+
+?>

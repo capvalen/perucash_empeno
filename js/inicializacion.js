@@ -50,33 +50,37 @@ $("input").focus(function(){
   this.select();
 });
 $('#btnVolverIniciarSesion').click(function () {
-	$('.modal-iniciarSesion .divError').addClass('hidden');
+	if( $('#btnVolverIniciarSesion').hasClass('') ){
+		$('.modal-iniciarSesion .divError').addClass('hidden');
 
-	if($('#txtVolverUsuario').val()==''){
-		$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
-		$('.modal-iniciarSesion .divError').removeClass('hidden');
-	}
-	else if($('#txtVolverPasw').val()==''){
-		$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
-		$('.modal-iniciarSesion .divError').removeClass('hidden');
-	}
-	else{
-		$.ajax({
-		type:'POST',
-		url: 'php/validarSesion.php',
-		data: {user: $('#txtVolverUsuario').val(), pws: $('#txtVolverPasw').val()},
-		success: function(iduser) {
-			if (parseInt(iduser)>0){//console.log('el id es '+data)
-				//console.log(iduser)
-				location.reload();
-			}
-			else {
-				$('.modal-iniciarSesion .spanError').text('Las credenciales no coinciden');
-				$('.modal-iniciarSesion .divError').removeClass('hidden');
-			}
+		if($('#txtVolverUsuario').val()==''){
+			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
+			$('.modal-iniciarSesion .divError').removeClass('hidden');
 		}
-	});
+		else if($('#txtVolverPasw').val()==''){
+			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
+			$('.modal-iniciarSesion .divError').removeClass('hidden');
+		}
+		else{
+			$('#btnVolverIniciarSesion').addClass('fa-spin');
+			$.ajax({
+			type:'POST',
+			url: 'php/validarSesion.php',
+			data: {user: $('#txtVolverUsuario').val(), pws: $('#txtVolverPasw').val()},
+			success: function(iduser) {
+				if (parseInt(iduser)>0){//console.log('el id es '+data)
+					//console.log(iduser)
+					location.reload();
+				}
+				else {
+					$('.modal-iniciarSesion .spanError').text('Las credenciales no coinciden');
+					$('.modal-iniciarSesion .divError').removeClass('hidden');
+				}
+			}
+		});
+		}
 	}
+
 });
 $('#txtVolverPasw').keypress(function(event){
 	if (event.keyCode === 10 || event.keyCode === 13) 
@@ -89,3 +93,6 @@ $('.soloLetras').keypress(function (e) {//||
         e.preventDefault();
     }
 });
+$('.modal-iniciarSesion').on('shown.bs.modal', function () {
+  $('#txtVolverUsuario').focus();
+})

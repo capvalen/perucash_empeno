@@ -1388,7 +1388,7 @@ $(document).ready(function () {
 
 				});
 				//console.log(coleccionIDs.substring(0,coleccionIDs.length-1));
-				$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { console.log(resp);
+				$.ajax({url:'php/listarMontoPrestamoActual.php', type:'POST', data:{idProd: idNew }}).done(function (resp) { //console.log(resp);
 					var jsonRespActual=JSON.parse(resp); //console.log(jsonRespActual[0].desCapital)
 					var preCapi=parseFloat(jsonRespActual[0].preCapital);
 					$('#spanMontoDado').text(preCapi.toFixed(2));
@@ -1420,10 +1420,11 @@ $(document).ready(function () {
 						if(hastaHoyDias>28){ 
 							if(hastaHoyDias>30){}
 							interesVigente=1.16;
-							var nuevoCapital=preCapi*interesVigente;
-							console.log('Nuevo capi: '+nuevoCapital)
+							var nuevoCapital=parseFloat(preCapi*interesVigente).toFixed(2);
+							
 							$.ajax({url: 'php/calculoInteresAcumuladoDeValor.php?inicio='+nuevoCapital+'&numhoy='+hastaHoyDias, type: 'POST' }).done(function (resp) {
-								var jsonInteres=JSON.parse(resp); console.log(jsonInteres);
+								//console.log(resp);
+								var jsonInteres=JSON.parse(resp); 
 								// $(`#contenedorPrestamos #${jresp2.idDesembolso}`).find('tbody').append(`
 								// <tr><td>Interés ${parseFloat(jsonInteres[2][0].intDiarioHoy*100).toFixed(2)}% por <span class="spanHastaHoyInt">${hastaHoyDias}</span> días.</td>
 								// <td>${moment(jresp2.desFechaContarInteres).fromNow()}</td>

@@ -5,12 +5,28 @@ echo "Ver. 3.0 Compilado 2018.10.04";
 Nuevos cambios en versiones:
 
 Version 3.0
-UPDATE `prestamo` p inner join desembolso d
-on d.idPrestamo=p.idPrestamo
-SET p.`preFechaContarInteres`=d.desFechaContarInteres
-WHERE 1
-Ahora jugamos más con presidTipoProceso de prestamo_producto;
 ALTER TABLE `producto` ADD `idTipoProducto` INT NOT NULL DEFAULT '0' AFTER `prodDioAdelanto`;
+
+CREATE TABLE `prestamo_producto` (
+  `idPrestamo` int(11) NOT NULL,
+  `idProducto` int(11) NOT NULL,
+  `presidTipoProceso` int(11) NOT NULL,
+  `desFechaContarInteres` datetime NOT NULL,
+  `preInteres` int(11) NOT NULL,
+  `preCapital` float NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+INSERT INTO `prestamo_producto`(`idPrestamo`, `idProducto`, `presidTipoProceso`, `desFechaContarInteres`, `preInteres`, `preCapital`)
+select pr.idPrestamo, pr.idProducto, pr.preIdEstado, d.desFechaContarInteres, pr.preInteres, d.desCapital
+from prestamo pr inner join desembolso d on d.idPrestamo = pr.idPrestamo
+where 1
+
+Ahora jugamos más con presidTipoProceso de prestamo_producto;
+
+
+
+
+
 
 
 Version 2.10

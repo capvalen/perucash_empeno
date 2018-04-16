@@ -19,7 +19,7 @@
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.45" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
@@ -261,8 +261,8 @@
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.8"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.7"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
@@ -516,15 +516,17 @@ $('#btnGuardarDatos').click(function () {
 				var jsonCliente= [];
 				jsonCliente.push({dniCli: $('#txtDni').val(), apellidoCli: $('#txtApellidos').val(), nombresCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), fijoCli: $('#txtFono').val() });
 				$.each( $('.rowProduct'), function (i, elem) {
-					jsonProducto.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
+					jsonProducto.push({cantidad: $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
 						tipoProducto: $(elem).find('.spanTipov3ID').text(), montoDado: $(elem).find('.spanPrecioEmpv3').text(), 
 						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), interes: $(elem).find('.spanInteresv3').text(),
-						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
+						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', ''), placa: $(elem).find('.spanPlacaVehiculo').text()
 					});
 					console.log(jsonProducto);
 					if($('.rowProduct').length-1==i){
-						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
-						console.log(resp)
+						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario, total: $('.spanTotalSumasv3').text() }}).done(function (resp) { console.log(resp);
+						/*if($.isNumeric(resp)){ 
+							window.location= 'cliente.php?idCliente='+resp;
+						}*/
 						});
 					}
 				});
