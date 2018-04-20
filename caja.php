@@ -26,6 +26,8 @@
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
 		<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.2" />
+		  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
 </head>
 
@@ -77,21 +79,18 @@ th{color:#a35bb4}
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
 			<li>
-					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
+					<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
 			</li>
 			<li>
-					<a href="productos_search.php"><i class="icofont icofont-cube"></i> Productos</a>
+					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
-			<li  class="active">
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
-			</li>
-			<li>
-					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
+			<li class="active">
+					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
-					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
+					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
 			</li>
-			<li class="hidden">
+			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
 			<li>
@@ -159,7 +158,7 @@ th{color:#a35bb4}
 
 				<div class="panel panel-default ">
 					<div style="padding: 10px;">
-						<p style="color: #a35bb4;">Por: <strong><?php echo $_SESSION['usuario']; ?></strong></p>
+						<p style="color: #a35bb4;">Por: <strong><?php echo $_COOKIE['usuario']; ?></strong></p>
 						<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
 					</div>
 				</div>
@@ -177,7 +176,7 @@ th{color:#a35bb4}
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">
 					<thead>
-						<tr> <th># Cod.</th> <th>Procedencia</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
+						<tr> <th>ID Caja</th> <th>Producto</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
 						<?php
 						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
@@ -233,8 +232,6 @@ th{color:#a35bb4}
 </div><!-- /#wrapper -->
 
 
-
-<?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 
@@ -246,6 +243,9 @@ th{color:#a35bb4}
 <script src="js/bootstrap-select.js?version=1.0.1"></script>
 <script src="js/moment-precise-range.js"></script>
 <script src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
+
+<?php include 'php/modals.php'; ?>
+<?php include 'php/existeCookie.php'; ?>
 
 <!-- Menu Toggle Script -->
 <script>

@@ -75,19 +75,16 @@ if( isset($_GET['idCliente'])){
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
 			<li>
-					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
+					<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
 			</li>
 			<li>
 					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
+					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
-					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
-			</li>
-			<li>
-					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
+					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
 			</li>
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>

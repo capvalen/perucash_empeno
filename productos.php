@@ -5,14 +5,22 @@ require("php/conkarl.php");
 <html lang="es">
 <?php 
 if( isset($_GET['idProducto'])){
-	$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
-inner join usuario u on u.idUsuario=p.idUsuario
-WHERE p.idProducto=".$_GET['idProducto'].";");
-$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
-/*$carpeta = 'images/productos/'.$_GET['idProducto'];
-if (!file_exists($carpeta)) {
-    mkdir($carpeta, 0777, true);
-}*/
+
+	$sqlComrpa = $conection->query("select escompra from producto where idProducto=".$_GET['idProducto']);
+	$resCompra = $sqlComrpa->fetch_row();
+	$esCompra=$resCompra[0];
+
+	if($esCompra =='0'){
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
+		inner join usuario u on u.idUsuario=p.idUsuario
+		WHERE p.idProducto=".$_GET['idProducto'].";");
+		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+	}else{
+		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
+		inner join usuario u on u.idUsuario=p.idUsuario
+		WHERE p.idProducto=".$_GET['idProducto'].";");
+		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+	}
 }
 ?>
 
@@ -117,20 +125,16 @@ li{list-style-type: none;}
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
 			<li>
-					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
+					<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
 			</li>
 			<li class="active">
 					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Cuadrar caja</a>
-			</li>
-			
-			<li>
-					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
+					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
-					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
+					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
 			</li>
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
@@ -225,11 +229,17 @@ li{list-style-type: none;}
 					<div class="col-xs-12 col-sm-5 divDatosProducto">
 						<h2 class="mayuscula purple-text text-lighten-1"><?php echo  $rowProducto['prodNombre']; ?></h2>
 						<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
+					<?php if($esCompra=='0'){ ?>
 						<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
+					<?php } ?>
 						<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 						<p>Préstamo incial: S/. <?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></p>
 						<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
-						<p>Adquisición: <span><?php echo $rowProducto['esCompra']==='0' ? 'Compra' : 'Por alquiler' ?></span></p>
+					<?php if($esCompra=='0'){ ?>
+						<p>Adquisición: <span>Por empeño</span></p>
+					<?php }else { ?>
+						<p>Adquisición: <span>Por compra</span></p>
+					<?php } ?>
 						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
 						<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
 					</div>
@@ -248,9 +258,9 @@ li{list-style-type: none;}
 						<!--Inicio de pestaña interior 01-->
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección intereses</h4>
 						<?php 
-						if($rowProducto['esCompra']===1){
+						if($esCompra=='1'){
 							?>
-							<ul><li>Ésta compra no genera intereses.</li></ul>
+							<ul><li>Las compras no generan intereses.</li></ul>
 							<?php
 						}else{
 							if($rowProducto['prodActivo']==='0'){
@@ -292,7 +302,7 @@ li{list-style-type: none;}
 							<ul>
 								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaRegistro']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 								<?php $i=0; 
-								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `detallereporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
+								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `DetalleReporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
 								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
 									echo "<li>{$rowEstados['repoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['repoUsuario']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['repoValorMonetario'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['repoFechaOcurrencia']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
 									$i++;
@@ -398,6 +408,7 @@ li{list-style-type: none;}
 </div>
 
 <?php include 'php/modals.php'; ?>
+<?php include 'php/existeCookie.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
