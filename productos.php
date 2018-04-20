@@ -94,12 +94,15 @@ if (!file_exists($carpeta)) {
 .textoMensaje{ padding-left: 30px }
 .mensaje small{color: #f7f7f7;/* color: #6b6b6b; */}
 .rowFotos{margin: 0 auto;}
-.divFotoGestion{border-color:#f3f3f3; border: dashed 2px #9a9a9a;
-	 border-radius: 5px;
-    width: 22%;
-    height: 100px;
-    margin: 0 5px;padding-right: 5px;
-    padding-left: 5px;padding-top: 5px;}
+.divFotoGestion{border: dashed 2px #cecece;
+	border-radius: 5px;
+    width: 22%; min-height: 150px;
+    margin: 0 10px; padding: 15px 10px;}
+li{list-style-type: none;}
+.divFotoGestion i{font-size: 10rem; color: #cecece;}
+.iEliminarFoto i{font-size: 20px;}
+.iEliminarFoto i:hover{color:#d50000;cursor: pointer;}
+.libreSubida:hover{cursor: pointer;}
 </style>
 <div class="noselect" id="wrapper">
 
@@ -187,7 +190,6 @@ if (!file_exists($carpeta)) {
 			<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
 			<!-- Empieza a meter contenido 2.1 -->
 				<div class="container row" style="margin-bottom: 20px;">
-					<h2 class="h3Apellidos mayuscula purple-text text-lighten-1"><?php echo  $rowProducto['prodNombre']; ?></h2>
 					<div class="divBotonesEdicion" style="margin-bottom: 10px">
 						<div class="btn-group">
 						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -199,7 +201,7 @@ if (!file_exists($carpeta)) {
 						  </ul>
 						</div>
 					</div>
-					<div class="col-xs-12 col-sm-4 divImagen">
+					<div class="col-xs-12 col-sm-7 divImagen">
 						<?php 
 						$directorio = "images/productos/".$_GET['idProducto'];
 						if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
@@ -220,8 +222,9 @@ if (!file_exists($carpeta)) {
 						</div>
 						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 					</div>
-					<div class="col-xs-12 col-sm-7 divDatosProducto">
-						<p>Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></p>
+					<div class="col-xs-12 col-sm-5 divDatosProducto">
+						<h2 class="mayuscula purple-text text-lighten-1"><?php echo  $rowProducto['prodNombre']; ?></h2>
+						<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 						<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
 						<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 						<p>Préstamo incial: S/. <?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></p>
@@ -359,7 +362,7 @@ if (!file_exists($carpeta)) {
 
 <!--Modal Para gestionar fotos-->
 <div class="modal fade modal-gestionarFotos" tabindex="-1" role="dialog">
-	<div class="modal-dialog ">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header-warning">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
@@ -369,34 +372,22 @@ if (!file_exists($carpeta)) {
 				<div>
 					<div class="row rowFotos"> 
 					<?php if($cantImg<=2){ ?>
-						<div class="col-xs-3 divFotoGestion" id="foto1"></div>
-						<div class="col-xs-3 divFotoGestion" id="foto2"></div>
-						<div class="col-xs-3 divFotoGestion" id="foto3"></div>
-						<div class="col-xs-3 divFotoGestion" id="foto4"></div>
+						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto1"><i class="icofont icofont-cloud-upload"></i></div>
+						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto2"><i class="icofont icofont-cloud-upload"></i></div>
+						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto3"><i class="icofont icofont-cloud-upload"></i></div>
+						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto4"><i class="icofont icofont-cloud-upload"></i></div>
+
 					<?php }else{
 						foreach($ficheros as $archivo)
 								{
 									$cantImg++;/*".$directorio."/".$archivo."*/
 									if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
-								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><img src='".$directorio."/".$archivo."' class='img-responsive' ></div>";
-								    }else{ echo '<div class="col-xs-3 divFotoGestion" id="foto3"></div>';}
+								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
+								    }else{ echo '<div class="col-xs-6 col-sm-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <br><button class="btn btn-primary btn-outline">Subir</button></div>';}
 								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 						} ?>
-					</div><br>
-					<div class="row ">
-					<?php for ($i=0; $i < 2 ; $i++) { 
-						if($i<=$cantImg){?>
-						<div class="col-xs-3 text-center"><button class="btn btn-azul btn-outline" boton-tag="2"><i class="icofont icofont-cloud-upload"></i></button></div>
-						<?php
-							}else{?>
-						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="2"><i class="icofont icofont-close-circled"></i></button></div>
-						<?php }
-					} ?>
-						
-						
-						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="3"><i class="icofont icofont-close-circled"></i></button></div>
-						<div class="col-xs-3 text-center"><button class="btn btn-default btn-outline" boton-tag="4"><i class="icofont icofont-close-circled"></i></button></div>
 					</div>
+					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -527,6 +518,11 @@ $('.btnImprimirTicket').click(function () {
 });
 $('#liAGestionrFotos').click(function() {
 	$('.modal-gestionarFotos').modal('show');
+});
+$('.divFotoGestion').click(function () {
+	if( $(this).hasClass('libreSubida')){
+		
+	}
 });
 </script>
 

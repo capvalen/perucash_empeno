@@ -9,6 +9,34 @@ $('#agregarBarra').click(function(){
 	$('#txtBarras').val('');}
 });
 $(document).ready(function(){
+$('.modal-iniciarSesion').on('shown.bs.modal', function () {
+	$('#txtVolverUsuario').focus();
+});
+$('#btnVolverIniciarSesion').click(function () {
+	if( ! $('#btnVolverIniciarSesion i').hasClass('fa-spin')){
+		$('.modal-iniciarSesion .divError').addClass('hidden');
+		$('#btnVolverIniciarSesion i').addClass('fa-spin');
+		if( $('#txtVolverUsuario').val()=='' ){
+			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
+			$('.modal-iniciarSesion .divError').removeClass('hidden');
+			$('#btnVolverIniciarSesion i').removeClass('fa-spin');
+		}else if($('#txtVolverPasw').val()==''){
+			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
+			$('.modal-iniciarSesion .divError').removeClass('hidden');
+			$('#btnVolverIniciarSesion i').removeClass('fa-spin');
+		}else{
+			$.ajax({url:'php/validarSesion.php', type: 'POST', data: { user: $('#txtVolverUsuario').val(), pws: $('#txtVolverPasw').val() } }).done(function (resp) {
+				console.log(resp);
+				if(parseInt(resp)>0 && esNumero(resp)){ location.reload();}
+				else{
+					$('.modal-iniciarSesion .spanError').text('Las credenciales no coinciden');
+					$('.modal-iniciarSesion .divError').removeClass('hidden');
+					$('#btnVolverIniciarSesion i').removeClass('fa-spin');
+				}
+			});
+		}
+	}
+});
 });
 $.fn.modal.prototype.constructor.Constructor.DEFAULTS.backdrop = 'static'; //Para que no cierre el modal, cuando hacen clic en cualquier parte
 
@@ -23,7 +51,7 @@ function esNumero(cadena) //true para si es número sólo
 }
 
 $(".ocultar-mostrar-menu").click(function() {
-	ocultar()
+	ocultar();
 });
 function ocultar(){//console.log('oc')
 	$("#wrapper").toggleClass("toggled");
@@ -33,7 +61,7 @@ function ocultar(){//console.log('oc')
 	$('#btnColapsador').attr('aria-expanded','false');
 	$('#navbar').removeClass('in');
 }
-$('.has-clear').mouseenter(function(){$(this).find('input').focus();})
+$('.has-clear').mouseenter(function(){$(this).find('input').focus();});
 
 $('.has-clear input[type="text"]').on('input propertychange', function() {
 	var $this = $(this);
@@ -49,39 +77,7 @@ $('.form-control-clear').click(function() {
 $("input").focus(function(){
   this.select();
 });
-$('#btnVolverIniciarSesion').click(function () {
-	if( $('#btnVolverIniciarSesion').hasClass('') ){
-		$('.modal-iniciarSesion .divError').addClass('hidden');
 
-		if($('#txtVolverUsuario').val()==''){
-			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
-			$('.modal-iniciarSesion .divError').removeClass('hidden');
-		}
-		else if($('#txtVolverPasw').val()==''){
-			$('.modal-iniciarSesion .spanError').text('Falta rellenar tu usuario');
-			$('.modal-iniciarSesion .divError').removeClass('hidden');
-		}
-		else{
-			$('#btnVolverIniciarSesion').addClass('fa-spin');
-			$.ajax({
-			type:'POST',
-			url: 'php/validarSesion.php',
-			data: {user: $('#txtVolverUsuario').val(), pws: $('#txtVolverPasw').val()},
-			success: function(iduser) {
-				if (parseInt(iduser)>0){//console.log('el id es '+data)
-					//console.log(iduser)
-					location.reload();
-				}
-				else {
-					$('.modal-iniciarSesion .spanError').text('Las credenciales no coinciden');
-					$('.modal-iniciarSesion .divError').removeClass('hidden');
-				}
-			}
-		});
-		}
-	}
-
-});
 $('#txtVolverPasw').keypress(function(event){
 	if (event.keyCode === 10 || event.keyCode === 13) 
 		{event.preventDefault();
@@ -93,6 +89,3 @@ $('.soloLetras').keypress(function (e) {//||
         e.preventDefault();
     }
 });
-$('.modal-iniciarSesion').on('shown.bs.modal', function () {
-  $('#txtVolverUsuario').focus();
-})

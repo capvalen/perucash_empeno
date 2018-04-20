@@ -24,14 +24,15 @@ if( isset($_GET['idCliente'])){
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
+		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.29" rel="stylesheet">
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-		<link href="css/bootstrap-select.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
+		<link rel="stylesheet" href="css/animate.css" >
 		
 </head>
 
@@ -52,11 +53,14 @@ if( isset($_GET['idCliente'])){
 	}
 	.h3Nombres{margin-top: 0px;}
 	.rate i{padding-left: 3px; cursor: pointer;}
+	.divBotonesPrestamo{display: inline-block;}
 	.divBotonesPrestamo .dropdown-menu>li>a{color: #0078D7;}
 	.divBotonesPrestamo .dropdown-menu>li>a:focus, .divBotonesPrestamo .dropdown-menu>li>a:hover {
 	    text-decoration: none;
 	    background-color: #f5f5f5;
-	}.divPrestamo h4{color: #c5c5c5;}
+	}.divPrestamo h4{color: #c5c5c5;display: inline-block;}
+	.divPrestamo .vigente{color: #050506;}
+	.contenedorPres{margin-bottom: 20px;}
 </style>
 <div id="wrapper">
 
@@ -70,7 +74,7 @@ if( isset($_GET['idCliente'])){
 			<li>
 					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
 			</li>
-			<li class="active">
+			<li>
 					<a href="registro.php"><i class="icofont icofont-washing-machine"></i> Registro</a>
 			</li>
 			<li>
@@ -167,10 +171,17 @@ if( isset($_GET['idCliente'])){
 				<?php
 				$i=0;
 				if( isset($_GET['idCliente'])){
-					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."' order by idPrestamo desc;");
+					$sql = mysqli_query($conection,"SELECT * FROM `prestamo` where idCliente= '".$_GET['idCliente']."' order by presActivo desc, idPrestamo desc;");
 					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-						echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']} <span class='hidden h4Prestamo'>{$rowPrestamos['idPrestamo']}</span></h4>";
-						echo "<div class='divBotonesPrestamo' style='margin-bottom: 10px'>
+						?>
+						<div class="contenedorPres">
+						<?php 
+						if($rowPrestamos['presActivo']=='1'){
+							echo "<h4 class='vigente'>Préstamo #P{$rowPrestamos['idPrestamo']} <span class='hidden h4Prestamo'>{$rowPrestamos['idPrestamo']}</span></h4>";
+						}else{
+							echo "<h4>Préstamo #P{$rowPrestamos['idPrestamo']} <span class='hidden h4Prestamo'>{$rowPrestamos['idPrestamo']}</span></h4>";
+						}
+						echo "<div class='divBotonesPrestamo pull-right' style='margin-bottom: 10px'>
 						<div class='btn-group'>
 						  <button type='button' class='btn btn-azul btn-outline dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
 							<i class='icofont icofont-settings'></i> <span class='caret'></span>
@@ -194,6 +205,9 @@ if( isset($_GET['idCliente'])){
 					</strong></div>";
 							$j++;
 						}
+						?>
+						</div>
+						<?php
 					}
 					
 				}
@@ -272,20 +286,44 @@ if( isset($_GET['idCliente'])){
 </div>
 </div>
 
-<?php include 'php/modals.php'; ?>
+<!-- Modal para agregar nuevo producto  -->
+<div class="modal fade modal-editarDatosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-morado">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Editar datos cliente</h4>
+		</div>
+		<div class="modal-body">
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis sint commodi ipsa sunt neque alias officia ducimus soluta eum, doloribus voluptatem iure ad ipsam impedit. Deserunt commodi ullam maiores accusamus!
+
+		</div>
+		</div>
+			
+		<div class="modal-footer">
+			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
+			<button class="btn btn-morado btn-outline hidden" id='btnActualizarItem1' ><i class="icofont icofont-refresh"></i> Actualizar item</button>
+			<button class="btn btn-morado btn-outline" id='btnAgregarIte1' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script src="js/inicializacion.js?version=1.0.3"></script>
-<script src="js/bootstrap-select.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
-<!-- Menu Toggle Script -->
+<?php include 'php/modals.php'; ?>
+<?php include 'php/existeCookie.php'; ?>
 <script>
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
@@ -295,7 +333,7 @@ $('#aaccionesCaja').click(function () {
 	$('.modal-accionesCaja').modal('show');
 });
 $('.paPrestamo').click(function () {
-	var codigo=$(this).find('.codRegistro').text()
+	var codigo=$(this).find('.codRegistro').text();
 	window.location='productos.php?idProducto='+codigo;
 });
 $('.rate i').click(function () {
@@ -315,6 +353,9 @@ $('.rate i').click(function () {
 $('.btnNuevoItemProdPrestamo').click(function () {
 	$('#deQuePrestamoViene').text( $(this).parent().parent().parent().parent().parent().find('.h4Prestamo').text() );
 	$('.modal-nuevoProductoLista').modal('show');
+});
+$('#spanEditarDatoClient').click(function () {
+	$('.modal-editarDatosCliente').modal('show');
 });
 </script>
 </body>

@@ -58,12 +58,6 @@
 					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
-					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
-			</li>
-			<li>
-					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
-			</li>
-			<li>
 					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
 			</li>
 			<li>
@@ -254,22 +248,21 @@
 </div>
 </div>
 
-<?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.8"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
-<!-- Menu Toggle Script -->
+<?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
+
 <script>
 $.interesGlobal=4;
 datosUsuario();
