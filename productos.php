@@ -46,7 +46,7 @@ if( isset($_GET['idProducto'])){
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
 		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-		<link href="css/flexslider.css?version=1.0.2" rel="stylesheet">
+		<link href="css/flexslider.css?version=1.0.5" rel="stylesheet">
 		<link href="css/lightbox.css" rel="stylesheet">
 		
 </head>
@@ -110,7 +110,21 @@ li{list-style-type: none;}
 .divFotoGestion i{font-size: 10rem; color: #cecece;}
 .iEliminarFoto i{font-size: 20px;}
 .iEliminarFoto i:hover{color:#d50000;cursor: pointer;}
-.libreSubida:hover{cursor: pointer;}
+.libreSubida span i{font-size: 16px; color: #337ab7;}
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.upload-btn-wrapper:hover{cursor: pointer;}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
 </style>
 <div class="noselect" id="wrapper">
 
@@ -131,7 +145,7 @@ li{list-style-type: none;}
 					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
+					<a href="caja.php"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
 					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
@@ -200,8 +214,9 @@ li{list-style-type: none;}
 							<i class="icofont icofont-settings"></i> <span class="caret"></span>
 						  </button>
 						  <ul class="dropdown-menu">
-							<li><a href="#" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-							<li><a href="#" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+							<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
+							<li><a href="#!" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+							<li><a href="#!" id=""><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						  </ul>
 						</div>
 					</div>
@@ -227,7 +242,7 @@ li{list-style-type: none;}
 						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 					</div>
 					<div class="col-xs-12 col-sm-5 divDatosProducto">
-						<h2 class="mayuscula purple-text text-lighten-1"><?php echo  $rowProducto['prodNombre']; ?></h2>
+						<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
 						<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 					<?php if($esCompra=='0'){ ?>
 						<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
@@ -374,18 +389,15 @@ li{list-style-type: none;}
 <div class="modal fade modal-gestionarFotos" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<div class="modal-header-warning">
+			<div class="modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Gestionar fotos</h4>
+				<h4 class="modal-tittle"><i class="icofont icofont-black-board"></i> Gestionar fotos</h4>
 			</div>
 			<div class="modal-body">
 				<div>
 					<div class="row rowFotos"> 
 					<?php if($cantImg<=2){ ?>
-						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto1"><i class="icofont icofont-cloud-upload"></i></div>
-						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto2"><i class="icofont icofont-cloud-upload"></i></div>
-						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto3"><i class="icofont icofont-cloud-upload"></i></div>
-						<div class="col-xs-6 col-sm-3 divFotoGestion text-center" id="foto4"><i class="icofont icofont-cloud-upload"></i></div>
+						<!-- <div class="col-xs-6 col-sm-3 divFotoGestion text-center libreSubida" id="foto1"><i class="icofont icofont-cloud-upload"></i></div> -->
 
 					<?php }else{
 						foreach($ficheros as $archivo)
@@ -393,16 +405,17 @@ li{list-style-type: none;}
 									$cantImg++;/*".$directorio."/".$archivo."*/
 									if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
 								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
-								    }else{ echo '<div class="col-xs-6 col-sm-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <br><button class="btn btn-primary btn-outline">Subir</button></div>';}
+								    }
 								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
-						} ?>
+						}
+						echo '<div class="col-xs-6 col-sm-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
+							  <button class="btn btn-primary btn-outline"><span><i class="icofont icofont-upload"></i></span> Subir archivo</button>
+							  <input type="file" id="txtSubirArchivo" />
+							</div>'; ?>
 					</div>
 					
 				</div>
 			</div>
-			<div class="modal-footer">
-			<button class="btn btn-warning btn-outline" data-dismiss="modal" id="btnActualizarEstado" ><i class="icofont icofont-check"></i> Actualizar</button>
-		</div>
 		</div>
 	</div>
 </div>
@@ -499,17 +512,17 @@ $('.btnImprimirTicket').click(function () {
 	queMonto=$(this).parent().find('.spanCantv3').text();
 	switch( $(this).attr('data-boton') ){
 		case '0':
-			queTitulo='    * Registro de Producto *';queMonto='0.00'; break;
+			queTitulo='     * Registro de Producto *';queMonto='0.00'; break;
 		case '1':
-			queTitulo='     * Venta de Producto *'; break;
+			queTitulo='      * Venta de Producto *'; break;
 		case '2':
-			queTitulo='    * Adelanto de interés *'; break;
+			queTitulo='     * Adelanto de interés *'; break;
 		case '3':
-			queTitulo='    * Crédito finalizado *'; break;
+			queTitulo='     * Crédito finalizado *'; break;
 		case '8':
-			queTitulo='    * Retiro de artículo *'; break;
+			queTitulo='     * Retiro de artículo *'; break;
 	}
-	var queArticulo =$('.h3Apellidos').text();
+	var queArticulo =$('.h2Producto').text();
 	var queDueno = $('.spanDueno').text();
 	if(queUser=='' || queUser==' '){
 		queUser='Sistema PeruCash';
@@ -534,6 +547,41 @@ $('.divFotoGestion').click(function () {
 	if( $(this).hasClass('libreSubida')){
 		
 	}
+});
+$('#txtSubirArchivo').change(function () {
+	var archivo = $(this)[0].files[0];
+	console.log(archivo.type);//.name: nombre, .size: tamaño archivo, .type: tipo de archivo
+	if( archivo.type=='image/jpeg' || archivo.type=='image/png' ){
+		//archivo correcto
+
+		//Tutorial: https://www.uno-de-piera.com/subir-imagenes-con-php-y-jquery/
+		console.log($('#txtSubirArchivo')[0])
+		var formData= new FormData();
+		formData.append('archivo',$('#txtSubirArchivo')[0].files[0]);
+		formData.append('idProducto',<?php echo $_GET['idProducto']; ?>);
+		$.ajax({
+			url: 'php/subirArchivo.php',
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				//MOstrar algo para que se vea que esta subiendo
+			},
+			success: function (resp) { console.log(resp);
+				//Mensaje que se subió
+				location.reload();
+			},
+			error: function (error) {
+				// Mostrar algo de error
+			}
+
+		})
+	}else{
+		//archivo incorrecto
+	}
+
 });
 </script>
 

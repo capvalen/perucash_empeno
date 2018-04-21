@@ -55,13 +55,7 @@
 					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
-			</li>
-			<li>
-					<a href="#!" id="aGastoExtra"><i class="icofont icofont-ui-rate-remove"></i> Gasto extra</a>
-			</li>
-			<li>
-					<a href="#!" id="aIngresoExtra"><i class="icofont icofont-ui-rate-add"></i> Ingreso extra</a>
+					<a href="caja.php"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li class="active">
 					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>

@@ -81,7 +81,7 @@ if( isset($_GET['idCliente'])){
 					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 			</li>
 			<li>
-					<a href="#!"><i class="icofont icofont-shopping-cart"></i> Caja</a>
+					<a href="caja.php"><i class="icofont icofont-shopping-cart"></i> Caja</a>
 			</li>
 			<li>
 					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>

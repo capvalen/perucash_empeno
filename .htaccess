@@ -1,6 +1,10 @@
 Header set Access-Control-Allow-Origin "http://perucash.com"
 Header set Access-Control-Allow-Origin "https://perucash.com"
 
+
+php_value upload_max_filesize 40M
+php_value post_max_size 40M
+
 RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTPS} on
+RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]

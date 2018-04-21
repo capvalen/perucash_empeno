@@ -49,8 +49,10 @@
   -webkit-backface-visibility: hidden;
 }
 .flexslider .slides img {
-  width: 100%;
+  /* width: 100%; */
+  width: auto;
   display: block;
+  max-height: 600px;
 }
 .flexslider .slides:after {
   content: "\eb61";

@@ -2241,7 +2241,7 @@ $('#btn-imprimirTicketFijo').click(function () {
 	moment.locale('es');
 	//console.log($('#rowWellFijo #spanProducto').text()) 123
 	//$.ajax({url: 'http://localhost/perucash/soloAbrirCaja.php', type: 'POST'}); http://192.168.1.107
-	$.ajax({url: 'http://localhost/perucash/printTicket.php', type: 'POST', data: {
+	$.ajax({url: 'http://192.168.1.133/perucash/printTicket.php', type: 'POST', data: {
 		cod: <?php if(isset($_SESSION['idprod'])){ echo $_GET['idprod']; } else {echo 0;}?>,
 		cliente: $('#spanApellido').text()+', '+$('#spanNombre').text(),
 		articulo: $('#rowWellFijo #spanProducto').text(),
