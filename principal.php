@@ -59,9 +59,14 @@
 			<li>
 					<a href="#!"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="#!"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>

@@ -27,7 +27,7 @@ if( isset($_GET['idCliente'])){
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.50" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
@@ -89,9 +89,14 @@ if( isset($_GET['idCliente'])){
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>
@@ -147,7 +152,7 @@ if( isset($_GET['idCliente'])){
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
-				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline" id="spanEditarDatoClient"><i class="icofont icofont-marker"></i></button></h3>
+				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-brush"></i></button></h3>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
 						for ($i=0; $i <5 ; $i++) { 
@@ -156,10 +161,11 @@ if( isset($_GET['idCliente'])){
 							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
 						}
 					 ?></span>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> <?php echo $rowCliente['cliDni']; ?></h5>
-				<h5 class="grey-text text-lighten-1 mayuscula"><i class="icofont icofont-home"></i> <?php echo $rowCliente['cliDireccion']; ?></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> <?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> <span class="cliDni"><?php echo $rowCliente['cliDni']; ?></span></h5>
+				<h5 class="grey-text text-lighten-1 mayuscula"><i class="icofont icofont-home"></i> <span class="cliDireccion"><?php echo $rowCliente['cliDireccion']; ?></span></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> <span class="cliCelular"><?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></span></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i><span class="cliTlf"><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></span></h5>
+				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-envelope"></i><span class="cliCorreo"><?php if($rowCliente['cliCorreo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCorreo'];} ?></span></h5>
 			<!-- Fin de contenido 2.1 -->
 			</div>
 			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
@@ -283,24 +289,34 @@ if( isset($_GET['idCliente'])){
 </div>
 </div>
 
-<!-- Modal para agregar nuevo producto  -->
+<!-- Modal para editar los datos del cliente3  -->
 <div class="modal fade modal-editarDatosCliente" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
-		<div class="modal-header-morado">
+		<div class="modal-header-default">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Editar datos cliente</h4>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Editar datos cliente</h4>
 		</div>
 		<div class="modal-body">
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis sint commodi ipsa sunt neque alias officia ducimus soluta eum, doloribus voluptatem iure ad ipsam impedit. Deserunt commodi ullam maiores accusamus!
-
-		</div>
+		<div class="container-fluid">
+			<label for="">Apellidos:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditApellidos">
+			<label for="">Nombres:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditNombres">
+			<label for="">D.N.I:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditDni">
+			<label for="">Dirección:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditDireccion">
+			<label for="">Celular:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditCelu">
+			<label for="">Teléfono:</label>
+			<input type="text" class="form-control mayuscula text-center" id="txtEditTlf">
+			<label for="">Correo electrónico:</label>
+			<input type="text" class="form-control text-center" id="txtEditCorreo">
 		</div>
 			
 		<div class="modal-footer">
-			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
-			<button class="btn btn-morado btn-outline hidden" id='btnActualizarItem1' ><i class="icofont icofont-refresh"></i> Actualizar item</button>
-			<button class="btn btn-morado btn-outline" id='btnAgregarIte1' ><i class="icofont icofont-social-meetme"></i> Agregar item</button>
+			<button class="btn btn-default btn-outline" id='btnEditarClientDatos' data-dismiss="modal" ><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i> </div><i class="icofont icofont-refresh"></i> Actualizar</button>
 		</div>
 	</div>
 	</div>
@@ -315,13 +331,17 @@ if( isset($_GET['idCliente'])){
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
+<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.4"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
+<?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
+datosUsuario();
+
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -352,8 +372,34 @@ $('.btnNuevoItemProdPrestamo').click(function () {
 	$('.modal-nuevoProductoLista').modal('show');
 });
 $('#spanEditarDatoClient').click(function () {
+	$('#txtEditApellidos').val($('.h3Apellidos').text());
+	$('#txtEditNombres').val($('.h3Nombres').text());
+	$('#txtEditDni').val($('.cliDni').text());
+	$('#txtEditDireccion').val($('.cliDireccion').text());
+	$('#txtEditCelu').val($('.cliCelular').text());
+	$('#txtEditTlf').val($('.cliTlf').text());
+	$('#txtEditCorreo').val($('.cliCorreo').text());
 	$('.modal-editarDatosCliente').modal('show');
 });
+$('#btnEditarClientDatos').click(function () {
+	$.ajax({url: 'php/actualizarDatosCliente.php', type: 'POST', data: {
+		appe: $('#txtEditApellidos').val(),
+		nnomb: $('#txtEditNombres').val(),
+		ddni: $('#txtEditDni').val(),
+		ddirecion: $('#txtEditDireccion').val(),
+		eemail: $('#txtEditCorreo').val(),
+		ccelular: $('#txtEditCelu').val(),
+		ttelf: $('#txtEditTlf').val(),
+		iid: <?= $_GET['idCliente']; ?>
+	}, beforeSend: function () {
+		$('.modal-nuevoProductoLista .fa-spin').removeClass('sr-only');
+		$('.modal-nuevoProductoLista .icofont-refresh').addClass('sr-only');
+	}, success: function (resp) {
+		// body...
+	}
+	});
+});
 </script>
+<?php } ?>
 </body>
 </html>

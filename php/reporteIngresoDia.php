@@ -16,7 +16,7 @@ if($totalRow==0){
 		$sumaIngr+=floatval($row['pagoMonto']);
 		echo "<tr> <th scope='row'>{$i}.</th> <td class='mayuscula'>{$row['pagoObservacion']}</td> <td><em>{$row['usuNick']}</em></td> <td>S/. {$row['pagoMonto']}</td></tr>";
 		if($totalRow==$i){
-			echo '<tr> <th scope="row"  style="border-top: transparent;"></th>  <td style="border-top: transparent;"></td> <td class="text-center" style="border-top: 1px solid #989898; color: #636363"><strong >Total</strong></td> <td style="border-top: 1px solid #989898; color: #636363"><strong >S/. <span id="strSumaEntrada">'.number_format(round($sumaIngr,1,PHP_ROUND_HALF_UP),2).'</span></strong></td><tr>';
+			echo '<tr> <th scope="row"  style="border-top: transparent;"></th>  <td style="border-top: transparent;"></td> <td class="text-center" style="border-top: 1px solid #989898; color: #636363"><strong >Total</strong></td> <td style="border-top: 1px solid #989898; color: #636363"><strong >S/. <span id="strSumaEntrada">'.number_format(round($sumaIngr,1,PHP_ROUND_HALF_UP),2, ',', '').'</span></strong></td><tr>';
 		}
 	}
 }

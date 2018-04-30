@@ -63,9 +63,14 @@
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="#!"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>
@@ -263,9 +268,11 @@
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
+<?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 $.interesGlobal=4;
 datosUsuario();
+
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -580,7 +587,7 @@ $('#divSelectProductoListado').on('click', '.optProducto ', function () {
 	});
 });
 </script>
-
+<?php } ?>
 </body>
 
 </html>

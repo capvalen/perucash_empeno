@@ -11,7 +11,8 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.preIdEstado 
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres
+FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -106,7 +107,7 @@ if( isset($_GET['idProducto'])){
 	border-radius: 5px;
     width: 22%; min-height: 150px;
     margin: 0 10px; padding: 15px 10px;}
-li{list-style-type: none;}
+#page-content-wrapper li{list-style-type: none;padding-bottom: 10px;}
 .divFotoGestion i{font-size: 10rem; color: #cecece;}
 .iEliminarFoto i{font-size: 20px;}
 .iEliminarFoto i:hover{color:#d50000;cursor: pointer;}
@@ -153,9 +154,14 @@ li{list-style-type: none;}
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>
@@ -216,7 +222,7 @@ li{list-style-type: none;}
 						  <ul class="dropdown-menu">
 							<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 							<li><a href="#!" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
-							<li><a href="#!" id=""><i class="icofont icofont-print"></i> Hoja de control</a></li>
+							<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						  </ul>
 						</div>
 					</div>
@@ -251,13 +257,33 @@ li{list-style-type: none;}
 						<p>Préstamo incial: S/. <?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></p>
 						<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 					<?php if($esCompra=='0'){ ?>
-						<p>Adquisición: <span>Por empeño</span></p>
+						<p>Adquisición: <strong><span>Por empeño</span></strong></p>
 					<?php }else { ?>
-						<p>Adquisición: <span>Por compra</span></p>
+						<p>Adquisición: <strong><span>Por compra</span></strong></p>
 					<?php } ?>
 						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
 						<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
+
+						<?php 
+						$sqlInvent = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");
+						$rowInvent = mysqli_fetch_array($sqlInvent, MYSQLI_ASSOC);
+						$activoInvent= $rowInvent['inventarioActivo'];
+					if ( ($_COOKIE['ckPower']=='1' || $_COOKIE['ckPower']=='2' || $_COOKIE['ckPower']=='4' ) && $activoInvent=='1'){
+					?>
+						<div class="row">
+							<p><strong>Inventario:</strong></p>
+						<div class="col-xs-12 col-sm-6">
+							<button class="btn btn-azul btn-outline btn-lg btn-block" id="btnInventariarPositivo"><i class="icofont icofont-chart-flow-alt-2"></i> Inventariar</button>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<button class="btn btn-danger btn-outline btn-lg btn-block" id="btnInventariarNegativo"><i class="icofont icofont-bubble-down"></i> No existe</button>
+						</div>
+						</div>
+					<?php
+					}
+				?>
 					</div>
+				
 				</div>
 				<div class="container row">
 					<ul class="nav nav-tabs">
@@ -265,6 +291,7 @@ li{list-style-type: none;}
 					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
 					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
 					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias</a></li>
+					<li><a href="#tabInventario" data-toggle="tab">Inventarios</a></li>
 					
 					</ul>
 					<div class="tab-content">
@@ -281,15 +308,15 @@ li{list-style-type: none;}
 							if($rowProducto['prodActivo']==='0'){
 							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
 							}else{
-								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.preFechaContarInteres,datediff( now(), preFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo` p where idProducto=".$_GET['idProducto']);
+								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto']);
 								$rowInteres=mysqli_fetch_assoc($sqlIntereses);
 								?>
 							<ul>
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
-								<li>Tiempo de intereses: <span><?php echo $rowInteres['diferenciaDias']; ?> días</span></li>
+								<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
 							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=28 ){ ?>
-								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= $rowInteres['preCapital']*$rowInteres['preInteres']/100; echo $interesJson; ?></span></li>
+								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
 							<?php }else { 
 								$_GET['inicio']=floatval($rowInteres['preCapital']);
 								$_GET['numhoy']=$rowInteres['diferenciaDias'];
@@ -299,8 +326,8 @@ li{list-style-type: none;}
 								$interesJson= $resultado[0]['pagarAHoy'];
 								$gastosAdmin=0;
 								?>
+								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más allá del día 29).</span></li>
-								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
 							<?php if($rowInteres['diferenciaDias']>=29 ){ $gastosAdmin=10; ?>
 								<li>Gastos admnistrativos: <span>S/. 10.00</span></li>
 							<?php }} ?>
@@ -350,6 +377,34 @@ li{list-style-type: none;}
 							
 						<!--Fin de pestaña interior 04-->
 						</div>
+
+						<div class="tab-pane fade container-fluid" id="tabInventario">
+						<!-- Inicio de pestaña interior 05 -->
+						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Inventarios</h4>
+						<ul>
+							<?php 
+							$sqlInventario = mysqli_query($conection,"call listarInventarioPorId(".$_GET['idProducto'].");");
+							// if (!$sql) { ////codigo para ver donde esta el error
+							//     printf("Error: %s\n", mysqli_error($conection));
+							//     exit();
+							// }
+							$row = mysqli_fetch_array($sqlInventario, MYSQLI_ASSOC);
+							$contador=mysqli_num_rows($sqlInventario);
+							if($contador>0){
+								while($row)
+							{
+								if($row['invObservaciones'] <>''){$comentario='Obs. '.$row['invObservaciones']; }else{$comentario='Obs. Ninguna';}
+							 echo "<li>Inventariado el <span class='spanFechaFormat'>{$row['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$row['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$row['usuNombres']}</strong></em></li>";
+							}
+							mysqli_close($conection); //desconectamos la base de datos
+						}else{
+							echo '<li>No se hizo ningún inventario todavía a éste producto.</li>';
+						}
+							
+							?>
+						</ul>
+						<!-- Fin de pestaña interior 05 -->
+						</div>
 					<!-- Fin de tab content -->
 	            	</div>
 				</div>
@@ -362,6 +417,50 @@ li{list-style-type: none;}
 
 
 </div>
+
+
+<!--Modal Para insertar inventario a BD-->
+<div class="modal fade modal-inventarioPositivo" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Inventariar</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<label for="">¿Tienes algún comentario extra?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtObsInvPositivo">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-azul btn-outline" data-dismiss="modal" id="btnInsertPositivo" ><i class="icofont icofont-chart-flow-alt-2"></i> Hacer inventario</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+<!--Modal Para insertar inventario a BD-->
+<div class="modal fade modal-inventarioNegativo" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-danger">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> No existe en almacén</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<label for="">¿Tienes algún comentario por qué no está en almacén?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtObsInvNegativo">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-danger btn-outline" data-dismiss="modal" id="btnInsertNegativo" ><i class="icofont icofont-bubble-down"></i>  No existe en almacén</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 
 <!--Modal Para asignar nuevo estado al producto-->
 <div class="modal fade modal-asignarEstado" tabindex="-1" role="dialog">
@@ -419,28 +518,31 @@ li{list-style-type: none;}
 		</div>
 	</div>
 </div>
+</div>
 
-<?php include 'php/modals.php'; ?>
-<?php include 'php/existeCookie.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script src="js/inicializacion.js?version=1.0.3"></script>
+<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
-<script src="js/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
-<script src="js/jquery.flexslider.js"></script>
-<script src="js/lightbox.js"></script>
+<script type="text/javascript" src="js/jquery.flexslider.js"></script>
+<script type="text/javascript" src="js/lightbox.js"></script>
+<script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
 
+<?php include 'php/modals.php'; ?>
+<?php include 'php/existeCookie.php'; ?>
 
 <!-- Menu Toggle Script -->
+<?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
+
 
 $(document).ready(function(){
 	moment.locale('es');
@@ -469,7 +571,6 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	}
 });
 $('#btnDejarMensaje').click(function () {
-	
 	if( $('#txtDejarMensaje').val()!==''){
 		$.ajax({
 			url: 'php/dejarMensaje.php',
@@ -583,8 +684,57 @@ $('#txtSubirArchivo').change(function () {
 	}
 
 });
+$('#btnInventariarPositivo').click(function () {
+	$('.modal-inventarioPositivo').modal('show');
+});
+$('#btnInventariarNegativo').click(function () {
+	$('.modal-inventarioNegativo').modal('show');
+});
+$('#btnInsertPositivo').click(function () {
+	$.ajax({
+		url: 'php/insertarInventarioPositivo.php',
+		type: 'POST',
+		data: {
+			idProd: <?php echo $_GET['idProducto']; ?>,
+			idUser: <?php echo $_COOKIE['ckidUsuario']; ?>,
+			obs: $('#txtObsInvPositivo').val()
+		}
+	}).done(function (resp) {
+		if( $.isNumeric(resp) ){
+			location.reload();
+		}else{
+			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: ' + resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+});
+$('#btnInsertNegativo').click(function () {
+	$.ajax({
+		url: 'php/insertarInventarioNegativo.php',
+		type: 'POST',
+		data: {
+			idProd: <?php echo $_GET['idProducto']; ?>,
+			idUser: <?php echo $_COOKIE['ckidUsuario']; ?>,
+			obs: $('#txtObsInvNegativo').val()
+		}
+	}).done(function (resp) {
+		if( $.isNumeric(resp) ){
+			location.reload();
+		}else{
+			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: ' + resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+});
+$('#liHojaControl').click(function () {
+	loadPrintDocument(this,{
+		url: "hojaControl.php?idProd="+<?php if( isset ($_GET['idProducto']) ){echo $_GET['idProducto'];}else{echo 0;}?>,
+		attr: "href",
+		message:"Tu documento está siendo creado"
+	});
+});
 </script>
-
+<?php } ?>
 </body>
 
 </html>

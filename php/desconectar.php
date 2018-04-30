@@ -15,6 +15,8 @@ setcookie("ckAtiende", "", time() - 3600, '/');
 setcookie("cknomCompleto", "", time() - 3600, '/');
 setcookie("ckPower", "", time() - 3600, '/');
 setcookie("ckoficina", "", time() - 3600, '/');
+setcookie("ckInventario", "", time() - 3600, '/');
+
 if ($_SESSION['Sucursal']) {
 	session_destroy();
 	

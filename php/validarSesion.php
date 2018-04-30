@@ -26,6 +26,11 @@ if ($row['idUsuario']>=1){
 	setcookie('ckPower', $row['usuPoder'], $expira, '/');
 	setcookie('ckidUsuario', $row['idUsuario'], $expira, '/');
 	setcookie('ckoficina', $_POST['offi'], $expira, '/');
+	
+	$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
+	$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
+	setcookie('ckInventario', $rowConf['inventarioActivo'], $expira, '/');
+
 	echo $row['idUsuario'];
 }
 

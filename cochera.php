@@ -63,9 +63,14 @@
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>
@@ -255,10 +260,8 @@
 </div>
 </div>
 
-<?php include 'php/modals.php'; ?>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -269,10 +272,14 @@
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
+<?php include 'php/modals.php'; ?>
+<?php include 'php/existeCookie.php'; ?>
 
+<!-- Menu Toggle Script -->
+<?php if ( isset($_COOKIE['ckidUsuario']) ){?>
+<script>
 datosUsuario();
+
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
@@ -332,6 +339,6 @@ $('#divSelectVehiculoListado').on('click', '.optVehiculo', function () {
 	
 });
 </script>
-
+<?php } ?>
 </body>
 </html>

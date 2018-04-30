@@ -16,18 +16,18 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.7" rel="stylesheet">
-		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.4">
-		<link href="css/estilosElementosv3.css?version=3.0.33" rel="stylesheet">
+		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
+		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
+		<link rel="stylesheet" href="css/animate.css" >
 
-		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
 		<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.2" />
-		  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+		<link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
 
 </head>
 
@@ -93,9 +93,14 @@ th{color:#a35bb4}
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
 			</li>
+			<li>
+					<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			</li>
+			 <?php } ?>
 			<li>
 					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 			</li>
@@ -237,19 +242,21 @@ th{color:#a35bb4}
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
 <script type="text/javascript" src="js/moment.js"></script>
-<script src="js/inicializacion.js?version=1.0.3"></script>
-<script src="js/impotem.js?version=1.0.4"></script>
-<script src="js/bootstrap-select.js?version=1.0.1"></script>
-<script src="js/moment-precise-range.js"></script>
-<script src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
+<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
+<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
+<script type="text/javascript" src="js/moment-precise-range.js"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
 
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
 <!-- Menu Toggle Script -->
+<?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
+
 
 
 $('#dtpFechaIniciov3').val('<?php
@@ -280,6 +287,7 @@ $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({
 		okText: 'Aceptar', nowText: 'Hoy'
 	});
 </script>
+<?php } ?>
 
 </body>
 

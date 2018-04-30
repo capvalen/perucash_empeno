@@ -16,27 +16,28 @@ if( $numRow>0){
 	$llamadoCliente->close();
 	insertarProductos($idCliente, $conection );
 
-	//insertarProductos();
 	//echo 'si existe su id es: '.$idCliente;
 }else{
 	//No existe insertar cliente nuevo
 	$sqlCliente="call insertClienteV3('{$cliente[0]['apellidoCli']}', '{$cliente[0]['nombresCli']}', '{$cliente[0]['dniCli']}', '{$cliente[0]['direccionCli']}', '{$cliente[0]['correoCli']}', '{$cliente[0]['celularCli']}', '{$cliente[0]['fijoCli']}' );";
-	//insertarProductos();
-	/*$llamadoClienteNew = $conection->query($sqlCliente);
+	
+	$llamadoClienteNew = $conection->query($sqlCliente);
 	$resClienteNew = $llamadoClienteNew->fetch_row();
 	$numRowCli = $llamadoClienteNew->num_rows;
 	//print_r($resClienteNew);
 	if( $numRowCli>0){
-		$idCliente=$resClienteNew[0];
-		//insertarProductos();
-	}*/
+		//$idCliente=$resClienteNew[0];
+		$llamadoClienteNew -> close();
+		insertarProductos($resClienteNew[0], $conection);
+	}
 	
 }
 
 
 function insertarProductos($idCliente, $conn){
+	$sqlPre= "call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );";
 	// Iniciamos préstamo
-	$consulta = $conn->prepare("call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );");
+	$consulta = $conn->prepare($sqlPre);
 	$consulta->execute();
 	$resultado = $consulta->get_result();
 	$numLineas=$resultado->num_rows;

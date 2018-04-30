@@ -1,8 +1,9 @@
 /************ Codigo generado por:
 ************* Pariona Valencia, Carlos Alex
 ************* Para:
-************* Criptocash.com.
+************* perucash.com.
 ************* Version: 3.0
+************* 27/04/2018
 */
 
 html body{ background-color: #f7f6fa;/*#eeeeee*/ font-size: 13px; /*background-color: #191617; background: #191617 url("../images/dark_mosaic.png") repeat scroll 0% 0%;*/}
@@ -47,9 +48,11 @@ input[type=number] {-moz-appearance:textfield;}
 
 .mayuscula{text-transform: capitalize;}
 .breadcrumb{margin-bottom: 10px; }
+.modal-header-default i, .modal-header-default .close span { color:#565656!important;}
+.modal-header-default { color:#808080;padding:9px 15px;border-bottom:1px solid #eee;background-color: #fff;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px;}
 .modal-header-success { color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #5cb85c;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px;}
 .modal-header-warning { color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #ffb74d;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
-.modal-header-danger {color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #ea0909;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
+.modal-header-danger {color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #e03030;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
 .modal-header-info {color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #4fc3f7 ;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
 .modal-header-primary {color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #0078D7;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
 .modal-header-morado {color:#fff;padding:9px 15px;border-bottom:1px solid #eee;background-color: #694D9F;-webkit-border-top-left-radius: 5px;-webkit-border-top-right-radius: 5px;-moz-border-radius-topleft: 5px;-moz-border-radius-topright: 5px;border-top-left-radius: 5px;border-top-right-radius: 5px;}
@@ -78,6 +81,9 @@ input[type=number] {-moz-appearance:textfield;}
     background-color: #157ad0;
     border-color: #065ca5;
 }
+.btn-danger:hover{background-color: #ea2e29;
+    border-color: #b52723;
+}
 
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus{outline: 0 none;}
 .btn-outline {background-color: #fff; color: inherit;transition: all .5s;}
@@ -93,6 +99,8 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-indigo.btn-outline{color:#3E50B4;}
 .btn-morita.btn-outline{color:#9B26AF;}
 .btn-rosaKit.btn-outline{color:#e91e63;}
+
+
  
 .btn-primary.btn-outline:focus,.btn-success.btn-outline:focus,.btn-info.btn-outline:focus,.btn-warning.btn-outline:focus,.btn-danger.btn-outline:focus,
 .btn-primary.btn-outline:active,.btn-success.btn-outline:active,.btn-info.btn-outline:active,.btn-warning.btn-outline:active,.btn-danger.btn-outline:active,
@@ -228,4 +236,8 @@ display: inline-block;
 @keyframes fa-spin {
 0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
 100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
+
+.radio-inline input{
+    height: 13px; 
 }

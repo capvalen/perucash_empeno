@@ -15,8 +15,6 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'prodCuantoFinaliza' => $row['prodCuantoFinaliza'],
 		'prodQuienFinaliza' => $row['prodQuienFinaliza'],
 		'prodFechaFinaliza' => $row['prodFechaFinaliza']
-
-
 	);
 	
 }
