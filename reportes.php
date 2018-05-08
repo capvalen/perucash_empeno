@@ -142,7 +142,7 @@ require("php/conkarl.php");
 				<h2 class="purple-text text-lighten-1">Reporte productos</h2>
 				<div>
 					<p>¿Qué tipo de reporte quieres ver?</p>
-					<div id="cmbEstadoProd">
+					<div class="col-xs-12 col-sm-6" id="cmbEstadoProd">
 					<select class="selectpicker mayuscula" title="Nuevo estado..." id="cmbEstadoCombo"  data-width="100%" data-live-search="true" data-size="15">
 					<?php require 'php/detalleReporteOPT.php'; ?>
 					</select></div>
@@ -206,6 +206,7 @@ $(document).ready(function(){
 });
 $('#cmbEstadoCombo').change(function () {
 	var estado=$('#cmbEstadoProd').find('li.selected a').attr('data-tokens');
+	console.log(estado);
 	switch(estado){
 		case '29':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 0}}).done(function (resp) {
@@ -229,7 +230,7 @@ $('#cmbEstadoCombo').change(function () {
 		});
 		break;
 		case '30':
-			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) {
+			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) { console.log(resp);
 			$('tbody').children().remove();
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`

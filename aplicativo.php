@@ -1831,7 +1831,13 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 			$('#divSoloParaPrint').children().remove()
 
 			$.each(dato, function (i, elem) { moment.locale('es'); //console.log(elem)
-				var limite = moment(elem.desFechaContarInteres);
+				var limite;
+				if(elem.ultimoPago=='0000-00-00'){
+					limite= moment(elem.desFechaContarInteres);;
+				}else{
+					limite=moment(elem.ultimoPago);
+				}
+				
 				var hoy = moment();
 				var fechaIni =moment(elem.desFechaContarInteres);
 				respu=calculoIntereses(fechaIni, hoy, elem.prodMontoEntregado, 4);

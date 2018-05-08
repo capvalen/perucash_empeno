@@ -245,7 +245,8 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 								?>
 							</ul>
 						</div>
-						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
+						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}
+						}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 					</div>
 					<div class="col-xs-12 col-sm-5 divDatosProducto">
 						<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
@@ -282,6 +283,13 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 					<?php
 					}
 				?>
+					<div class="row">
+						<div class="cmbAccionesProductos">
+						<select class="selectpicker mayuscula" title="Acciones disponibles..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php require 'php/detalleReporteOPT.php'; ?>
+						</select>							
+						</div>
+					</div>
 					</div>
 				
 				</div>
