@@ -22,6 +22,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}
+	$sqlComrpa->close();
 }
 ?>
 
@@ -234,10 +235,9 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						<div class="flexslider">
 							<ul class="slides">
 							   <?php 
-									foreach($ficheros as $archivo)
-									{
+									foreach($ficheros as $archivo){
 										$cantImg++;/*".$directorio."/".$archivo."*/
-										if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
+										if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
 									        /*echo $directorio."/".$archivo;*/
 									        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
 									    }
@@ -284,8 +284,8 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 					}
 				?>
 					<div class="row">
-						<div class="cmbAccionesProductos">
-						<select class="selectpicker mayuscula" title="Acciones disponibles..."  data-width="100%" data-live-search="true" data-size="15">
+						<div class="cmbAccionesProductos"> 
+						<select class="selectpicker mayuscula" title="Acciones disponibles..." estilo="nuevo" data-width="100%" data-live-search="true" data-size="15">
 							<?php require 'php/detalleReporteOPT.php'; ?>
 						</select>							
 						</div>
@@ -316,8 +316,10 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 							if($rowProducto['prodActivo']==='0'){
 							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
 							}else{
-								$sqlIntereses=mysqli_query($conection, "SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto']);
-								$rowInteres=mysqli_fetch_assoc($sqlIntereses);
+								$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
+
+								$sqlIntereses = $conection->query($sqlBaseInteres);
+								$rowInteres = $sqlIntereses->fetch_assoc();
 								?>
 							<ul>
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
@@ -390,26 +392,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						<!-- Inicio de pestaña interior 05 -->
 						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Inventarios</h4>
 						<ul>
-							<?php 
-							$sqlInventario = mysqli_query($conection,"call listarInventarioPorId(".$_GET['idProducto'].");");
-							// if (!$sql) { ////codigo para ver donde esta el error
-							//     printf("Error: %s\n", mysqli_error($conection));
-							//     exit();
-							// }
-							$row = mysqli_fetch_array($sqlInventario, MYSQLI_ASSOC);
-							$contador=mysqli_num_rows($sqlInventario);
-							if($contador>0){
-								while($row)
-							{
-								if($row['invObservaciones'] <>''){$comentario='Obs. '.$row['invObservaciones']; }else{$comentario='Obs. Ninguna';}
-							 echo "<li>Inventariado el <span class='spanFechaFormat'>{$row['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$row['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$row['usuNombres']}</strong></em></li>";
-							}
-							mysqli_close($conection); //desconectamos la base de datos
-						}else{
-							echo '<li>No se hizo ningún inventario todavía a éste producto.</li>';
-						}
-							
-							?>
+							<?php require  'php/seccionInventarios.php?idProd='.$_GET['idProducto']; ?>
 						</ul>
 						<!-- Fin de pestaña interior 05 -->
 						</div>
@@ -510,7 +493,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						foreach($ficheros as $archivo)
 								{
 									$cantImg++;/*".$directorio."/".$archivo."*/
-									if (eregi("jpeg", $archivo) || eregi("jpg", $archivo) || eregi("png", $archivo)){
+									if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
 								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
 								    }
 								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
