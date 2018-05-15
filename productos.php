@@ -11,12 +11,12 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres
 FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
-	}else{
+	}else{//Cuando es una compra
 		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
@@ -40,16 +40,16 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
+		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.31" rel="stylesheet">
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-		<link href="css/bootstrap-select.min.css" rel="stylesheet">
-		<link href="css/flexslider.css?version=1.0.5" rel="stylesheet">
-		<link href="css/lightbox.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
+		<link rel="stylesheet" href="css/flexslider.css?version=1.0.5" rel="stylesheet">
+		<link rel="stylesheet" href="css/lightbox.css" rel="stylesheet">
 		
 </head>
 
@@ -269,7 +269,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						$sqlInvent = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");
 						$rowInvent = mysqli_fetch_array($sqlInvent, MYSQLI_ASSOC);
 						$activoInvent= $rowInvent['inventarioActivo'];
-					if ( ($_COOKIE['ckPower']=='1' || $_COOKIE['ckPower']=='2' || $_COOKIE['ckPower']=='4' ) && $activoInvent=='1'){
+					if ( ($_COOKIE['ckPower']=='1' || $_COOKIE['ckPower']=='2' || $_COOKIE['ckPower']=='4' || $_COOKIE['ckPower']=='4' ) && $activoInvent=='1'){
 					?>
 						<div class="row">
 							<p><strong>Inventario:</strong></p>
@@ -282,13 +282,21 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						</div>
 					<?php
 					}
+					
+					
 				?>
 					<div class="row">
-						<div class="cmbAccionesProductos"> 
-						<select class="selectpicker mayuscula" title="Acciones disponibles..." estilo="nuevo" data-width="100%" data-live-search="true" data-size="15">
-							<?php require 'php/detalleReporteOPT.php'; ?>
-						</select>							
-						</div>
+				<?php 
+					if( ($_COOKIE['ckPower']=='1'  || $_COOKIE['ckPower']=='5' ) && ($rowProducto['desFechaContarInteres']>=37) && $esCompra=0 ){ ?>
+					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
+
+				<?php } ?>
+
+				<?php if($esCompra==1 && $rowProducto['prodActivo']==1 ){?>
+					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
+				<?php } ?>
 					</div>
 					</div>
 				
@@ -392,7 +400,19 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						<!-- Inicio de pestaña interior 05 -->
 						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Inventarios</h4>
 						<ul>
-							<?php require  'php/seccionInventarios.php?idProd='.$_GET['idProducto']; ?>
+							<?php 
+						$sqlInventario="call listarInventarioPorId( {$_GET['idProducto']} );";
+						$llamadoInventarios = $conection->query($sqlInventario);
+						$numRow = $llamadoInventarios->num_rows;
+						if($numRow>0){
+						while($rowInventa = $llamadoInventarios->fetch_assoc()){
+							echo "<li>Inventariado el <span class='spanFechaFormat'>{$rowInventa['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$rowInventa['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$rowInventa['usuNombres']}</strong></em></li>";
+
+						}
+						}else{
+							echo '<li>No se encontraron inventarios todavía en almacén con éste producto.</li>';
+						}
+							 ?>
 						</ul>
 						<!-- Fin de pestaña interior 05 -->
 						</div>
@@ -409,6 +429,32 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 
 </div>
 
+
+<!--Modal Para insertar inventario a BD-->
+<div class="modal fade modal-ticketVenta" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-success">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Generar ticket</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<label for="">Estas generando un ticket.</label><br>
+					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
+					<input type="number" class="form-control input-lg esDecimal" id="txtMontoTicketVenta" placeholder="S/.">
+					<label for="">Comentario extra:</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketVenta" placeholder="Comentario">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+				<button class="btn btn-azul btn-outline" id="btnCrearTicketVenta" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket</button>
+		</div>
+		</div>
+	</div>
+</div>
 
 <!--Modal Para insertar inventario a BD-->
 <div class="modal fade modal-inventarioPositivo" tabindex="-1" role="dialog">
@@ -516,7 +562,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.11"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.12"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
@@ -604,23 +650,23 @@ $('.btnImprimirTicket').click(function () {
 	queMonto=$(this).parent().find('.spanCantv3').text();
 	switch( $(this).attr('data-boton') ){
 		case '0':
-			queTitulo='     * Registro de Producto *';queMonto='0.00'; break;
+			queTitulo='      * Registro de Producto *';queMonto='0.00'; break;
 		case '1':
-			queTitulo='      * Venta de Producto *'; break;
+			queTitulo='        * Venta de Producto *'; break;
 		case '2':
-			queTitulo='     * Adelanto de interés *'; break;
+			queTitulo='      * Adelanto de interés *'; break;
 		case '3':
-			queTitulo='     * Crédito finalizado *'; break;
+			queTitulo='      * Crédito finalizado *'; break;
 		case '8':
-			queTitulo='     * Retiro de artículo *'; break;
+			queTitulo='       * Retiro de artículo *'; break;
 	}
 	var queArticulo =$('.h2Producto').text();
-	var queDueno = $('.spanDueno').text();
+	var queDueno = <?php if($esCompra==1){ echo '`Compra directa`';}else { ?> $('.spanDueno').text() <?php } ?>;
 	if(queUser=='' || queUser==' '){
 		queUser='Sistema PeruCash';
 	}
 	var queFecha = $(this).parent().find('.spanFechaFormat').text();
-	$.ajax({url: 'http://192.168.1.131/perucash/printTicketv3.php', type: 'POST', data: {
+	$.ajax({url: 'http://192.168.1.133/perucash/printTicketv3.php', type: 'POST', data: {
 		codigo: "<?php echo $_GET['idProducto']; ?>",
 		titulo: queTitulo,
 		fecha: queFecha.replace('a las ', ''),
@@ -724,7 +770,24 @@ $('#liHojaControl').click(function () {
 		message:"Tu documento está siendo creado"
 	});
 });
+$('#btnLlamarTicketVenta').click(function () {
+	$('.modal-ticketVenta').modal('show');
+});
+$('#btnCrearTicketVenta').click(function () {
+	if( $('#txtMontoTicketVenta').val()=='' || $('#txtMontoTicketVenta').val()<=0 ){
+		$('.modal-ticketVenta .divError').removeClass('hidden').find('.spanError').text('Falta monto válido para una posible venta que tu área lo decide');
+	}else{
+		$.ajax({url:'php/crearTicketParaVenta.php', type: 'POST', data:{
+			idProd: <?php echo $_GET['idProducto']; ?>,
+			monto: $('#txtMontoTicketVenta').val(),
+			obs: '- '+ $('#txtRazonTicketVenta').val()
+		}}).done(function (resp) {
+			console.log(resp);
+		});
+	}
+});
 </script>
+
 <?php } ?>
 </body>
 

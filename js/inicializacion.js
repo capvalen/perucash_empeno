@@ -1,6 +1,9 @@
 $('.txtNumeroDecimal').change(function(){
 	$(this).val(parseFloat($(this).val()).toFixed(2));
 });
+$('.esDecimal').change(function(){
+	$(this).val(parseFloat($(this).val()).toFixed(2));
+});
 $('#agregarBarra').click(function(){
 	//console.log('Se hizo clic en el boton agregar barra');
 	if($('#txtBarras').val()!=''){
