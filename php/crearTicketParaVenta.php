@@ -5,8 +5,8 @@ header('Content-Type: text/html; charset=utf8');
 
 $tipoProc=19;
 
-$sql= "call crearTicket (".$_POST['idProd'].", {$tipoProc}, ".$_POST['monto']." , '<p>{$_COOKIE['ckAtiende']} dice: ".$_POST['obs']."</p>' , ".$_POST['idUser'].")";
-echo $sql;
+$sql= "call crearTicket (".$_POST['idProd'].", {$tipoProc}, ".$_POST['monto']." , '<p>{$_COOKIE['ckAtiende']} dice: ".$_POST['obs']."</p>' , ".$_COOKIE['ckidUsuario'].")";
+//echo $sql;
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	/* obtener el array de objetos */
 	while ($resultado = $llamadoSQL->fetch_row()) {

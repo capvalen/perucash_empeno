@@ -9,9 +9,9 @@
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row">
-			
-			<p>Excelente. Tu dato fue guardado:</p>
-			<p class="text-center">«<em><span id="spanBien"></span></em>»</p>
+			<img src="images/congrautlaiotn-card.png" class="img-responsive" alt="">
+			<p class="text-center blue-text text-darken-1"><strong>Tu información fue guardada:</strong></p>
+			<p class="text-center blue-text text-darken-1"><span id="spanBien"></span><h1 class="text-center blue-text text-darken-1" id="h1Bien"></h1></p>
 			</div>
 		</div>
 			

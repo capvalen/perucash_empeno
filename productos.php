@@ -155,6 +155,9 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<li>
+					<a href="verificacion.php"><i class="icofont icofont-medal"></i> Verificación</a>
+			</li>
 			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
@@ -450,7 +453,7 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 			</div>
 			<div class="modal-footer">
 				<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
-				<button class="btn btn-azul btn-outline" id="btnCrearTicketVenta" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket</button>
+				<button class="btn btn-success btn-outline" id="btnCrearTicketVenta" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket</button>
 		</div>
 		</div>
 	</div>
@@ -782,7 +785,15 @@ $('#btnCrearTicketVenta').click(function () {
 			monto: $('#txtMontoTicketVenta').val(),
 			obs: '- '+ $('#txtRazonTicketVenta').val()
 		}}).done(function (resp) {
-			console.log(resp);
+			$('.modal-ticketVenta').modal('hide');
+			if(parseInt(resp)>0){
+				$('.modal-GuardadoCorrecto #spanBien').text('Tu ticket es:');
+				$('.modal-GuardadoCorrecto #h1Bien').text('#'+resp);
+				$('.modal-GuardadoCorrecto').modal('show');
+			}else{
+				$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+				$('.modal-GuardadoError').modal('show');
+			}
 		});
 	}
 });

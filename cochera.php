@@ -63,6 +63,9 @@
 			<li>
 					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
 			</li>
+			<li>
+					<a href="verificacion.php"><i class="icofont icofont-medal"></i> Verificación</a>
+			</li>
 			<?php if( $_COOKIE['ckPower']==1){ ?>
 			<li>
 					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>

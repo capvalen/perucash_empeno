@@ -203,7 +203,7 @@ input[type=number] {-moz-appearance:textfield;}
 #ulListadoProductos{font-size: 14px}
 #ulListadoProductos .icoMedia{font-size: 18px}
 .colNewProduct p{color: #f12855!important;}
-.btn-sinBorde{border-color: transparent!important;}
+.btn-sinBorde, .btnSinBorde {border-color: transparent!important;}
 .contenedorDatosCliente input::placeholder, .modal-iniciarSesion input::placeholder{ font-size: 12px;}
 
 .btnBorrarFila{background-color: transparent;margin-top: -50px;}
