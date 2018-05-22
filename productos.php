@@ -24,6 +24,16 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 	}
 	$sqlComrpa->close();
 }
+/*Días para tener en cuenta*/
+$iniGracia=0;
+$finGracia=28;
+$iniProrroga=29;
+$finProrroga=57;
+$iniRemate=58;
+$finRemate=90;
+$iniRecupero=91;
+$finRecupero=160;
+
 ?>
 
 <head>
@@ -290,16 +300,46 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 				?>
 					<div class="row">
 				<?php 
-					if( ($_COOKIE['ckPower']=='1'  || $_COOKIE['ckPower']=='5' ) && ($rowProducto['desFechaContarInteres']>=37) && $esCompra=0 ){ ?>
+				$fecha1=$rowProducto['desFechaContarInteres'];
+				$cuenta= new DateTime($fecha1); ;
+				$hoy= new DateTime("now");
+				$diasLimite=  $cuenta->diff($hoy);
+				$limite=$diasLimite->days;
+				
+					if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
 					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
 
 				<?php } ?>
 
-				<?php if($esCompra==1 && $rowProducto['prodActivo']==1 ){?>
+				<?php if($esCompra==1 && $rowProducto['prodActivo']==1 && ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) ){?>
 					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
-				<?php } ?>
+				<?php }
+
+					if($esCompra==0 && $rowProducto['prodActivo']==1 ){ 
+						if( $limite >= 0 && $limite <= 28 ){ //zona de créditos ?>
+							<p style="margin-top: 10px;" ><strong>Zona Créditos</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketRemate"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de créditos</button>
+						<?php }
+						if( $limite >= 29 && $limite <= 56 ){ //zona de prórroga ?>
+							<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<?php }
+						if( $limite >= 57 && $limite <= 57 ){ //zona de precio administrativo ?>
+							<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button>
+						<?php }
+						if( $limite >= 58 && $limite <= 91 ){ //zona de remate ?>
+							<p style="margin-top: 10px;" ><strong>Zona remate</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+						<?php }
+						if( $limite >= 92 ){ //zona de remate administrativo ?>
+							<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
+						<?php }
+					}
+				 ?>
 					</div>
 					</div>
 				
@@ -410,7 +450,6 @@ FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prest
 						if($numRow>0){
 						while($rowInventa = $llamadoInventarios->fetch_assoc()){
 							echo "<li>Inventariado el <span class='spanFechaFormat'>{$rowInventa['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$rowInventa['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$rowInventa['usuNombres']}</strong></em></li>";
-
 						}
 						}else{
 							echo '<li>No se encontraron inventarios todavía en almacén con éste producto.</li>';
