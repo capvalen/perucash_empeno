@@ -15,7 +15,6 @@ if( $numRow>0){
 	$idCliente=$resCliente[0];
 	$llamadoCliente->close();
 	insertarProductos($idCliente, $conection );
-
 	//echo 'si existe su id es: '.$idCliente;
 }else{
 	//No existe insertar cliente nuevo
@@ -26,20 +25,20 @@ if( $numRow>0){
 	$numRowCli = $llamadoClienteNew->num_rows;
 	//print_r($resClienteNew);
 	if( $numRowCli>0){
-		//$idCliente=$resClienteNew[0];
+		$idCliente=$resClienteNew[0];
 		$llamadoClienteNew -> close();
-		insertarProductos($resClienteNew[0], $conection);
+		insertarProductos($idCliente, $conection);
 	}
-	
 }
 
 
 function insertarProductos($idCliente, $conn){
 	$sqlPre= "call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );";
+	echo $sqlPre;
 	// Iniciamos préstamo
-	$consulta = $conn->prepare($sqlPre);
-	$consulta->execute();
-	$resultado = $consulta->get_result();
+	$consulta = $conn->query($sqlPre);
+	/*$consulta->execute();
+	$resultado = $consulta->get_result();*/
 	$numLineas=$resultado->num_rows;
 	$row = $resultado->fetch_array(MYSQLI_ASSOC);
 	$idPrestamo =$row['idnuevoPrestamo'];

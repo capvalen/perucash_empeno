@@ -529,10 +529,11 @@ $('#btnGuardarDatos').click(function () {
 					});
 					console.log(jsonProducto);
 					if($('.rowProduct').length-1==i){
-						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario, total: $('.spanTotalSumasv3').text() }}).done(function (resp) { console.log(resp);
-						if($.isNumeric(resp)){ 
-							window.location= 'cliente.php?idCliente='+resp;
-						}
+						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario, total: $('.spanTotalSumasv3').text() }}).done(function (resp) {
+							console.log(resp);
+							if($.isNumeric(resp)){ 
+								window.location= 'cliente.php?idCliente='+resp;
+							}
 						});
 					}
 				});
