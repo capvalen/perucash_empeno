@@ -319,8 +319,8 @@ $finRecupero=160;
 
 					if($esCompra==0 && $rowProducto['prodActivo']==1 ){ 
 						if( $limite >= 0 && $limite <= 28 ){ //zona de créditos ?>
-							<p style="margin-top: 10px;" ><strong>Zona Créditos</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketRemate"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de créditos</button>
+							<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
 						<?php }
 						if( $limite >= 29 && $limite <= 56 ){ //zona de prórroga ?>
 							<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
@@ -376,7 +376,7 @@ $finRecupero=160;
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
 								<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
 							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=28 ){ ?>
-								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= $rowInteres['preCapital']*$rowInteres['preInteres']/100; echo $interesJson; ?></span></li>
+								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
 							<?php }else { 
 								$_GET['inicio']=floatval($rowInteres['preCapital']);
@@ -472,7 +472,45 @@ $finRecupero=160;
 </div>
 
 
-<!--Modal Para insertar inventario a BD-->
+<!--Modal Para insertar ticket de venta a BD-->
+<div class="modal fade modal-ticketZonaIntereses" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-success">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Generar ticket</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<label for="">Selecciona el tipo de ticket que se generará.</label><br>
+					<div class="divSelectTipoInteres">
+					<label for="">El cliente tiene pendiente:</label>
+						<ul>
+							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial">100.00</span></li>
+							<li><strong>Interés:</strong> S/. <span id="spanInteresInt">80.00</span></li>
+							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena">10.00</span></li>
+							<li><strong>Total:</strong> S/. <span id="spanInteresTotal">190.00</span></li>
+						</ul>
+					</div>
+						
+					</select>
+					<label for="">Tipo de pago:</label> <span id="spanInteresTipo">-</span><br>
+					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
+					<input type="number" class="form-control input-lg esDecimal" id="txtMontoTicketIntereses" placeholder="S/.">
+					<label for="">Comentario extra:</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketIntereses" placeholder="Comentario">
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+				<button class="btn btn-success btn-outline" id="btnCrearTicketVenta" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+<!--Modal Para insertar ticket para pagar interes -->
 <div class="modal fade modal-ticketVenta" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
@@ -834,6 +872,24 @@ $('#btnCrearTicketVenta').click(function () {
 				$('.modal-GuardadoError').modal('show');
 			}
 		});
+	}
+});
+$('#btnLlamarTicketIntereses').click(function () { 
+	$('#spanInteresInicial').text();
+	$('#spanInteresInt').text();
+	$('#spanInteresPena').text();
+	$('#spanInteresTotal').text();
+	$('.modal-ticketZonaIntereses').modal(); });
+
+$('#txtMontoTicketIntereses').focusout(function () {
+	console.log( (valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo $rowInteres['preCapital']; ?>))
+	var valor = parseFloat($(this).val());
+	if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
+		$('#spanInteresTipo').text('Pago parcial de interés');
+	}else if(valor = ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
+		$('#spanInteresTipo').text('Cancelación de interés');
+	} else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float) $rowInteres['preCapital']; ?>) ){
+		$('#spanInteresTipo').text('Amortización');
 	}
 });
 </script>

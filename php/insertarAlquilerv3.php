@@ -2,6 +2,11 @@
 require('conkarl.php');
 header('Content-Type: text/html; charset=utf8');
 
+/** Reportes de error */
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+date_default_timezone_set('America/Lima');
 
 $cliente= $_POST['jsonCliente'];
 
@@ -14,36 +19,39 @@ $sqlClienteExiste="SELECT idCliente FROM `Cliente` where cliDni='{$cliente[0]['d
 if( $numRow>0){
 	$idCliente=$resCliente[0];
 	$llamadoCliente->close();
-	insertarProductos($idCliente, $conection );
+	//insertarProductos($idCliente, $conection );
 	//echo 'si existe su id es: '.$idCliente;
 }else{
 	//No existe insertar cliente nuevo
 	$sqlCliente="call insertClienteV3('{$cliente[0]['apellidoCli']}', '{$cliente[0]['nombresCli']}', '{$cliente[0]['dniCli']}', '{$cliente[0]['direccionCli']}', '{$cliente[0]['correoCli']}', '{$cliente[0]['celularCli']}', '{$cliente[0]['fijoCli']}' );";
 	
-	$llamadoClienteNew = $conection->query($sqlCliente);
-	$resClienteNew = $llamadoClienteNew->fetch_row();
-	$numRowCli = $llamadoClienteNew->num_rows;
+	$llamadoClienteNew = $conection->prepare($sqlCliente);
+	$llamadoClienteNew->execute();
+	$resultado3 = $llamadoClienteNew->get_result();
+	$numRowCli = $resultado3->num_rows;
+	$resClienteNew = $resultado3->fetch_array(MYSQLI_BOTH);
 	//print_r($resClienteNew);
 	if( $numRowCli>0){
 		$idCliente=$resClienteNew[0];
 		$llamadoClienteNew -> close();
-		insertarProductos($idCliente, $conection);
+		//insertarProductos($idCliente, $conection);
 	}
 }
 
-
-function insertarProductos($idCliente, $conn){
+//echo "hola 7. \n";
 	$sqlPre= "call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );";
-	echo $sqlPre;
+	//echo $sqlPre;
 	// Iniciamos préstamo
-	$consulta = $conn->query($sqlPre);
-	/*$consulta->execute();
-	$resultado = $consulta->get_result();*/
+	$consulta = $conection->prepare($sqlPre);
+	$consulta->execute();
+	$resultado = $consulta->get_result();
 	$numLineas=$resultado->num_rows;
 	$row = $resultado->fetch_array(MYSQLI_ASSOC);
 	$idPrestamo =$row['idnuevoPrestamo'];
+	//$consulta->free();
 	$consulta->fetch();
 	$consulta->close();
+	//echo $idPrestamo;
 
 
 	//Insertar préstamo_producto y desembolso
@@ -57,29 +65,27 @@ for ($i=0; $i < count($productos) ; $i++) {
 		$placa='';
 	}
 	
-
-	$sqlProducto= "call insertarProductov3 ('".$productos[$i]['nombre'].$placa."', ".$productos[$i]['montoDado'].", ".$productos[$i]['interes'].", '".$productos[$i]['fechaRegistro']."', '".$productos[$i]['observaciones']."', ".$idCliente." , ".$_COOKIE['ckidUsuario'].", ".$idPrestamo.", ".$productos[$i]['cantidad'].",".$productos[$i]['tipoProducto'].");";
+	$sqlProducto= "call insertarProductov3 ('".$productos[$i]['nombre'].$placa."', '".$productos[$i]['montoDado']."', ".$productos[$i]['interes'].", '".$productos[$i]['fechaRegistro']."', '".$productos[$i]['observaciones']."', ".$idCliente." , ".$_COOKIE['ckidUsuario'].", ".$idPrestamo.", ".$productos[$i]['cantidad'].",".$productos[$i]['tipoProducto'].");";
 	//echo $sqlProducto;
 
-	$consultaProd = $conn->prepare($sqlProducto);
+	$consultaProd = $conection->prepare($sqlProducto);
 	$consultaProd->execute();
-	$resultadoProd = $consultaProd->get_result();
-	$numLineas=$resultadoProd->num_rows;
-	$row = $resultadoProd->fetch_array(MYSQLI_ASSOC);
-	$idProd=$row['idProd'];
+	$resultado4 = $consultaProd->get_result();
+	$numLineas=$resultado4->num_rows;
+	$rowN = $resultado4->fetch_array(MYSQLI_ASSOC);
+	$idProd=$rowN['idProd'];
 	$consultaProd->fetch();
 	$consultaProd->close();
-
-
 	
 	if($tipo=='1' || $tipo=='11' || $tipo=='42' ){
 		$sqlCochera ="call insertarPlaca('".$productos[$i]['placa']."', {$tipo}, {$idProd});";
 		
-		$consultaCoche = $conn->prepare($sqlCochera);
+		$consultaCoche = $conection->prepare($sqlCochera);
 		$consultaCoche->execute();
 		$resultadoCoche = $consultaCoche->get_result();
-		$rowCoche = $resultadoCoche->fetch_array(MYSQLI_ASSOC);
+		//$rowCoche = $consultaCoche->fetch_array(MYSQLI_ASSOC);
 		//print_r($row);
+		//$consultaCoche->fetch();
 		$consultaCoche->fetch();
 		$consultaCoche->close();
 	}
@@ -87,6 +93,10 @@ for ($i=0; $i < count($productos) ; $i++) {
 }
 
 echo $idCliente;
+
+
+function insertarProductos($idCliente, $cadena){
+
 }
 
 ?>
