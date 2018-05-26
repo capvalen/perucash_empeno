@@ -94,3 +94,21 @@ $('.soloLetras').keypress(function (e) {//||
         e.preventDefault();
     }
 });
+$('#txtBuscarNivelGod').keypress(function (e) {
+	if (event.keyCode === 10 || event.keyCode === 13) 
+		{event.preventDefault();
+		//analizar que esta entrando
+		// numbero >6 dni o telefonos
+		// Numero <=6 buscar por id producto
+		// Letra buscar nombre cliente o nombre producto
+
+		var campo = $(this).val();
+		if( $.isNumeric(campo)){
+			if(campo.length<6){
+				window.location='productos.php?idProducto='+campo;
+			}
+		}else{ // es letras
+			//hacer ajax a clientes
+		}
+	}
+});

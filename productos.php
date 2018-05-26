@@ -52,7 +52,7 @@ $finRecupero=160;
 		<!-- Custom CSS -->
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
-		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
+		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
 		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
@@ -650,7 +650,7 @@ $finRecupero=160;
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.18"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.22"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
@@ -889,7 +889,14 @@ $('#btnLlamarTicketIntereses').click(function () {
 	$('#spanInteresTotal').text();
 	$('.modal-ticketZonaIntereses').modal(); });
 
-$('#txtMontoTicketIntereses').focusout(function () {
+
+$('#btnCrearTicketPagoInteres').click(function () {
+	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val() }}).done(function (resp) {
+		console.log(resp);
+	});
+});
+<?php if( $rowProducto['prodActivo']==1 ){ ?>
+	$('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
 	var interes = <?php echo  $interesJson; ?>;
@@ -908,11 +915,7 @@ $('#txtMontoTicketIntereses').focusout(function () {
 		$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
 	}
 });
-$('#btnCrearTicketPagoInteres').click(function () {
-	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val() }}).done(function (resp) {
-		console.log(resp);
-	});
-});
+<?php } ?>
 </script>
 
 <?php } ?>

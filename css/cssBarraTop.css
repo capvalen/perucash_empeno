@@ -64,11 +64,11 @@ border: none;}
 /* #menuNombreUsuario{color: rgb(255,193,74);} */ .has-clear{margin-top: 20px;}
 #txtBuscarNivelGod{font-family: 'IcoFont'; width:20%;  transition: all 0.5s ease; top:0; right:0; float: right;}
 #txtBuscarNivelGod:hover{width:100%;-moz-box-sizing: border-box;}
-#txtBuscarNivelGod:not(:placeholder-shown) {width:100%;font-family: 'Futura Bk BT',Verdana, Arial ;} /*Cuando el txt NO esta vacio*/
+#txtBuscarNivelGod:not(:placeholder-shown) {width:100%;font-family: 'Poppins', sans-serif ,Verdana, Arial ;} /*Cuando el txt NO esta vacio*/
 #txtBuscarNivelGod:placeholder-shown { font-family: 'IcoFont';}/*Cuando el txt SI esta vacio*/
 
 #txtBuscarNivelGod:hover, #txtBuscarNivelGod:focus{width:100%; -moz-box-sizing: border-box;}
-#txtBuscarNivelGod:not(:placeholder-shown) {width:100%;font-family: 'Futura Bk BT',Verdana ; -moz-box-sizing: border-box;} /*Cuando el txt NO esta vacio*/
+#txtBuscarNivelGod:not(:placeholder-shown) {width:100%;font-family: 'Poppins', sans-serif ,Verdana ; -moz-box-sizing: border-box;} /*Cuando el txt NO esta vacio*/
 #txtBuscarNivelGod:placeholder-shown { width:100%; font-family: 'IcoFont'; -moz-box-sizing: border-box;}/*Cuando el txt SI esta vacio*/
 
 ::-ms-clear {display: none;} .form-control-clear {  z-index: 10;  pointer-events: auto;  cursor: pointer;}

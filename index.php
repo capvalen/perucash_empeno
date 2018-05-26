@@ -156,7 +156,7 @@ a:hover{color:#462782;}
 
 			
 
-			<div class="pull-left" ><small><?php include 'php/version.php' ?> | 2016 - <?php echo date("Y"); ?> <a href="https://facebook.com/pg/infocat.soluciones/photos/?tab=album&album_id=2040393179508347"><br>®  Info-cat</a></small></div>
+			<div class="pull-left" ><small><?php include 'php/version.php' ?> | 2016 - <?php echo date("Y"); ?> <a href="https://facebook.com/pg/infocat.soluciones/photos/?tab=album&album_id=2040393179508347"><br>®  Info-cat</a></small> <small>Hosted Google Cloud</small></div>
 
 			</div>
 
