@@ -41,7 +41,7 @@ else if($DiadeHoy<=$maximoDias ){$filas[2][]=array('pagarAHoy' => round( $filas[
 
 
 
-return ($filas[2]);
+return ($filas[2]); //$filas[2]
 
 
  ?>

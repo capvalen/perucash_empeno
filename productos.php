@@ -137,6 +137,8 @@ $finRecupero=160;
   top: 0;
   opacity: 0;
 }
+.divSelectTipoInteres ul li{padding-bottom: 5px;}
+.divSelectTipoInteres ul li strong, #spanInteresTipo{color: #5cb85c; padding-bottom: 5px; }
 </style>
 <div class="noselect" id="wrapper">
 
@@ -324,7 +326,7 @@ $finRecupero=160;
 						<?php }
 						if( $limite >= 29 && $limite <= 56 ){ //zona de prórroga ?>
 							<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
 						<?php }
 						if( $limite >= 57 && $limite <= 57 ){ //zona de precio administrativo ?>
 							<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong></p>
@@ -371,21 +373,27 @@ $finRecupero=160;
 
 								$sqlIntereses = $conection->query($sqlBaseInteres);
 								$rowInteres = $sqlIntereses->fetch_assoc();
+								$gastosAdmin=0;
 								?>
 							<ul>
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
 								<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
-							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=28 ){ ?>
+							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 28).</span></li>
-							<?php }else { 
+								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
+							<?php 
+								}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=28 ){ 
+									$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
+								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% semanal = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$interesDiario*$rowInteres['diferenciaDias'],1,PHP_ROUND_HALF_UP),2); echo $interesJson.' ('.number_format($interesDiario*$rowInteres['diferenciaDias']*100,2).'%)'; ?></span></li>
+								<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 28).</span></li>
+							<?php  }else { 
 								$_GET['inicio']=floatval($rowInteres['preCapital']);
 								$_GET['numhoy']=$rowInteres['diferenciaDias'];
 								$_GET['interes']=$rowInteres['preInteres'];
 								$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
 								// var_dump($resultado);
 								$interesJson= $resultado[0]['pagarAHoy'];
-								$gastosAdmin=0;
+								
 								?>
 								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más allá del día 29).</span></li>
@@ -403,7 +411,7 @@ $finRecupero=160;
 						<!--Inicio de pestaña interior 02-->
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
 							<ul>
-								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaRegistro']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 								<?php $i=0; 
 								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `DetalleReporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
 								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
@@ -473,7 +481,7 @@ $finRecupero=160;
 
 
 <!--Modal Para insertar ticket de venta a BD-->
-<div class="modal fade modal-ticketZonaIntereses" tabindex="-1" role="dialog">
+<div class="modal fade modal-ticketZonaIntereses noselect" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header-success">
@@ -486,25 +494,25 @@ $finRecupero=160;
 					<div class="divSelectTipoInteres">
 					<label for="">El cliente tiene pendiente:</label>
 						<ul>
-							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial">100.00</span></li>
-							<li><strong>Interés:</strong> S/. <span id="spanInteresInt">80.00</span></li>
-							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena">10.00</span></li>
-							<li><strong>Total:</strong> S/. <span id="spanInteresTotal">190.00</span></li>
+							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial"><?php echo $rowInteres['preCapital']; ?></span></li>
+							<li><strong>Interés:</strong> S/. <span id="spanInteresInt"><?php echo $interesJson; ?></span></li>
+							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena"><?php echo number_format($gastosAdmin,2); ?></span></li>
+							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo $rowInteres['preCapital']+$interesJson+$gastosAdmin; ?></span></li>
 						</ul>
 					</div>
 						
 					</select>
-					<label for="">Tipo de pago:</label> <span id="spanInteresTipo">-</span><br>
 					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
-					<input type="number" class="form-control input-lg esDecimal" id="txtMontoTicketIntereses" placeholder="S/.">
+					<input type="number" class="form-control input-lg esDecimal " id="txtMontoTicketIntereses" placeholder="S/.">
 					<label for="">Comentario extra:</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketIntereses" placeholder="Comentario">
+					<label for="">El cliente está pagando:</label> <p id="spanInteresTipo">-</p>
 
 				</div>
 			</div>
 			<div class="modal-footer">
 				<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
-				<button class="btn btn-success btn-outline" id="btnCrearTicketVenta" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket</button>
+				<button class="btn btn-success btn-outline" id="btnCrearTicketPagoInteres" ><i class="icofont icofont-chart-flow-alt-2"></i> Crear ticket Interes</button>
 		</div>
 		</div>
 	</div>
@@ -638,11 +646,11 @@ $finRecupero=160;
 </div>
 
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> 
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.12"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.18"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
@@ -882,15 +890,28 @@ $('#btnLlamarTicketIntereses').click(function () {
 	$('.modal-ticketZonaIntereses').modal(); });
 
 $('#txtMontoTicketIntereses').focusout(function () {
-	console.log( (valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo $rowInteres['preCapital']; ?>))
+	var capital = <?php echo $rowInteres['preCapital']; ?>;
+	var gastos = <?php echo $gastosAdmin; ?>;
+	var interes = <?php echo  $interesJson; ?>;
 	var valor = parseFloat($(this).val());
+	console.log(valor)
+	var hayGasto='';
+	if(gastos >0){	hayGasto= '<br>Penalización de S/. 10.00 .'}
+
 	if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
-		$('#spanInteresTipo').text('Pago parcial de interés');
-	}else if(valor = ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
-		$('#spanInteresTipo').text('Cancelación de interés');
-	} else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float) $rowInteres['preCapital']; ?>) ){
-		$('#spanInteresTipo').text('Amortización');
+		$('#spanInteresTipo').html('Pago parcial de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+	}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
+		$('#spanInteresTipo').html('Cancelación de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+	}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
+		$('#spanInteresTipo').html('Final de préstamo de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+	}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
+		$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
 	}
+});
+$('#btnCrearTicketPagoInteres').click(function () {
+	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val() }}).done(function (resp) {
+		console.log(resp);
+	});
 });
 </script>
 
