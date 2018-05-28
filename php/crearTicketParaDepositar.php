@@ -7,6 +7,12 @@ $tipoProc=19;
 
 $dinero = $_POST['dinero'];
 
+if ($_POST['obs']==''){
+	$obs= "";
+}else{
+	$obs= '<p>'.$_COOKIE['ckAtiende'].' dice: '.$_POST['obs'].'</p>';
+
+}
 
 $sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres, datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_POST['idProducto'];
 
@@ -48,7 +54,7 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	}else if ( $dinero > $debe ){
 		echo ' Amortización S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2);
 	}
-}else if($diasDebe >=29 && $diasDebe <=56){
+}else if($diasDebe >=29 && $diasDebe <=56){ // caso prórroga. Interes compuesto.
 	$gastos =10;
 	$_GET['inicio']=$capital;
 	$_GET['numhoy']=$diasDebe;
@@ -62,6 +68,15 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	
 	if ( $dinero < $debe ){
 		echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		$sql= "call crearTicketDepositar (".$_POST['idProd'].", {$tipoProc}, ".$_POST['monto']." , {$obs}, ".$_COOKIE['ckidUsuario'].")";
+		//echo $sql;
+		if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
+			while ($resultado = $llamadoSQL->fetch_row()) {
+				echo $resultado[0]; //Retorna los resultados via post del procedure
+			}
+			// liberar el conjunto de resultados 
+			$llamadoSQL->close();
+		}else{echo mysql_error( $conection);}
 	}else if( $dinero == $debe ){
 		echo ' Cancelación de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
 	}else if ( $dinero == $debe+$capital ){
@@ -75,16 +90,7 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 
 
 
-/*$sql= "call crearTicketDepositar (".$_POST['idProd'].", {$tipoProc}, ".$_POST['monto']." , '<p>{$_COOKIE['ckAtiende']} dice: ".$_POST['obs']."</p>' , ".$_COOKIE['ckidUsuario'].")";
-//echo $sql;
-if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
-	// obtener el array de objetos 
-	while ($resultado = $llamadoSQL->fetch_row()) {
-		echo $resultado[0]; //Retorna los resultados via post del procedure
-	}
-	// liberar el conjunto de resultados 
-	$llamadoSQL->close();
-}else{echo mysql_error( $conection);}*/
+
 
 /*
 Procedimientos aprobados:

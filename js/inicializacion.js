@@ -83,9 +83,9 @@ $("input").focus(function(){
   this.select();
 });
 
-$('#txtVolverPasw').keypress(function(event){
-	if (event.keyCode === 10 || event.keyCode === 13) 
-		{event.preventDefault();
+$('body').on('keypress','#txtVolverPasw', function(e){console.log('hola');
+	if (e.keyCode === 10 || e.keyCode === 13) 
+		{e.preventDefault(); 
 		$('#btnVolverIniciarSesion').click();
 	 }
 });
@@ -95,8 +95,8 @@ $('.soloLetras').keypress(function (e) {//||
     }
 });
 $('#txtBuscarNivelGod').keypress(function (e) {
-	if (event.keyCode === 10 || event.keyCode === 13) 
-		{event.preventDefault();
+	if (e.keyCode === 10 || e.keyCode === 13) 
+		{e.preventDefault();
 		//analizar que esta entrando
 		// numbero >6 dni o telefonos
 		// Numero <=6 buscar por id producto
