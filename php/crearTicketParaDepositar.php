@@ -5,7 +5,9 @@ header('Content-Type: text/html; charset=utf8');
 
 $tipoProc=19;
 
+$idProd= $_POST['idProducto'];
 $dinero = $_POST['dinero'];
+$ticket='';
 
 if ($_POST['obs']==''){
 	$obs= "";
@@ -67,16 +69,36 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	$debe = number_format(round( $interesAcumulado ,1,PHP_ROUND_HALF_UP),2);
 	
 	if ( $dinero < $debe ){
-		echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
-		$sql= "call crearTicketDepositar (".$_POST['idProd'].", {$tipoProc}, ".$_POST['monto']." , {$obs}, ".$_COOKIE['ckidUsuario'].")";
-		//echo $sql;
-		if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
-			while ($resultado = $llamadoSQL->fetch_row()) {
-				echo $resultado[0]; //Retorna los resultados via post del procedure
-			}
-			// liberar el conjunto de resultados 
-			$llamadoSQL->close();
-		}else{echo mysql_error( $conection);}
+		//echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		$tipoProc= 36;
+
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		//echo $sqlPre;
+		$consulta = $conection->prepare($sqlPre);
+		$consulta->execute();
+		$resultado = $consulta->get_result();
+		$numLineas=$resultado->num_rows;
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$row['idTicket'].'<br />';
+		//$consulta->free();
+		$consulta->fetch();
+		$consulta->close();
+
+		$tipoProc= 33;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ${dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		//$consulta->free();
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
+		
+
 	}else if( $dinero == $debe ){
 		echo ' Cancelación de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
 	}else if ( $dinero == $debe+$capital ){

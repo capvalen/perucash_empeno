@@ -892,7 +892,13 @@ $('#btnLlamarTicketIntereses').click(function () {
 
 $('#btnCrearTicketPagoInteres').click(function () {
 	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) {
-		console.log(resp);
+
+		if(resp.indexOf("#")>=0){
+			$('.modal-ticketZonaIntereses').modal('hide');
+			$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+			$('.modal-GuardadoCorrecto #h1Bien').html(resp);
+			$('.modal-GuardadoCorrecto').modal('show');
+		}
 	});
 });
 <?php if( $rowProducto['prodActivo']==1 ){ ?>
@@ -904,14 +910,21 @@ $('#btnCrearTicketPagoInteres').click(function () {
 	console.log(valor)
 	var hayGasto='';
 	if(gastos >0){	hayGasto= '<br>Penalización de S/. 10.00 .'}
-
-	if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
+	if(gastos==10  && valor <gastos){
+		$('#btnCrearTicketPagoInteres').addClass('hidden');
+		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
+	}
+	else if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
+		$('#btnCrearTicketPagoInteres').removeClass('hidden');
 		$('#spanInteresTipo').html('Pago parcial de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
 	}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
+		$('#btnCrearTicketPagoInteres').removeClass('hidden');
 		$('#spanInteresTipo').html('Cancelación de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
 	}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
+		$('#btnCrearTicketPagoInteres').removeClass('hidden');
 		$('#spanInteresTipo').html('Final de préstamo de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
 	}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
+		$('#btnCrearTicketPagoInteres').removeClass('hidden');
 		$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
 	}
 });

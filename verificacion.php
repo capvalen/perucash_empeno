@@ -137,7 +137,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php include "php/listarTicketsSinAprobar.php"; ?>
+					<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
+						include "php/listarTicketsSinAprobar.php";
+					}else{
+						echo '<p>No tienes permmiso para estar husmeando acá.</p>';
+					 ?>
+					}
 				</tbody>
 			</table>
 			<h4 class="purple-text text-lighten-1">Actividades ya aprobadas</h4>
@@ -165,6 +170,33 @@
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
+<!-- Modal para verificar cambio en ticket  -->
+<div class="modal fade modal-modifyTicket" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Aprobar solicitud</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row"><span class="hidden" id="tckId2"></span>
+			<p>Está por <strong id="stroTicktModif"></strong> el ticket a «<strong id="tckNum2"></strong>»</p>
+			<p>¿Está realmente seguro?</p>
+			<p>Puedes agregar algún comentario</p>
+			<input type="text" id="txtMotivoDeny" class="form-control">
+			</div>
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-default btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> No</button>
+			<button class="btn btn-danger btn-outline" id="btnAceptarAnular" ><i class="icofont icofont-warning-alt"></i> Sí</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
 <!-- Modal para modificar ticket  -->
 <div class="modal fade modal-modificarTicket" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
@@ -179,7 +211,7 @@
 			<p>Se está modificando el ticket:</p><span class="hidden" id="tckId"></span>
 			<p><strong>N° de Ticket:</strong> <span id="tckNum"></span></p>
 			<p><strong>Transacción:</strong> <span id="tckTransac"></span></p>
-			<p><strong>Producto:</strong> <span id="tckProd"></span></p>
+			<p><strong>Producto:</strong> <span class="mayuscula" id="tckProd"></span></p>
 			<p><strong>Observaciones:</strong> <div id="tckObs"></div></p>
 			<p><strong>Monto: S/. </strong> <input class="form-control input-lg text-center esDecimal" type="number" id="txtTckMonto"></p>
 			<p><strong>Otras Observaciones: S/. </strong> <input class="form-control input-lg" type="text" id="txtTckOtraObs"></p>
@@ -258,11 +290,12 @@ $('.btnApproveTicket').click(function () {
 	$('#aproTckProd').html(padre.find('.tdNombre').html());
 	$('#aproTckObs').html(padre.find('.tdObser').html());
 
-	$('.modal-modificarTicket').modal('show');
+	$('.modal-aprobarTicket').modal('show');
 });
 $('.btnEditTicket').click(function () {
 	var padre = $(this).parent().parent();
 	var idTick= padre.attr('data-id');
+
 
 	$('#tckId').text(idTick);
 	$('#tckNum').text(padre.find('.tkNum').text());
@@ -271,7 +304,7 @@ $('.btnEditTicket').click(function () {
 	$('#tckObs').html(padre.find('.tdObser').html());
 	$('#txtTckMonto').val(padre.find('.tdValor').text());
 
-	$('.modal-aprobarTicket').modal('show');
+	$('.modal-modificarTicket').modal('show');
 });
 $('#btnEditTicketModal').click(function () {
 	var observa='';
@@ -290,9 +323,30 @@ $('#btnEditTicketModal').click(function () {
 			}
 		});
 	}
-
-
-	
+});
+$('.btnDenyTicket').click(function () {
+	var padre = $(this).parent().parent();
+	var idTick= padre.attr('data-id');
+	$('#stroTicktModif').text(' anular ');
+	$('#tckId2').text(idTick);
+	$('#tckNum2').text('#'+idTick);
+	$('.modal-modifyTicket').modal('show');
+});
+$('#btnAceptarAnular').click(function () {
+	if($('#txtMotivoDeny').val()!==''){
+		observa='<p><?php echo $_COOKIE['ckAtiende']; ?> dice: '+$('#txtMotivoDeny').val()+'</p>'
+	}else{
+		observa='';
+	}
+	$.ajax({url: 'php/updateAnularTicket.php', type: 'POST', data: {idTick: $('#tckId2').text(), obs:  observa }}).done(function (resp) {
+		//console.log(resp)
+		if(resp){
+			location.reload();
+		}else{
+			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
 });
 </script>
 <?php } ?>
