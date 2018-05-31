@@ -137,15 +137,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
-						include "php/listarTicketsSinAprobar.php";
-					}else{
-						echo '<p>No tienes permmiso para estar husmeando acá.</p>';
-					 ?>
-					}
+				
+			<?php
+				if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
+					include "php/listarTicketsSinAprobar.php";
+				}else{
+					echo '<p>No tienes permmiso para estar husmeando acá.</p>';
+				}
+			?>
 				</tbody>
 			</table>
-			<h4 class="purple-text text-lighten-1">Actividades ya aprobadas</h4>
+			<h4 class="purple-text text-lighten-1">Actividades rechazadas</h4>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -158,7 +160,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php include "php/listarTicketsYaAprobado.php"; ?>
+					<?php include "php/listarTicketsNoAprobado.php"; ?>
 				</tbody>
 			</table>
 
@@ -184,7 +186,7 @@
 			<p>Está por <strong id="stroTicktModif"></strong> el ticket a «<strong id="tckNum2"></strong>»</p>
 			<p>¿Está realmente seguro?</p>
 			<p>Puedes agregar algún comentario</p>
-			<input type="text" id="txtMotivoDeny" class="form-control">
+			<input type="text" id="txtMotivoDeny" class="form-control" autocomplete="off">
 			</div>
 		</div>
 			
@@ -230,7 +232,7 @@
 <div class="modal fade modal-aprobarTicket" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
-		<div class="modal-header-warning">
+		<div class="modal-header-primary">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Modificar ticket</h4>
 		</div>
@@ -238,16 +240,17 @@
 			<div class="container-fluid">
 			<div class="row">
 			<p>¿Deseas aprobar?</p><span class="hidden" id="aproTckId"></span>
-			<p><strong>N° de Ticket:</strong> #</p>
-			<p><strong>Monto: S/. </strong> S/. <span id="aproTckMonto"></span></p>
+			<p><strong>N° de Ticket:</strong> # <span id="aproTckId2"></span></p>
+			<p><strong>Monto: S/. </strong> S/. <span  id="aproTckMonto"></span></p>
 			<p><strong>Transacción:</strong> <span id="aproTckTransac"></span></p>
-			<p><strong>Producto:</strong> <span id="aproTckProd"></span></p>
+			<p><strong>Producto:</strong> <span class="mayuscula" id="aproTckProd"></span></p>
 			<p><strong>Observaciones:</strong> <div id="aproTckObs"></div></p>
 			</div>
 		</div>
 			
 		<div class="modal-footer">
-			<button class="btn btn-warning btn-outline" id="btnEditTicketModal" ><i class="icofont icofont-warning-alt"></i> Editar ticket</button>
+			<button class="btn btn-default btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> Aún  no</button>
+			<button class="btn btn-azul btn-outline" id="btnAcceptTicketModal" ><i class="icofont icofont-like"></i> Sí, aprobar</button>
 		</div>
 	</div>
 	</div>
@@ -285,7 +288,8 @@ $('.btnApproveTicket').click(function () {
 	var idTick= padre.attr('data-id');
 
 	$('#aproTckId').text(idTick);
-	$('#aproTckNum').text(padre.find('.tkNum').text());
+	$('#aproTckId2').text(idTick);
+	$('#aproTckMonto').text(padre.find('.tdValor').text());
 	$('#aproTckTransac').text(padre.find('.tdDescip').text());
 	$('#aproTckProd').html(padre.find('.tdNombre').html());
 	$('#aproTckObs').html(padre.find('.tdObser').html());
@@ -334,12 +338,22 @@ $('.btnDenyTicket').click(function () {
 });
 $('#btnAceptarAnular').click(function () {
 	if($('#txtMotivoDeny').val()!==''){
-		observa='<p><?php echo $_COOKIE['ckAtiende']; ?> dice: '+$('#txtMotivoDeny').val()+'</p>'
+		observa='<p><?php echo $_COOKIE['ckAtiende']; ?> dice: '+$('#txtMotivoDeny').val()+'</p>';
 	}else{
 		observa='';
 	}
 	$.ajax({url: 'php/updateAnularTicket.php', type: 'POST', data: {idTick: $('#tckId2').text(), obs:  observa }}).done(function (resp) {
 		//console.log(resp)
+		if(resp){
+			location.reload();
+		}else{
+			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+});
+$('#btnAcceptTicketModal').click(function () {
+	$.ajax({url: 'php/updateAprobarTicket.php', type: 'POST', data: {idTick: $('#aproTckId2').text() }}).done(function (resp) {
 		if(resp){
 			location.reload();
 		}else{

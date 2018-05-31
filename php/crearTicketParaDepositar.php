@@ -48,13 +48,89 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	//echo $debe;
 	
 	if ( $dinero < $debe ){
-		echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) ;
+		//echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) ;
+
+		$tipoProc= 33;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
 	}else if( $dinero == $debe ){
-		echo ' Cancelación de interés S/. ' . number_format($dinero,2) ;
+		//echo ' Cancelación de interés S/. ' . number_format($dinero,2) ;
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
 	}else if ( $dinero == $debe+$capital ){
-		echo ' Final de préstamo S/. ' . number_format($dinero,2) ;
+		//echo ' Final de préstamo S/. ' . number_format($dinero,2) ;
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		$tipoProc= 32;
+		$resta= $dinero-$debe;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$resta} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
 	}else if ( $dinero > $debe ){
-		echo ' Amortización S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2);
+		//echo ' Amortización S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2);
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		$tipoProc= 45;
+		$resta= $dinero-$debe;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$resta} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+		
+		echo $ticket;
 	}
 }else if($diasDebe >=29 && $diasDebe <=56){ // caso prórroga. Interes compuesto.
 	$gastos =10;
@@ -80,19 +156,17 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		$numLineas=$resultado->num_rows;
 		$row = $resultado->fetch_array(MYSQLI_ASSOC);
 		$ticket .='#'.$row['idTicket'].'<br />';
-		//$consulta->free();
 		$consulta->fetch();
 		$consulta->close();
 
 		$tipoProc= 33;
-		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ${dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
 		$consultaDepos = $conection->prepare($sql);
 		$consultaDepos ->execute();
 		$resultadoDepos = $consultaDepos->get_result();
 		$numLineaDeposs=$resultadoDepos->num_rows;
 		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
 		$ticket .='#'.$rowDepos['idTicket'].'<br />';
-		//$consulta->free();
 		$consultaDepos->fetch();
 		$consultaDepos->close();
 
@@ -100,11 +174,112 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		
 
 	}else if( $dinero == $debe ){
-		echo ' Cancelación de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		//echo ' Cancelación de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		$gastos =10;
+		$tipoProc= 36;
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		//echo $sqlPre;
+		$consulta = $conection->prepare($sqlPre);
+		$consulta->execute();
+		$resultado = $consulta->get_result();
+		$numLineas=$resultado->num_rows;
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$row['idTicket'].'<br />';
+		$consulta->fetch();
+		$consulta->close();
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
+
 	}else if ( $dinero == $debe+$capital ){
-		echo ' Final de préstamo = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		//echo ' Final de préstamo = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
+		$gastos =10;
+		$tipoProc= 36;
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		//echo $sqlPre;
+		$consulta = $conection->prepare($sqlPre);
+		$consulta->execute();
+		$resultado = $consulta->get_result();
+		$numLineas=$resultado->num_rows;
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$row['idTicket'].'<br />';
+		$consulta->fetch();
+		$consulta->close();
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		$tipoProc= 32;
+		$resta= $dinero-$debe;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$resta} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
+
 	}else if ( $dinero > $debe ){
-		echo ' Amortización = S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2). ' con penalización S/. 10.00';;
+		//echo ' Amortización = S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2). ' con penalización S/. 10.00';;
+		$gastos =10;
+		$tipoProc= 36;
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		//echo $sqlPre;
+		$consulta = $conection->prepare($sqlPre);
+		$consulta->execute();
+		$resultado = $consulta->get_result();
+		$numLineas=$resultado->num_rows;
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$row['idTicket'].'<br />';
+		$consulta->fetch();
+		$consulta->close();
+
+		$tipoProc= 44;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		$tipoProc= 45;
+		$resta= $dinero-$debe;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$resta} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
 	}
 
 }

@@ -505,7 +505,7 @@ $finRecupero=160;
 					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
 					<input type="number" class="form-control input-lg esDecimal " id="txtMontoTicketIntereses" placeholder="S/.">
 					<label for="">Comentario extra:</label>
-					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketIntereses" placeholder="Comentario">
+					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketIntereses" placeholder="Comentario" autocomplete="off">
 					<label for="">El cliente está pagando:</label> <p id="spanInteresTipo">-</p>
 
 				</div>
@@ -532,7 +532,7 @@ $finRecupero=160;
 					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
 					<input type="number" class="form-control input-lg esDecimal" id="txtMontoTicketVenta" placeholder="S/.">
 					<label for="">Comentario extra:</label>
-					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketVenta" placeholder="Comentario">
+					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketVenta" placeholder="Comentario" autocomplete="off">
 
 				</div>
 			</div>
@@ -891,18 +891,26 @@ $('#btnLlamarTicketIntereses').click(function () {
 
 
 $('#btnCrearTicketPagoInteres').click(function () {
-	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) {
-
-		if(resp.indexOf("#")>=0){
-			$('.modal-ticketZonaIntereses').modal('hide');
-			$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
-			$('.modal-GuardadoCorrecto #h1Bien').html(resp);
-			$('.modal-GuardadoCorrecto').modal('show');
-		}
-	});
+/*	if($('#txtMontoTicketIntereses').val().length==0){
+		$('#btnCrearTicketPagoInteres').addClass('hidden');
+		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
+	}
+	else {
+		
+	}*/
+	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) { console.log(resp)
+			if(resp.indexOf("#")>=0){
+				$('.modal-ticketZonaIntereses').modal('hide');
+				$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+				$('.modal-GuardadoCorrecto #h1Bien').html(resp);
+				$('.modal-GuardadoCorrecto').modal('show');
+			}
+		}).error(function (er) {console.log(er);
+			// body...
+		});
 });
-<?php if( $rowProducto['prodActivo']==1 ){ ?>
-	$('#txtMontoTicketIntereses').focusout(function () {
+<?php if( $rowProducto['prodActivo']==1 && $esCompra==0 ){ ?>
+$('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
 	var interes = <?php echo  $interesJson; ?>;
@@ -910,7 +918,7 @@ $('#btnCrearTicketPagoInteres').click(function () {
 	console.log(valor)
 	var hayGasto='';
 	if(gastos >0){	hayGasto= '<br>Penalización de S/. 10.00 .'}
-	if(gastos==10  && valor <gastos){
+	if(gastos==10  && valor <gastos || $('#txtMontoTicketIntereses').val()==''){
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
