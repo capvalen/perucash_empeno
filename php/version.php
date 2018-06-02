@@ -5,8 +5,7 @@ echo "Ver. 3.0.21 Compilado 2018.04.30";
 Nuevos cambios en versiones:
 
 Version 3.0
-ALTER TABLE `producto` ADD `idTipoProducto` INT NOT NULL DEFAULT '0' AFTER `prodDioAdelanto`;
-
+DROP TABLE `prestamo_producto`;
 CREATE TABLE `prestamo_producto` (
   `idPrestamo` int(11) NOT NULL,
   `idProducto` int(11) NOT NULL,
@@ -15,15 +14,17 @@ CREATE TABLE `prestamo_producto` (
   `preInteres` int(11) NOT NULL,
   `preCapital` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `prestamo_producto` ADD `prActivo` INT NOT NULL COMMENT '0 anulado, 1 activo' AFTER `preCapital`;
 
 INSERT INTO `prestamo_producto`(`idPrestamo`, `idProducto`, `presidTipoProceso`, `desFechaContarInteres`, `preInteres`, `preCapital`)
 select pr.idPrestamo, pr.idProducto, pr.preIdEstado, d.desFechaContarInteres, pr.preInteres, d.desCapital
 from prestamo pr inner join desembolso d on d.idPrestamo = pr.idPrestamo
-where 1
+where 1;
 
 Ahora jugamos más con presidTipoProceso de prestamo_producto;
 
-
+UPDATE `prestamo_producto` SET `presidTipoProceso`=32 WHERE `presidTipoProceso`=11;
+UPDATE `prestamo_producto` pp inner join producto p on pp.idProducto = p.idProducto SET pp.`presidTipoProceso`= 22 WHERE pp.`presidTipoProceso`=1 and p.esCompra=0;
 
 
 

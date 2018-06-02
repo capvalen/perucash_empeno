@@ -307,7 +307,18 @@ $finRecupero=160;
 				$hoy= new DateTime("now");
 				$diasLimite=  $cuenta->diff($hoy);
 				$limite=$diasLimite->days;
-				
+
+				$sql= "SELECT idTicket FROM `tickets` where cajaActivo in (0,1) and idProducto = {$_GET['idProducto']}"; // si tiene un ticket activo
+				$consultaDepos = $conection->prepare($sql);
+				$consultaDepos ->execute();
+				$resultadoDepos = $consultaDepos->get_result();
+				$numLineaDeposs=$resultadoDepos->num_rows;
+				if ($numLineaDeposs >0){
+					while($rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC)){
+						echo '<h3 class="purple-text text-lighten-1">Ticket asignado #'.$rowDepos['idTicket'].'</h3>';
+					}
+				}else{
+
 					if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
 					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
@@ -340,7 +351,11 @@ $finRecupero=160;
 							<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong></p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
 						<?php }
-					}
+						}
+				}
+				$consultaDepos->fetch();
+				$consultaDepos->close();
+				
 				 ?>
 					</div>
 					</div>
@@ -396,7 +411,7 @@ $finRecupero=160;
 								
 								?>
 								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más allá del día 29).</span></li>
+								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
 							<?php if($rowInteres['diferenciaDias']>=29 ){ $gastosAdmin=10; ?>
 								<li>Gastos admnistrativos: <span>S/. 10.00</span></li>
 							<?php }} ?>

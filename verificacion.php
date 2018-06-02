@@ -124,7 +124,7 @@
 			<h2 class="purple-text text-lighten-1">Área de verificación </h2><hr>
 			<h4 class="purple-text text-lighten-1">Actividades sin aprobar</h4>
 			<p>Los siguientes códigos son para verificar, sea responsable por favor</p>
-			<table class="table table-hover">
+			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
 						<th>N° Ticket</th>
@@ -148,7 +148,7 @@
 				</tbody>
 			</table>
 			<h4 class="purple-text text-lighten-1">Actividades rechazadas</h4>
-			<table class="table table-hover">
+			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
 						<th>N° Ticket</th>
@@ -171,6 +171,35 @@
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
+
+
+<!-- Modal para verificar cambio en ticket  -->
+<div class="modal fade modal-aceptPagoTicket" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Aprobar solicitud</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row"><span class="hidden" id="pagoId2"></span>
+			<p>Operación (<strong id="pagoModif"></strong>) del ticket <strong>#<span id="pagoNum2"></span></strong> son <strong>S/. <span id="pagoMoney"></span></strong></p>
+			<p>¿Está realmente seguro?</p>
+			<p>Puedes agregar algún comentario</p>
+			<input type="text mayuscula" id="txtMotivoPago" class="form-control" autocomplete="off">
+			</div>
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-default btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> No</button>
+			<button class="btn btn-azul btn-outline" id="btnAceptarPago" ><i class="icofont icofont-money"></i> Sí</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
 
 <!-- Modal para verificar cambio en ticket  -->
 <div class="modal fade modal-modifyTicket" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -359,6 +388,28 @@ $('#btnAcceptTicketModal').click(function () {
 		}else{
 			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
 			$('.modal-GuardadoError').modal('show');
+		}
+	});
+});
+$('.btnCobrarTicket').click(function() {
+	var padre = $(this).parent().parent();
+	var idTick= padre.attr('data-id');
+
+	$('#pagoId2').text(idTick);
+	$('#pagoNum2').text(idTick);
+	$('#pagoMoney').text(padre.find('.tdValor').text());
+	$('#pagoModif').text(padre.find('.tdDescip').text());
+	$('.modal-aceptPagoTicket').modal('show');
+});
+$('#btnAceptarPago').click( ()=> {
+	var obs = $('#txtMotivoPago').val();
+	$.ajax({url: 'php/updateCobrarTicket.php', type: 'POST', data: {idTick: $('#pagoId2').text(), obs: obs }}).done((resp)=>{
+		if(resp){
+			$('.modal-aceptPagoTicket').modal('hide');
+			$('.modal-GuardadoCorrecto #spanBien').text('Pago realizado');
+			$('.modal-GuardadoCorrecto').modal('show');
+		}else{
+
 		}
 	});
 });

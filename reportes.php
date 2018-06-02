@@ -143,19 +143,21 @@ require("php/conkarl.php");
 			<div class="col-lg-12 contenedorDeslizable">
 			<!-- Empieza a meter contenido principal dentro de estas etiquetas -->
 				<h2 class="purple-text text-lighten-1">Reporte productos</h2>
-				<div>
+				<div class="row">
 					<p>¿Qué tipo de reporte quieres ver?</p>
 					<div class="col-xs-12 col-sm-6" id="cmbEstadoProd">
 					<select class="selectpicker mayuscula" title="Nuevo estado..." id="cmbEstadoCombo"  data-width="100%" data-live-search="true" data-size="15">
 					<?php require 'php/detalleReporteOPT.php'; ?>
 					</select></div>
 				</div>
-				<div class="tablaResultados">
+				<div class="row tablaResultados table-responsive">
 					<table class="table table-hover" id="tablita">
 					<thead>
 					  <tr>
+						<th data-sort="int">N° <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Descripcion producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="date">Último Pago <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
 					  </tr>
 					</thead>
@@ -228,7 +230,7 @@ $('#cmbEstadoCombo').change(function () {
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a> Obs. <em class="mayuscula">${dato.invObservaciones}</em></td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td><span class="spanFechaFormat">${dato.invFechaInventario}</span></td>
-				</tr>`)
+				</tr>`);
 			});
 		});
 		break;
@@ -241,11 +243,12 @@ $('#cmbEstadoCombo').change(function () {
 					<td class="mayuscula">No existen artículos en ésta categoría</td>
 					<td class="mayuscula"></td>
 					<td></td>
-				</tr>`)
+				</tr>`);
 			}
 			$.each(JSON.parse(resp), function (i, dato) {
 				$('tbody').append(`
 				 <tr>
+				 	<td>${i+1}</td>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a> Obs. <em class="mayuscula">${dato.invObservaciones}</em></td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td><span class="spanFechaFormat">${dato.invFechaInventario}</span></td>
@@ -254,7 +257,7 @@ $('#cmbEstadoCombo').change(function () {
 		});
 		break;
 		default:
-			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado}}).done(function (resp) {
+			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { console.log(resp);
 			$('tbody').children().remove();
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
@@ -262,15 +265,16 @@ $('#cmbEstadoCombo').change(function () {
 					<td class="mayuscula">No existen artículos en ésta categoría</td>
 					<td class="mayuscula"></td>
 					<td></td>
-				</tr>`)
+				</tr>`);
 			}
 			$.each(JSON.parse(resp), function (i, dato) {
 				$('tbody').append(`
-				 <tr>
+				 <tr><td>${i+1}</td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+					<td>${moment(dato.desFechaContarInteres).format('DD-MM-YYYY')}</td>
 					<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
-				</tr>`)
+				</tr>`);
 			});
 		});
 		break;

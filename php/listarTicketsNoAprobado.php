@@ -6,7 +6,7 @@ $filas=mysqli_num_rows($sql);
 
 if($filas==0){
 	echo "<tr '>
-			<td>No hay registros en ".date("d/m/Y")." </td>
+			<td colspan='5'>No hay registros en ".date("d/m/Y")." </td>
 		</tr>";
 }
 {while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
