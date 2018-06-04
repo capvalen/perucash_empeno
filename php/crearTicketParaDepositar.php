@@ -41,7 +41,7 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	}else if ( $dinero > $debe ){
 		echo ' Amortización';
 	}
-}else if( $diasDebe>=8 && $diasDebe <=28 ){ //caso normal fuera de gracia. Interes semanal
+}else if( $diasDebe>=8 && $diasDebe <=35 ){ //caso normal fuera de gracia. Interes semanal
 	$interesDiario= ($tasaInteres /100)/7;
 	
 	$debe = number_format(round($capital *$interesDiario*$diasDebe,1,PHP_ROUND_HALF_UP),2);
@@ -132,8 +132,8 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		
 		echo $ticket;
 	}
-}else if($diasDebe >=29 && $diasDebe <=56){ // caso prórroga. Interes compuesto.
-	$gastos =10;
+}else if($diasDebe >=36 && $diasDebe <=1000){ // caso prórroga. Interes compuesto.
+	$gastos =35;
 	$_GET['inicio']=$capital;
 	$_GET['numhoy']=$diasDebe;
 	$_GET['interes']=$tasaInteres;
@@ -141,14 +141,14 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	//var_dump($resultado);
 
 	$interesAcumulado= $resultado[0]['pagarAHoy'];
-	$dinero -=10;
+	$dinero -=$gastos;
 	$debe = number_format(round( $interesAcumulado ,1,PHP_ROUND_HALF_UP),2);
 	
 	if ( $dinero < $debe ){
 		//echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
 		$tipoProc= 36;
 
-		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 35 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
 		//echo $sqlPre;
 		$consulta = $conection->prepare($sqlPre);
 		$consulta->execute();
@@ -175,9 +175,9 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 
 	}else if( $dinero == $debe ){
 		//echo ' Cancelación de interés = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
-		$gastos =10;
+		$gastos =35;
 		$tipoProc= 36;
-		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 35 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
 		//echo $sqlPre;
 		$consulta = $conection->prepare($sqlPre);
 		$consulta->execute();
@@ -203,9 +203,9 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 
 	}else if ( $dinero == $debe+$capital ){
 		//echo ' Final de préstamo = S/. ' . number_format($dinero,2) . ' con penalización S/. 10.00';
-		$gastos =10;
+		$gastos =35;
 		$tipoProc= 36;
-		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 35 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
 		//echo $sqlPre;
 		$consulta = $conection->prepare($sqlPre);
 		$consulta->execute();
@@ -243,9 +243,9 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 
 	}else if ( $dinero > $debe ){
 		//echo ' Amortización = S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2). ' con penalización S/. 10.00';;
-		$gastos =10;
+		$gastos =35;
 		$tipoProc= 36;
-		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 10 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+		$sqlPre= "call crearTicketDepositar ({$idProd}, {$tipoProc}, 35 , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
 		//echo $sqlPre;
 		$consulta = $conection->prepare($sqlPre);
 		$consulta->execute();

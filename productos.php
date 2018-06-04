@@ -331,24 +331,42 @@ $finRecupero=160;
 				<?php }
 
 					if($esCompra==0 && $rowProducto['prodActivo']==1 ){ 
-						if( $limite >= 0 && $limite <= 28 ){ //zona de créditos ?>
+						if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
 							<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
 						<?php }
-						if( $limite >= 29 && $limite <= 56 ){ //zona de prórroga ?>
+						if( $limite == 36 ){ //zona de prórroga y zona de precio administrativo  && $limite <= 36  ?>
 							<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
 						<?php }
-						if( $limite >= 57 && $limite <= 57 ){ //zona de precio administrativo ?>
-							<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong></p>
+						if( $limite >= 37 && $limite <= 49 ){ //zona venta de remate ?>
+						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button>
 						<?php }
-						if( $limite >= 58 && $limite <= 91 ){ //zona de remate ?>
-							<p style="margin-top: 10px;" ><strong>Zona remate</strong></p>
+						if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
+						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 200%</p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
 						<?php }
-						if( $limite >= 92 ){ //zona de remate administrativo ?>
-							<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong></p>
+						if( $limite >= 60 && $limite <= 69 ){ //zona  venta de remate ?>
+						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 150%</p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+						<?php }
+						if( $limite >= 70 && $limite <= 79 ){ //zona  venta de remate ?>
+						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 80%</p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+						<?php }
+						if( $limite >= 80 ){ //zona de venta de remate ?>
+							<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong> Proponer una solución. Hueso</p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
 						<?php }
 						}
@@ -412,8 +430,8 @@ $finRecupero=160;
 								?>
 								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
-							<?php if($rowInteres['diferenciaDias']>=29 ){ $gastosAdmin=10; ?>
-								<li>Gastos admnistrativos: <span>S/. 10.00</span></li>
+							<?php if($rowInteres['diferenciaDias']>=42 ){ $gastosAdmin=35; ?>
+								<li>Gastos admnistrativos: <span>S/. 35.00</span></li>
 							<?php }} ?>
 								<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
 							</ul>
@@ -635,17 +653,17 @@ $finRecupero=160;
 			<div class="modal-body">
 				<div>
 					<div class="row rowFotos"> 
-					<?php if($cantImg<=2){ ?>
-						<!-- <div class="col-xs-6 col-sm-3 divFotoGestion text-center libreSubida" id="foto1"><i class="icofont icofont-cloud-upload"></i></div> -->
+				<?php if($cantImg<=2){ ?>
+					<!-- <div class="col-xs-6 col-sm-3 divFotoGestion text-center libreSubida" id="foto1"><i class="icofont icofont-cloud-upload"></i></div> -->
 
-					<?php }else{
+				<?php }else{
 						foreach($ficheros as $archivo)
-								{
-									$cantImg++;/*".$directorio."/".$archivo."*/
-									if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-								      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
-								    }
-								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
+						{
+							$cantImg++;/*".$directorio."/".$archivo."*/
+							if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
+						      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
+						    }
+						}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 						}
 						echo '<div class="col-xs-6 col-sm-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
 							  <button class="btn btn-primary btn-outline"><span><i class="icofont icofont-upload"></i></span> Subir archivo</button>
@@ -932,8 +950,8 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	var valor = parseFloat($(this).val());
 	console.log(valor)
 	var hayGasto='';
-	if(gastos >0){	hayGasto= '<br>Penalización de S/. 10.00 .'}
-	if(gastos==10  && valor <gastos || $('#txtMontoTicketIntereses').val()==''){
+	if(gastos >0){	hayGasto= '<br>Penalización de S/. 35.00 .'}
+	if(gastos==35  && valor <gastos || $('#txtMontoTicketIntereses').val()==''){
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}

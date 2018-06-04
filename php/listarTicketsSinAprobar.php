@@ -39,7 +39,7 @@ while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
 			<td>S/. <span class='tdValor'>".number_format($row['cajaValor'], 2)."</span></td>
 			<td class='mayuscula tdNombre'><a href='productos.php?idProducto={$row['idProducto']}'>{$row['prodNombre']}</a></td>
 			<td class='mayuscula tdObser'>{$row['cajaObservacion']}</td>
-			<td>{$botones}</td>
+			<td class='botonesTd'>{$botones}</td>
 		</tr>";
 
 }}
