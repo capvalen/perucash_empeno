@@ -93,11 +93,11 @@
 				<div id="navbar" class="navbar-collapse collapse ">
 					<ul class="nav navbar-nav">
 						<li class="hidden down"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">HR <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-										<li><a href="#">Change Time Entry</a></li>
-										<li><a href="#">Report</a></li>
-								</ul>
-							</li>
+							<ul class="dropdown-menu">
+								<li><a href="#">Change Time Entry</a></li>
+								<li><a href="#">Report</a></li>
+							</ul>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav pull-right">
 						 <li>
@@ -382,7 +382,7 @@ $('#btnAceptarAnular').click(function () {
 	});
 });
 $('#btnAcceptTicketModal').click(function () {
-	$.ajax({url: 'php/updateAprobarTicket.php', type: 'POST', data: {idTick: $('#aproTckId2').text() }}).done(function (resp) {
+	$.ajax({url: 'php/updateAprobarTicket.php', type: 'POST', data: {idTick: $('#aproTckId2').text() }}).done(function (resp) { console.log(resp)
 		if(resp){
 			location.reload();
 		}else{
@@ -403,8 +403,10 @@ $('.btnCobrarTicket').click(function() {
 });
 $('#btnAceptarPago').click( ()=> {
 	var obs = $('#txtMotivoPago').val();
-	$.ajax({url: 'php/updateCobrarTicket.php', type: 'POST', data: {idTick: $('#pagoId2').text(), obs: obs }}).done((resp)=>{
+	$.ajax({url: 'php/updateCobrarTicket.php', type: 'POST', data: {idTick: $('#pagoId2').text(), obs: obs }}).done((resp)=>{ console.info(resp);
 		if(resp){
+			$('tr[data-id ='+$('#pagoId2').text()+']').find('.botonesTd').children().remove();
+			$('tr[data-id ='+$('#pagoId2').text()+']').find('.botonesTd').append('<h5 class="light-green-text"><i class="icofont icofont-check-circled"></i></h5>');
 			$('.modal-aceptPagoTicket').modal('hide');
 			$('.modal-GuardadoCorrecto #spanBien').text('Pago realizado');
 			$('.modal-GuardadoCorrecto').modal('show');

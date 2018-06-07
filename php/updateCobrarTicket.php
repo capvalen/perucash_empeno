@@ -17,22 +17,30 @@ $consulta->execute();
 $resultado = $consulta->get_result();
 $numLineas=$resultado->num_rows;
 $row = $resultado->fetch_array(MYSQLI_ASSOC);
-$ticket .='#'.$row['idTicket'].'<br />';
+$proceso =$row['idTipoProceso'];
 $consulta->fetch();
 $consulta->close();
 
 
 
+switch ($proceso) {
+	case '36': // penalización
+		//echo "call updateCobrarTicket(".$_POST['idTick'].", {$_COOKIE['ckidUsuario']}, '{$obs}', {$proceso});";
+		/*$filas=array();
+		if( mysqli_query($conection,"call updateCobrarTicket(".$_POST['idTick'].", {$_COOKIE['ckidUsuario']}, '{$obs}', {$proceso});")){
+			echo true;
+		}else{
+			echo false;
+		}*/
+		break;
+	
+	default:
+		# code...
+		break;
+}
 
 
 
-//echo "call updateCobrarTicket(".$_POST['idTick'].", {$_COOKIE['ckidUsuario']}, '{$obs}');";
-/*$filas=array();
-if( mysqli_query($conection,"call updateCobrarTicket(".$_POST['idTick'].", {$_COOKIE['ckidUsuario']}, '{$obs}');")){
-	echo true;
-}else{
-	echo false;
-}*/
 
 /* cerrar la conexión */
 mysqli_close($conection);

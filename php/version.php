@@ -15,6 +15,7 @@ CREATE TABLE `prestamo_producto` (
   `preCapital` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ALTER TABLE `prestamo_producto` ADD `prActivo` INT NOT NULL COMMENT '0 anulado, 1 activo' AFTER `preCapital`;
+ALTER TABLE `prestamo_producto` ADD `idCubicajeEstado` INT NOT NULL COMMENT 'En tipoProceso' AFTER `prActivo`;
 
 INSERT INTO `prestamo_producto`(`idPrestamo`, `idProducto`, `presidTipoProceso`, `desFechaContarInteres`, `preInteres`, `preCapital`, `prActivo`)
 select pr.idPrestamo, pr.idProducto, pr.preIdEstado, d.desFechaContarInteres, pr.preInteres, d.desCapital, p.prodActivo

@@ -486,20 +486,21 @@ $('#btnGuardarDatos').click(function () {
 				$.each( $('.rowProduct'), function (i, elem) {
 					jsonProductos.push({'cantidad': $(elem).find('.spanCantidadv3').text(), nombre: $(elem).find('.spanNomProductov3').text(),
 						tipoProducto: $(elem).find('.spanTipov3ID').text(), montoDado: $(elem).find('.spanPrecioEmpv3').text(), 
-						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), 
+						fechaIngreso: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'),
+						fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), 
 						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
 					});
 					//console.log(jsonProductos);
 					if($('.rowProduct').length-1==i){
-						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) {
-							if($.isNumeric(resp)){
+						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) { //console.log(resp)
+							if( resp.indexOf('ticket') ){//$.isNumeric(resp)
 								window.location= 'productos.php?idProducto='+resp;
-							}
-							//console.log(resp)
+							}else{
+								$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+								$('.modal-GuardadoError').modal('show');}
 						});
 					}
 				});
-				
 			}
 		break;
 		case 'esRemate':

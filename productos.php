@@ -65,60 +65,60 @@ $finRecupero=160;
 
 <body>
 <style>
-	.paPrestamo{
+.paPrestamo{
 
-		margin: 10px 0;
-		padding: 15px;
-		border: 1px solid #e3e3e3;
-		border-radius: 6px;
-		cursor: pointer;
-	}
-	.paPrestamo:hover{
-		background-color: #f5f5f5;
-		transition: all 0.6s ease-in-out;
-	}
-	.h3Nombres{margin-top: 0px;}
-	.divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; cursor:default; color: #546e7a;}
-	.divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
-	.divImagen img{border-radius: 7px;}
-	.divBotonesAccion{margin: 15px 0;}
-	.tab-pane li{list-style: none;}
-	.tab-pane li{margin:5px 0;text-indent: -.7em;}
-	.tab-pane li::before {
-		content: "• ";
-		color: #ab47bc;
-	}
-	.contenedorDatosCliente a{
-		color: #ab47bc;
-	}
-	#tabAdvertencias li{width: 85%;}
-	.mensaje{    float: left;    margin-bottom: 10px;
-    width: 85%;
-    border-radius: 5px;
-    padding: 5px;
-    display: flex;
-    background: #ab47bc; color: white;box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.13);
-    /* background: whitesmoke; */}
-    .mensaje:before {
-    width: 0;
-    height: 0;
-    content: "";
-    top: -5px;
-    left: -14px;
-    position: relative;
-    border-style: solid;
-    border-width: 0 13px 13px 0;
-    border-color: transparent #ab47bc transparent transparent;
-    /*border-color: transparent whitesmoke transparent transparent;*/
+	margin: 10px 0;
+	padding: 15px;
+	border: 1px solid #e3e3e3;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.paPrestamo:hover{
+	background-color: #f5f5f5;
+	transition: all 0.6s ease-in-out;
+}
+.h3Nombres{margin-top: 0px;}
+.divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; cursor:default; color: #546e7a;}
+.divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
+.divImagen img{border-radius: 7px;}
+.divBotonesAccion{margin: 15px 0;}
+.tab-pane li{list-style: none;}
+.tab-pane li{margin:5px 0;text-indent: -.7em;}
+.tab-pane li::before {
+	content: "• ";
+	color: #ab47bc;
+}
+.contenedorDatosCliente a{
+	color: #ab47bc;
+}
+#tabAdvertencias li{width: 85%;}
+.mensaje{    float: left;    margin-bottom: 10px;
+  width: 85%;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  background: #ab47bc; color: white;box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.13);
+  /* background: whitesmoke; */}
+.mensaje:before {
+  width: 0;
+  height: 0;
+  content: "";
+  top: -5px;
+  left: -14px;
+  position: relative;
+  border-style: solid;
+  border-width: 0 13px 13px 0;
+  border-color: transparent #ab47bc transparent transparent;
+  /*border-color: transparent whitesmoke transparent transparent;*/
 }
 .textoMensaje{ padding-left: 30px }
 .mensaje small{color: #f7f7f7;/* color: #6b6b6b; */}
 .rowFotos{margin: 0 auto;}
 .divFotoGestion{border: dashed 2px #cecece;
 	border-radius: 5px;
-    width: 22%; min-height: 150px;
-    margin: 0 10px; padding: 15px 10px;}
-#page-content-wrapper li{list-style-type: none;padding-bottom: 10px;}
+  width: 22%; min-height: 150px;
+  margin: 0 10px; padding: 15px 10px;}
+#tabMovEstados li, #tabAdvertencias li, #tabIntereses li{list-style-type: none;padding-bottom: 10px;}
 .divFotoGestion i{font-size: 10rem; color: #cecece;}
 .iEliminarFoto i{font-size: 20px;}
 .iEliminarFoto i:hover{color:#d50000;cursor: pointer;}
@@ -129,7 +129,6 @@ $finRecupero=160;
   display: inline-block;
 }
 .upload-btn-wrapper:hover{cursor: pointer;}
-
 .upload-btn-wrapper input[type=file] {
   font-size: 100px;
   position: absolute;
@@ -139,6 +138,12 @@ $finRecupero=160;
 }
 .divSelectTipoInteres ul li{padding-bottom: 5px;}
 .divSelectTipoInteres ul li strong, #spanInteresTipo{color: #5cb85c; padding-bottom: 5px; }
+.dropdown-menu li::before{ content: "";}
+.dropdown-menu li a {padding: 0px 32px;}
+.dropdown-menu li:hover{background: #f3f3f3;}
+..dropdown-menu>.active>a:hover{
+	background-color: #9658d0;
+}
 </style>
 <div class="noselect" id="wrapper">
 
@@ -385,7 +390,7 @@ $finRecupero=160;
 					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
 					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
 					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias</a></li>
-					<li><a href="#tabInventario" data-toggle="tab">Inventarios</a></li>
+					<li><a href="#tabInventario" data-toggle="tab">Almacén e Inventarios</a></li>
 					
 					</ul>
 					<div class="tab-content">
@@ -495,8 +500,55 @@ $finRecupero=160;
 						}else{
 							echo '<li>No se encontraron inventarios todavía en almacén con éste producto.</li>';
 						}
+						
+						$sqlMovimientosAlmacen= "call listarMovimientosAlmacen (".$_GET['idProducto'].");";
+						//echo $sqlMovimientosAlmacen;
+
+						$consultaMovimiento = $cadena->prepare($sqlMovimientosAlmacen);
+						$consultaMovimiento ->execute();
+						$resultadoMovimiento = $consultaMovimiento->get_result();
+						$numLineaMovimiento=$resultadoMovimiento->num_rows;
+						if($numLineaMovimiento>0){
+							while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
+								<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion']; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
+							<?php }
+						}
+						$consultaMovimiento->fetch();
+						$consultaMovimiento->close();
+						
+						
 							 ?>
 						</ul>
+						
+						<div class="row">
+						<div class="col-xs-12" id="divTipoMovAlmacen">
+							<select class="selectpicker mayuscula" id="sltTipoMovimiento"  data-width="50%" data-live-search="false" data-size="15">
+								<option class="optPiso mayuscula" data-tokens="23">En almacén</option>
+								<option class="optPiso mayuscula" data-tokens="46">Entrada a almacén</option>
+								<option class="optPiso mayuscula" data-tokens="47">Salida de almacén</option>
+							</select>
+						</div>
+						<div class="col-xs-4" id="divSelectEstante">
+							<select class="selectpicker mayuscula" id="sltEstantes" title="Estante..."  data-width="100%" data-live-search="false" data-size="15">
+								<?php require 'php/listarEstantesOPT.php'; ?>
+							</select>
+						</div>
+						<div class="col-xs-4" id="divSelectPiso">
+							<select class="selectpicker mayuscula" id="sltPiso" title="Piso..."  data-width="100%" data-live-search="false" data-size="15">
+								<?php require 'php/listarPisosOPT.php'; ?>
+							</select>
+						</div>
+						<div class="col-xs-4" id="divSelectSeccion">
+							<select class="selectpicker mayuscula" id="sltSeccion" title="Sección..."  data-width="100%" data-live-search="false" data-size="15">
+								<?php require 'php/listarZonasOPT.php'; ?>
+							</select>
+							
+						</div>
+						<div class="col-xs-12">
+							<input type="text" class="form-control" placeholder="Comentario extra" id="txtObservacionCubicaje">
+							<button class="btn btn-morado btn-outline" id="btnGuardarCubicaje"><i class="icofont icofont-box"></i> Guardar cubicaje</button>
+						</div>
+						</div>
 						<!-- Fin de pestaña interior 05 -->
 						</div>
 					<!-- Fin de tab content -->
@@ -511,7 +563,6 @@ $finRecupero=160;
 
 
 </div>
-
 
 <!--Modal Para insertar ticket de venta a BD-->
 <div class="modal fade modal-ticketZonaIntereses noselect" tabindex="-1" role="dialog">
@@ -528,9 +579,9 @@ $finRecupero=160;
 					<label for="">El cliente tiene pendiente:</label>
 						<ul>
 							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial"><?php echo $rowInteres['preCapital']; ?></span></li>
-							<li><strong>Interés:</strong> S/. <span id="spanInteresInt"><?php echo $interesJson; ?></span></li>
+							<li><strong>Interés:</strong> S/. <span id="spanInteresInt"><?php echo number_format($interesJson,2); ?></span></li>
 							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena"><?php echo number_format($gastosAdmin,2); ?></span></li>
-							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo $rowInteres['preCapital']+$interesJson+$gastosAdmin; ?></span></li>
+							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo number_format($rowInteres['preCapital']+$interesJson+$gastosAdmin,2); ?></span></li>
 						</ul>
 					</div>
 						
@@ -711,6 +762,34 @@ $(document).ready(function(){
 		$(dato).text(nueFecha.format('LLLL'));
 	});
 
+$('#sltEstantes').on('changed.bs.select', function (e) {
+ 	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens');
+	if(id==1){
+		$('#sltPiso').attr('disabled',true).selectpicker('refresh');
+		$('#sltSeccion').attr('disabled',true).selectpicker('refresh');
+	}else{
+		$('#sltPiso').removeAttr('disabled').selectpicker('refresh');
+		$('#sltSeccion').removeAttr('disabled').selectpicker('refresh');
+		if(id==4 || id==7){
+			$('#sltPiso').find('option[data-tokens=6]').removeAttr('disabled', true);
+			$('#sltPiso').selectpicker('refresh');
+		}else{
+			$('#sltPiso').find('option[data-tokens=6]').attr('disabled', true);
+			$('#sltPiso').selectpicker('refresh');
+		}
+		if(id==3){
+			$('#sltSeccion').find('option[data-tokens=5]').removeAttr('disabled', true);
+			$('#sltSeccion').find('option[data-tokens=6]').removeAttr('disabled', true);
+			$('#sltSeccion').find('option[data-tokens=7]').removeAttr('disabled', true);
+			$('#sltSeccion').selectpicker('refresh');
+		}else{
+			$('#sltSeccion').find('option[data-tokens=5]').attr('disabled', true);
+			$('#sltSeccion').find('option[data-tokens=6]').attr('disabled', true);
+			$('#sltSeccion').find('option[data-tokens=7]').attr('disabled', true);
+			$('#sltSeccion').selectpicker('refresh');
+		}
+	}
+});
 });
 $(window).load(function() {
 	$('.flexslider').flexslider({
@@ -931,16 +1010,20 @@ $('#btnCrearTicketPagoInteres').click(function () {
 	else {
 		
 	}*/
-	$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) { console.log(resp)
-			if(resp.indexOf("#")>=0){
-				$('.modal-ticketZonaIntereses').modal('hide');
-				$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
-				$('.modal-GuardadoCorrecto #h1Bien').html(resp);
-				$('.modal-GuardadoCorrecto').modal('show');
-			}
-		}).error(function (er) {console.log(er);
-			// body...
-		});
+	if($('#txtMontoTicketIntereses').val().length!=0){$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) { console.log(resp)
+				if(resp.indexOf("#")>=0){
+					$('.modal-ticketZonaIntereses').modal('hide');
+					$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+					$('.modal-GuardadoCorrecto #h1Bien').html(resp);
+					$('.modal-GuardadoCorrecto').modal('show');
+				}
+			}).error(function (er) {console.log(er);
+				// body...
+			});
+	}else{
+		$('#btnCrearTicketPagoInteres').addClass('hidden');
+		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
+	}
 });
 <?php if( $rowProducto['prodActivo']==1 && $esCompra==0 ){ ?>
 $('#txtMontoTicketIntereses').focusout(function () {
@@ -950,27 +1033,65 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	var valor = parseFloat($(this).val());
 	console.log(valor)
 	var hayGasto='';
-	if(gastos >0){	hayGasto= '<br>Penalización de S/. 35.00 .'}
-	if(gastos==35  && valor <gastos || $('#txtMontoTicketIntereses').val()==''){
+	if($('#txtMontoTicketIntereses').val().length!=0){
+		$('#btnCrearTicketPagoInteres').removeClass('hidden');
+		if(gastos >0){	hayGasto= '<br>Penalización de S/. 35.00 .'}
+		if(gastos==35  && valor <gastos ){
+			$('#btnCrearTicketPagoInteres').addClass('hidden');
+			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
+		}
+		else if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+			$('#spanInteresTipo').html('Pago parcial de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+		}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+			$('#spanInteresTipo').html('Cancelación de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+		}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+			$('#spanInteresTipo').html('Final de préstamo de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+		}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+			$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
+		}
+	}else{
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
-	else if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
-		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-		$('#spanInteresTipo').html('Pago parcial de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-	}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
-		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-		$('#spanInteresTipo').html('Cancelación de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-	}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
-		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-		$('#spanInteresTipo').html('Final de préstamo de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-	}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
-		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-		$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
-	}
 });
 <?php } ?>
+$('#btnGuardarCubicaje').click( ()=> {
+	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
+	var estante= $('#divSelectEstante').find('.selected a').attr('data-tokens');
+	var piso= $('#divSelectPiso').find('.selected a').attr('data-tokens');
+	var seccion = $('#divSelectSeccion').find('.selected a').attr('data-tokens');
+	console.log(proces);
+
+	if( estante !=null ){
+		if( piso ==null ){ piso = 1;}
+		if( seccion ==null ){ seccion = 1;}
+		$.ajax({url:'php/insertarCubicaje.php', type: 'POST', data: {
+			idProducto: <?php echo $_GET['idProducto']; ?>,
+			proceso: proces,
+			estante: estante,
+			piso: piso,
+			seccion: seccion,
+			obs: $('#txtObservacionCubicaje').val()
+		}}).done((resp)=> { console.log(resp);
+			if( $.isNumeric(resp)){
+				location.reload();
+			}
+		});}
+});
 </script>
+
+<?php 
+if( isset($_GET['ticket']) ){ ?>
+<script>
+$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+$('.modal-GuardadoCorrecto #h1Bien').html( '<?php echo $_GET['ticket']; ?>');
+$('.modal-GuardadoCorrecto').modal('show');
+</script>
+<?php  } ?>
 
 <?php } ?>
 </body>

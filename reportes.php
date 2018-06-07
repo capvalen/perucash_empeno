@@ -157,7 +157,7 @@ require("php/conkarl.php");
 						<th data-sort="int">N° <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Descripcion producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
-						<th data-sort="date">Último Pago <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
 					  </tr>
 					</thead>
@@ -272,7 +272,7 @@ $('#cmbEstadoCombo').change(function () {
 				 <tr><td>${i+1}</td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
-					<td>${moment(dato.desFechaContarInteres).format('DD-MM-YYYY')}</td>
+					<td data-sort-value="${moment(dato.desFechaContarInteres).format('X')}">${moment(dato.desFechaContarInteres).format('YYYY-MM-DD')}</td>
 					<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 				</tr>`);
 			});
