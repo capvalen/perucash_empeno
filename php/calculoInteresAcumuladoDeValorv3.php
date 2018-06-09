@@ -31,13 +31,14 @@ for ($i=1; $i <=$maximoDias ; $i++) {
 	$filas[1][]= array(
 		'numDia' => $i,
 		'intAcum' => round($interesAcumulado,1, PHP_ROUND_HALF_UP),
-		'intDiario' => $intDiarioAcumulado
+		'intDiario' => $intDiarioAcumulado,
+		'soloInteres' => $interesAcumulado-$montoInicial
 
 	);
 }
 if($DiadeHoy==0){$filas[2][]=array('pagarAHoy' => 0);}
-else if($DiadeHoy<=14){$filas[2][]=array('pagarAHoy' => round($filas[1][14-1]['intAcum'],1, PHP_ROUND_HALF_UP), 'intDiarioHoy' => $filas[1][14-1]['intDiario'] );} //cuando le monto es mejor a 5000 manda al dia 14 por defecto 0.1
-else if($DiadeHoy<=$maximoDias ){$filas[2][]=array('pagarAHoy' => round( $filas[1][$DiadeHoy-1]['intAcum'],1, PHP_ROUND_HALF_UP), 'intDiarioHoy' => $filas[1][$DiadeHoy-1]['intDiario'] ); } //cuando le monto es mejor a 5000 calcula su deuda al dia
+else if($DiadeHoy<=14){$filas[2][]=array('pagarAHoy' => round($filas[1][14-1]['intAcum'],1, PHP_ROUND_HALF_UP), 'intDiarioHoy' => $filas[1][14-1]['intDiario']  );} //cuando le monto es mejor a 5000 manda al dia 14 por defecto 0.1
+else if($DiadeHoy<=$maximoDias ){$filas[2][]=array('pagarAHoy' => round( $filas[1][$DiadeHoy-1]['intAcum'],1, PHP_ROUND_HALF_UP), 'intDiarioHoy' => $filas[1][$DiadeHoy-1]['intDiario'], 'soloInteres' => round($filas[1][$DiadeHoy-1]['soloInteres'],1, PHP_ROUND_HALF_UP) ); } //cuando le monto es mejor a 5000 calcula su deuda al dia
 
 
 

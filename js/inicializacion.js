@@ -106,9 +106,20 @@ $('#txtBuscarNivelGod').keypress(function (e) {
 		if( $.isNumeric(campo)){
 			if(campo.length<6){
 				window.location='productos.php?idProducto='+campo;
-			}
+			} 
 		}else{ // es letras
-			//hacer ajax a clientes
+			$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {texto: campo }}).done(function (resp) {
+			//console.log(resp);
+			dato = JSON.parse(resp); 
+			$.each(dato, function(i, elem){ //console.log(elem)
+				$('#rowProductoEncontrado').append(`<div class="row">
+					<div class="col-xs-5 mayuscula"><a href="productos.php?idProducto=${elem.idproducto}">${elem.prodnombre}</a></div>
+					<div class="col-xs-5 mayuscula eleNom"><a href="cliente.php?idCliente=${elem.idCliente}">${elem.cliapellidos}, ${elem.clinombres}</a></div>
+					<div class="col-xs-2">S/. ${parseFloat(elem.prodMontoEntregado).toFixed(2)}</div>
+					</div>`);
+			});
+			$('.modal-mostrarResultadosProducto').modal('show');
+		});
 		}
 	}
 });

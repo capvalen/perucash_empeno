@@ -92,3 +92,27 @@
 	</div>
 	</div>
 </div>
+
+<!-- Modal para mostrar los clientes coincidentes -->
+<div class="modal fade modal-mostrarResultadosProducto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content">
+		<div class="modal-header-indigo">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Resultados de la búsqueda</h4>
+		</div>
+		<div class="modal-body">
+			<div class="row container-fluid"> <strong>
+				<div class="col-xs-5">Producto</div>
+				<div class="col-xs-5">Nombre de Cliente</div>
+				<div class="col-xs-2">Monto inicial</div></strong>
+			</div>
+			<div class="" id="rowProductoEncontrado">
+				
+			</div>
+			
+		</div>
+		<div class="modal-footer"> <button class="btn btn-primary btn-outline" data-dismiss="modal"></i><i class="icofont icofont-alarm"></i> Aceptar</button></div>
+	</div>
+	</div>
+</div>

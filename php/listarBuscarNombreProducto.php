@@ -1,7 +1,8 @@
 <?php 
 require("conkarl.php");
 $filas=array();
-$sql = mysqli_query($conection,"call listarBuscarNombreProducto('".$_POST['campo']."');");
+//echo "call listarBuscarNombreProducto('".$_POST['texto']."');";
+$sql = mysqli_query($conection,"call listarBuscarNombreProducto('".$_POST['texto']."');");
 $i=0;
 // if (!$sql) { ////codigo para ver donde esta el error
 //     printf("Error: %s\n", mysqli_error($conection));

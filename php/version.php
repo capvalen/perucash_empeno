@@ -16,6 +16,7 @@ CREATE TABLE `prestamo_producto` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 ALTER TABLE `prestamo_producto` ADD `prActivo` INT NOT NULL COMMENT '0 anulado, 1 activo' AFTER `preCapital`;
 ALTER TABLE `prestamo_producto` ADD `idCubicajeEstado` INT NOT NULL COMMENT 'En tipoProceso' AFTER `prActivo`;
+ALTER TABLE `prestamo_producto` CHANGE `idCubicajeEstado` `idCubicajeEstado` INT(11) NOT NULL DEFAULT '22' COMMENT 'En tipoProceso';
 
 INSERT INTO `prestamo_producto`(`idPrestamo`, `idProducto`, `presidTipoProceso`, `desFechaContarInteres`, `preInteres`, `preCapital`, `prActivo`)
 select pr.idPrestamo, pr.idProducto, pr.preIdEstado, d.desFechaContarInteres, pr.preInteres, d.desCapital, p.prodActivo
@@ -27,7 +28,6 @@ Ahora jugamos más con presidTipoProceso de prestamo_producto;
 
 UPDATE `prestamo_producto` SET `presidTipoProceso`=32 WHERE `presidTipoProceso`=11;
 UPDATE `prestamo_producto` pp inner join producto p on pp.idProducto = p.idProducto SET pp.`presidTipoProceso`= 22 WHERE pp.`presidTipoProceso`=1 and p.esCompra=0;
-
 
 
 

@@ -238,7 +238,7 @@ $('#btnAcceder').click(function() {
 
 				//console.log(iduser)
 
-				window.location="aplicativo.php";
+				window.location="registro.php";
 
 			}
 

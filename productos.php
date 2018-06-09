@@ -412,6 +412,7 @@ $finRecupero=160;
 								$sqlIntereses = $conection->query($sqlBaseInteres);
 								$rowInteres = $sqlIntereses->fetch_assoc();
 								$gastosAdmin=0;
+
 								?>
 							<ul>
 								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
@@ -420,22 +421,28 @@ $finRecupero=160;
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
 							<?php 
-								}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=28 ){ 
+								}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
 									$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% semanal = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$interesDiario*$rowInteres['diferenciaDias'],1,PHP_ROUND_HALF_UP),2); echo $interesJson.' ('.number_format($interesDiario*$rowInteres['diferenciaDias']*100,2).'%)'; ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 28).</span></li>
-							<?php  }else { 
+								<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 35).</span></li>
+							<?php  }else {
 								$_GET['inicio']=floatval($rowInteres['preCapital']);
-								$_GET['numhoy']=$rowInteres['diferenciaDias'];
+
+								if($rowInteres['diferenciaDias']<=200){
+									$_GET['numhoy']=$rowInteres['diferenciaDias'];
+								}else{
+									$_GET['numhoy']=200;
+								}
 								$_GET['interes']=$rowInteres['preInteres'];
 								$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
 								// var_dump($resultado);
-								$interesJson= $resultado[0]['pagarAHoy'];
+								$interesJson= $resultado[0]['soloInteres'];
+								$razonInteres= $resultado[0]['intDiarioHoy']*100;
 								
 								?>
-								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2); ?></span></li>
+								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
 								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
-							<?php if($rowInteres['diferenciaDias']>=42 ){ $gastosAdmin=35; ?>
+							<?php if($rowInteres['diferenciaDias']>=36 ){ $gastosAdmin=35; ?>
 								<li>Gastos admnistrativos: <span>S/. 35.00</span></li>
 							<?php }} ?>
 								<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
@@ -510,7 +517,7 @@ $finRecupero=160;
 						$numLineaMovimiento=$resultadoMovimiento->num_rows;
 						if($numLineaMovimiento>0){
 							while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
-								<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion']; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
+								<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion'].': <span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
 							<?php }
 						}
 						$consultaMovimiento->fetch();
@@ -545,7 +552,7 @@ $finRecupero=160;
 							
 						</div>
 						<div class="col-xs-12">
-							<input type="text" class="form-control" placeholder="Comentario extra" id="txtObservacionCubicaje">
+							<input type="text" class="form-control mayuscula" placeholder="Comentario extra" id="txtObservacionCubicaje">
 							<button class="btn btn-morado btn-outline" id="btnGuardarCubicaje"><i class="icofont icofont-box"></i> Guardar cubicaje</button>
 						</div>
 						</div>
@@ -716,7 +723,7 @@ $finRecupero=160;
 						    }
 						}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 						}
-						echo '<div class="col-xs-6 col-sm-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
+						echo '<div class="col-sm-3 col-xs-6  divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
 							  <button class="btn btn-primary btn-outline"><span><i class="icofont icofont-upload"></i></span> Subir archivo</button>
 							  <input type="file" id="txtSubirArchivo" />
 							</div>'; ?>
@@ -734,7 +741,7 @@ $finRecupero=160;
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.23"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.38"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>

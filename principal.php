@@ -178,7 +178,7 @@
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="js/inicializacion.js?version=1.0.1"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.36"></script>
 
 <!-- Menu Toggle Script -->
 <script>
