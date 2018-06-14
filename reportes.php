@@ -215,6 +215,38 @@ $('#cmbEstadoCombo').change(function () {
 	console.log(estado);
 	$('#tablita').find('#tdUltPago').html('Último pago <i class="icofont icofont-expand-alt"></i>');
 	switch(estado){
+		case '24':
+		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarProductosProrrogav3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			});
+		break;
 		case '29':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 0}}).done(function (resp) {
 			$('tbody').children().remove();
@@ -274,9 +306,105 @@ $('#cmbEstadoCombo').change(function () {
 				});
 			});
 		break;
+		case '37':
+		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarProductosEmpenosv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			});
+		break;
+		case '38':
+		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarSoloCompras.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td data-sort-value="${moment(dato.prodFechaInicial).format('X')}">${moment(dato.prodFechaInicial, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			});
+		break;
 		case '68':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosVencidos.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			});
+		break;
+		case '72':
+		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarProductosVigentesv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
 				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`

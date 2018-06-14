@@ -334,8 +334,12 @@ $finRecupero=160;
 					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 				<?php }
-
-					if($esCompra==0 && $rowProducto['prodActivo']==1 ){ 
+					if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ //zona de pago especial ?>
+							<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
+							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
+						<?php }
+					if($esCompra==0 && $rowProducto['prodActivo']==1 ){
+					
 						if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
 							<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
 							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
@@ -415,7 +419,7 @@ $finRecupero=160;
 
 								?>
 							<ul>
-								<li>Saldo pendiente: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
+								<li>Capital: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
 								<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
 							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
@@ -458,9 +462,11 @@ $finRecupero=160;
 							<ul>
 								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 								<?php $i=0; 
-								$sqlEstado=mysqli_query($conection, "SELECT * FROM `reportes_producto` rp inner join `DetalleReporte` dr on dr.idDetalleReporte=rp.idDetalleReporte where idProducto=".$_GET['idProducto'].";");
+								$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
+									inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
+									inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
 								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
-									echo "<li>{$rowEstados['repoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['repoUsuario']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['repoValorMonetario'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['repoFechaOcurrencia']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idDetalleReporte']}><i class='icofont icofont-print'></i></button></li>";
+									echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
 									$i++;
 								} ?>
 							</ul>
@@ -676,6 +682,39 @@ $finRecupero=160;
 		</div>
 	</div>
 </div>
+
+<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
+<!--Modal Para insertar pago maestro -->
+<div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar pago maestro</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<p>Rellene cuidadosamente la siguiente información</p>
+					<label for="">Tipo de pago</label>
+					<div id="cmbEstadoPagos">
+					<select class="selectpicker mayuscula" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
+						<?php require 'php/detallePagosOPT.php'; ?>
+					</select></div>
+					<label for="">Fecha de pago</label>
+					<div class="sandbox-container"><input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off"></div>
+					<label for="">Monto de pago</label>
+					<input type="number" class="form-control input-lg mayuscula" id="txtMontoPagos" autocomplete="off">
+					<label for="">¿Observaciones?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-azul btn-outline" id="btnInsertPagoMaestro" ><i class="icofont icofont-bubble-down"></i> Insertar pago maestro</button>
+		</div>
+		</div>
+	</div>
+</div>
+<?php } ?>
 
 
 <!--Modal Para asignar nuevo estado al producto-->
@@ -1065,6 +1104,26 @@ $('#txtMontoTicketIntereses').focusout(function () {
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
 });
+<?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8){ ?>
+$('#btnLlamarTicketMaestro').click(()=> {
+	$('.modal-pagoMaestro').modal('show');
+});
+$('#btnInsertPagoMaestro').click(()=> {
+	//console.log(  );
+	$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
+		idProd: <?php echo $_GET['idProducto']; ?>,
+		quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
+		cuanto: $('#txtMontoPagos').val(),
+		fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' 00:00:00',
+		obs: $('#txtObsPagos').val()
+	}}).done((resp)=> {
+		if( $.isNumeric(resp) ){
+			$('.modal-pagoMaestro').modal('hide');
+			$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
+			$('.modal-GuardadoCorrecto').modal('show');
+		}
+	});
+});
 <?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {
 	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
@@ -1089,6 +1148,7 @@ $('#btnGuardarCubicaje').click( ()=> {
 			}
 		});}
 });
+
 </script>
 
 <?php 
