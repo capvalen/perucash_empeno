@@ -17,7 +17,7 @@
 
 		<!-- Custom CSS -->
 		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
 		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
@@ -129,7 +129,7 @@
 				<h4>Bienvenido a PeruCash, para empezar selecciona que tipo de producto deseas registrar</h4>
 				<div class="row"><br>
 					<div class="col-sm-6 text-center">
-						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Remate</button>
+						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Empeño</button>
 					</div>
 					<div class="col-sm-6 text-center">
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-shopping-cart"></i> <br>Compra</button>
@@ -223,7 +223,7 @@
 				<div class="col-xs-4"><label for="">Cantidad <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtQProduc" autocomplete="off"></div>
 			</div>
 			<div class="row ">
-				<div class="col-xs-8"><label for="">Nombre, marca o características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
+				<div class="col-xs-8"><label for="">Marca, Modelo y/o Características <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula" id="txtNameProduc" placeholder="Sea específico con las características" autocomplete="off"></div>
 				<div class="col-xs-4 hidden" id="divParaVehiculos">
 					<label for="">Placa <span class="txtObligatorio">*</span></label> <input type="text" class="form-control mayuscula soloLetras" id="txtPlacaProduc" placeholder="" autocomplete="off" style="text-transform:uppercase;">
 				</div>
@@ -240,7 +240,7 @@
 				<div class="datosCheck container-fluid"></div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12"><label for="">¿Más características?</label> <textarea  type="text" class="form-control mayuscula" id="txtObservacionProduc" cols=2 placeholder="¿Algún comentario que rescatar?"></textarea></div>
+				<div class="col-xs-12"><label for="">¿Observaciones?</label> <textarea  type="text" class="form-control mayuscula" id="txtObservacionProduc" cols=2 placeholder="¿Algún comentario que rescatar?"></textarea></div>
 			</div>
 
 		</div>

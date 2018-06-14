@@ -19,14 +19,14 @@ require("php/conkarl.php");
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<!-- Custom CSS -->
-		<link href="css/sidebarDeslizable.css?version=1.0.5" rel="stylesheet">
-		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link href="css/estilosElementosv3.css?version=3.0.29" rel="stylesheet">
+		<link rel="shortcut icon" href="images/favicon.png">
+		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
+		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker3.css">
-		<link href="css/bootstrap-select.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
 		
 </head>
 
@@ -154,10 +154,10 @@ require("php/conkarl.php");
 					<table class="table table-hover" id="tablita">
 					<thead>
 					  <tr>
-						<th data-sort="int">N° <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="int"># <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Descripcion producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
-						<th data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
+						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
 					  </tr>
 					</thead>
@@ -211,7 +211,9 @@ $(document).ready(function(){
 });
 $('#cmbEstadoCombo').change(function () {
 	var estado=$('#cmbEstadoProd').find('li.selected a').attr('data-tokens');
+	var sumaElementos=0;
 	console.log(estado);
+	$('#tablita').find('#tdUltPago').html('Último pago <i class="icofont icofont-expand-alt"></i>');
 	switch(estado){
 		case '29':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 0}}).done(function (resp) {
@@ -224,40 +226,88 @@ $('#cmbEstadoCombo').change(function () {
 					<td></td>
 				</tr>`)
 			}
+			var data = JSON.parse(resp);
 			$.each(JSON.parse(resp), function (i, dato) {
+				sumaElementos+=parseFloat(dato.prodMontoEntregado);
 				$('tbody').append(`
 				 <tr>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a> Obs. <em class="mayuscula">${dato.invObservaciones}</em></td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td><span class="spanFechaFormat">${dato.invFechaInventario}</span></td>
 				</tr>`);
+				if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
 			});
 		});
 		break;
 		case '30':
-			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) { console.log(resp);
-			$('tbody').children().remove();
-			if(JSON.parse(resp).length==0){
-				$('tbody').append(`
-				<tr>
-					<td class="mayuscula">No existen artículos en ésta categoría</td>
-					<td class="mayuscula"></td>
-					<td></td>
-				</tr>`);
-			}
-			$.each(JSON.parse(resp), function (i, dato) {
-				$('tbody').append(`
-				 <tr>
-				 	<td>${i+1}</td>
-					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a> Obs. <em class="mayuscula">${dato.invObservaciones}</em></td>
-					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
-					<td><span class="spanFechaFormat">${dato.invFechaInventario}</span></td>
-				</tr>`)
+			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(JSON.parse(resp), function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr>
+					 	<td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a> Obs. <em class="mayuscula">${dato.invObservaciones}</em></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td><span class="spanFechaFormat">${dato.invFechaInventario}</span></td>
+					</tr>`);
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
 			});
-		});
+		break;
+		case '68':
+		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarProductosVencidos.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				$('tbody').children().remove();
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			});
 		break;
 		default:
-			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { console.log(resp);
+			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { //console.log(resp);
 			$('tbody').children().remove();
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
@@ -267,14 +317,22 @@ $('#cmbEstadoCombo').change(function () {
 					<td></td>
 				</tr>`);
 			}
+			var data = JSON.parse(resp);
 			$.each(JSON.parse(resp), function (i, dato) {
+				sumaElementos+=parseFloat(dato.prodMontoEntregado);
 				$('tbody').append(`
-				 <tr><td>${i+1}</td>
-					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+				 <tr><td>${dato.idProducto}</td>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 					<td data-sort-value="${moment(dato.desFechaContarInteres).format('X')}">${moment(dato.desFechaContarInteres).format('YYYY-MM-DD')}</td>
 					<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 				</tr>`);
+				if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
 			});
 		});
 		break;
