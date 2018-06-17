@@ -53,7 +53,7 @@ $finRecupero=160;
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.46" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.51" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
@@ -780,7 +780,7 @@ $finRecupero=160;
 
 <!-- Bootstrap Core JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.38"></script>
+<script type="text/javascript" src="js/inicializacion.js?version=1.0.43"></script>
 <script type="text/javascript" src="js/moment.js"></script>
 <script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>

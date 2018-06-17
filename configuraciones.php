@@ -20,7 +20,7 @@ include 'php/conkarl.php'; ?>
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.5" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.48" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.51" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">

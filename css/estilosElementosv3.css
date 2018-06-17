@@ -241,3 +241,5 @@ display: inline-block;
 .radio-inline input{
     height: 13px; 
 }
+.prodSiActivo{color: #a35bb4;}
+.prodNoActivo{color: #989898;}

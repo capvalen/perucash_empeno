@@ -102,11 +102,11 @@
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Resultados de la búsqueda</h4>
 		</div>
 		<div class="modal-body">
-			<div class="row container-fluid"> <strong>
+			<!-- <div class="row container-fluid"> <strong>
 				<div class="col-xs-5">Producto</div>
 				<div class="col-xs-5">Nombre de Cliente</div>
 				<div class="col-xs-2">Monto inicial</div></strong>
-			</div>
+			</div> -->
 			<div class="" id="rowProductoEncontrado">
 				
 			</div>
