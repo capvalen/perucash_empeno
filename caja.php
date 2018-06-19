@@ -19,7 +19,7 @@
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.47" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.51" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
@@ -157,46 +157,54 @@ th{color:#a35bb4}
 			<!-- Empieza a meter contenido 2 -->
 			<h2 class="purple-text text-lighten-1">Cuadre de caja <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
 			<div class="container-fluid">
-				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Cierre de caja </h3></div>
+				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
 			</div>
 			<div class="container-fluid">
-				<div class="col-xs-12 col-sm-8">
-					<p class="pheader">Datos de Cuadre</p>
-
-
-				<div class="panel panel-default ">
-					<div style="padding: 10px;">
-						<p style="color: #a35bb4;">Por: <strong><?php echo $_COOKIE['usuario']; ?></strong></p>
-						<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
+					<p class="pheader col-xs-7">Estado</p>
+					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
+						<div class="col-xs-12 col-sm-6 text-center">
+							<button class="btn btn-azul btn-outline btn-lg"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
+						</div>
+						<div class="col-xs-12 col-sm-6 text-center">
+							<button class="btn btn-warning btn-outline btn-lg"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
+						</div>
+					</div>
+			</div>
+			<div class="container-fluid  ">
+				<p class="pheader col-xs-7">Filtros</p>
+				<div class="panel panel-default container-fluid ">
+					<div class=" col-xs-12 col-sm-7 ">
+						<div style="padding: 10px;">
+							<p style="color: #a35bb4;">Por: <strong><?php echo $_COOKIE['usuario']; ?></strong></p>
+								<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
+							<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
+						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
 					</div>
 				</div>
-				</div>
-				<div class="col-xs-12 col-sm-4">
-					<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
-					<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
-					<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
-
-				</div>
 			</div>
 
-			<div class="container-fluid">
-				<p class="pheader col-xs-6">Clientes atentidos</p>
-				<div class=" panel panel-default  ">
-					<table class="table table-hover">
-					<thead>
-						<tr> <th>ID Caja</th> <th>Producto</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
-					<tbody>
-						<?php
-						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
-							require_once 'php/reporteCajaDiaTR.php';
-						}else{ //sino existe lista la fecha de hoy
-							$_GET['fecha']=date('Y-m-d');
-							require_once 'php/reporteCajaDiaTR.php';
-						}
-						?>
-					</tbody> </table>
-				</div>
-			</div>
+<!-- 			<div class="container-fluid">
+	<p class="pheader col-xs-6">Clientes atentidos</p>
+	<div class=" panel panel-default  ">
+		<table class="table table-hover">
+		<thead>
+			<tr> <th>ID Caja</th> <th>Producto</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
+		<tbody>
+			<?php
+			if (isset($_GET['fecha'])) { //si existe lista fecha requerida
+				require_once 'php/reporteCajaDiaTR.php';
+			}else{ //sino existe lista la fecha de hoy
+				$_GET['fecha']=date('Y-m-d');
+				require_once 'php/reporteCajaDiaTR.php';
+			}
+			?>
+		</tbody> </table>
+	</div>
+</div> -->
 			<div class="container-fluid col-xs-12 col-sm-6">
 				<h4 class="pheader">Entradas de dinero</h4>
 				<div class=" panel panel-default  ">
@@ -280,15 +288,15 @@ $('#dtpFechaIniciov3').change(function () {
 	}
 });
 $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({
-		format: 'DD/MM/YYYY',
-		lang: 'es',
-		time: false,
-		weekStart: 1,
-		cancelText : 'Cerrar',
-		nowButton : true,
-		switchOnClick : true,
-		okText: 'Aceptar', nowText: 'Hoy'
-	});
+	format: 'DD/MM/YYYY',
+	lang: 'es',
+	time: false,
+	weekStart: 1,
+	cancelText : 'Cerrar',
+	nowButton : true,
+	switchOnClick : true,
+	okText: 'Aceptar', nowText: 'Hoy'
+});
 </script>
 <?php } ?>
 
