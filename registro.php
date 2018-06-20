@@ -181,7 +181,7 @@
 										<div class="container-fluid" id="conjuntoElementos"></div>
 										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
 										</div>
-										<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
+										<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/ <span class="spanTotalSumasv3"></span></strong></div>
 									</div>
 								</ul>
 							</div>
@@ -230,7 +230,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-4"><label for="">Capital total S/. <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
+				<div class="col-xs-4"><label for="">Capital total S/ <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center txtNumeroDecimal" id="txtCapitalProduc" value="0.00" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Interés Semanal % <span class="txtObligatorio">*</span></label> <input type="number" class="form-control text-center" id="txtInteresProduc" value="4" autocomplete="off"></div>
 				<div class="col-xs-4"><label for="">Fecha de ingreso <span class="txtObligatorio">*</span></label>
 					<div class="sandbox-container"><input id="dtpFechaInicio" type="text" class="form-control text-center" autocomplete="off"></div>	
@@ -335,7 +335,7 @@ $('#btnAgregarItem').click(function () {
 				<div class="row rowProduct">
 					<div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span><span class="spanUnd"> und. </span><span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo " style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 					<span class="sr-only spanfechaIngresov3">${fechaItem}</span>  </div>
-					<div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+					<div class="col-xs-2 divMonto" >S/ <span class="spanPrecioEmpv3">${capiItem}</span></div>
 					<div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div>
 				</div><button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
 				</li>`);
@@ -423,7 +423,7 @@ $('#btnActualizarItem').click(function () {
 			    <div class="row rowProduct">
 			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo mayuscula" style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
 			        <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
-			        <div class="col-xs-2 divMonto" >S/. <span class="spanPrecioEmpv3">${capiItem}</span></div>
+			        <div class="col-xs-2 divMonto" >S/ <span class="spanPrecioEmpv3">${capiItem}</span></div>
 			        <div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
 			    <button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
 			    </li>`);

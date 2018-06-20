@@ -61,6 +61,7 @@ clear: left; }
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
+#txtMontoApertura{font-size: 26px;}
 </style>
 <div id="overlay">
 	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
@@ -159,17 +160,20 @@ th{color:#a35bb4}
 			<div class="container-fluid">
 				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
 			</div>
+			
 			<div class="container-fluid">
-					<p class="pheader col-xs-7">Estado</p>
+					<p class="pheader col-xs-7">Acciones en caja</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
-						<div class="col-xs-12 col-sm-6 text-center">
-							<button class="btn btn-azul btn-outline btn-lg"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
+						<!-- <div class="col-xs-12 col-sm-6 text-center">
+							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
 						</div>
 						<div class="col-xs-12 col-sm-6 text-center">
-							<button class="btn btn-warning btn-outline btn-lg"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
-						</div>
+							<button class="btn btn-warning btn-outline btn-lg" id="btnCajaCerrar"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
+						</div> -->
+						<?php require 'php/cajaActivaHoy.php'; ?>
 					</div>
 			</div>
+			
 			<div class="container-fluid  ">
 				<p class="pheader col-xs-7">Filtros</p>
 				<div class="panel panel-default container-fluid ">
@@ -205,7 +209,7 @@ th{color:#a35bb4}
 		</tbody> </table>
 	</div>
 </div> -->
-			<div class="container-fluid col-xs-12 col-sm-6">
+			<div class="container-fluid col-xs-12 ">
 				<h4 class="pheader">Entradas de dinero</h4>
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
@@ -221,7 +225,7 @@ th{color:#a35bb4}
 					</tbody> </table>
 				</div>
 			</div>
-			<div class="container-fluid col-xs-12 col-sm-6">
+			<div class="container-fluid col-xs-12 ">
 				<h4 class="pheader">Salidas de dinero</h4>
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
@@ -238,7 +242,7 @@ th{color:#a35bb4}
 				</div>
 			</div>
 			<div class="container-fluid col-xs-12 text-center">
-				<h4 class="pheader">Efectivo total del día: <strong>S/. <span id="spanResultadoFinal"></span></strong></h4>
+				<h4 class="pheader">Efectivo total del día: <strong>S/ <span id="spanResultadoFinal"></span></strong></h4>
 			</div>
 			<!-- Fin de contenido 2 -->
 			</div>
@@ -247,6 +251,59 @@ th{color:#a35bb4}
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
+<?php if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ ?>
+<!-- Modal para Abrir caja  -->
+<div class="modal fade modal-aperturarCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Apertura de caja</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<p>¿Con qué monto inicias?</p>
+				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoApertura" value="0.00">
+				<p>¿Alguna observación?</p>
+				<input type="text" class="form-control input-lg text-center" id="txtObsApertura">
+			</div>
+		</div>
+		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
+		<div class="modal-footer">
+			<button class="btn btn-azul btn-outline" id="btnGuardarApertura"><i class="icofont icofont-save"></i> Guardar</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal para Cerrar caja  -->
+<div class="modal fade modal-aperturarCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cierre de caja</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<p>¿Con qué monto estás cerrando?</p>
+				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoCierre" value="0.00">
+				<p>¿Alguna observación?</p>
+				<input type="text" class="form-control input-lg text-center" id="txtObsCierre">
+			</div>
+		</div>
+		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
+		<div class="modal-footer">
+			<button class="btn btn-azul btn-outline" id="btnGuardarCierre"><i class="icofont icofont-save"></i> Guardar</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+<?php } ?>
 
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
@@ -280,7 +337,7 @@ $('#dtpFechaIniciov3').val('<?php
 		?>');
 moment.locale('es');
 
-$('#spanResultadoFinal').text(parseFloat(parseFloat($('#strSumaClientes').text())-parseFloat($('#strSumaSalida').text())+parseFloat($('#strSumaEntrada').text())).toFixed(2));
+$('#spanResultadoFinal').text(parseFloat(parseFloat($('#strSumaEntrada').text() ) - parseFloat($('#strSumaSalida').text() )).toFixed(2));
 $('#dtpFechaIniciov3').change(function () {
 	//console.log(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid())
 	if(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid()){
@@ -296,6 +353,40 @@ $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({
 	nowButton : true,
 	switchOnClick : true,
 	okText: 'Aceptar', nowText: 'Hoy'
+});
+$('#btnCajaAbrir').click(function () {
+	$('.modal-aperturarCaja').modal('show');
+});
+$('#btnGuardarApertura').click(function () {
+	var monto = parseFloat($('#txtMontoApertura').val());
+	var obs = $('#txtObsApertura').val();
+
+	if( $('#txtMontoApertura').val() == '' || monto <0){
+		$('.modal-aperturarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto'); 
+	}else{
+		$.ajax({url: 'php/cajaAperturar.php', type: 'POST', data:{
+			monto: monto, obs: obs
+		}}).done((resp)=> {
+			console.log(resp);
+		});
+	}
+});
+$('#btnCajaCerrar').click(()=> {
+	$('.modal-cerrarCaja').modal('show');
+});
+$('#btnGuardarCierre').click(function () {
+	var monto = parseFloat($('#txtMontoCierre').val());
+	var obs = $('#txtObsCierre').val();
+
+	if( $('#txtMontoCierre').val() == '' || monto <0){
+		$('.modal-cerrarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto de cierre'); 
+	}else{
+		$.ajax({url: 'php/cajaCerrar.php', type: 'POST', data:{
+			monto: monto, obs: obs
+		}}).done((resp)=> {
+			console.log(resp);
+		});
+	}
 });
 </script>
 <?php } ?>
