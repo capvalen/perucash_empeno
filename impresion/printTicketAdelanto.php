@@ -13,7 +13,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
  *  echo "Hello World" > LPT1
  */
  
-    $connector = new WindowsPrintConnector("smb://192.168.1.131/TM-U220");
+    $connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
     
     // A FilePrintConnector will also work, but on non-Windows systems, writes
@@ -25,13 +25,13 @@ try {
     $printer -> text("      Casa de Préstamos y Empeños\n");
     $printer -> text("          Oficina de Apoyo N° 1\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("    *******  Cancela Interés  ******\n");
-    $printer -> text("   Lunes 11/12/2017 10:31 a.m.\n\n");
-    $printer -> text("Cliente: Rivera Zamudio, Raul Angel\n\n");
-    $printer -> text("Artículo: Extractora Rena Ware\n");
-    $printer -> text("Monto: S/. 156.20\n\n");
+    $printer -> text("   *******  Cancelacion de pago  ******\n");
+    $printer -> text("   Lunes 27/10/2017 5:26 pm\n\n");
+    $printer -> text("Cliente: Bendezu Eulogio, Jesus Millagui\n\n");
+    $printer -> text("Artículo: Laptop Toshiba L755 Sin Cargador\n");
+    $printer -> text("Monto cancelado: S/. 142.47\n\n");
     //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
-    $printer -> text("Usuario: Giordan Manrique\n");
+    $printer -> text("Usuario: Pariona Valencia Carlos\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("         Celular: # 943 798696\n");
     $printer -> text("         Web: www.perucash.com\n");

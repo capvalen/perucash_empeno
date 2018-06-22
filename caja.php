@@ -68,87 +68,10 @@ th{color:#a35bb4}
 </div>
 
 <div id="wrapper">
-
 	<!-- Sidebar -->
-	<div id="sidebar-wrapper">
-		<ul class="sidebar-nav">
+	<?php include 'menu-wrapper.php' ?>
+	<!-- /#sidebar-wrapper -->
 
-			<div class="logoEmpresa ocultar-mostrar-menu">
-				<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
-			</div>
-			<li>
-					<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
-			</li>
-			<li>
-					<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
-			</li>
-			<li>
-					<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
-			</li>
-			<li class="active">
-					<a href="caja.php"><i class="icofont icofont-shopping-cart"></i> Caja</a>
-			</li>
-			<li>
-					<a href="cochera.php"><i class="icofont icofont-car-alt-1"></i> Cochera</a>
-			</li>
-			<li>
-					<a href="reportes.php"><i class="icofont icofont-ui-copy"></i> Reportes</a>
-			</li>
-			<li>
-					<a href="verificacion.php"><i class="icofont icofont-medal"></i> Verificación</a>
-			</li>
-			<?php if( $_COOKIE['ckPower']==1){ ?>
-			<li>
-					<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
-			</li>
-			<li>
-					<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
-			</li>
-			 <?php } ?>
-			<li>
-					<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
-			</li>
-		</ul>
-	</div>
-			<!-- /#sidebar-wrapper -->
-<div class="navbar-wrapper">
-	<div class="container-fluid">
-		<nav class="navbar navbar-fixed-top encoger">
-			<div class="container">
-				<div class="navbar-header ">
-				<a class="navbar-brand ocultar-mostrar-menu" href="#"><img id="imgLogoInfocat" class="img-responsive" src="images/logoInfocat.png" alt=""></a>
-					<button type="button" class="navbar-toggle collapsed" id="btnColapsador" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-				</div>
-				<div id="navbar" class="navbar-collapse collapse ">
-					<ul class="nav navbar-nav">
-						<li class="hidden down"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">HR <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-										<li><a href="#">Change Time Entry</a></li>
-										<li><a href="#">Report</a></li>
-								</ul>
-							</li>
-					</ul>
-					<ul class="nav navbar-nav pull-right">
-						 <li>
-							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs">Buscar algo:</label>
-								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;">
-								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color:#777;padding-top: 9px;"></span>
-							</div>
-						 </li>
-						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
-						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
-					</ul>
-
-				</div>
-		</div>
-		</nav>
-	</div>
-</div>
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid">
@@ -247,8 +170,9 @@ th{color:#a35bb4}
 			<!-- Fin de contenido 2 -->
 			</div>
 
-</div>
-<!-- /#page-content-wrapper -->
+        </div>
+    </div>    
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 <?php if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ ?>
@@ -305,18 +229,7 @@ th{color:#a35bb4}
 </div>
 <?php } ?>
 
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="js/inicializacion.js?version=1.0.43"></script>
-<script type="text/javascript" src="js/moment.js"></script>
-<script type="text/javascript" src="js/bootstrap-select.js?version=1.0.1"></script>
-<script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
-<script type="text/javascript" src="js/moment-precise-range.js"></script>
-<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
-
+<?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -381,7 +294,7 @@ $('#btnGuardarCierre').click(function () {
 	if( $('#txtMontoCierre').val() == '' || monto <0){
 		$('.modal-cerrarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto de cierre'); 
 	}else{
-		$.ajax({url: 'php/cajaCerrar.php', type: 'POST', data:{
+		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
 		}}).done((resp)=> {
 			console.log(resp);

@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php   ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -37,13 +37,14 @@
 	<!-- Sidebar -->
 	<?php include 'menu-wrapper.php' ?>
 	<!-- /#sidebar-wrapper -->
+
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid ">
 		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido principal -->
-			<h2 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
+			<h2 class="purple-text text-lighten-1">Almacén <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
 			
 
 				
@@ -53,6 +54,7 @@
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
+
 
 
 <?php include 'footer.php'; ?>
@@ -65,6 +67,7 @@ $.interesGlobal=4;
 datosUsuario();
 
 $(document).ready(function(){
+	console.log( '0');
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });

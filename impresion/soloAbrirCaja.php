@@ -1,5 +1,4 @@
 <?php
-session_start();
 /* Change to the correct path if you copy this example! */
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 use Mike42\Escpos\Printer;
@@ -12,26 +11,22 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
  * data from the command-line first:
  *  echo "Hello World" > LPT1
  */
-    $connector = new WindowsPrintConnector("smb://perucash-caja/TM-U220");
-    /*$connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");*/
+    $connector = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
+	//TM-U220 //Generic Text Only
 try {
     
     // A FilePrintConnector will also work, but on non-Windows systems, writes
     // to an actual file called 'LPT1' rather than giving a useful error.
     // $connector = new FilePrintConnector("LPT1");
+
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connector);
-    $printer -> text("                PeruCash\n");
-    $printer -> text("      Casa de Préstamos y Empeños\n");
-	$printer -> text("           Articulo retirado\n");
-	$printer -> text("28/11/2017 18:33 pm\n");
-	$printer -> text("Artículo: Laptop Compaq 1.3ghz Negra\n");
-	$printer -> text("Cliente: Machuca Espinoza, Anderson Froilan\n");
-	$printer -> text("Monto: S/. 162.90\n");
 	
-	
-    $printer -> text("       Gracias por tu preferencia\n");
-    $printer -> cut();
+
+    //$printer -> cut();
+	//$printer -> text(Chr (27) . Chr (112) .Chr (0) .Chr (75) .Chr (50));
+	$printer -> pulse();
+
     /* Close printer */
     $printer -> close();
 } catch (Exception $e) {
