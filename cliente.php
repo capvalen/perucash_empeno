@@ -39,17 +39,16 @@ if( isset($_GET['idCliente'])){
 <body>
 <style>
 	.paPrestamo{
-
 		margin: 0;
 		padding: 15px;
 		border-top: 1px solid #e3e3e3;
 		/*border-radius: 6px;*/
-		transition: all 0.6s ease-in-out;
+		transition: all 0.2s ease-in-out;
 		cursor: pointer;
 	}
 	.paPrestamo:hover{
 		background-color: #f5f5f5;
-		transition: all 0.6s ease-in-out;
+		transition: all 0.2s ease-in-out;
 	}
 	.h3Nombres{margin-top: 0px;}
 	.rate i{padding-left: 3px; cursor: pointer;}
@@ -62,6 +61,7 @@ if( isset($_GET['idCliente'])){
 	.divPrestamo .vigente{color: #050506;}
 	.contenedorPres{margin-bottom: 20px;}
 </style>
+<div class="noselect" id="wrapper">
 <?php include 'menu-wrapper.php' ?>
 
 <!-- Page Content -->
@@ -84,11 +84,11 @@ if( isset($_GET['idCliente'])){
 							}else{echo '<i class="icofont icofont-ui-rate-blank"></i>';}
 						}
 					 ?></span>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-ui-v-card"></i> <span class="cliDni"><?php echo $rowCliente['cliDni']; ?></span></h5>
-				<h5 class="grey-text text-lighten-1 mayuscula"><i class="icofont icofont-home"></i> <span class="cliDireccion"><?php echo $rowCliente['cliDireccion']; ?></span></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i> <span class="cliCelular"><?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></span></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-phone"></i><span class="cliTlf"><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></span></h5>
-				<h5 class="grey-text text-lighten-1"><i class="icofont icofont-envelope"></i><span class="cliCorreo"><?php if($rowCliente['cliCorreo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCorreo'];} ?></span></h5>
+				<h5 class="grey-text text-darken-1"><i class="icofont icofont-ui-v-card"></i> <span class="cliDni"><?php echo $rowCliente['cliDni']; ?></span></h5>
+				<h5 class="grey-text text-darken-1 mayuscula"><i class="icofont icofont-home"></i> <span class="cliDireccion"><?php echo $rowCliente['cliDireccion']; ?></span></h5>
+				<h5 class="grey-text text-darken-1"><i class="icofont icofont-phone"></i> <span class="cliCelular"><?php if($rowCliente['cliCelular']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCelular'];} ?></span></h5>
+				<h5 class="grey-text text-darken-1"><i class="icofont icofont-phone"></i><span class="cliTlf"><?php if($rowCliente['cliFijo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliFijo'];} ?></span></h5>
+				<h5 class="grey-text text-darken-1"><i class="icofont icofont-envelope"></i><span class="cliCorreo"><?php if($rowCliente['cliCorreo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCorreo'];} ?></span></h5>
 			<!-- Fin de contenido 2.1 -->
 			</div>
 			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
@@ -121,14 +121,14 @@ if( isset($_GET['idCliente'])){
 						$j=0;
 						$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
 						while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
-							echo "<div class=' paPrestamo'><strong>
+							echo "<div class=' paPrestamo'><div>
 						<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
 							<div class='hidden codRegistro'>{$rowPrestamosProductos['idProducto']}</div>
 							<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
 							<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
-							<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right grey-text'><i class='icofont icofont-rounded-right'></i></span></div>
+							<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
 						</div>
-					</strong></div>";
+					</div></div>";
 							$j++;
 						}
 						?>

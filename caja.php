@@ -61,7 +61,7 @@ clear: left; }
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
-#txtMontoApertura{font-size: 26px;}
+#txtMontoApertura, #txtMontoCierre {font-size: 26px;}
 </style>
 <div id="overlay">
 	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
@@ -203,10 +203,10 @@ th{color:#a35bb4}
 </div>
 
 <!-- Modal para Cerrar caja  -->
-<div class="modal fade modal-aperturarCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal fade modal-cerrarCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
-		<div class="modal-header-primary">
+		<div class="modal-header-warning">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cierre de caja</h4>
 		</div>
@@ -221,7 +221,7 @@ th{color:#a35bb4}
 		</div>
 		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
 		<div class="modal-footer">
-			<button class="btn btn-azul btn-outline" id="btnGuardarCierre"><i class="icofont icofont-save"></i> Guardar</button>
+			<button class="btn btn-warning btn-outline" id="btnGuardarCierre"><i class="icofont icofont-save"></i> Guardar</button>
 		</div>
 	</div>
 	</div>
@@ -230,6 +230,8 @@ th{color:#a35bb4}
 <?php } ?>
 
 <?php include 'footer.php'; ?>
+<script type="text/javascript" src="js/moment-precise-range.js"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 

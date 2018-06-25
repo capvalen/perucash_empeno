@@ -141,9 +141,8 @@ $finRecupero=160;
 .dropdown-menu li::before{ content: "";}
 .dropdown-menu li a {padding: 0px 32px;}
 .dropdown-menu li:hover{background: #f3f3f3;}
-..dropdown-menu>.active>a:hover{
-	background-color: #9658d0;
-}
+.dropdown-menu>.active>a:hover{ background-color: #9658d0; }
+.badge{background-color: #9658d0;    font-size: 10px;}
 </style>
 <div class="noselect" id="wrapper">
 
@@ -305,6 +304,16 @@ $finRecupero=160;
 				$consultaDepos->fetch();
 				$consultaDepos->close();
 				
+				$sqlContador="call contarObservaciones({$_GET['idProducto']})";
+				echo $sqlContador;
+				$consultaContar = $cadena->prepare($sqlContador);
+				$consultaContar->execute();
+				$resultadoContar = $consultaContar->get_result();
+				$rowContar = $resultadoContar->fetch_array(MYSQLI_ASSOC);
+				
+				$consultaContar->fetch();
+				$consultaContar->close();
+
 				 ?>
 					</div>
 					</div>
@@ -315,7 +324,7 @@ $finRecupero=160;
 					<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
 					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
 					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
-					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias</a></li>
+					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias <span class="badge"><?php echo $rowContar['total']; ?></span></a></li>
 					<li><a href="#tabInventario" data-toggle="tab">Almacén e Inventarios</a></li>
 					
 					</ul>
@@ -698,8 +707,12 @@ $finRecupero=160;
 </div>
 
 <?php include 'footer.php'; ?>
+<script type="text/javascript" src="js/jquery.flexslider.js"></script>
+<script type="text/javascript" src="js/lightbox.js"></script>
+<script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
+
 
 <!-- Menu Toggle Script -->
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
@@ -814,7 +827,7 @@ $('.btnImprimirTicket').click(function () {
 		case '28':
 			queTitulo='      * Registro de Producto *\nGracias por registrar su producto';
 			queMonto= $('#spanPresInicial').text(); 
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketv3.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
@@ -833,7 +846,7 @@ $('.btnImprimirTicket').click(function () {
 			queTitulo='       * Retiro de artículo *'; break;
 		case '9':
 			queTitulo='       * Pago Parcial de Interés *';
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketv3.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
@@ -845,7 +858,7 @@ $('.btnImprimirTicket').click(function () {
 		case '10':
 		case '44':
 			queTitulo='       * Cancelación de Interés *';
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketv3.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
@@ -856,7 +869,7 @@ $('.btnImprimirTicket').click(function () {
 			}}).done(function (resp) { 	}); break;
 		case '21':
 			queTitulo='       * Venta de producto *';
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketVenta.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketVenta.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
@@ -867,7 +880,7 @@ $('.btnImprimirTicket').click(function () {
 			}}).done(function (resp) { 	}); break;
 		case '45':
 			queTitulo='     * Amotización al préstamo *';
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketv3.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
@@ -878,7 +891,7 @@ $('.btnImprimirTicket').click(function () {
 			}}).done(function (resp) { 	}); break;
 		case '32':
 			queTitulo='       * Fin de préstamo *';
-			$.ajax({url: 'http://192.168.1.1/perucash/printTicketv3.php', type: 'POST', data: {
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),

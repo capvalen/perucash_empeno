@@ -101,6 +101,7 @@ require("php/conkarl.php");
 </div>
 
 <?php include 'footer.php'; ?>
+<script type="text/javascript" src="js/stupidtable.min.js"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
