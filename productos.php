@@ -116,7 +116,7 @@ $finRecupero=160;
 .rowFotos{margin: 0 auto;}
 .divFotoGestion{border: dashed 2px #cecece;
 	border-radius: 5px;
-  width: 22%; min-height: 150px;
+/*   width: 22%; */ min-height: 150px;
   margin: 0 10px; padding: 15px 10px;}
 #tabMovEstados li, #tabAdvertencias li, #tabIntereses li{list-style-type: none;padding-bottom: 10px;}
 .divFotoGestion i{font-size: 10rem; color: #cecece;}
@@ -163,7 +163,7 @@ $finRecupero=160;
 						  </button>
 						  <ul class="dropdown-menu">
 							<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-							<li><a href="#!" id=""><i class="icofont icofont-shopping-cart"></i> Agregar nuevo item</a></li>
+							<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-shopping-cart"></i> Editar descripción</a></li>
 							<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						  </ul>
 						</div>
@@ -305,7 +305,6 @@ $finRecupero=160;
 				$consultaDepos->close();
 				
 				$sqlContador="call contarObservaciones({$_GET['idProducto']})";
-				echo $sqlContador;
 				$consultaContar = $cadena->prepare($sqlContador);
 				$consultaContar->execute();
 				$resultadoContar = $consultaContar->get_result();
@@ -389,18 +388,34 @@ $finRecupero=160;
 						</div>
 						<div class="tab-pane fade container-fluid" id="tabMovEstados">
 						<!--Inicio de pestaña interior 02-->
+						
 							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
-							<ul>
-								<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
-								<?php $i=0; 
+							<div class="table-responsive">
+							<table class="table table-hover" id="tablita">
+								<thead><tr>
+									<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
+								</tr></thead>
+								<tbody>
+								<?php $i=0;
 								$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
 									inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
 									inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
-								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){
-									echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
-									$i++;
+								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
+								<tr>
+									<td class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td><td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td><?php echo $rowEstados['cajaObservacion']; ?></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								</tr>
+								<?php 
+								$i++;
 								} ?>
-							</ul>
+								</tbody>
+							</table>
+							</div>
+						<!-- 	<ul>
+							<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+							
+								echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
+							
+						</ul> -->
 						<!--Fin de pestaña interior 02-->
 						</div>
 						<div class="tab-pane fade container-fluid" id="tabMovFinancieros">
@@ -419,12 +434,32 @@ $finRecupero=160;
 							<?php } ?>
 							<div class="conjuntoMensajes">
 							<?php
-							$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres FROM `avisos` a inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
+							$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres, ( case when tp.tipoDescripcion is NULL then 'Mensaje simple' else tp.tipoDescripcion end ) as 'tipoDescripcion'
+								FROM `avisos` a
+								left join tipoProceso tp on tp.idTipoProceso = a.tipoComentario
+								inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
 							while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
-								<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['aviMensaje']; ?></p> </div></div>
+								<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['tipoDescripcion'].': '.$rowMensajes['aviMensaje']; ?></p> </div></div>
 							<?php } ?>
 							</div>
-							<div class="dejarMensaje"><input type="text" class="form-control mayuscula" id="txtDejarMensaje" placeholder="¿Qué mensaje dejó para el cliente?" style="width: 85%; display: inline-block;"> <button class="btn btn-default" id="btnDejarMensaje" style="margin-top: -3px;"><i class="icofont icofont-location-arrow"></i></button></div>
+							<div class="dejarMensaje row"><div class="col-sm-4">
+							<select name="" id="sltTipoMensaje" class="form-control">
+								<option value="0" selected>Mensaje simple</option>
+						<?php 
+						$sqlTPMensajes = "SELECT * FROM `tipoProceso` where idTipoProceso in(62, 63, 64, 65, 66, 67, 73) order by tipoDescripcion asc;";
+						$sqlLlamadoTPMensajes =  $conection->query($sqlTPMensajes);
+						while($rowTPMensajes = $sqlLlamadoTPMensajes->fetch_assoc()){ ?>
+							<option value="<?php echo $rowTPMensajes['idTipoProceso']; ?>"><?php echo $rowTPMensajes['tipoDescripcion']; ?></option>
+						<?php }
+						/*$consultaTPMensajes->fetch();
+						$consultaTPMensajes->close();*/
+						?>
+							</select>
+							</div>
+							<div class="col-sm-8">
+								<input type="text" class="form-control mayuscula" id="txtDejarMensaje" placeholder="¿Qué mensaje dejó para el cliente?" autocomplete="off" style="width: 85%; display: inline-block;"> <button class="btn btn-default" id="btnDejarMensaje" style="margin-top: -3px;color: #ab47bc;"><i class="icofont icofont-location-arrow"></i></button>
+							</div>
+							</div>
 							
 						<!--Fin de pestaña interior 04-->
 						</div>
@@ -614,6 +649,8 @@ $finRecupero=160;
 	</div>
 </div>
 
+
+
 <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
@@ -689,11 +726,11 @@ $finRecupero=160;
 						{
 							$cantImg++;/*".$directorio."/".$archivo."*/
 							if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-						      echo "<div class='col-xs-3 divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
+						      echo "<div class='col-xs-6 col-md-3  divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
 						    }
 						}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 						}
-						echo '<div class="col-sm-3 col-xs-6  divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
+						echo '<div class="col-xs-6 col-md-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
 							  <button class="btn btn-primary btn-outline"><span><i class="icofont icofont-upload"></i></span> Subir archivo</button>
 							  <input type="file" id="txtSubirArchivo" />
 							</div>'; ?>
@@ -710,6 +747,7 @@ $finRecupero=160;
 <script type="text/javascript" src="js/jquery.flexslider.js"></script>
 <script type="text/javascript" src="js/lightbox.js"></script>
 <script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
+<script type="text/javascript" src="js/stupidtable.min.js"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -724,9 +762,11 @@ $(document).ready(function(){
 	moment.locale('es');
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
 		var nueFecha=moment($(dato).text());
 		$(dato).text(nueFecha.format('LLLL'));
+		//$(dato).attr('data-sort');//
 	});
 
 $('#sltEstantes').on('changed.bs.select', function (e) {
@@ -782,11 +822,12 @@ $('#btnDejarMensaje').click(function () {
 			data: {
 				mensaje: $('#txtDejarMensaje').val(),
 				idUser: $.JsonUsuario.idUsuario,
-				idProducto: <?php echo $_GET['idProducto']; ?>
+				idProducto: <?php echo $_GET['idProducto']; ?>,
+				tipoMensaje: $('#sltTipoMensaje').val()
 			}
-		}).done(function (resp) {
+		}).done(function (resp) { console.log(resp)
 			moment.locale('es');
-			$('.conjuntoMensajes').append(`<div class="mensaje"><div class="texto"><p><strong>${$.JsonUsuario.usunombres}</strong> <small><i class="icofont icofont-clock-time"></i> ${moment().format('LLLL')}</small></p> <p class="textoMensaje">${ $('#txtDejarMensaje').val()}</p> </div></div>`);
+			$('.conjuntoMensajes').append(`<div class="mensaje"><div class="texto"><p><strong>${$.JsonUsuario.usunombres}</strong> <small><i class="icofont icofont-clock-time"></i> ${moment().format('LLLL')}</small></p> <p class="textoMensaje">${$('#sltTipoMensaje option:selected').text()} : ${ $('#txtDejarMensaje').val()}</p> </div></div>`);
 			$('#txtDejarMensaje').val('');
 		});
 	}
@@ -813,11 +854,11 @@ $('#btnActualizarEstado').click(function () {
 });
 $('.btnImprimirTicket').click(function () {
 	var queMonto, queTitulo;
-	var queUser = $(this).parent().find('.spanQuienRegistra').text();
-	queMonto=$(this).parent().find('.spanCantv3').text();
+	var queUser = $(this).parent().parent().find('.spanQuienRegistra').text();
+	queMonto=$(this).parent().parent().find('.spanCantv3').text();
 	var queArticulo =$('.h2Producto').text();
 	var queDueno = <?php if($esCompra==1){ echo '`Compra directa`';}else { ?> $('.spanDueno').text() <?php } ?>;
-	var queFecha = moment($(this).parent().find('.spanFechaFormat').text(), 'dddd, DD [de] MMMM [de] YYYY h:mm a').format('dddd, DD/MMMM/YYYY h:mm a');
+	var queFecha = moment($(this).parent().parent().find('.spanFechaFormat').text(), 'dddd, DD [de] MMMM [de] YYYY h:mm a').format('dddd, DD/MMMM/YYYY h:mm a');
 	if(queUser=='' || queUser==' '){
 		queUser='Sistema PeruCash';
 	}
@@ -1084,6 +1125,10 @@ $('#txtMontoTicketIntereses').focusout(function () {
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
 });
+$('#liEditarDescripciones').click(() => {
+	// body...
+});
+
 <?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8){ ?>
 $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
