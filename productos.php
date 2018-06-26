@@ -396,6 +396,9 @@ $finRecupero=160;
 									<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
 								</tr></thead>
 								<tbody>
+								<tr>
+									<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								</tr>
 								<?php $i=0;
 								$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
 									inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso

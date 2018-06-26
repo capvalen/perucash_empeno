@@ -26,7 +26,7 @@
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper"> 
 
 	<!-- Sidebar -->
 	<div id="sidebar-wrapper">

@@ -303,6 +303,7 @@ $('#btnGuardarCierre').click(function () {
 		});
 	}
 });
+
 </script>
 <?php } ?>
 
