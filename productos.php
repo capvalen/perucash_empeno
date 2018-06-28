@@ -150,395 +150,395 @@ $finRecupero=160;
 	<?php include 'menu-wrapper.php' ?>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-	<div class="container-fluid noSelect">				 
+<div class="container-fluid noSelect">				 
 
-		<div class="row continer-fluid">
-			<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
-			<!-- Empieza a meter contenido 2.1 -->
-				<div class="container row" style="margin-bottom: 20px;">
-					<div class="divBotonesEdicion" style="margin-bottom: 10px">
-						<div class="btn-group">
-						  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="icofont icofont-settings"></i> <span class="caret"></span>
-						  </button>
-						  <ul class="dropdown-menu">
-							<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-							<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-shopping-cart"></i> Editar descripción</a></li>
-							<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
-						  </ul>
-						</div>
+	<div class="row continer-fluid">
+		<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
+		<!-- Empieza a meter contenido 2.1 -->
+			<div class="container row" style="margin-bottom: 20px;">
+				<div class="divBotonesEdicion" style="margin-bottom: 10px">
+					<div class="btn-group">
+					  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="icofont icofont-settings"></i> <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu">
+						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
+						<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-shopping-cart"></i> Editar descripción</a></li>
+						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
+					  </ul>
 					</div>
-					<div class="col-xs-12 col-sm-7 divImagen">
-						<?php 
-						$directorio = "images/productos/".$_GET['idProducto'];
-						if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
-						$cantImg=0; ?>
-						<div class="flexslider">
-							<ul class="slides">
-							   <?php 
-									foreach($ficheros as $archivo){
-										$cantImg++;/*".$directorio."/".$archivo."*/
-										if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-									        /*echo $directorio."/".$archivo;*/
-									        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
-									    }
-									}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
-								?>
-							</ul>
-						</div>
-						<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}
-						}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
+				</div>
+				<div class="col-xs-12 col-sm-7 divImagen">
+					<?php 
+					$directorio = "images/productos/".$_GET['idProducto'];
+					if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
+					$cantImg=0; ?>
+					<div class="flexslider">
+						<ul class="slides">
+						   <?php 
+								foreach($ficheros as $archivo){
+									$cantImg++;/*".$directorio."/".$archivo."*/
+									if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
+								        /*echo $directorio."/".$archivo;*/
+								        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
+								    }
+								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
+							?>
+						</ul>
 					</div>
-					<div class="col-xs-12 col-sm-5 divDatosProducto">
-						<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
-						<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
-					<?php if($esCompra=='0'){ ?>
-						<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
-					<?php } ?>
-						<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
-						<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
-						<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
-					<?php if($esCompra=='0'){ ?>
-						<p>Adquisición: <strong><span>Por empeño</span></strong></p>
-					<?php }else { ?>
-						<p>Adquisición: <strong><span>Por compra</span></strong></p>
-					<?php } ?>
-						<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
-						<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
+					<?php if($cantImg==2){ echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';}
+					}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
+				</div>
+				<div class="col-xs-12 col-sm-5 divDatosProducto">
+					<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
+					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
+				<?php if($esCompra=='0'){ ?>
+					<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
+				<?php } ?>
+					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
+					<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
+					<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
+				<?php if($esCompra=='0'){ ?>
+					<p>Adquisición: <strong><span>Por empeño</span></strong></p>
+				<?php }else { ?>
+					<p>Adquisición: <strong><span>Por compra</span></strong></p>
+				<?php } ?>
+					<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
+					<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
 
-						<?php 
-						$sqlInvent = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");
-						$rowInvent = mysqli_fetch_array($sqlInvent, MYSQLI_ASSOC);
-						$activoInvent= $rowInvent['inventarioActivo'];
-					if ( ($_COOKIE['ckPower']=='1' || $_COOKIE['ckPower']=='2' || $_COOKIE['ckPower']=='4' || $_COOKIE['ckPower']=='4' ) && $activoInvent=='1'){
-					?>
-						<div class="row">
-							<p><strong>Inventario:</strong></p>
-						<div class="col-xs-12 col-sm-6">
-							<button class="btn btn-azul btn-outline btn-lg btn-block" id="btnInventariarPositivo"><i class="icofont icofont-chart-flow-alt-2"></i> Inventariar</button>
-						</div>
-						<div class="col-xs-12 col-sm-6">
-							<button class="btn btn-danger btn-outline btn-lg btn-block" id="btnInventariarNegativo"><i class="icofont icofont-bubble-down"></i> No existe</button>
-						</div>
-						</div>
-					<?php
-					}
-					
-					
+					<?php 
+					$sqlInvent = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");
+					$rowInvent = mysqli_fetch_array($sqlInvent, MYSQLI_ASSOC);
+					$activoInvent= $rowInvent['inventarioActivo'];
+				if ( ($_COOKIE['ckPower']=='1' || $_COOKIE['ckPower']=='2' || $_COOKIE['ckPower']=='4' || $_COOKIE['ckPower']=='4' ) && $activoInvent=='1'){
 				?>
 					<div class="row">
-				<?php 
-				$fecha1=$rowProducto['desFechaContarInteres'];
-				$cuenta= new DateTime($fecha1); ;
-				$hoy= new DateTime("now");
-				$diasLimite=  $cuenta->diff($hoy);
-				$limite=$diasLimite->days;
-
-				$sql= "SELECT idTicket FROM `tickets` where cajaActivo in (0,1) and idProducto = {$_GET['idProducto']}"; // si tiene un ticket activo
-				$consultaDepos = $conection->prepare($sql);
-				$consultaDepos ->execute();
-				$resultadoDepos = $consultaDepos->get_result();
-				$numLineaDeposs=$resultadoDepos->num_rows;
-				if ($numLineaDeposs >0){
-					while($rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC)){
-						echo '<h3 class="purple-text text-lighten-1">Ticket asignado #'.$rowDepos['idTicket'].'</h3>';
-					}
-				}else{
-
-					if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
-					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
-
-				<?php } ?>
-
-				<?php if($esCompra==1 && $rowProducto['prodActivo']==1 && ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) ){?>
-					<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
-				<?php }
-					if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ //zona de pago especial ?>
-							<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
-						<?php }
-					if($esCompra==0 && $rowProducto['prodActivo']==1 ){
-					
-						if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
-							<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
-						<?php }
-						if( $limite == 36 ){ //zona de prórroga y zona de precio administrativo  && $limite <= 36  ?>
-							<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-							<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-					<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
-						<?php }
-						if( $limite >= 37 && $limite <= 49 ){ //zona venta de remate ?>
-						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-							<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button>
-						<?php }
-						if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
-						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 200%</p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
-						<?php }
-						if( $limite >= 60 && $limite <= 69 ){ //zona  venta de remate ?>
-						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 150%</p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
-						<?php }
-						if( $limite >= 70 && $limite <= 79 ){ //zona  venta de remate ?>
-						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-							<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 80%</p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
-						<?php }
-						if( $limite >= 80 ){ //zona de venta de remate ?>
-							<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong> Proponer una solución. Hueso</p>
-							<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
-						<?php }
-						}
+						<p><strong>Inventario:</strong></p>
+					<div class="col-xs-12 col-sm-6">
+						<button class="btn btn-azul btn-outline btn-lg btn-block" id="btnInventariarPositivo"><i class="icofont icofont-chart-flow-alt-2"></i> Inventariar</button>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<button class="btn btn-danger btn-outline btn-lg btn-block" id="btnInventariarNegativo"><i class="icofont icofont-bubble-down"></i> No existe</button>
+					</div>
+					</div>
+				<?php
 				}
-				$consultaDepos->fetch();
-				$consultaDepos->close();
 				
-				$sqlContador="call contarObservaciones({$_GET['idProducto']})";
-				$consultaContar = $cadena->prepare($sqlContador);
-				$consultaContar->execute();
-				$resultadoContar = $consultaContar->get_result();
-				$rowContar = $resultadoContar->fetch_array(MYSQLI_ASSOC);
 				
-				$consultaContar->fetch();
-				$consultaContar->close();
+			?>
+				<div class="row">
+			<?php 
+			$fecha1=$rowProducto['desFechaContarInteres'];
+			$cuenta= new DateTime($fecha1); ;
+			$hoy= new DateTime("now");
+			$diasLimite=  $cuenta->diff($hoy);
+			$limite=$diasLimite->days;
 
-				 ?>
-					</div>
-					</div>
+			$sql= "SELECT idTicket FROM `tickets` where cajaActivo in (0,1) and idProducto = {$_GET['idProducto']}"; // si tiene un ticket activo
+			$consultaDepos = $conection->prepare($sql);
+			$consultaDepos ->execute();
+			$resultadoDepos = $consultaDepos->get_result();
+			$numLineaDeposs=$resultadoDepos->num_rows;
+			if ($numLineaDeposs >0){
+				while($rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC)){
+					echo '<h3 class="purple-text text-lighten-1">Ticket asignado #'.$rowDepos['idTicket'].'</h3>';
+				}
+			}else{
+
+				if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
+				<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+				<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
+
+			<?php } ?>
+
+			<?php if($esCompra==1 && $rowProducto['prodActivo']==1 && ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) ){?>
+				<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
+			<?php }
+				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ //zona de pago especial ?>
+						<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
+					<?php }
+				if($esCompra==0 && $rowProducto['prodActivo']==1 ){
 				
-				</div>
-				<div class="container row">
-					<ul class="nav nav-tabs">
-					<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
-					<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
-					<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
-					<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias <span class="badge"><?php echo $rowContar['total']; ?></span></a></li>
-					<li><a href="#tabInventario" data-toggle="tab">Almacén e Inventarios</a></li>
-					
-					</ul>
-					<div class="tab-content">
-					<!--tab content-->
-						<div class="tab-pane fade in active container-fluid" id="tabIntereses">
-						<!--Inicio de pestaña interior 01-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección intereses</h4>
-						<?php 
-						if($esCompra=='1'){
-							?>
-							<ul><li>Las compras no generan intereses.</li></ul>
-							<?php
-						}else{
-							if($rowProducto['prodActivo']==='0'){
-							?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
-							}else{
-								$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
-
-								$sqlIntereses = $conection->query($sqlBaseInteres);
-								$rowInteres = $sqlIntereses->fetch_assoc();
-								$gastosAdmin=0;
-
-								?>
-							<ul>
-								<li>Capital: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
-								<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
-							<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
-								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
-							<?php 
-								}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
-									$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
-								<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% semanal = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$interesDiario*$rowInteres['diferenciaDias'],1,PHP_ROUND_HALF_UP),2); echo $interesJson.' ('.number_format($interesDiario*$rowInteres['diferenciaDias']*100,2).'%)'; ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 35).</span></li>
-							<?php  }else {
-								$_GET['inicio']=floatval($rowInteres['preCapital']);
-
-								if($rowInteres['diferenciaDias']<=200){
-									$_GET['numhoy']=$rowInteres['diferenciaDias'];
-								}else{
-									$_GET['numhoy']=200;
-								}
-								$_GET['interes']=$rowInteres['preInteres'];
-								$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
-								// var_dump($resultado);
-								$interesJson= $resultado[0]['soloInteres'];
-								$razonInteres= $resultado[0]['intDiarioHoy']*100;
-								
-								?>
-								<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
-								<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
-							<?php if($rowInteres['diferenciaDias']>=36 ){ $gastosAdmin=35; ?>
-								<li>Gastos admnistrativos: <span>S/. 35.00</span></li>
-							<?php }} ?>
-								<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
-							</ul>
-							<?php 
-							}
-						} ?>
-						<!--Fin de pestaña interior 01-->
-						</div>
-						<div class="tab-pane fade container-fluid" id="tabMovEstados">
-						<!--Inicio de pestaña interior 02-->
-						
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
-							<div class="table-responsive">
-							<table class="table table-hover" id="tablita">
-								<thead><tr>
-									<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
-								</tr></thead>
-								<tbody>
-								<tr>
-									<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
-								</tr>
-								<?php $i=0;
-								$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
-									inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
-									inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
-								while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
-								<tr>
-									<td class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td><td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td><?php echo $rowEstados['cajaObservacion']; ?></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
-								</tr>
-								<?php 
-								$i++;
-								} ?>
-								</tbody>
-							</table>
-							</div>
-						<!-- 	<ul>
-							<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
-							
-								echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
-							
-						</ul> -->
-						<!--Fin de pestaña interior 02-->
-						</div>
-						<div class="tab-pane fade container-fluid" id="tabMovFinancieros">
-						<!--Inicio de pestaña interior 03-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Financiera</h4>
-							<ul>
-								<li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li>
-							</ul>
-						<!--Fin de pestaña interior 03-->
-						</div>
-						<div class="tab-pane fade container-fluid" id="tabAdvertencias">
-						<!--Inicio de pestaña interior 04-->
-							<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Observaciones y Advertencias antes de rematar</h4>
-							<?php if($rowProducto['prodObservaciones']<>''){ ?>
-								<div class="mensaje"><div class="texto"><p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
-							<?php } ?>
-							<div class="conjuntoMensajes">
-							<?php
-							$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres, ( case when tp.tipoDescripcion is NULL then 'Mensaje simple' else tp.tipoDescripcion end ) as 'tipoDescripcion'
-								FROM `avisos` a
-								left join tipoProceso tp on tp.idTipoProceso = a.tipoComentario
-								inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
-							while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
-								<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['tipoDescripcion'].': '.$rowMensajes['aviMensaje']; ?></p> </div></div>
-							<?php } ?>
-							</div>
-							<div class="dejarMensaje row"><div class="col-sm-4">
-							<select name="" id="sltTipoMensaje" class="form-control">
-								<option value="0" selected>Mensaje simple</option>
-						<?php 
-						$sqlTPMensajes = "SELECT * FROM `tipoProceso` where idTipoProceso in(62, 63, 64, 65, 66, 67, 73) order by tipoDescripcion asc;";
-						$sqlLlamadoTPMensajes =  $conection->query($sqlTPMensajes);
-						while($rowTPMensajes = $sqlLlamadoTPMensajes->fetch_assoc()){ ?>
-							<option value="<?php echo $rowTPMensajes['idTipoProceso']; ?>"><?php echo $rowTPMensajes['tipoDescripcion']; ?></option>
-						<?php }
-						/*$consultaTPMensajes->fetch();
-						$consultaTPMensajes->close();*/
-						?>
-							</select>
-							</div>
-							<div class="col-sm-8">
-								<input type="text" class="form-control mayuscula" id="txtDejarMensaje" placeholder="¿Qué mensaje dejó para el cliente?" autocomplete="off" style="width: 85%; display: inline-block;"> <button class="btn btn-default" id="btnDejarMensaje" style="margin-top: -3px;color: #ab47bc;"><i class="icofont icofont-location-arrow"></i></button>
-							</div>
-							</div>
-							
-						<!--Fin de pestaña interior 04-->
-						</div>
-
-						<div class="tab-pane fade container-fluid" id="tabInventario">
-						<!-- Inicio de pestaña interior 05 -->
-						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Inventarios</h4>
-						<ul>
-							<?php 
-						$sqlInventario="call listarInventarioPorId( {$_GET['idProducto']} );";
-						$llamadoInventarios = $conection->query($sqlInventario);
-						$numRow = $llamadoInventarios->num_rows;
-						if($numRow>0){
-						while($rowInventa = $llamadoInventarios->fetch_assoc()){
-							echo "<li>Inventariado el <span class='spanFechaFormat'>{$rowInventa['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$rowInventa['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$rowInventa['usuNombres']}</strong></em></li>";
-						}
-						}else{
-							echo '<li>No se encontraron inventarios todavía en almacén con éste producto.</li>';
-						}
-						
-						$sqlMovimientosAlmacen= "call listarMovimientosAlmacen (".$_GET['idProducto'].");";
-						//echo $sqlMovimientosAlmacen;
-
-						$consultaMovimiento = $cadena->prepare($sqlMovimientosAlmacen);
-						$consultaMovimiento ->execute();
-						$resultadoMovimiento = $consultaMovimiento->get_result();
-						$numLineaMovimiento=$resultadoMovimiento->num_rows;
-						if($numLineaMovimiento>0){
-							while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
-								<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion'].': <span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
-							<?php }
-						}
-						$consultaMovimiento->fetch();
-						$consultaMovimiento->close();
-						
-						
-							 ?>
-						</ul>
-						
-						<div class="row">
-						<div class="col-xs-12" id="divTipoMovAlmacen">
-							<select class="selectpicker mayuscula" id="sltTipoMovimiento"  data-width="50%" data-live-search="false" data-size="15">
-								<option class="optPiso mayuscula" data-tokens="23">En almacén</option>
-								<option class="optPiso mayuscula" data-tokens="46">Entrada a almacén</option>
-								<option class="optPiso mayuscula" data-tokens="47">Salida de almacén</option>
-							</select>
-						</div>
-						<div class="col-xs-4" id="divSelectEstante">
-							<select class="selectpicker mayuscula" id="sltEstantes" title="Estante..."  data-width="100%" data-live-search="false" data-size="15">
-								<?php require 'php/listarEstantesOPT.php'; ?>
-							</select>
-						</div>
-						<div class="col-xs-4" id="divSelectPiso">
-							<select class="selectpicker mayuscula" id="sltPiso" title="Piso..."  data-width="100%" data-live-search="false" data-size="15">
-								<?php require 'php/listarPisosOPT.php'; ?>
-							</select>
-						</div>
-						<div class="col-xs-4" id="divSelectSeccion">
-							<select class="selectpicker mayuscula" id="sltSeccion" title="Sección..."  data-width="100%" data-live-search="false" data-size="15">
-								<?php require 'php/listarZonasOPT.php'; ?>
-							</select>
-							
-						</div>
-						<div class="col-xs-12">
-							<input type="text" class="form-control mayuscula" placeholder="Comentario extra" id="txtObservacionCubicaje">
-							<button class="btn btn-morado btn-outline" id="btnGuardarCubicaje"><i class="icofont icofont-box"></i> Guardar cubicaje</button>
-						</div>
-						</div>
-						<!-- Fin de pestaña interior 05 -->
-						</div>
-					<!-- Fin de tab content -->
-	            	</div>
-				</div>
-			</div>
+					if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
+						<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
+					<?php }
+					if( $limite == 36 ){ //zona de prórroga y zona de precio administrativo  && $limite <= 36  ?>
+						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+				<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
+					<?php }
+					if( $limite >= 37 && $limite <= 49 ){ //zona venta de remate ?>
+					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button>
+					<?php }
+					if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
+					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 200%</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+					<?php }
+					if( $limite >= 60 && $limite <= 69 ){ //zona  venta de remate ?>
+					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 150%</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+					<?php }
+					if( $limite >= 70 && $limite <= 79 ){ //zona  venta de remate ?>
+					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
+						<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 80%</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate</button>
+					<?php }
+					if( $limite >= 80 ){ //zona de venta de remate ?>
+						<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong> Proponer una solución. Hueso</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
+					<?php }
+					}
+			}
+			$consultaDepos->fetch();
+			$consultaDepos->close();
 			
+			$sqlContador="call contarObservaciones({$_GET['idProducto']})";
+			$consultaContar = $cadena->prepare($sqlContador);
+			$consultaContar->execute();
+			$resultadoContar = $consultaContar->get_result();
+			$rowContar = $resultadoContar->fetch_array(MYSQLI_ASSOC);
+			
+			$consultaContar->fetch();
+			$consultaContar->close();
+
+			 ?>
+				</div>
+				</div>
+			
+			</div>
+			<div class="container row">
+				<ul class="nav nav-tabs">
+				<li class="active"><a href="#tabIntereses" data-toggle="tab">Intereses</a></li>
+				<li><a href="#tabMovEstados" data-toggle="tab">Estados y movimientos</a></li>
+				<li class="hidden"><a href="#tabMovFinancieros" data-toggle="tab">Financiero</a></li>
+				<li><a href="#tabAdvertencias" data-toggle="tab">Observaciones y advertencias <span class="badge"><?php echo $rowContar['total']; ?></span></a></li>
+				<li><a href="#tabInventario" data-toggle="tab">Almacén e Inventarios</a></li>
+				
+				</ul>
+				<div class="tab-content">
+				<!--tab content-->
+					<div class="tab-pane fade in active container-fluid" id="tabIntereses">
+					<!--Inicio de pestaña interior 01-->
+						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección intereses</h4>
+					<?php 
+					if($esCompra=='1'){
+						?>
+						<ul><li>Las compras no generan intereses.</li></ul>
+						<?php
+					}else{
+						if($rowProducto['prodActivo']==='0'){
+						?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
+						}else{
+							$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
+
+							$sqlIntereses = $conection->query($sqlBaseInteres);
+							$rowInteres = $sqlIntereses->fetch_assoc();
+							$gastosAdmin=0;
+
+							?>
+						<ul>
+							<li>Capital: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
+							<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
+						<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
+							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
+							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
+						<?php 
+							}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
+								$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
+							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% semanal = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$interesDiario*$rowInteres['diferenciaDias'],1,PHP_ROUND_HALF_UP),2); echo $interesJson.' ('.number_format($interesDiario*$rowInteres['diferenciaDias']*100,2).'%)'; ?></span></li>
+							<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 35).</span></li>
+						<?php  }else {
+							$_GET['inicio']=floatval($rowInteres['preCapital']);
+
+							if($rowInteres['diferenciaDias']<=200){
+								$_GET['numhoy']=$rowInteres['diferenciaDias'];
+							}else{
+								$_GET['numhoy']=200;
+							}
+							$_GET['interes']=$rowInteres['preInteres'];
+							$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
+							// var_dump($resultado);
+							$interesJson= $resultado[0]['soloInteres'];
+							$razonInteres= $resultado[0]['intDiarioHoy']*100;
+							
+							?>
+							<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
+							<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
+						<?php if($rowInteres['diferenciaDias']>=36 ){ $gastosAdmin=35; ?>
+							<li>Gastos admnistrativos: <span>S/. 35.00</span></li>
+						<?php }} ?>
+							<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
+						</ul>
+						<?php 
+						}
+					} ?>
+					<!--Fin de pestaña interior 01-->
+					</div>
+					<div class="tab-pane fade container-fluid" id="tabMovEstados">
+					<!--Inicio de pestaña interior 02-->
+					
+						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección de estados &amp; Movimientos</h4>
+						<div class="table-responsive">
+						<table class="table table-hover" id="tablita">
+							<thead><tr>
+								<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
+							</tr></thead>
+							<tbody>
+							<tr>
+								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+							</tr>
+							<?php $i=0;
+							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
+								inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
+								inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
+							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
+							<tr>
+								<td class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td><td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td><?php echo $rowEstados['cajaObservacion']; ?></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+							</tr>
+							<?php 
+							$i++;
+							} ?>
+							</tbody>
+						</table>
+						</div>
+					<!-- 	<ul>
+						<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
+						
+							echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
+						
+					</ul> -->
+					<!--Fin de pestaña interior 02-->
+					</div>
+					<div class="tab-pane fade container-fluid" id="tabMovFinancieros">
+					<!--Inicio de pestaña interior 03-->
+						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Financiera</h4>
+						<ul>
+							<li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li>
+						</ul>
+					<!--Fin de pestaña interior 03-->
+					</div>
+					<div class="tab-pane fade container-fluid" id="tabAdvertencias">
+					<!--Inicio de pestaña interior 04-->
+						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Observaciones y Advertencias antes de rematar</h4>
+						<?php if($rowProducto['prodObservaciones']<>''){ ?>
+							<div class="mensaje"><div class="texto"><p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
+						<?php } ?>
+						<div class="conjuntoMensajes">
+						<?php
+						$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres, ( case when tp.tipoDescripcion is NULL then 'Mensaje simple' else tp.tipoDescripcion end ) as 'tipoDescripcion'
+							FROM `avisos` a
+							left join tipoProceso tp on tp.idTipoProceso = a.tipoComentario
+							inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
+						while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
+							<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['tipoDescripcion'].': '.$rowMensajes['aviMensaje']; ?></p> </div></div>
+						<?php } ?>
+						</div>
+						<div class="dejarMensaje row"><div class="col-sm-4">
+						<select name="" id="sltTipoMensaje" class="form-control">
+							<option value="0" selected>Mensaje simple</option>
+					<?php 
+					$sqlTPMensajes = "SELECT * FROM `tipoProceso` where idTipoProceso in(62, 63, 64, 65, 66, 67, 73) order by tipoDescripcion asc;";
+					$sqlLlamadoTPMensajes =  $conection->query($sqlTPMensajes);
+					while($rowTPMensajes = $sqlLlamadoTPMensajes->fetch_assoc()){ ?>
+						<option value="<?php echo $rowTPMensajes['idTipoProceso']; ?>"><?php echo $rowTPMensajes['tipoDescripcion']; ?></option>
+					<?php }
+					/*$consultaTPMensajes->fetch();
+					$consultaTPMensajes->close();*/
+					?>
+						</select>
+						</div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control mayuscula" id="txtDejarMensaje" placeholder="¿Qué mensaje dejó para el cliente?" autocomplete="off" style="width: 85%; display: inline-block;"> <button class="btn btn-default" id="btnDejarMensaje" style="margin-top: -3px;color: #ab47bc;"><i class="icofont icofont-location-arrow"></i></button>
+						</div>
+						</div>
+						
+					<!--Fin de pestaña interior 04-->
+					</div>
+
+					<div class="tab-pane fade container-fluid" id="tabInventario">
+					<!-- Inicio de pestaña interior 05 -->
+					<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Inventarios</h4>
+					<ul>
+						<?php 
+					$sqlInventario="call listarInventarioPorId( {$_GET['idProducto']} );";
+					$llamadoInventarios = $conection->query($sqlInventario);
+					$numRow = $llamadoInventarios->num_rows;
+					if($numRow>0){
+					while($rowInventa = $llamadoInventarios->fetch_assoc()){
+						echo "<li>Inventariado el <span class='spanFechaFormat'>{$rowInventa['invFechaInventario']}</span>: <strong style='color: #ab47bc;'>«{$rowInventa['caso']}»</strong> <span class='mayuscula'>$comentario</span>. <em><strong>{$rowInventa['usuNombres']}</strong></em></li>";
+					}
+					}else{
+						echo '<li>No se encontraron inventarios todavía en almacén con éste producto.</li>';
+					}
+					
+					$sqlMovimientosAlmacen= "call listarMovimientosAlmacen (".$_GET['idProducto'].");";
+					//echo $sqlMovimientosAlmacen;
+
+					$consultaMovimiento = $cadena->prepare($sqlMovimientosAlmacen);
+					$consultaMovimiento ->execute();
+					$resultadoMovimiento = $consultaMovimiento->get_result();
+					$numLineaMovimiento=$resultadoMovimiento->num_rows;
+					if($numLineaMovimiento>0){
+						while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
+							<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion'].': <span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
+						<?php }
+					}
+					$consultaMovimiento->fetch();
+					$consultaMovimiento->close();
+					
+					
+						 ?>
+					</ul>
+					
+					<div class="row">
+					<div class="col-xs-12" id="divTipoMovAlmacen">
+						<select class="selectpicker mayuscula" id="sltTipoMovimiento"  data-width="50%" data-live-search="false" data-size="15">
+							<option class="optPiso mayuscula" data-tokens="23">En almacén</option>
+							<option class="optPiso mayuscula" data-tokens="46">Entrada a almacén</option>
+							<option class="optPiso mayuscula" data-tokens="47">Salida de almacén</option>
+						</select>
+					</div>
+					<div class="col-xs-4" id="divSelectEstante">
+						<select class="selectpicker mayuscula" id="sltEstantes" title="Estante..."  data-width="100%" data-live-search="false" data-size="15">
+							<?php require 'php/listarEstantesOPT.php'; ?>
+						</select>
+					</div>
+					<div class="col-xs-4" id="divSelectPiso">
+						<select class="selectpicker mayuscula" id="sltPiso" title="Piso..."  data-width="100%" data-live-search="false" data-size="15">
+							<?php require 'php/listarPisosOPT.php'; ?>
+						</select>
+					</div>
+					<div class="col-xs-4" id="divSelectSeccion">
+						<select class="selectpicker mayuscula" id="sltSeccion" title="Sección..."  data-width="100%" data-live-search="false" data-size="15">
+							<?php require 'php/listarZonasOPT.php'; ?>
+						</select>
+						
+					</div>
+					<div class="col-xs-12">
+						<input type="text" class="form-control mayuscula" placeholder="Comentario extra" id="txtObservacionCubicaje">
+						<button class="btn btn-morado btn-outline" id="btnGuardarCubicaje"><i class="icofont icofont-box"></i> Guardar cubicaje</button>
+					</div>
+					</div>
+					<!-- Fin de pestaña interior 05 -->
+					</div>
+				<!-- Fin de tab content -->
+            	</div>
+			</div>
 		</div>
+		
+	</div>
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->

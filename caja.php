@@ -102,7 +102,7 @@ th{color:#a35bb4}
 				<div class="panel panel-default container-fluid ">
 					<div class=" col-xs-12 col-sm-7 ">
 						<div style="padding: 10px;">
-							<p style="color: #a35bb4;">Por: <strong><?php echo $_COOKIE['usuario']; ?></strong></p>
+							<p style="color: #a35bb4;">Por: <?php require "php/historialCierres.php"; ?></p>
 								<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
 						</div>
 					</div>
@@ -134,7 +134,7 @@ th{color:#a35bb4}
 </div> -->
 			<div class="container-fluid col-xs-12 ">
 				<h4 class="pheader">Entradas de dinero</h4>
-				<div class=" panel panel-default  ">
+				<div class=" panel panel-default">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
 						<?php
@@ -281,8 +281,10 @@ $('#btnGuardarApertura').click(function () {
 	}else{
 		$.ajax({url: 'php/cajaAperturar.php', type: 'POST', data:{
 			monto: monto, obs: obs
-		}}).done((resp)=> {
-			console.log(resp);
+		}}).done((resp)=> { //console.log(resp);
+			if(resp==1){
+				location.reload();
+			}
 		});
 	}
 });
@@ -299,7 +301,7 @@ $('#btnGuardarCierre').click(function () {
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
 		}}).done((resp)=> {
-			console.log(resp);
+			location.reload();
 		});
 	}
 });

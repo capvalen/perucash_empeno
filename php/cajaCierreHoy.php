@@ -6,8 +6,8 @@ if($_POST['obs']<>''){
 	$obs = '<p>'.$_COOKIE['ckAtiende'].' dice '.$_POST['obs'].'</p>';
 }else{$obs ='';}
 
-$sql= "call cajaAperturar (".$_COOKIE['ckidUsuario'].", ".$_POST['monto'].", '".$_POST['obs']."' )";
-//echo $sql;
+$sql= "call cajaCierreHoy (".$_COOKIE['ckidUsuario'].", ".$_POST['monto'].", '".$_POST['obs']."' )";
+echo $sql;
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	// obtener el array de objetos 
 	echo true;
@@ -15,4 +15,4 @@ if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retor
 }else{echo mysql_error( $conection);}
 
 
- ?>
+?>
