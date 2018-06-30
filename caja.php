@@ -1,4 +1,8 @@
-<?php ?>
+<?php
+if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
+	$_GET['fecha']=date('Y-m-d');
+}
+ ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -122,12 +126,7 @@ th{color:#a35bb4}
 			<tr> <th>ID Caja</th> <th>Producto</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
 		<tbody>
 			<?php
-			if (isset($_GET['fecha'])) { //si existe lista fecha requerida
-				require_once 'php/reporteCajaDiaTR.php';
-			}else{ //sino existe lista la fecha de hoy
-				$_GET['fecha']=date('Y-m-d');
-				require_once 'php/reporteCajaDiaTR.php';
-			}
+			require_once 'php/reporteCajaDiaTR.php';
 			?>
 		</tbody> </table>
 	</div>
@@ -137,14 +136,9 @@ th{color:#a35bb4}
 				<div class=" panel panel-default">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
-						<?php
-						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
-							require_once 'php/reporteIngresoDia.php';
-						}else{ //sino existe lista la fecha de hoy
-							$_GET['fecha']=date('Y-m-d');
-							require_once 'php/reporteIngresoDia.php';
-						}
-						?>
+					<?php
+						require_once 'php/reporteIngresoDia.php';
+					?>
 					</tbody> </table>
 				</div>
 			</div>
@@ -153,14 +147,9 @@ th{color:#a35bb4}
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
-						<?php
-						if (isset($_GET['fecha'])) { //si existe lista fecha requerida
-							require_once 'php/reporteEgresoDia.php';
-						}else{ //sino existe lista la fecha de hoy
-							$_GET['fecha']=date('Y-m-d');
-							require_once 'php/reporteEgresoDia.php';
-						}
-						?>
+					<?php
+						require_once 'php/reporteEgresoDia.php';
+					?>
 					</tbody> </table>
 				</div>
 			</div>
