@@ -17,7 +17,8 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'cliDni' => $row['cliDni'],
 		'cliDireccion' => $row['cliDireccion'],
 		'cliCorreo' => $row['cliCorreo'],
-		'cliCelular' => $row['cliCelular']
+		'cliCelular' => $row['cliCelular'],
+		'cliFijo' => $row['cliFijo']
 	);
 	
 }

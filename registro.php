@@ -363,7 +363,7 @@ $('#someSwitchOptionWarning').change(function (e) {
 });
 $('#txtDni').focusout(function () {
 if($('#txtDni').val()!=''){
-	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {// console.log(resp);
+	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {//console.log(resp);
 		// console.log(JSON.parse(resp).length)
 		if(JSON.parse(resp).length==1 ){
 			$.each(JSON.parse(resp), function (i, dato) {
@@ -373,6 +373,7 @@ if($('#txtDni').val()!=''){
 				$('#txtDireccion').val(dato.cliDireccion); /*.attr("disabled", 'true')*/
 				$('#txtCorreo').val(dato.cliCorreo); /*.attr("disabled", 'true')*/
 				$('#txtCelular').val(dato.cliCelular); /*.attr("disabled", 'true')*/
+				$('#txtFono').val(dato.cliFijo); /*.attr("disabled", 'true')*/
 			});
 		}
 		else{
@@ -382,6 +383,7 @@ if($('#txtDni').val()!=''){
 				$('#txtDireccion').val('').removeAttr("disabled");
 				$('#txtCorreo').val('').removeAttr("disabled");
 				$('#txtCelular').val('').removeAttr("disabled");
+				$('#txtFono').val('').removeAttr("disabled");
 		}
 	});
 }

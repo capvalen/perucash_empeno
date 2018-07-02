@@ -290,11 +290,18 @@ $('#btnGuardarCierre').click(function () {
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
 		}}).done((resp)=> {
-			location.reload();
+			//location.reload();
+			$('#btnCajaCerrar').remove();
+			$('.modal-cerrarCaja').modal('hide');
+			$('.modal-GuardadoCorrecto #spanBien').text('¿Deseas imprimir el ticket de cierre?');
+			$('.modal-GuardadoCorrecto #h1Bien').html( '<button class="btn btn-negro btn-outline" id="btnPrintTCierre"><i class="icofont icofont-print"></i> Ticket de cierre</button>');
+			$('.modal-GuardadoCorrecto').modal('show');
 		});
 	}
 });
-
+$('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
+	console.log('hola');
+});
 </script>
 <?php } ?>
 
