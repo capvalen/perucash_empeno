@@ -27,6 +27,8 @@ require("php/conkarl.php");
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
 		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
+		<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.2" /> <!--https://github.com/T00rk/bootstrap-material-datetimepicker-->
+		<link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
 		
 </head>
 
@@ -69,9 +71,23 @@ require("php/conkarl.php");
 					<p>¿Qué tipo de reporte quieres ver?</p>
 					<div class="col-xs-12 col-sm-6" id="cmbEstadoProd">
 					<select class="selectpicker mayuscula" title="Nuevo estado..." id="cmbEstadoCombo"  data-width="100%" data-live-search="true" data-size="15">
+						<option class="optProducto mayuscula" data-tokens="9999">Analítica</option>
 					<?php require 'php/detalleReporteOPT.php'; ?>
 					</select></div>
+					<div class=" divAnalitica col-xs-12 col-sm-6 hidden">
+					<select class="form-control" id="sltFiltroAnalitica">
+						<option value="0">Seleccione una opción</option>
+						<option value="1">Préstamos y Desembolsos</option>
+						<option value="2">Intereses cobrados</option>
+						<option value="3">Préstamos finalizados</option>
+					</select>
+					<div class="container-fluid" style="margin-top: 10px;">
+					<div class="col-xs-8"><input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos"></div>
+					<div class="col-xs-4"><button class="btn btn-success btn-outline" id="btnFiltroAnaticica">Filtrar <i class="icofont icofont-search-alt-1"></i></button></div>
+					</div>
 				</div>
+				</div>
+				
 				<div class="row tablaResultados table-responsive">
 					<table class="table table-hover" id="tablita">
 					<thead>
@@ -87,6 +103,7 @@ require("php/conkarl.php");
 					</tbody>
 				  </table>
 				</div>
+				
 			<!-- Fin de contenido principal -->
 			</div>
 		
@@ -101,7 +118,8 @@ require("php/conkarl.php");
 </div>
 
 <?php include 'footer.php'; ?>
-<script type="text/javascript" src="js/stupidtable.min.js"></script>
+<script src="js/stupidtable.min.js"></script>
+<script src="js/bootstrap-material-datetimepicker.js"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -109,8 +127,10 @@ require("php/conkarl.php");
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
+$('#dtpFechaIniciov3').bootstrapMaterialDatePicker({ format : 'YYYY-MM', lang : 'es', weekStart : 1 , time: false});
 
 $(document).ready(function(){
+	$('#dtpFechaIniciov3').bootstrapMaterialDatePicker('setDate', moment());
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 	$('#tablita').stupidtable();
@@ -124,11 +144,13 @@ $('#cmbEstadoCombo').change(function () {
 	var sumaElementos=0;
 	console.log(estado);
 	$('#tablita').find('#tdUltPago').html('Último pago <i class="icofont icofont-expand-alt"></i>');
+	$('tbody').children().remove();
+	$('tfoot').children().remove();
+	$('.divAnalitica').addClass('hidden');
 	switch(estado){
 		case '24':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosProrrogav3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -159,7 +181,6 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '29':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 0}}).done(function (resp) {
-			$('tbody').children().remove();
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
 				 <tr>
@@ -188,7 +209,6 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '30':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -219,7 +239,6 @@ $('#cmbEstadoCombo').change(function () {
 		case '37':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosEmpenosv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -251,7 +270,6 @@ $('#cmbEstadoCombo').change(function () {
 		case '38':
 		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarSoloCompras.php', type: 'POST' }).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -283,7 +301,6 @@ $('#cmbEstadoCombo').change(function () {
 		case '68':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosVencidos.php', type: 'POST' }).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -315,7 +332,6 @@ $('#cmbEstadoCombo').change(function () {
 		case '72':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosVigentesv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
-				$('tbody').children().remove();
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -344,9 +360,11 @@ $('#cmbEstadoCombo').change(function () {
 				});
 			});
 		break;
+		case '9999':
+			$('.divAnalitica').removeClass('hidden');
+		break;
 		default:
 			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { //console.log(resp);
-			$('tbody').children().remove();
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
 				<tr>
@@ -374,6 +392,7 @@ $('#cmbEstadoCombo').change(function () {
 			});
 		});
 		break;
+		
 	}
 });
 </script>

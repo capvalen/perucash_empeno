@@ -118,19 +118,6 @@ th{color:#a35bb4}
 				</div>
 			</div>
 
-<!-- 			<div class="container-fluid">
-	<p class="pheader col-xs-6">Clientes atentidos</p>
-	<div class=" panel panel-default  ">
-		<table class="table table-hover">
-		<thead>
-			<tr> <th>ID Caja</th> <th>Producto</th> <th>Datos de Cliente</th> <th>Razón <i class="icofont icofont-long-arrow-right"></i> Usuario</th> <th>Cantidad</th> </tr> </thead>
-		<tbody>
-			<?php
-			require_once 'php/reporteCajaDiaTR.php';
-			?>
-		</tbody> </table>
-	</div>
-</div> -->
 			<div class="container-fluid col-xs-12 ">
 				<h4 class="pheader">Entradas de dinero</h4>
 				<div class=" panel panel-default">
@@ -228,8 +215,6 @@ th{color:#a35bb4}
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
-
-
 
 $('#dtpFechaIniciov3').val('<?php
 		if (isset($_GET['fecha'])) { //si existe lista fecha requerida

@@ -31,7 +31,7 @@
 <body>
 
 <style>
-
+.btnAgregarAlmacen{padding: 2px;}
 </style>
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -45,10 +45,76 @@
 			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido principal -->
 			<h2 class="purple-text text-lighten-1">Almacén <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
-			<select class="form-control" id="cmbEstantes">
-				<?php require 'php/listarEstantesOPT.php'; ?>
-			</select>
-			
+			<div class="row">
+			<div class="col-md-6">
+				<select class="form-control" id="cmbEstantes">
+					<?php require 'php/listarEstantesOPT.php'; ?>
+				</select>
+			</div>
+			</div>
+			<br>
+			<div class="row container-fluid table-responsive">
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="text-center" >Piso / Sección</th>
+							<th class="text-center" >A</th>
+							<th class="text-center" >B</th>
+							<th class="text-center" >C</th>
+							<th class="text-center" >D</th>
+							<th class="text-center" >E</th>
+							<th class="text-center" >F</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th class="text-center">1</th>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+						</tr>
+						<tr>
+							<th class="text-center">2</th>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+						</tr>
+						<tr>
+							<th class="text-center">3</th>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+						</tr>
+						<tr>
+							<th class="text-center">4</th>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+						</tr>
+						<tr>
+							<th class="text-center">5</th>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
 				
 			<!-- Fin de contenido principal -->

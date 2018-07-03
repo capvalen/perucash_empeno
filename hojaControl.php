@@ -17,7 +17,7 @@ mysqli_free_result($log);
 mysqli_close($conection);
 
 
-$agencia = 'Las Rematamas';
+$agencia = 'Las Retamas';
 
 if($row['esCompra']=='0'){ $compra = 'Empeño';}else{ $compra = 'Compra';}
 ?>
