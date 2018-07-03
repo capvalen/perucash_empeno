@@ -45,6 +45,9 @@
 			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido principal -->
 			<h2 class="purple-text text-lighten-1">Almacén <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
+			<select class="form-control" id="cmbEstantes">
+				<?php require 'php/listarEstantesOPT.php'; ?>
+			</select>
 			
 
 				
