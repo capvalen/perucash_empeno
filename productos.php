@@ -1099,7 +1099,7 @@ $('#btnCrearTicketPagoInteres').click(function () {
 $('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
-	var interes = <?php echo  $interesJson; ?>;
+	var interes = <?php echo $interesJson; ?>;
 	var valor = parseFloat($(this).val());
 	console.log(valor)
 	var hayGasto='';

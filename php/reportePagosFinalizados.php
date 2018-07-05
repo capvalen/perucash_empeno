@@ -6,7 +6,7 @@ include 'conkarl.php';
 
 $filas=array();
 //echo "call reportePrestamosMes('{$_POST["fecha"]}');";
-$log = mysqli_query($conection,"call reportePrestamosMes('{$_POST["fecha"]}');");// ".$_POST['idSucursal']."
+$log = mysqli_query($conection,"call reportePagosFinalizados('{$_POST["fecha"]}');");// ".$_POST['idSucursal']."
 $i=0;
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {

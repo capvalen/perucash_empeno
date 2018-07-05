@@ -55,6 +55,7 @@ require("php/conkarl.php");
 		background-color: #f5f5f5;
 	}
 	#tablita th{cursor: pointer;}
+	#spanError{color: #d50000;}
 </style>
 <div id="wrapper">
 
@@ -85,6 +86,7 @@ require("php/conkarl.php");
 					<div class="col-xs-8"><input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos"></div>
 					<div class="col-xs-4"><button class="btn btn-success btn-outline" id="btnFiltroAnaticica">Filtrar <i class="icofont icofont-search-alt-1"></i></button></div>
 					</div>
+				<label class="hidden" id="spanError"><i class="icofont icofont-warning"></i>Tiene que seleccionar un tipo de producto</label>
 				</div>
 				</div>
 				
@@ -384,17 +386,123 @@ $('#cmbEstadoCombo').change(function () {
 					<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 				</tr>`);
 				if(data.length==i+1){
-						$('#tablita').append(`<tfoot><th><td></td><td></td>
-							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
-							</th></tfoot>`);
-					}
+					$('#tablita').append(`<tfoot><th><td></td><td></td>
+						<td><strong>Total: </strong></td>
+						<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+						</th></tfoot>`);
+				}
 			});
 		});
 		break;
 		
 	}
 });
+$('#btnFiltroAnaticica').click(()=> {
+	$('#spanError').addClass('hidden');
+	var sumaElementos=0;
+	if( $('#sltFiltroAnalitica').val()==0){
+		$('#spanError').removeClass('hidden');
+		$('#spanError').text('Tienes que seleccionar un filtro');
+	}else if( $('#dtpFechaIniciov3').val()=='' ){
+		$('#spanError').removeClass('hidden');
+		$('#spanError').text('Fecha incorrecta');
+	}else{
+		$('tbody').children().remove();
+		$('tfoot').children().remove();
+		switch ($('#sltFiltroAnalitica').val()) {
+			case '1':
+				$.ajax({url: 'php/reportePrestamosMes.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+			case '2':
+				$.ajax({url: 'php/reporteInteresesCobrados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '3':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+			default:
+				break;
+		}
+	}
+});
+
 </script>
 <?php } ?>
 </body>
