@@ -6,6 +6,16 @@ $('.esDecimal').change(function(){
 	var valor =campo.val();
 	$(this).val(parseFloat(valor).toFixed(2));
 });
+$('.esMoneda').change(function(){
+	var campo = $(this);
+	var valor =campo.val();
+	if(valor<0){
+		$(this).val('0.00')
+	}else{
+		$(this).val(parseFloat(valor).toFixed(2));
+	}
+	
+});
 $('#agregarBarra').click(function(){
 	//console.log('Se hizo clic en el boton agregar barra');
 	if($('#txtBarras').val()!=''){

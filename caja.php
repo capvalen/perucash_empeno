@@ -23,7 +23,7 @@ if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
 		<link rel="shortcut icon" href="images/favicon.png">
 		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
 		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.3">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.51" >
+		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.52" >
 		<link rel="stylesheet" href="css/colorsmaterial.css">
 		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
@@ -61,11 +61,13 @@ hr{ margin-bottom: 5px;}
 h3{ margin-top: 5px;}
 .pheader{background-color: #a35bb4;padding: 10px 10px; color: white; font-size: 17px; display: block;
 clear: left; }
+.pheader li>a{color: #a35bb4;}
+.pheader li>a:hover{color: #a35bb4;background: #f2f2f2;}
 
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
-#txtMontoApertura, #txtMontoCierre {font-size: 26px;}
+#txtMontoApertura, #txtMontoCierre, #txtMontoPagos {font-size: 26px;}
 </style>
 <div id="overlay">
 	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
@@ -119,7 +121,19 @@ th{color:#a35bb4}
 			</div>
 
 			<div class="container-fluid col-xs-12 ">
-				<h4 class="pheader">Entradas de dinero</h4>
+				<div class="pheader">
+					<h4 >Entradas de dinero </h4>
+					<?php 
+					if(date('Y-m-d')==$_GET['fecha']){ ?>
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle pull-right " type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-add"></i> <span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownEntradas">
+								<?php include "php/omitidasEntradasLI.php"; ?>
+							</ul>
+						</div>
+					<?php } ?>
+				</div>
+				
 				<div class=" panel panel-default">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
@@ -130,7 +144,18 @@ th{color:#a35bb4}
 				</div>
 			</div>
 			<div class="container-fluid col-xs-12 ">
-				<h4 class="pheader">Salidas de dinero</h4>
+				<div class="pheader">
+					<h4>Salidas de dinero</h4>
+					<?php 
+					if(date('Y-m-d')==$_GET['fecha']){ ?>
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle pull-right " type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-remove"></i> <span class="caret"></span></button>
+							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownEntradas">
+								<?php include "php/omitidasSalidasLI.php"; ?>
+							</ul>
+						</div>
+					<?php } ?>
+				</div>
 				<div class=" panel panel-default  ">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
 					<tbody>
@@ -153,6 +178,33 @@ th{color:#a35bb4}
 
 <?php if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ ?>
 <!-- Modal para Abrir caja  -->
+
+<div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar pago maestro</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<p>Rellene cuidadosamente la siguiente información</p>
+					<label for="">Tipo de pago</label>
+					<div id="cmbEstadoPagos">
+					<h5 id="h5TipoPago"></h5></div>
+					<label for="">Monto de pago</label>
+					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
+					<label for="">¿Observaciones?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-azul btn-outline" id="btnInsertPagoMaestro" ><i class="icofont icofont-bubble-down"></i> Insertar pago maestro</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade modal-aperturarCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
@@ -286,6 +338,15 @@ $('#btnGuardarCierre').click(function () {
 });
 $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
 	console.log('hola');
+});
+$('.aLiProcesos').click(function() {
+	//console.log($(this).attr('data-id'));
+	$('#h5TipoPago').text($(this).text());
+	$('.modal-pagoMaestro').modal('show');
+});
+
+$(".modal-pagoMaestro").on("shown.bs.modal", function () { 
+    $('#txtMontoPagos').val('0.00').focus();
 });
 </script>
 <?php } ?>
