@@ -135,7 +135,7 @@ th{color:#a35bb4}
 				</div>
 				
 				<div class=" panel panel-default">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
+					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
 						require_once 'php/reporteIngresoDia.php';
@@ -157,7 +157,7 @@ th{color:#a35bb4}
 					<?php } ?>
 				</div>
 				<div class=" panel panel-default  ">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> </tr> </thead>
+					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
 						require_once 'php/reporteEgresoDia.php';
@@ -184,22 +184,22 @@ th{color:#a35bb4}
 		<div class="modal-content">
 			<div class="modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar pago maestro</h4>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar proceso especial</h4>
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<p>Rellene cuidadosamente la siguiente información</p>
-					<label for="">Tipo de pago</label>
+					<label for="">Tipo de proceso</label>
 					<div id="cmbEstadoPagos">
 					<h5 id="h5TipoPago"></h5></div>
-					<label for="">Monto de pago</label>
+					<label for="">Monto S/</label>
 					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
 					<label for="">¿Observaciones?</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-azul btn-outline" id="btnInsertPagoMaestro" ><i class="icofont icofont-bubble-down"></i> Insertar pago maestro</button>
+				<button class="btn btn-azul btn-outline" id="btnInsertPagoOmiso" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
 		</div>
 		</div>
 	</div>
@@ -342,12 +342,36 @@ $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
 $('.aLiProcesos').click(function() {
 	//console.log($(this).attr('data-id'));
 	$('#h5TipoPago').text($(this).text());
+	$('#cmbEstadoPagos').attr('data-id', $(this).attr('data-id') );
 	$('.modal-pagoMaestro').modal('show');
 });
-
-$(".modal-pagoMaestro").on("shown.bs.modal", function () { 
-    $('#txtMontoPagos').val('0.00').focus();
+$(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#txtMontoPagos').val('0.00').focus(); });
+<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
+$('#btnInsertPagoOmiso').click(()=> {
+	$.ajax({url: 'php/insertarProcesoOmiso.php', type: 'POST', data: {
+		tipo: $('#cmbEstadoPagos').attr('data-id'),
+		valor: $('#txtMontoPagos').val(),
+		obs: $('#txtObsPagos').val()
+	 }}).done((resp)=> {
+		if(resp== true){
+			location.reload();
+		}else{
+			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
 });
+<?php } ?>
+
+
+
+
+
+
+
+
+
+//
 </script>
 <?php } ?>
 
