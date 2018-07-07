@@ -14,7 +14,6 @@ $('.esMoneda').change(function(){
 	}else{
 		$(this).val(parseFloat(valor).toFixed(2));
 	}
-	
 });
 $('#agregarBarra').click(function(){
 	//console.log('Se hizo clic en el boton agregar barra');

@@ -811,10 +811,8 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	//console.log(target);
 	if(target=='#tabIntereses'){
 		//$.queMichiEs='nada'; console.log('tabnada')
-		
 	}
 	if(target=='#tabMovEstados'){
-		
 	}
 });
 $('#btnDejarMensaje').click(function () {
@@ -1070,8 +1068,6 @@ $('#btnLlamarTicketIntereses').click(function () {
 	$('#spanInteresPena').text();
 	$('#spanInteresTotal').text();
 	$('.modal-ticketZonaIntereses').modal(); });
-
-
 $('#btnCrearTicketPagoInteres').click(function () {
 /*	if($('#txtMontoTicketIntereses').val().length==0){
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
@@ -1081,15 +1077,15 @@ $('#btnCrearTicketPagoInteres').click(function () {
 		
 	}*/
 	if($('#txtMontoTicketIntereses').val().length!=0){$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) { console.log(resp)
-				if(resp.indexOf("#")>=0){
-					$('.modal-ticketZonaIntereses').modal('hide');
-					$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
-					$('.modal-GuardadoCorrecto #h1Bien').html(resp);
-					$('.modal-GuardadoCorrecto').modal('show');
-				}
-			}).error(function (er) {console.log(er);
-				// body...
-			});
+			if(resp.indexOf("#")>=0){
+				$('.modal-ticketZonaIntereses').modal('hide');
+				$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+				$('.modal-GuardadoCorrecto #h1Bien').html(resp);
+				$('.modal-GuardadoCorrecto').modal('show');
+			}
+		}).error(function (er) {console.log(er);
+			// body...
+		});
 	}else{
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');

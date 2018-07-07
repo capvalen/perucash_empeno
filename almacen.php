@@ -32,6 +32,7 @@
 
 <style>
 .btnAgregarAlmacen{padding: 2px;}
+#txtAlmacenCodProducto{font-size:24px;}
 </style>
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -46,72 +47,70 @@
 			<!-- Empieza a meter contenido principal -->
 			<h2 class="purple-text text-lighten-1">Almacén <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
 			<div class="row">
-			<div class="col-md-6">
-				<select class="form-control" id="cmbEstantes">
+			<div class="col-md-6" id="divCmbEstantes">
+				<select class="selectpicker mayuscula" id="cmbEstantes" data-live-search="true" data-width="100%" title="Mostradores">
 					<?php require 'php/listarEstantesOPT.php'; ?>
 				</select>
 			</div>
 			</div>
 			<br>
+			<?php 
+			if( isset($_GET['estanteAmarillo']) || isset($_GET['estanteExibicion']) || isset($_GET['estanteRojo']) ){
+				$estante = array (
+					array(1, 2, 3, 4),//pisos
+					array('A','B','C'),//seccion
+				);
+			}
+			else if( isset($_GET['estanteNegro']) || isset($_GET['estantePlateado']) ){
+				$estante = array (
+					array(1, 2, 3, 4, 5),//pisos
+					array('A','B','C'),//seccion
+				);
+			}
+			else if( isset($_GET['estanteLaptops']) ){
+				$estante = array (
+					array(1, 2, 3, 4),//pisos
+					array('A','B','C', 'D', 'E', 'F'),//seccion
+				);
+			}
+			else {
+				$_GET['almacen']=0;
+				$estante = array (
+					array(1),//pisos
+					array('A'),//seccion
+				);
+			}
+			//var_dump($estante[1]);
+			// foreach ($estante[0] as $piso ) {
+			// 	echo "<br>".$piso;
+			// 	foreach ($estante[1] as $seccion) {
+			// 		echo ' '.$seccion;
+			// 	}
+			// }
+			?>
 			<div class="row container-fluid table-responsive">
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
 							<th class="text-center" >Piso / Sección</th>
-							<th class="text-center" >A</th>
-							<th class="text-center" >B</th>
-							<th class="text-center" >C</th>
-							<th class="text-center" >D</th>
-							<th class="text-center" >E</th>
-							<th class="text-center" >F</th>
+						<?php 
+						foreach ($estante[1] as $seccionn  ) : ?>
+							<th class="text-center" ><? echo $seccionn ?></th>
+						<?php endforeach;
+						 ?>
 						</tr>
 					</thead>
 					<tbody>
+					<?php 
+					foreach ($estante[0] as $pisoo) : ?>
 						<tr>
-							<th class="text-center">1</th>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<th class="text-center"><?= $pisoo; ?></th>
+					<?php foreach ($estante[1] as $estantee ) : ?>
+							<td dCol="<?= $pisoo; ?>" dRow="<?= $estantee ?>"><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+					<?php endforeach; ?>
 						</tr>
-						<tr>
-							<th class="text-center">2</th>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-						</tr>
-						<tr>
-							<th class="text-center">3</th>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-						</tr>
-						<tr>
-							<th class="text-center">4</th>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-						</tr>
-						<tr>
-							<th class="text-center">5</th>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-							<td><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
-						</tr>
+					<?php endforeach; ?>
+					
 					</tbody>
 				</table>
 			</div>
@@ -124,6 +123,29 @@
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
+<!-- Modal para insertar productos a almacén -->
+<div class="modal fade modal-almacenInsertar" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar producto a almacén</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid"> <span id="spanCubicaje" ></span>
+					<p>Rellene cuidadosamente la siguiente información</p>
+					<label for="">Código del producto</label>
+					<input type="number" class="form-control input-lg mayuscula text-center " id="txtAlmacenCodProducto" val="0.00" autocomplete="off">
+					<label for="">¿Observaciones?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtAlmacenObs" autocomplete="off">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-azul btn-outline" id="btnInsertAlmacenProd" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
+		</div>
+		</div>
+	</div>
+</div>
 
 
 <?php include 'footer.php'; ?>
@@ -136,11 +158,57 @@ $.interesGlobal=4;
 datosUsuario();
 
 $(document).ready(function(){
-	console.log( '0');
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
+	$('.selectpicker').selectpicker('refresh');
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> {
+		$.each( JSON.parse(resp), function (i, dato) { console.log(dato)
+			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`<p><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a></p>`);
+			//console.log(dato.numPiso +' '+dato.zonaDescripcion);
+		});
+	});
 });
-
+$('#cmbEstantes').on('changed.bs.select', function (e) {
+	var id= $('#divCmbEstantes').find('.selected a').attr('data-tokens');
+	switch (id) {
+		case '1':
+			window.location.href = 'almacen.php?estanteNingun&almacen='+id; break;
+		case '2':
+			window.location.href = 'almacen.php?estanteExibicion&almacen='+id; break;
+		case '3':
+			window.location.href = 'almacen.php?estanteLaptops&almacen='+id; break;
+		case '4':
+			window.location.href = 'almacen.php?estantePlateado&almacen='+id; break;
+		case '4':
+			window.location.href = 'almacen.php?estanteAmarillo&almacen='+id; break;
+		case '5':
+			window.location.href = 'almacen.php?estanteRojo&almacen='+id; break;
+		case '6':
+			window.location.href = 'almacen.php?estanteNegro&almacen='+id; break;
+		default:
+			break;
+	}
+	
+});
+$('.btnAgregarAlmacen').click(function() {
+	$('#spanCubicaje').attr('dcol', $(this).parent().attr('dcol'));
+	$('#spanCubicaje').attr('drow', $(this).parent().attr('drow'));
+	$('.modal-almacenInsertar').modal('show');
+});
+$('#btnInsertAlmacenProd').click(function() {
+	var piso= $('#spanCubicaje').attr('dcol');
+	var zona= $('#spanCubicaje').attr('drow');
+	console.log( zona );
+	$.ajax({url: 'php/insertAlmacenv3.php', type: 'POST', data: {
+		idProducto : $('#txtAlmacenCodProducto').val(),
+		estante: <?= $_GET['almacen']; ?>,
+		piso: piso,
+		zona: zona,
+		obs: $('#txtAlmacenObs').val()
+	 }}).done(function(resp) {
+		console.log(resp)
+	});
+});
 </script>
 <?php } ?>
 </body>
