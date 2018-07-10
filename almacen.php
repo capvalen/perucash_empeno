@@ -3,29 +3,8 @@
 <html lang="es">
 
 <head>
-
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
-
-		<title>Registro: PeruCash</title>
-
-		<!-- Bootstrap Core CSS -->
-		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-		<!-- Custom CSS -->
-		<link rel="shortcut icon" href="images/favicon.png">
-		<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.6" >
-		<link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
-		<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.51" >
-		<link rel="stylesheet" href="css/colorsmaterial.css">
-		<link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-		<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
-		<link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
-		<link rel="stylesheet" href="css/animate.css" >
-		
+	<title>Registro: PeruCash</title>
+	<?php include "header.php"; ?>
 </head>
 
 <body>
@@ -33,6 +12,7 @@
 <style>
 .btnAgregarAlmacen{padding: 2px;}
 #txtAlmacenCodProducto{font-size:24px;}
+h3{color: #ab47bc;}
 </style>
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -55,26 +35,33 @@
 			</div>
 			<br>
 			<?php 
-			if( isset($_GET['estanteAmarillo']) || isset($_GET['estanteExibicion']) || isset($_GET['estanteRojo']) ){
+			if( isset($_GET['estanteAmarillo']) || isset($_GET['estanteExhibicion']) || isset($_GET['estanteRojo']) ){
 				$estante = array (
 					array(1, 2, 3, 4),//pisos
 					array('A','B','C'),//seccion
 				);
+				if( isset($_GET['estanteAmarillo'])){ echo '<h3>Estante Amarillo</h3>';}
+				if( isset($_GET['estanteExhibicion'])){ echo '<h3>Estante Metálico de Exibición</h3>';}
+				if( isset($_GET['estanteRojo'])){ echo '<h3>Estante Rojo</h3>';}
 			}
 			else if( isset($_GET['estanteNegro']) || isset($_GET['estantePlateado']) ){
 				$estante = array (
 					array(1, 2, 3, 4, 5),//pisos
 					array('A','B','C'),//seccion
 				);
+				if( isset($_GET['estanteNegro'])){ echo '<h3>Estante Negro</h3>';}
+				if( isset($_GET['estantePlateado'])){ echo '<h3>Estante Plateado</h3>';}
 			}
 			else if( isset($_GET['estanteLaptops']) ){
 				$estante = array (
 					array(1, 2, 3, 4),//pisos
 					array('A','B','C', 'D', 'E', 'F'),//seccion
 				);
+				if( isset($_GET['estanteLaptops'])){ echo '<h3>Estante Negro de Laptops</h3>';}
 			}
 			else {
-				$_GET['almacen']=0;
+				if( isset($_GET['estanteNingun'])){ echo '<h3>Sin estante</h3>';}
+				$_GET['almacen']=1;
 				$estante = array (
 					array(1),//pisos
 					array('A'),//seccion
@@ -163,7 +150,7 @@ $(document).ready(function(){
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> {
 		$.each( JSON.parse(resp), function (i, dato) { console.log(dato)
-			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`<p><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a></p>`);
+			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`<p class="text-center"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a></p>`);
 			//console.log(dato.numPiso +' '+dato.zonaDescripcion);
 		});
 	});
@@ -174,16 +161,16 @@ $('#cmbEstantes').on('changed.bs.select', function (e) {
 		case '1':
 			window.location.href = 'almacen.php?estanteNingun&almacen='+id; break;
 		case '2':
-			window.location.href = 'almacen.php?estanteExibicion&almacen='+id; break;
+			window.location.href = 'almacen.php?estanteExhibicion&almacen='+id; break;
 		case '3':
 			window.location.href = 'almacen.php?estanteLaptops&almacen='+id; break;
 		case '4':
 			window.location.href = 'almacen.php?estantePlateado&almacen='+id; break;
-		case '4':
-			window.location.href = 'almacen.php?estanteAmarillo&almacen='+id; break;
 		case '5':
-			window.location.href = 'almacen.php?estanteRojo&almacen='+id; break;
+			window.location.href = 'almacen.php?estanteAmarillo&almacen='+id; break;
 		case '6':
+			window.location.href = 'almacen.php?estanteRojo&almacen='+id; break;
+		case '7':
 			window.location.href = 'almacen.php?estanteNegro&almacen='+id; break;
 		default:
 			break;
@@ -198,15 +185,17 @@ $('.btnAgregarAlmacen').click(function() {
 $('#btnInsertAlmacenProd').click(function() {
 	var piso= $('#spanCubicaje').attr('dcol');
 	var zona= $('#spanCubicaje').attr('drow');
-	console.log( zona );
+	//console.log( zona );
 	$.ajax({url: 'php/insertAlmacenv3.php', type: 'POST', data: {
 		idProducto : $('#txtAlmacenCodProducto').val(),
 		estante: <?= $_GET['almacen']; ?>,
 		piso: piso,
 		zona: zona,
 		obs: $('#txtAlmacenObs').val()
-	 }}).done(function(resp) {
-		console.log(resp)
+	 }}).done(function(resp) { console.log( resp );
+		if($.isNumeric(resp)){
+			location.reload();
+		}
 	});
 });
 </script>
