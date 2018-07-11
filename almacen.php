@@ -12,6 +12,9 @@
 <style>
 .btnAgregarAlmacen{padding: 2px;}
 #txtAlmacenCodProducto{font-size:24px;}
+.pProdAlmacen{padding: 6px 5px;}
+.pProdAlmacen:hover{background-color: #f5f5f5;}
+.aRemoveProductAlmacen{color: #d50000;}
 h3{color: #ab47bc;}
 </style>
 <div id="wrapper">
@@ -37,7 +40,7 @@ h3{color: #ab47bc;}
 			<?php 
 			if( isset($_GET['estanteAmarillo']) || isset($_GET['estanteExhibicion']) || isset($_GET['estanteRojo']) ){
 				$estante = array (
-					array(1, 2, 3, 4),//pisos
+					array(5, 4, 3, 2, 1),//pisos
 					array('A','B','C'),//seccion
 				);
 				if( isset($_GET['estanteAmarillo'])){ echo '<h3>Estante Amarillo</h3>';}
@@ -46,7 +49,7 @@ h3{color: #ab47bc;}
 			}
 			else if( isset($_GET['estanteNegro']) || isset($_GET['estantePlateado']) ){
 				$estante = array (
-					array(1, 2, 3, 4, 5),//pisos
+					array(5, 4, 3, 2, 1),//pisos
 					array('A','B','C'),//seccion
 				);
 				if( isset($_GET['estanteNegro'])){ echo '<h3>Estante Negro</h3>';}
@@ -54,10 +57,24 @@ h3{color: #ab47bc;}
 			}
 			else if( isset($_GET['estanteLaptops']) ){
 				$estante = array (
-					array(1, 2, 3, 4),//pisos
+					array(5, 4, 3, 2, 1),//pisos
 					array('A','B','C', 'D', 'E', 'F'),//seccion
 				);
 				if( isset($_GET['estanteLaptops'])){ echo '<h3>Estante Negro de Laptops</h3>';}
+			}
+			else if( isset($_GET['cuarto2']) ){
+				$estante = array (
+					array(1),//pisos
+					array('A'),//seccion
+				);
+				if( isset($_GET['cuarto2'])){ echo '<h3>Segundo almacén</h3>';}
+			}
+			else if( isset($_GET['televisores']) ){
+				$estante = array (
+					array(1),//pisos
+					array('A'),//seccion
+				);
+				if( isset($_GET['televisores'])){ echo '<h3>Zona televisores</h3>';}
 			}
 			else {
 				if( isset($_GET['estanteNingun'])){ echo '<h3>Sin estante</h3>';}
@@ -76,7 +93,7 @@ h3{color: #ab47bc;}
 			// }
 			?>
 			<div class="row container-fluid table-responsive">
-				<table class="table table-bordered table-hover">
+				 <table class="table table-bordered "> <!-- table-hover -->
 					<thead>
 						<tr>
 							<th class="text-center" >Piso / Sección</th>
@@ -150,7 +167,8 @@ $(document).ready(function(){
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> {
 		$.each( JSON.parse(resp), function (i, dato) { console.log(dato)
-			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`<p class="text-center"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a></p>`);
+			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`
+			<p class="text-center pProdAlmacen"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a> <a href="#!" class="aRemoveProductAlmacen pull-right"><i class="icofont icofont-close"></i></a></p>`);
 			//console.log(dato.numPiso +' '+dato.zonaDescripcion);
 		});
 	});
@@ -172,6 +190,10 @@ $('#cmbEstantes').on('changed.bs.select', function (e) {
 			window.location.href = 'almacen.php?estanteRojo&almacen='+id; break;
 		case '7':
 			window.location.href = 'almacen.php?estanteNegro&almacen='+id; break;
+		case '8':
+			window.location.href = 'almacen.php?cuarto2&almacen='+id; break;
+		case '9':
+			window.location.href = 'almacen.php?televisores&almacen='+id; break;
 		default:
 			break;
 	}
@@ -197,6 +219,9 @@ $('#btnInsertAlmacenProd').click(function() {
 			location.reload();
 		}
 	});
+});
+$('td').on('click', '.aRemoveProductAlmacen', function (e) {
+	console.log( 'hola' );
 });
 </script>
 <?php } ?>

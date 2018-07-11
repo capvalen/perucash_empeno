@@ -5,7 +5,8 @@ $sql = mysqli_query($conection,"SELECT cu.*, s.zonaDescripcion, pi.numPiso, p.pr
 inner join seccion s on s.idZona = cu.idZona
 inner join piso pi on pi.idPiso = cu.idPiso
 inner join producto p on p.idProducto = cu.idProducto
- where Idestante = {$_POST['almacen']} and idTipoProceso=23");
+where Idestante = {$_POST['almacen']} and idTipoProceso=23
+order by cu.idProducto desc");
 $i=0;
 // if (!$sql) { ////codigo para ver donde esta el error
 //     printf("Error: %s\n", mysqli_error($conection));
