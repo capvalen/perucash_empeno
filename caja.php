@@ -283,7 +283,7 @@ $('#btnGuardarApertura').click(function () {
 	}else{
 		$.ajax({url: 'php/cajaAperturar.php', type: 'POST', data:{
 			monto: monto, obs: obs
-		}}).done((resp)=> { //console.log(resp);
+		}}).done((resp)=> { console.log(resp);
 			if(resp==1){
 				location.reload();
 			}
