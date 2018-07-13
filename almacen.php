@@ -110,7 +110,7 @@ h3{color: #ab47bc;}
 						<tr>
 							<th class="text-center"><?= $pisoo; ?></th>
 					<?php foreach ($estante[1] as $estantee ) : ?>
-							<td dCol="<?= $pisoo; ?>" dRow="<?= $estantee ?>"><button class="btn btn-azul btn-outline btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
+							<td dCol="<?= $pisoo; ?>" dRow="<?= $estantee ?>"><button class="btn btn-azul btn-outline btnSinBorde btn-block btn-lg btnAgregarAlmacen"><i class="icofont icofont-inbox"></i></button></td>
 					<?php endforeach; ?>
 						</tr>
 					<?php endforeach; ?>
@@ -197,7 +197,6 @@ $('#cmbEstantes').on('changed.bs.select', function (e) {
 		default:
 			break;
 	}
-	
 });
 $('.btnAgregarAlmacen').click(function() {
 	$('#spanCubicaje').attr('dcol', $(this).parent().attr('dcol'));

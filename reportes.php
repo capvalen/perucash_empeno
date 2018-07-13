@@ -128,6 +128,36 @@ $('#cmbEstadoCombo').change(function () {
 	$('tfoot').children().remove();
 	$('.divAnalitica').addClass('hidden');
 	switch(estado){
+		case '23':
+		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
+			$.ajax({url: 'php/listarInventarioAlmacen.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				if(JSON.parse(resp).length==0){
+					$('tbody').append(`
+					<tr>
+						<td class="mayuscula">No existen artículos en ésta categoría</td>
+						<td class="mayuscula"></td>
+						<td></td>
+					</tr>`);
+				}
+				var data = JSON.parse(resp);
+				$.each(data, function (i, dato) {
+					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					$('tbody').append(`
+					<tr><td>${dato.idProducto}</td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}"></a></td>
+						<td data-sort-value="${moment(dato.cubFecha).format('X')}">${moment(dato.cubFecha, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
+						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+					</tr>`);
+					
+					if(data.length==i+1){
+						$('#tablita').append(`<tfoot><th><td></td><td></td>
+							<td><strong>Total: </strong></td>
+							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							</th></tfoot>`);
+					}
+				});
+			}); break;
 		case '24':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosProrrogav3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
