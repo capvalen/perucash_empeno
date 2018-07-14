@@ -76,6 +76,8 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-indigo, .btn-indigo:hover{border-color: #3E50B4; color: #fff; background-color: #3E50B4;}.btn-indigo:active {background-color: #3748a2;} .btn-indigo:focus {color: #fff;}
 .btn-morita, .btn-morita:hover{border-color: #9B26AF; color: #fff; background-color: #9B26AF;}.btn-morita:active {background-color: #7c1e8c;} .btn-morita:focus {color: #fff;}
 .btn-rosaKit, .btn-rosaKit:hover{border-color: #e91e63; color: #fff; background-color: #e91e63;}.btn-rosaKit:active {background-color: #a31545;} .btn-rosaKit:focus {color: #fff;}
+.btn-infocat, .btn-infocat:hover{border-color: #bb53d4!important; color: #fff; background-color: #bb53d4;}.btn-infocat:active {background-color: #bb53d4;} .btn-infocat:focus {color: #fff;}
+.btn-rojoFresa, .btn-rojoFresa:hover{border-color: #e53935; color: #fff; background-color: #e53935;}.btn-rojoFresa:active {background-color: #e53935;} .btn-rojoFresa:focus {color: #fff;}
 
 .btn-primary:hover {
     background-color: #157ad0;
@@ -99,7 +101,8 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-indigo.btn-outline{color:#3E50B4;}
 .btn-morita.btn-outline{color:#9B26AF;}
 .btn-rosaKit.btn-outline{color:#e91e63;}
-
+.btn-rojoFresa.btn-outline{color:#e53935;}
+.btn-infocat.btn-outline{color:#bb53d4;}
 
  
 .btn-primary.btn-outline:focus,.btn-success.btn-outline:focus,.btn-info.btn-outline:focus,.btn-warning.btn-outline:focus,.btn-danger.btn-outline:focus,
@@ -109,6 +112,7 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-morado.btn-outline:active,.btn-morado.btn-outline:hover, .btn-indigo.btn-outline:active,.btn-indigo.btn-outline:hover,
 .btn-azul.btn-outline:active,.btn-azul.btn-outline:hover,.btn-dark.btn-outline:active,.btn-dark.btn-outline:hover,
 .btn-morita.btn-outline:active,.btn-morita.btn-outline:hover,.btn-rosaKit.btn-outline:active,.btn-rosaKit.btn-outline:hover
+.btn-rojoFresa.btn-outline:hover, .btn-rojoFresa.btn-outline:active, .btn-infocat.btn-outline:active,.btn-infocat.btn-outline:hover
 {color: white;}
 .btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: : black;}
 
