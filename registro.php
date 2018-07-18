@@ -448,7 +448,6 @@ $('#txtBuscarNivelGod').keyup(function (e) {
     		//Buscar descripciones, apellidos
     	}
     }
-
 });
 $('.btnMasterEntrada').click(function () {
 	$('.contenedorBienvenida').addClass('hidden');

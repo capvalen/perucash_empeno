@@ -151,6 +151,25 @@ h3{color: #ab47bc;}
 	</div>
 </div>
 
+<!-- Modal para confirmar elminiación -->
+<div class="modal fade modalRemoveAnalisis" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm" >
+	<div class="modal-content ">
+	<div class="modal-header-danger">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Retirar de almacén</h4>
+	</div>
+	  <div class="modal-body">
+		<p >¿Está seguro de eliminar <strong class="text-uppercase" id="strNombre"></strong>?</p><span id="idRemove"></span>
+		<input type="text" class='form-control' id='txtRetirarObs' placeholder='Observaciones'>
+		<div class="modal-footer d-flex justify-content-between">
+			<button class="btn btn-danger btn-outline" id="btnAproveRemoveAnalisis"><i class="icofont icofont-bug"></i> Sí, retirar</button>
+		</div>
+	</div>
+  </div>
+</div>
+</div>
+
 
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
@@ -168,10 +187,12 @@ $(document).ready(function(){
 	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> {
 		$.each( JSON.parse(resp), function (i, dato) { console.log(dato)
 			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`
-			<p class="text-center pProdAlmacen"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a> <a href="#!" class="aRemoveProductAlmacen pull-right"><i class="icofont icofont-close"></i></a></p>`);
+			<p class="text-center pProdAlmacen" data-toggle="tooltip" data-placement="top" title="${dato.prodNombre.toUpperCase()}"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a> <a href="#!" class="aRemoveProductAlmacen pull-right" data-cubicaje="${dato.idCubicaje}"><i class="icofont icofont-close" ></i></a></p>`);
 			//console.log(dato.numPiso +' '+dato.zonaDescripcion);
 		});
+		$('[data-toggle="tooltip"]').tooltip();
 	});
+
 });
 $('#cmbEstantes').on('changed.bs.select', function (e) {
 	var id= $('#divCmbEstantes').find('.selected a').attr('data-tokens');
@@ -219,8 +240,26 @@ $('#btnInsertAlmacenProd').click(function() {
 		}
 	});
 });
+$('.modalRemoveAnalisis').on('shown.bs.modal', function () { 
+	$('#txtRetirarObs').focus();
+});
 $('td').on('click', '.aRemoveProductAlmacen', function (e) {
-	console.log( 'hola' );
+	$('#idRemove').attr('data-producto', $(this).prev().text());
+	$('#idRemove').attr('data-cubo',$(this).attr('data-cubicaje'));
+	$('#strNombre').text(' con id '+$(this).attr('data-cubicaje')+' producto: '+$(this).parent().attr('data-original-title'));
+	$('.modalRemoveAnalisis').modal('show');
+	
+});
+$('#btnAproveRemoveAnalisis').click(function() {
+	$.ajax({url: 'php/eliminarItemAlmacen.php', type: 'POST', data: {
+		idProd: $('#idRemove').attr('data-producto'),
+		cubo: $('#idRemove').attr('data-cubo'),
+		obs: $('#txtRetirarObs').val()
+		}}).done(function(resp) {
+			if(resp==true){
+				location.reload();
+			}
+	});
 });
 </script>
 <?php } ?>
