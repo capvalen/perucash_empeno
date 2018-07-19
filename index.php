@@ -66,11 +66,11 @@ a:hover{color:#462782;}
 
 			<div class="form-group">
 				<label class="hidden" for="username"><i class="icofont icofont-user"></i> Usuario</label>
-				<input class="form-control text-center" value='' id="txtUser_app" placeholder="Usuario" type="text"  /><div class="icoTransparent"><i class="icofont icofont-user"></i> </div>
+				<input class="form-control text-center" value='' id="txtUser_app" name="campo2" placeholder="Usuario" type="text" autocomplete="off" /><div class="icoTransparent"><i class="icofont icofont-user"></i> </div>
 			</div>
 			<div class="form-group">
 				<label class="hidden" for="password"><i class="icofont icofont-key"></i> Contraseña</label>
-				<input class="form-control text-center" id="txtPassw" value='' placeholder="Contraseña" type="password" /><div class="icoTransparent"><i class="icofont icofont-ui-text-loading"></i>
+				<input class="form-control text-center" id="txtPassw" value='' name="campo3" placeholder="Contraseña" type="password" autocomplete="off" /><div class="icoTransparent"><i class="icofont icofont-ui-text-loading"></i>
 			</div>
 
 			<div class="form-group text-center"><br>

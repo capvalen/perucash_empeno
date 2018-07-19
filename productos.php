@@ -142,7 +142,7 @@ $finRecupero=160;
 					  </button>
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-						<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-shopping-cart"></i> Editar descripción</a></li>
+						<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-exchange"></i> Editar descripción</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 					  </ul>
 					</div>
@@ -176,7 +176,7 @@ $finRecupero=160;
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 					<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
-					<p>Cantidad: <span><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
+					<p>Cantidad: <span id="spanCantp"><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 				<?php if($esCompra=='0'){ ?>
 					<p>Adquisición: <strong><span>Por empeño</span></strong></p>
 				<?php }else { ?>
@@ -664,6 +664,40 @@ $finRecupero=160;
 		</div>
 	</div>
 </div>
+
+<!-- Modal para: editar producto-->
+<div class='modal fade modalEditarProducto' tabindex='-1' role='dialog' aria-hidden='true'>
+	<div class='modal-dialog modal-sm' >
+	<div class='modal-content '>
+		<div class='modal-header-warning'>
+			<button type='button' class='close' data-dismiss='modal' aria-label='Close' ><span aria-hidden='true'>&times;</span></button>
+			<h4 class='modal-tittle'><i class="icofont icofont-focus"></i> Editar producto</h4>
+		</div>
+		<div class='modal-body'>
+			<label for="">Nombre producto:</label>
+			<input type="text" class='form-control mayuscula' id='txtModProdNombre' autocomplete="off">
+			<label for="">Cantidad Unds.:</label>
+			<input type="number" class='form-control' id='txtModPresCantidad' value="0" autocomplete="off">
+			<label for="">Préstamo inicial S/:</label>
+			<input type="number" class='form-control esMoneda' id='txtModPresInicial' value="0" autocomplete="off">
+			<label for="">Interés base %</label>
+			<input type="number" class='form-control esMoneda' id='txtModPresInteres' value="0" autocomplete="off">
+			<label for="">Cliente</label>
+			<select class="form-control" id="sltClienteMod">
+			</select><br>
+			<label for="">Estado:</label>
+			<select class="form-control" id="sltEstadoMod">
+				<option value="1">Vigente</option>
+				<option value="0">Finalizado</option>
+			</select>
+
+		</div>
+		<div class='modal-footer'>
+			<button type='button' class='btn btn-warning btn-outline' id='btnActualizarMod'><i class="icofont icofont-exchange"></i> Actualizar</button>
+		</div>
+		</div>
+	</div>
+</div>
 <?php } ?>
 
 
@@ -1103,8 +1137,12 @@ $('#txtMontoTicketIntereses').focusout(function () {
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
 });
-$('#liEditarDescripciones').click(() => {
-	// body...
+$('#liEditarDescripciones').click(function() {
+	$('#txtModProdNombre').val( $('.h2Producto').text() );
+	$('#txtModPresCantidad').val(parseInt($('#spanCantp').text()));
+	$('#txtModPresInicial').val($('#spanPresInicial').text());
+	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
+	$('.modalEditarProducto').modal('show');
 });
 
 <?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8){ ?>
@@ -1150,6 +1188,9 @@ $('#btnGuardarCubicaje').click( ()=> {
 				location.reload();
 			}
 		});}
+});
+$('#btnActualizarMod').click(function() {
+	
 });
 
 </script>

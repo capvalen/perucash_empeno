@@ -57,8 +57,7 @@ th{color:#a35bb4}
 <!-- Page Content -->
 <div id="page-content-wrapper">
 	<div class="container-fluid">
-
-		<div class="row noselect">
+		<div class="row "> <!-- noSelect -->
 			<div class="col-lg-12 contenedorDeslizable contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2 -->
 			<h2 class="purple-text text-lighten-1">Cuadre de caja <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
