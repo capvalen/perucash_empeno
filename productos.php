@@ -142,8 +142,8 @@ $finRecupero=160;
 					  </button>
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
-						<li><a href="#!" id="liEditarDescripciones"><i class="icofont icofont-exchange"></i> Editar descripción</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
+                        <li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
 					  </ul>
 					</div>
 				</div>
@@ -546,7 +546,7 @@ $finRecupero=160;
 						</ul>
 					</div>
 						
-					</select>
+					
 					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
 					<input type="number" class="form-control input-lg esDecimal " id="txtMontoTicketIntereses" placeholder="S/.">
 					<label for="">Comentario extra:</label>
@@ -683,8 +683,11 @@ $finRecupero=160;
 			<label for="">Interés base %</label>
 			<input type="number" class='form-control esMoneda' id='txtModPresInteres' value="0" autocomplete="off">
 			<label for="">Cliente</label>
-			<select class="form-control" id="sltClienteMod">
-			</select><br>
+			<div class="divCmbClientes">
+				<select class="form-control selectpicker" id="sltClienteMod" title="Clientes..."  data-width="100%" data-live-search="true" data-size="15">
+					<?php include 'php/listarClienteOPT.php'; ?>
+				</select>
+			</div><br>
 			<label for="">Estado:</label>
 			<select class="form-control" id="sltEstadoMod">
 				<option value="1">Vigente</option>
@@ -955,6 +958,17 @@ $('.btnImprimirTicket').click(function () {
 				monto: queMonto,
 				usuario: queUser
 			}}).done(function (resp) { 	}); break;
+		case '33':
+			queTitulo='       * Pago parcial *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
+				cliente: queDueno,
+				articulo: queArticulo,
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
 	}
 	
 	
@@ -1104,6 +1118,14 @@ $('#btnCrearTicketPagoInteres').click(function () {
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
 });
+$('#liEditDescription').click(function() {
+	$('#txtModProdNombre').val( $('.h2Producto').text() );
+	$('#txtModPresCantidad').val(parseInt($('#spanCantp').text()));
+	$('#txtModPresInicial').val($('#spanPresInicial').text());
+	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
+	$('.modalEditarProducto').modal('show');
+});
+
 <?php if( $rowProducto['prodActivo']==1 && $esCompra==0 ){ ?>
 $('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
@@ -1136,13 +1158,6 @@ $('#txtMontoTicketIntereses').focusout(function () {
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
 		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
-});
-$('#liEditarDescripciones').click(function() {
-	$('#txtModProdNombre').val( $('.h2Producto').text() );
-	$('#txtModPresCantidad').val(parseInt($('#spanCantp').text()));
-	$('#txtModPresInicial').val($('#spanPresInicial').text());
-	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
-	$('.modalEditarProducto').modal('show');
 });
 
 <?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8){ ?>
