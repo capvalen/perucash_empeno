@@ -11,7 +11,7 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni
 FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
@@ -172,7 +172,7 @@ $finRecupero=160;
 					<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 				<?php if($esCompra=='0'){ ?>
-					<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno"><?php echo $rowProducto['cliNombres']; ?></a></p>
+					<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 					<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
@@ -1122,6 +1122,8 @@ $('#liEditDescription').click(function() {
 	$('#txtModProdNombre').val( $('.h2Producto').text() );
 	$('#txtModPresCantidad').val(parseInt($('#spanCantp').text()));
 	$('#txtModPresInicial').val($('#spanPresInicial').text());
+	//spanDueno
+
 	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
 	$('.modalEditarProducto').modal('show');
 });

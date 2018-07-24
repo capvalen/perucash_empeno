@@ -324,7 +324,7 @@ $('#cmbEstadoCombo').change(function () {
 					sumaElementos+=parseFloat(dato.prodMontoEntregado);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}#tabMovEstados">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
 						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
