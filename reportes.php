@@ -56,9 +56,12 @@ require("php/conkarl.php");
 					<div class=" divAnalitica col-xs-12 col-sm-6 hidden">
 					<select class="form-control" id="sltFiltroAnalitica">
 						<option value="0">Seleccione una opción</option>
-						<option value="1">Préstamos y Desembolsos</option>
+						<option value="4">Amortizaciones</option>
 						<option value="2">Intereses cobrados</option>
 						<option value="3">Préstamos finalizados</option>
+						<option value="1">Préstamos y Desembolsos</option>
+						<option value="6">Rematados</option>
+						<option value="5">Vendidos</option>
 					</select>
 					<div class="container-fluid" style="margin-top: 10px;">
 					<div class="col-xs-8"><input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos"></div>
@@ -477,7 +480,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					});
 				}); break;
 				case '3':
-				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 32 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
 					if(resp.length==0){
 						$('tbody').append(`
@@ -505,6 +508,94 @@ $('#btnFiltroAnaticica').click(()=> {
 						}
 					});
 				}); break;
+				case '4':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 45 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '5':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 21 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '6':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 20 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${dato.idProducto}</td>
+							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				
 			default:
 				break;
 		}
