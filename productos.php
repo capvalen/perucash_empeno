@@ -202,8 +202,6 @@ $finRecupero=160;
 					</div>
 				<?php
 				}
-				
-				
 			?>
 				<div class="row">
 			<?php 

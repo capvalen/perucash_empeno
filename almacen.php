@@ -250,6 +250,7 @@ $('td').on('click', '.aRemoveProductAlmacen', function (e) {
 	$('.modalRemoveAnalisis').modal('show');
 	
 });
+
 $('#btnAproveRemoveAnalisis').click(function() {
 	$.ajax({url: 'php/eliminarItemAlmacen.php', type: 'POST', data: {
 		idProd: $('#idRemove').attr('data-producto'),
@@ -261,6 +262,7 @@ $('#btnAproveRemoveAnalisis').click(function() {
 			}
 	});
 });
+
 </script>
 <?php } ?>
 </body>

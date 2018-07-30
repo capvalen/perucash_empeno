@@ -115,8 +115,9 @@ $('#txtBuscarNivelGod').keypress(function (e) {
 		if( $.isNumeric(campo) && campo.length<6){
 			window.location='productos.php?idProducto='+campo; 
 		}else{ // es letras
+			if($('#txtBuscarNivelGod').val()!=''){
 			$.ajax({url: 'php/listarBuscarNombreProducto.php', type: 'POST', data: {texto: campo }}).done(function (resp) {
-			//console.log(resp);
+			console.log(resp);
 			//dato = JSON.parse(resp); 
 			$('#rowProductoEncontrado').html(resp);
 			/*$.each(dato, function(i, elem){ //console.log(elem)
@@ -127,7 +128,8 @@ $('#txtBuscarNivelGod').keypress(function (e) {
 					</div>`);
 			});*/
 			$('.modal-mostrarResultadosProducto').modal('show');
-		});
+			});
+			}
 		}
 	}
 });
