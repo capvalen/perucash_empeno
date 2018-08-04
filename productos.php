@@ -12,12 +12,13 @@ if( isset($_GET['idProducto'])){
 
 	if($esCompra =='0'){
 		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni
-FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
+		FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}else{//Cuando es una compra
-		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
+		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres
+		FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
 		inner join usuario u on u.idUsuario=p.idUsuario
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -172,7 +173,7 @@ $finRecupero=160;
 					<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 				<?php if($esCompra=='0'){ ?>
-					<p class="mayuscula">Dueño: <a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
+					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 					<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
@@ -679,7 +680,7 @@ $finRecupero=160;
 			<label for="">Préstamo inicial S/:</label>
 			<input type="number" class='form-control esMoneda' id='txtModPresInicial' value="0" autocomplete="off">
 			<label for="">Interés base %</label>
-			<input type="number" class='form-control esMoneda' id='txtModPresInteres' value="0" autocomplete="off">
+			<input type="number" class='form-control esMoneda' id='txtModPresInteres' value="<?= $rowProducto['prodInteres']; ?>" autocomplete="off">
 			<label for="">Cliente</label>
 			<div class="divCmbClientes">
 				<select class="form-control selectpicker" id="sltClienteMod" title="Clientes..."  data-width="100%" data-live-search="true" data-size="15">
@@ -1120,8 +1121,8 @@ $('#liEditDescription').click(function() {
 	$('#txtModProdNombre').val( $('.h2Producto').text() );
 	$('#txtModPresCantidad').val(parseInt($('#spanCantp').text()));
 	$('#txtModPresInicial').val($('#spanPresInicial').text());
-	//spanDueno
-
+	$('#txtModPresInteres').val(<?= $rowProducto['prodInteres']; ?>);
+	$('#sltClienteMod').selectpicker('val', $('#spanIdDueno').text() +' - '+ $('.spanDueno').text());
 	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
 	$('.modalEditarProducto').modal('show');
 });

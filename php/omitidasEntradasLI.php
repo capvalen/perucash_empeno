@@ -2,7 +2,7 @@
 require("conkarl.php");
 
 $sql = mysqli_query($conection,"SELECT * FROM `tipoProceso`
-where idTipoProceso in (31)");
+where idTipoProceso in (31,75)");
 
 while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
 {
