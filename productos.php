@@ -35,6 +35,8 @@ $finRemate=90;
 $iniRecupero=91;
 $finRecupero=160;
 
+$cochera=0;
+
 ?>
 
 <head>
@@ -346,18 +348,39 @@ $finRecupero=160;
 								$_GET['numhoy']=200;
 							}
 							$_GET['interes']=$rowInteres['preInteres'];
-							$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
+							//$resultado=(require_once "php/calculoInteresAcumuladoDeValorv3.php");
 							// var_dump($resultado);
-							$interesJson= $resultado[0]['soloInteres'];
-							$razonInteres= $resultado[0]['intDiarioHoy']*100;
+							//$interesJson= $resultado[0]['soloInteres'];
+							//$razonInteres= $resultado[0]['intDiarioHoy']*100;
+							$razonInteres= $rowInteres['diferenciaDias']*($rowInteres['preInteres']/7);
+							$interesJson= ($rowInteres['preCapital']*$razonInteres)/100;
 							
 							?>
-							<li>Interés <strong>acumulado</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
-							<li>Razón del cálculo: <span><strong>Interés acumulado diario</strong> (más de 29 días).</span></li>
-						<?php if($rowInteres['diferenciaDias']>=36 ){ $gastosAdmin=35; ?>
-							<li>Gastos admnistrativos: <span>S/. 35.00</span></li>
-						<?php }} ?>
-							<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin,2);  ?></strong></span></li>
+							<li>Interés <strong>simple</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
+							<li>Razón del cálculo: <span><strong>Interés simple diario</strong> (más de 29 días).</span></li>
+						<?php if($rowInteres['diferenciaDias']>=36 ){
+							if ($rowInteres['preCapital']<=200) { $gastosAdmin=5; }
+							else if ($rowInteres['preCapital']>200 && $rowInteres['preCapital']<=1000) { $gastosAdmin=10; }
+							else if ($rowInteres['preCapital']>1001 && $rowInteres['preCapital']<=3000) { $gastosAdmin=20; }
+							else if ($rowInteres['preCapital']>3000 ) { $gastosAdmin=30; }
+						?>
+							<li>Gastos admnistrativos: <span>S/ <?= number_format($gastosAdmin,2); ?></span></li>
+						<?php }} 
+						if($rowProducto['idTipoProducto']=="1" ):
+							$cochera=2*$rowInteres['diferenciaDias'];
+							echo "<li>Cochera: <span>S/. ". number_format($cochera,2) ."</span> (S/ 2.00 por día)</li>";
+						endif;
+						if( $rowProducto['idTipoProducto']=="11" ):
+							$cochera=2*$rowInteres['diferenciaDias'];
+							echo "<li>Cochera: <span>S/. ". number_format($cochera,2) ."</span> (S/ 2.00 por día)</li>";
+						endif;
+						if( $rowProducto['idTipoProducto']=="42" ):
+							$cochera=1*$rowInteres['diferenciaDias'];
+							echo "<li>Cochera: <span>S/. ". number_format($cochera,2) ."</span> (S/ 1.00 por día)</li>";
+						endif;
+						?>
+							
+							<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin+$cochera,2);  ?></strong></span></li>
 						</ul>
 						<?php 
 						}
@@ -968,6 +991,16 @@ $('.btnImprimirTicket').click(function () {
 				monto: queMonto,
 				usuario: queUser
 			}}).done(function (resp) { 	}); break;
+		case '36':
+			queTitulo='      * Gastos Adminitrativos *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketGastos.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
+				cliente: queDueno,
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
 	}
 	
 	
@@ -1173,7 +1206,7 @@ $('#btnInsertPagoMaestro').click(()=> {
 		cuanto: $('#txtMontoPagos').val(),
 		fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' 00:00:00',
 		obs: $('#txtObsPagos').val()
-	}}).done((resp)=> {
+	}}).done((resp)=> { console.log (resp);
 		if( $.isNumeric(resp) ){
 			$('.modal-pagoMaestro').modal('hide');
 			$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');

@@ -65,7 +65,7 @@ h3{color: #ab47bc;}
 			else if( isset($_GET['cuarto2']) ){
 				$estante = array (
 					array(1),//pisos
-					array('A'),//seccion
+					array('A', 'B', 'C', 'D'),//seccion
 				);
 				if( isset($_GET['cuarto2'])){ echo '<h3>Segundo almacén</h3>';}
 			}
@@ -256,13 +256,15 @@ $('#btnAproveRemoveAnalisis').click(function() {
 		idProd: $('#idRemove').attr('data-producto'),
 		cubo: $('#idRemove').attr('data-cubo'),
 		obs: $('#txtRetirarObs').val()
-		}}).done(function(resp) {
+		}}).done(function(resp) { console.log(resp)
 			if(resp==true){
 				location.reload();
 			}
 	});
 });
-
+$('.modal-almacenInsertar').on('shown.bs.modal', function () { 
+	$('#txtAlmacenCodProducto').focus();
+});
 </script>
 <?php } ?>
 </body>
