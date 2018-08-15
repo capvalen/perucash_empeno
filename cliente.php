@@ -44,7 +44,7 @@ if( isset($_GET['idCliente'])){
 }
 	/* .contenedorPres{margin-bottom: 20px;} */
 </style>
-<div class="noselect" id="wrapper">
+<div class="" id="wrapper">
 <?php include 'menu-wrapper.php' ?>
 
 <!-- Page Content -->

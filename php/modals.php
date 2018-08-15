@@ -9,7 +9,7 @@
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row">
-			<img src="images/congrautlaiotn-card.png" class="img-responsive" alt="">
+			<img src="images/path4585.png?ver=1.1" class="img-responsive" alt=""><br>
 			<p class="text-center blue-text text-darken-1"><strong>Tu información fue guardada:</strong></p>
 			<p class="text-center blue-text text-darken-1"><span id="spanBien"></span><h1 class="text-center blue-text text-darken-1" id="h1Bien"></h1></p>
 			</div>

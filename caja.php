@@ -169,6 +169,12 @@ th{color:#a35bb4}
 					<h5 id="h5TipoPago"></h5></div>
 					<label for="">Monto S/</label>
 					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
+					<label for="">Método de pago</label>
+					<div id="divCmbMetodoPago">
+						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php include 'php/listarMonedaOPT.php'; ?>
+						</select>
+					</div> <br>
 					<label for="">¿Observaciones?</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
 				</div>

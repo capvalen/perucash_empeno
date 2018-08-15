@@ -126,13 +126,13 @@ $cochera=0;
 .badge{background-color: #9658d0;    font-size: 10px;}
 .divImagen li{list-style-type: none;}
 </style>
-<div class="noselect" id="wrapper">
+<div class="" id="wrapper">
 
 	<!-- Sidebar -->
 	<?php include 'menu-wrapper.php' ?>
 <!-- Page Content -->
 <div id="page-content-wrapper">
-<div class="container-fluid noSelect">				 
+<div class="container-fluid">				 
 
 	<div class="row continer-fluid">
 		<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
@@ -674,10 +674,17 @@ $cochera=0;
 					</select></div>
 					<label for="">Fecha de pago</label>
 					<div class="sandbox-container"><input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off"></div>
+					<label for="">Método de pago</label>
+					<div id="divCmbMetodoPago">
+						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php include 'php/listarMonedaOPT.php'; ?>
+						</select>
+					</div> <br>
 					<label for="">Monto de pago</label>
-					<input type="number" class="form-control input-lg mayuscula" id="txtMontoPagos" autocomplete="off">
+					<input type="number" class="form-control input-lg mayuscula text-center" id="txtMontoPagos" autocomplete="off" style="font-size: 20px;">
 					<label for="">¿Observaciones?</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -1054,6 +1061,9 @@ $('#btnInventariarPositivo').click(function () {
 $('#btnInventariarNegativo').click(function () {
 	$('.modal-inventarioNegativo').modal('show');
 });
+$('.modal-pagoMaestro').on('shown.bs.modal', function () {
+	$('#dtpFechaPago').val( moment().format('DD/MM/YYYY') );
+});
 $('#btnInsertPositivo').click(function () {
 	$.ajax({
 		url: 'php/insertarInventarioPositivo.php',
@@ -1199,20 +1209,26 @@ $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
 });
 $('#btnInsertPagoMaestro').click(()=> {
-	//console.log(  );
-	$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
-		idProd: <?php echo $_GET['idProducto']; ?>,
-		quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
-		cuanto: $('#txtMontoPagos').val(),
-		fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' 00:00:00',
-		obs: $('#txtObsPagos').val()
-	}}).done((resp)=> { console.log (resp);
-		if( $.isNumeric(resp) ){
-			$('.modal-pagoMaestro').modal('hide');
-			$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
-			$('.modal-GuardadoCorrecto').modal('show');
-		}
-	});
+	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
+	if(idMoneda == null ){
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
+	}else{ 
+		$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
+			idProd: <?php echo $_GET['idProducto']; ?>,
+			quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
+			cuanto: $('#txtMontoPagos').val(),
+			moneda: idMoneda,
+			fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' 00:00:00',
+			obs: $('#txtObsPagos').val()
+		}}).done((resp)=> { console.log (resp);
+			if( $.isNumeric(resp) ){
+				$('.modal-pagoMaestro').modal('hide');
+				$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
+				$('.modal-GuardadoCorrecto').modal('show');
+			}
+		});
+	}
+	
 });
 <?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {
