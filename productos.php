@@ -398,7 +398,7 @@ $cochera=0;
 							</tr></thead>
 							<tbody>
 							<tr>
-								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
 							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
@@ -406,7 +406,7 @@ $cochera=0;
 								inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
-								<td class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td><td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td><?php echo $rowEstados['cajaObservacion']; ?></td><td><button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td data-id="<?php echo $rowEstados['idCaja']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td><td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php 
 							$i++;
@@ -694,6 +694,39 @@ $cochera=0;
 	</div>
 </div>
 
+<!--Modal Para insertar pago maestro -->
+<div class="modal fade modal-cajaMaestra" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-success">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Modificar pago caja</h4>
+			</div>
+			<div class="modal-body">
+				<div class="container-fluid">
+					<p>Rellene cuidadosamente la siguiente información</p>
+					<label for="">Fecha de pago</label>
+					<div class="sandbox-container"><input id="dtpCajaFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off"></div>
+					<label class="hidden" for="">Método de pago</label>
+					<div class="hidden" id="divCmbMetodoPago">
+						<select class="form-control selectpicker" id="sltCajaMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php include 'php/listarMonedaOPT.php'; ?>
+						</select>
+					</div> <br>
+					<label for="">Monto de pago S/</label>
+					<input type="number" class="form-control input-lg mayuscula text-center " id="txtCajaMontoPagos" autocomplete="off" style="font-size: 20px;">
+					<label for="">¿Observaciones?</label>
+					<input type="text" class="form-control input-lg mayuscula" id="txtCajaObsPagos" autocomplete="off">
+					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success btn-outline" id="btnUpdateCajaMaestra" ><i class="icofont icofont-bubble-down"></i> Actualizar registro caja</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal para: editar producto-->
 <div class='modal fade modalEditarProducto' tabindex='-1' role='dialog' aria-hidden='true'>
 	<div class='modal-dialog modal-sm' >
@@ -712,7 +745,7 @@ $cochera=0;
 			<label for="">Interés base %</label>
 			<input type="number" class='form-control esMoneda' id='txtModPresInteres' value="<?= $rowProducto['prodInteres']; ?>" autocomplete="off">
 			<label for="">Cliente</label>
-			<div class="divCmbClientes">
+			<div id="divCmbClientes">
 				<select class="form-control selectpicker" id="sltClienteMod" title="Clientes..."  data-width="100%" data-live-search="true" data-size="15">
 					<?php include 'php/listarClienteOPT.php'; ?>
 				</select>
@@ -722,7 +755,7 @@ $cochera=0;
 				<option value="1">Vigente</option>
 				<option value="0">Finalizado</option>
 			</select>
-
+			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div> <br>
 		</div>
 		<div class='modal-footer'>
 			<button type='button' class='btn btn-warning btn-outline' id='btnActualizarMod'><i class="icofont icofont-exchange"></i> Actualizar</button>
@@ -1166,7 +1199,7 @@ $('#liEditDescription').click(function() {
 	$('#txtModPresInicial').val($('#spanPresInicial').text());
 	$('#txtModPresInteres').val(<?= $rowProducto['prodInteres']; ?>);
 	$('#sltClienteMod').selectpicker('val', $('#spanIdDueno').text() +' - '+ $('.spanDueno').text());
-	$('#sltEstadoMod').val(<?php $rowProducto['prodActivo']; ?>);
+	$('#sltEstadoMod').val(<?= $rowProducto['prodActivo']; ?>);
 	$('.modalEditarProducto').modal('show');
 });
 
@@ -1228,6 +1261,37 @@ $('#btnInsertPagoMaestro').click(()=> {
 			}
 		});
 	}
+});
+$('.btnEditarCajaMaestra').click(function() {
+	var padre = $(this).parent().parent();
+	$('#txtCajaMontoPagos').val( padre.find('.spanCantv3').text() );
+	$('#txtCajaObsPagos').val( padre.find('.tdObservacion').text() );
+	$('#dtpCajaFechaPago').val(moment(padre.find('.fechaPagov3').text()).format('DD/MM/YYYY'));
+
+	$('.modal-cajaMaestra').modal('show');
+});
+$('#btnActualizarMod').click(function() {
+	var idCli= $('#divCmbClientes').find('.selected a').attr('data-tokens');
+	if(idCli == null ){
+		$('.modalEditarProducto .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
+	}else{
+		$.ajax({url: 'php/actualizarProducto.php', type: 'POST', data: {
+			idProd: <?= $_GET['idProducto'];  ?>,
+			nombre: $('#txtModProdNombre').val(),
+			monto: $('#txtModPresInicial').val(),
+			intereses:  $('#txtModPresInteres').val(),
+			idCLi:  idCli,
+			activo: $('#sltEstadoMod').val(),
+			cantidad: $('#txtModPresCantidad').val()
+			
+		}}).done(function(resp) {
+			if(resp==1){
+				location.reload();
+			}
+		});
+	}
+});
+$('#btnUpdateCajaMaestra').click(function() {
 	
 });
 <?php } ?>
@@ -1253,9 +1317,6 @@ $('#btnGuardarCubicaje').click( ()=> {
 				location.reload();
 			}
 		});}
-});
-$('#btnActualizarMod').click(function() {
-	
 });
 
 </script>

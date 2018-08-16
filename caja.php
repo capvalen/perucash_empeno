@@ -329,18 +329,23 @@ $('.aLiProcesos').click(function() {
 $(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#txtMontoPagos').val('0.00').focus(); });
 <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
 $('#btnInsertPagoOmiso').click(()=> {
-	$.ajax({url: 'php/insertarProcesoOmiso.php', type: 'POST', data: {
-		tipo: $('#cmbEstadoPagos').attr('data-id'),
-		valor: $('#txtMontoPagos').val(),
-		obs: $('#txtObsPagos').val()
-	 }}).done((resp)=> {
-		if(resp== true){
-			location.reload();
-		}else{
-			$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
-			$('.modal-GuardadoError').modal('show');
-		}
-	});
+	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
+	if(idMoneda == null ){
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
+	}else{
+		$.ajax({url: 'php/insertarProcesoOmiso.php', type: 'POST', data: {
+			tipo: $('#cmbEstadoPagos').attr('data-id'),
+			valor: $('#txtMontoPagos').val(),
+			obs: $('#txtObsPagos').val()
+		}}).done((resp)=> {
+			if(resp== true){
+				location.reload();
+			}else{
+				$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
+				$('.modal-GuardadoError').modal('show');
+			}
+		});
+	}
 });
 <?php } ?>
 
