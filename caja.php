@@ -110,7 +110,7 @@ th{color:#a35bb4}
 				</div>
 				
 				<div class=" panel panel-default">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Obs.</th> </tr> </thead>
+					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
 						require_once 'php/reporteIngresoDia.php';
@@ -132,7 +132,7 @@ th{color:#a35bb4}
 					<?php } ?>
 				</div>
 				<div class=" panel panel-default  ">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Obs.</th> </tr> </thead>
+					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
 						require_once 'php/reporteEgresoDia.php';
@@ -177,6 +177,7 @@ th{color:#a35bb4}
 					</div> <br>
 					<label for="">¿Observaciones?</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -240,7 +241,7 @@ th{color:#a35bb4}
 
 <?php include 'footer.php'; ?>
 <script type="text/javascript" src="js/moment-precise-range.js"></script>
-<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.5"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.6"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -259,7 +260,7 @@ $('#dtpFechaIniciov3').val('<?php
 		?>');
 moment.locale('es');
 
-$('#spanResultadoFinal').text(parseFloat(parseFloat($('#strSumaEntrada').text() ) - parseFloat($('#strSumaSalida').text() )).toFixed(2));
+$('#spanResultadoFinal').text(parseFloat(parseFloat($('#strSumaEntrada').text().replace(',', '.') ) - parseFloat($('#strSumaSalida').text().replace(',', '.') )).toFixed(2));
 $('#dtpFechaIniciov3').change(function () {
 	//console.log(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid())
 	if(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid()){
@@ -336,6 +337,7 @@ $('#btnInsertPagoOmiso').click(()=> {
 		$.ajax({url: 'php/insertarProcesoOmiso.php', type: 'POST', data: {
 			tipo: $('#cmbEstadoPagos').attr('data-id'),
 			valor: $('#txtMontoPagos').val(),
+			moneda: idMoneda,
 			obs: $('#txtObsPagos').val()
 		}}).done((resp)=> {
 			if(resp== true){

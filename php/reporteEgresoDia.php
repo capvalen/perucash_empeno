@@ -14,7 +14,7 @@ if($totalRow==0){
 	{
 		$i++;
 		$sumaIngr+=floatval($row['pagoMonto']);
-		echo "<tr><th scope='row'><a href='productos.php?idProducto={$row['idProducto']}#tabMovEstados'>#{$row['idProducto']}</a> </th> <td class='mayuscula'>{$row['prodNombre']}</td> <td class='mayuscula'>{$row['tipoDescripcion']}</td> <td><em>{$row['usuNick']}</em></td> <td>S/ {$row['pagoMonto']}</td> <td class='mayuscula'>{$row['cajaObservacion']}</td> </tr>";
+		echo "<tr><th scope='row'><a href='productos.php?idProducto={$row['idProducto']}#tabMovEstados'>#{$row['idProducto']}</a> </th> <td class='mayuscula'>{$row['prodNombre']}</td> <td class='mayuscula'>{$row['tipoDescripcion']}</td> <td><em>{$row['usuNick']}</em></td> <td>S/ {$row['pagoMonto']}</td> <td class='mayuscula'>{$row['moneDescripcion']}</td> <td class='mayuscula'>{$row['cajaObservacion']}</td> </tr>";
 		if($totalRow==$i){
 			echo '<tr> <th scope="row"  style="border-top: transparent;"></th>  <td style="border-top: transparent;"></td> <td style="border-top: transparent;"></td> <td class="text-center" style="border-top: 1px solid #989898; color: #636363"><strong >Total</strong></td> <td style="border-top: 1px solid #989898; color: #636363"><strong >S/ <span id="strSumaSalida">'.number_format(round($sumaIngr,1,PHP_ROUND_HALF_UP),2, ',', '').'</span></strong></td><tr>';
 		}

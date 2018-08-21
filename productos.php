@@ -47,7 +47,6 @@ $cochera=0;
 <body>
 <style>
 .paPrestamo{
-
 	margin: 10px 0;
 	padding: 15px;
 	border: 1px solid #e3e3e3;
@@ -705,11 +704,22 @@ $cochera=0;
 			<div class="modal-body">
 				<div class="container-fluid">
 					<p>Rellene cuidadosamente la siguiente información</p>
+					<label for="">Tipo de pago</label>
+					<div id="cmbEstadoPagos">
+					<select class="selectpicker mayuscula" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
+						<?php require 'php/detallePagosOPT.php'; ?>
+					</select></div>
 					<label for="">Fecha de pago</label>
-					<div class="sandbox-container"><input id="dtpCajaFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off"></div>
+					<input id="dtpCajaFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
 					<label class="hidden" for="">Método de pago</label>
 					<div class="hidden" id="divCmbMetodoPago">
 						<select class="form-control selectpicker" id="sltCajaMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php include 'php/listarMonedaOPT.php'; ?>
+						</select>
+					</div>
+					<label for="">Métodos de pago</label>
+					<div id="divCmbMetodoPago2">
+						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
 							<?php include 'php/listarMonedaOPT.php'; ?>
 						</select>
 					</div> <br>
@@ -829,6 +839,8 @@ $cochera=0;
 <script type="text/javascript" src="js/lightbox.js"></script>
 <script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
 <script type="text/javascript" src="js/stupidtable.min.js"></script>
+<script type="text/javascript" src="js/moment-precise-range.js"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.7"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -930,6 +942,16 @@ $('#btnActualizarEstado').click(function () {
 	}}).done(function (resp) {
 		location.reload();;
 	});
+});
+$('#dtpCajaFechaPago').bootstrapMaterialDatePicker({
+	format: 'DD/MM/YYYY hh:mm a',
+	lang: 'es',
+	time: true,
+	weekStart: 1,
+	cancelText : 'Cerrar',
+	nowButton : true,
+	switchOnClick : true,
+	okText: 'Aceptar', nowText: 'Hoy'
 });
 $('.btnImprimirTicket').click(function () {
 	var queMonto, queTitulo;
@@ -1262,11 +1284,14 @@ $('#btnInsertPagoMaestro').click(()=> {
 		});
 	}
 });
+
 $('.btnEditarCajaMaestra').click(function() {
 	var padre = $(this).parent().parent();
 	$('#txtCajaMontoPagos').val( padre.find('.spanCantv3').text() );
 	$('#txtCajaObsPagos').val( padre.find('.tdObservacion').text() );
-	$('#dtpCajaFechaPago').val(moment(padre.find('.fechaPagov3').text()).format('DD/MM/YYYY'));
+	
+	console.log( moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a')) ;
+	$('#dtpCajaFechaPago').bootstrapMaterialDatePicker('setDate',moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a'));
 
 	$('.modal-cajaMaestra').modal('show');
 });
@@ -1283,7 +1308,6 @@ $('#btnActualizarMod').click(function() {
 			idCLi:  idCli,
 			activo: $('#sltEstadoMod').val(),
 			cantidad: $('#txtModPresCantidad').val()
-			
 		}}).done(function(resp) {
 			if(resp==1){
 				location.reload();
@@ -1300,7 +1324,7 @@ $('#btnGuardarCubicaje').click( ()=> {
 	var estante= $('#divSelectEstante').find('.selected a').attr('data-tokens');
 	var piso= $('#divSelectPiso').find('.selected a').attr('data-tokens');
 	var seccion = $('#divSelectSeccion').find('.selected a').attr('data-tokens');
-	console.log(proces);
+	//console.log(proces);
 
 	if( estante !=null ){
 		if( piso ==null ){ piso = 1;}
