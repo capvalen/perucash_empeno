@@ -352,10 +352,10 @@ $cochera=0;
 							//$interesJson= $resultado[0]['soloInteres'];
 							//$razonInteres= $resultado[0]['intDiarioHoy']*100;
 							$razonInteres= $rowInteres['diferenciaDias']*($rowInteres['preInteres']/7);
-							$interesJson= ($rowInteres['preCapital']*$razonInteres)/100;
+							$interesJson= round(($rowInteres['preCapital']*$razonInteres)/100,1,PHP_ROUND_HALF_UP );
 							
 							?>
-							<li>Interés <strong>simple</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
+							<li>Interés <strong>simple</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php  echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
 							<li>Razón del cálculo: <span><strong>Interés simple diario</strong> (más de 29 días).</span></li>
 						<?php if($rowInteres['diferenciaDias']>=36 ){
 							if ($rowInteres['preCapital']<=200) { $gastosAdmin=5; }
@@ -393,19 +393,21 @@ $cochera=0;
 						<div class="table-responsive">
 						<table class="table table-hover" id="tablita">
 							<thead><tr>
-								<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
+								<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Tipo Pago <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
 							</tr></thead>
 							<tbody>
 							<tr>
-								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td><td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
-							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres FROM `caja` ca
+							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres, m.moneDescripcion FROM `caja` ca
 								inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
-								inner join usuario u on u.idUsuario=ca.idUsuario where idProducto=".$_GET['idProducto'].";");
+								inner join usuario u on u.idUsuario=ca.idUsuario
+								inner join moneda m on m.idMoneda = ca.cajaMoneda
+								where idProducto=".$_GET['idProducto'].";");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
-								<td data-id="<?php echo $rowEstados['idCaja']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td><?php echo $rowEstados['tipoDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td><td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td data-id="<?php echo $rowEstados['idCaja']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php 
 							$i++;
@@ -705,8 +707,8 @@ $cochera=0;
 				<div class="container-fluid">
 					<p>Rellene cuidadosamente la siguiente información</p>
 					<label for="">Tipo de pago</label>
-					<div id="cmbEstadoPagos">
-					<select class="selectpicker mayuscula" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
+					<div id="cmbEstadoPagos2">
+					<select class="selectpicker mayuscula" id="spTipoPago2" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
 						<?php require 'php/detallePagosOPT.php'; ?>
 					</select></div>
 					<label for="">Fecha de pago</label>
@@ -719,7 +721,7 @@ $cochera=0;
 					</div>
 					<label for="">Métodos de pago</label>
 					<div id="divCmbMetodoPago2">
-						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+						<select class="form-control selectpicker" id="sltMetodopago2" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
 							<?php include 'php/listarMonedaOPT.php'; ?>
 						</select>
 					</div> <br>
@@ -1235,23 +1237,23 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	var hayGasto='';
 	if($('#txtMontoTicketIntereses').val().length!=0){
 		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-		if(gastos >0){	hayGasto= '<br>Penalización de S/. 35.00 .'}
-		if(gastos==35  && valor <gastos ){
+	if(gastos >0){	hayGasto= '<br>Penalización de S/. <?= number_format($gastosAdmin,2); ?> '} 
+		if(gastos==<?= $gastosAdmin; ?>  && valor <gastos ){
 			$('#btnCrearTicketPagoInteres').addClass('hidden');
 			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 		}
 		else if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Pago parcial de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+			$('#spanInteresTipo').html('Pago parcial de interés de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
 		}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Cancelación de interés de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+			$('#spanInteresTipo').html('Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto).toFixed(2) );
 		}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Final de préstamo de S/. ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
+			$('#spanInteresTipo').html('Final de préstamo de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
 		}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Amortización de S/. ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/. " + (interes) + hayGasto  );
+			$('#spanInteresTipo').html('Amortización de S/ ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/ " + parseFloat(interes).toFixed(2) + hayGasto );
 		}
 	}else{
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
@@ -1289,8 +1291,10 @@ $('.btnEditarCajaMaestra').click(function() {
 	var padre = $(this).parent().parent();
 	$('#txtCajaMontoPagos').val( padre.find('.spanCantv3').text() );
 	$('#txtCajaObsPagos').val( padre.find('.tdObservacion').text() );
+	$('#sltMetodopago2').selectpicker('val', padre.find('.tdMoneda').text() );
+	$('#spTipoPago2').selectpicker('val', padre.find('.tpIdDescripcion').text() );
 	
-	console.log( moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a')) ;
+	//console.log( moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a')) ;
 	$('#dtpCajaFechaPago').bootstrapMaterialDatePicker('setDate',moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a'));
 
 	$('.modal-cajaMaestra').modal('show');
