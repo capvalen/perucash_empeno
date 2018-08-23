@@ -1333,7 +1333,7 @@ $('#btnUpdateCajaMaestra').click(function() {
 	var idProc= $('#cmbEstadoPagos2').find('.selected a').attr('data-tokens');
 	var mone = $('#divCmbMetodoPago2').find('.selected a').attr('data-tokens');
 	var padre = $(this).parent().parent();
-	$.ajax({url: 'php/actualizarCaja.php', type: 'POST', data: {
+	$.ajax({url: 'php/actualizarCaja.php', type: 'POST', data: { 
 		idCaj: $('#btnUpdateCajaMaestra').attr('data-caja'),
 		pproceso: idProc,
 		ffecha: moment($('#dtpCajaFechaPago').val(), 'DD/MM/YYYY hh:mm a').format('YYYY-MM-DD HH:mm'),
@@ -1341,7 +1341,7 @@ $('#btnUpdateCajaMaestra').click(function() {
 		oobs: $('#txtCajaObsPagos').val(),
 		mmoneda: mone,
 		aactivo: $('#sltActivoV2').val()
-	 }}).done(function(resp) {
+	 }}).done(function(resp) { //console.log(resp)
 		$('.modal-cajaMaestra').modal('hide');
 		if(resp=='1'){
 			location.reload();

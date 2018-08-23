@@ -76,7 +76,8 @@ require("php/conkarl.php");
 					<thead>
 					  <tr>
 						<th data-sort="int"># <i class="icofont icofont-expand-alt"></i></th>
-						<th data-sort="string">Descripcion producto <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="int">Unds. <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="string">Descripción del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
@@ -265,6 +266,7 @@ $('#cmbEstadoCombo').change(function () {
 					sumaElementos+=parseFloat(dato.prodMontoEntregado);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
+						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
@@ -292,10 +294,11 @@ $('#cmbEstadoCombo').change(function () {
 					</tr>`);
 				}
 				var data = JSON.parse(resp);
-				$.each(data, function (i, dato) {
+				$.each(data, function (i, dato) { console.log(dato)
 					sumaElementos+=parseFloat(dato.prodMontoEntregado);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
+						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${moment(dato.prodFechaInicial).format('X')}">${moment(dato.prodFechaInicial, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
