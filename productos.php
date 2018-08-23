@@ -407,7 +407,7 @@ $cochera=0;
 								where idProducto=".$_GET['idProducto'].";");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
-								<td data-id="<?php echo $rowEstados['idCaja']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php 
 							$i++;
@@ -729,6 +729,11 @@ $cochera=0;
 					<input type="number" class="form-control input-lg mayuscula text-center " id="txtCajaMontoPagos" autocomplete="off" style="font-size: 20px;">
 					<label for="">¿Observaciones?</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtCajaObsPagos" autocomplete="off">
+					<label for="">¿Activo?</label>
+					<select name="" id="sltActivoV2" class="form-control">
+						<option value="0">Inactivo</option>
+						<option value="1">Activo</option>
+					</select>
 					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
 				</div>
 			</div>
@@ -1293,6 +1298,8 @@ $('.btnEditarCajaMaestra').click(function() {
 	$('#txtCajaObsPagos').val( padre.find('.tdObservacion').text() );
 	$('#sltMetodopago2').selectpicker('val', padre.find('.tdMoneda').text() );
 	$('#spTipoPago2').selectpicker('val', padre.find('.tpIdDescripcion').text() );
+	$('#btnUpdateCajaMaestra').attr('data-caja', padre.find('.spanQuienRegistra').attr('data-id') );
+	$('#sltActivoV2').val(padre.find('.spanQuienRegistra').attr('data-activo'));
 	
 	//console.log( moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a')) ;
 	$('#dtpCajaFechaPago').bootstrapMaterialDatePicker('setDate',moment(padre.find('.fechaPagov3').text(), 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm a'));
@@ -1315,12 +1322,31 @@ $('#btnActualizarMod').click(function() {
 		}}).done(function(resp) {
 			if(resp==1){
 				location.reload();
+			}else{
+				$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: ' + resp);
+				$('.modal-GuardadoError').modal('show');
 			}
 		});
 	}
 });
 $('#btnUpdateCajaMaestra').click(function() {
-	
+	var idProc= $('#cmbEstadoPagos2').find('.selected a').attr('data-tokens');
+	var mone = $('#divCmbMetodoPago2').find('.selected a').attr('data-tokens');
+	var padre = $(this).parent().parent();
+	$.ajax({url: 'php/actualizarCaja.php', type: 'POST', data: {
+		idCaj: $('#btnUpdateCajaMaestra').attr('data-caja'),
+		pproceso: idProc,
+		ffecha: moment($('#dtpCajaFechaPago').val(), 'DD/MM/YYYY hh:mm a').format('YYYY-MM-DD HH:mm'),
+		vvalor: $('#txtCajaMontoPagos').val(),
+		oobs: $('#txtCajaObsPagos').val(),
+		mmoneda: mone,
+		aactivo: $('#sltActivoV2').val()
+	 }}).done(function(resp) {
+		$('.modal-cajaMaestra').modal('hide');
+		if(resp=='1'){
+			location.reload();
+		}
+	});
 });
 <?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {
