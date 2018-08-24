@@ -213,6 +213,7 @@ $cochera=0;
 			$diasLimite=  $cuenta->diff($hoy);
 			$limite=$diasLimite->days;
 
+			
 			$sql= "SELECT idTicket FROM `tickets` where cajaActivo in (0,1) and idProducto = {$_GET['idProducto']}"; // si tiene un ticket activo
 			$consultaDepos = $conection->prepare($sql);
 			$consultaDepos ->execute();
@@ -223,6 +224,11 @@ $cochera=0;
 					echo '<h3 class="purple-text text-lighten-1">Ticket asignado #'.$rowDepos['idTicket'].'</h3>';
 				}
 			}else{
+				$vari = require_once 'php/comprobarCajaHoy.php';
+				if($vari==false){
+					echo '<h3 class="red-text text-darken-1" >No hay ninguna caja aperturada</h3>';
+				//fin de if de fallse
+				}else{
 
 				if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
 				<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
@@ -279,7 +285,11 @@ $cochera=0;
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
 					<?php }
 					}
+				}//fin de if de requireonce comproibar cajahoy
 			}
+		
+
+			
 			$consultaDepos->fetch();
 			$consultaDepos->close();
 			
@@ -1062,6 +1072,16 @@ $('.btnImprimirTicket').click(function () {
 			}}).done(function (resp) { 	}); break;
 		case '36':
 			queTitulo='      * Gastos Adminitrativos *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketGastos.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
+				cliente: queDueno,
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
+		case '76':
+			queTitulo='      * Pago de cochera *';
 			$.ajax({url: 'http://127.0.0.1/perucash/printTicketGastos.php', type: 'POST', data: {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
