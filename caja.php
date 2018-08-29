@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Lima');
 if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');
 }
@@ -109,7 +110,7 @@ th{color:#a35bb4}
 					<?php } ?>
 				</div>
 				
-				<div class=" panel panel-default">
+				<div class=" panel panel-default" id="divEntradas">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
@@ -131,7 +132,7 @@ th{color:#a35bb4}
 						</div>
 					<?php } ?>
 				</div>
-				<div class=" panel panel-default  ">
+				<div class=" panel panel-default " id="divSalidas">
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
@@ -198,7 +199,7 @@ th{color:#a35bb4}
 			<div class="container-fluid">
 			<div class="row">
 				<p>¿Con qué monto inicias?</p>
-				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoApertura" value="0.00">
+				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoApertura" value="0.00" readonly>
 				<p>¿Alguna observación?</p>
 				<input type="text" class="form-control input-lg text-center" id="txtObsApertura">
 			</div>
@@ -226,7 +227,7 @@ th{color:#a35bb4}
 				<p>¿Con qué monto estás cerrando?</p>
 				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoCierre" value="0.00">
 				<p>¿Alguna observación?</p>
-				<input type="text" class="form-control input-lg text-center" id="txtObsCierre">
+				<input type="text" class="form-control input-lg text-center" id="txtObsCierre" autocomplete="off">
 			</div>
 		</div>
 		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
@@ -336,10 +337,14 @@ $('#dtpCajaFechaPago').bootstrapMaterialDatePicker({
 	okText: 'Aceptar', nowText: 'Hoy'
 });
 $('#btnCajaAbrir').click(function () {
+	$.ajax({url: 'php/listarUltimoCuadreValor.php', type: 'POST'}).done(function(resp) {
+		$('#txtMontoApertura').val(parseFloat(resp).toFixed(2));
+		$('#txtMontoApertura').attr('data-val',resp);
+	});
 	$('.modal-aperturarCaja').modal('show');
 });
 $('#btnGuardarApertura').click(function () {
-	var monto = parseFloat($('#txtMontoApertura').val());
+	var monto = parseFloat($('#txtMontoApertura').attr('data-val'));
 	var obs = $('#txtObsApertura').val();
 
 	if( $('#txtMontoApertura').val() == '' || monto <0){
@@ -357,6 +362,9 @@ $('#btnGuardarApertura').click(function () {
 $('#btnCajaCerrar').click(()=> {
 	$('.modal-cerrarCaja').modal('show');
 });
+$('.modal-cerrarCaja').on('shown.bs.modal', function () { 
+	$('#txtMontoCierre').focus();
+});
 $('#btnGuardarCierre').click(function () {
 	var monto = parseFloat($('#txtMontoCierre').val());
 	var obs = $('#txtObsCierre').val();
@@ -364,6 +372,12 @@ $('#btnGuardarCierre').click(function () {
 	if( $('#txtMontoCierre').val() == '' || monto <0){
 		$('.modal-cerrarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto de cierre'); 
 	}else{
+		console.log('Abrio con: ' + $('#spanApertura').text());
+		console.log('Cierra con: ' + $('#txtMontoCierre').val());
+		$.each( $('#divEntradas .tdMoneda') , function(i, mone){
+			console.log($(mone).attr('data-id'));
+		});
+		
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
 		}}).done((resp)=> {

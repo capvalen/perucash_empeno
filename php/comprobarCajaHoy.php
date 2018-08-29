@@ -8,6 +8,7 @@ $sql = mysqli_query($esclavo,"call cajaActivaHoy('".$fecha."');");
 $numRow = mysqli_num_rows($sql);
 $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
+echo date("Y-m-d H:i:s");
 if($numRow>=1){ $_POST['cajaActiva']=true;}
 else { $_POST['cajaActiva']=false;}
 

@@ -1,4 +1,5 @@
 <?php session_start();
+date_default_timezone_set('America/Lima');
 require("php/conkarl.php");
 ?>
 <!DOCTYPE html>
@@ -1077,6 +1078,15 @@ $('.btnImprimirTicket').click(function () {
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
 				cliente: queDueno,
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
+		case '38':
+			queTitulo='      * Compra *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketCompra.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
 				monto: queMonto,
 				usuario: queUser
 			}}).done(function (resp) { 	}); break;
