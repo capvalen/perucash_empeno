@@ -54,7 +54,7 @@ if( isset($_GET['idCliente'])){
 			<div class="container-fluid">
 				<h2 class="purple-text text-lighten-1"><i class="icofont icofont-puzzle"></i> Reporte de cliente</h2>
 			</div>
-			<div class="col-xs-12 col-md-4 contenedorDatosCliente text-center">
+			<div class="col-xs-12 col-md-3 contenedorDatosCliente text-center">
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
@@ -74,7 +74,7 @@ if( isset($_GET['idCliente'])){
 				<h5 class="grey-text text-darken-1"><i class="icofont icofont-envelope"></i><span class="cliCorreo"><?php if($rowCliente['cliCorreo']==''){ echo 'Sin datos';}else{ echo $rowCliente['cliCorreo'];} ?></span></h5>
 			<!-- Fin de contenido 2.1 -->
 			</div>
-			<div class="col-xs-12 col-md-6 contenedorDatosCliente">
+			<div class="col-xs-12 col-md-8 contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2.2 -->
 				<div class="divPrestamo">
 				<?php
@@ -85,19 +85,21 @@ if( isset($_GET['idCliente'])){
 					inner join producto p on p.idProducto= pp.idProducto
 					inner join tipoProceso tp on tp.idTipoProceso = pp.presidTipoProceso
 					where p.idCliente = ".$_GET['idCliente']."
-					order by p.prodActivo desc, p.prodNombre asc;");
+					order by p.prodActivo desc, p.idProducto desc;");
 					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
 						?>
 						<div class="contenedorPres">
-						<?php 
-							echo "<div class=' paPrestamo'><div>
-							<div class='row {$rowPrestamos['tipColorMaterial']}'>
-								<div class='hidden codRegistro'>{$rowPrestamos['idProducto']}</div>
-								<div class='col-xs-5 mayuscula'><span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> {$rowPrestamos['prodNombre']}</div>
-								<div class='col-xs-3'>S/. ".number_format($rowPrestamos['preCapital'],2)."</div>
-								<div class='col-xs-4'>{$rowPrestamos['tipoDescripcion']} <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
+							<div class=' paPrestamo'><div>
+							<div class='row <? if( $rowPrestamos['prodActivo']==1 ){ echo $rowPrestamos['tipColorMaterial'];} else{ echo 'grey-text text-darken-3'; } ?>'>
+								<div class='hidden codRegistro'><?= $rowPrestamos['idProducto']; ?></div>
+								<div class='col-xs-5 mayuscula'><span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'];?> </div>
+								<div class='col-xs-2'>S/. <?= number_format($rowPrestamos['preCapital'],2); ?></div>
+								<div class='col-xs-3 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
+								<div class='col-xs-2'><? if( $rowPrestamos['prodActivo']==1 ){ echo 'Pendiente'; }else{ echo 'Inactivo'; } ?> <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
 							</div>
-						</div></div>";
+						</div></div>
+						</div>
+						<?php 
 					// 	$i++;
 					// 	$j=0;
 					// 	$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
@@ -112,9 +114,7 @@ if( isset($_GET['idCliente'])){
 					// </div></div>";
 					// 		$j++;
 					// 	}
-						?>
-						</div>
-						<?php
+					
 					}
 					
 				}
@@ -237,6 +237,13 @@ datosUsuario();
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	//$('.hastaHoy').tooltip();
+	moment.locale('es');
+	$.each( $('.hastaHoy') , function(i, objeto){
+		var texto=  moment($(objeto).text());
+		$(objeto).text(texto.fromNow());
+		$(objeto).attr('title', texto.format('DD/MM/YYYY hh:mm a') ).tooltip();
+	});
 });
 $('#aaccionesCaja').click(function () {
 	$('.modal-accionesCaja').modal('show');
