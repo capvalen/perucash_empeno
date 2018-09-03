@@ -360,6 +360,19 @@ $('#btnGuardarApertura').click(function () {
 	}
 });
 $('#btnCajaCerrar').click(()=> {
+	var sumaIngresos=0;
+	var sumaTarjetas=0;
+	$.each( $("#divEntradas .tdMoneda") , function(i, objeto){
+		if( $(objeto).attr('data-id')==1 ){
+			sumaIngresos+=parseFloat( $(objeto).prev().find('.spanCantv3').text());
+		}else{
+			sumaTarjetas+=parseFloat( $(objeto).prev().find('.spanCantv3').text());
+		}
+		
+	});
+	//console.log(sumaIngresos.toFixed(2))
+	$('#btnGuardarCierre').attr('data-sumaIngreso',sumaIngresos.toFixed(2));
+	$('#btnGuardarCierre').attr('data-sumaTarjetas',sumaTarjetas.toFixed(2));
 	$('.modal-cerrarCaja').modal('show');
 });
 $('.modal-cerrarCaja').on('shown.bs.modal', function () { 

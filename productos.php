@@ -178,7 +178,7 @@ $cochera=0;
 					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
-					<p>Préstamo incial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
+					<p>Préstamo inicial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
 					<p>Cantidad: <span id="spanCantp"><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 				<?php if($esCompra=='0'){ ?>
 					<p>Adquisición: <strong><span>Por empeño</span></strong></p>
