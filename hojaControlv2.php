@@ -1,7 +1,15 @@
 <?php 
 $agencia = 'Las Retamas';
-$compra= 'Empeño';
+$compra= 'Artículo en garantía';
 $dueno= 'Pillaca Lobaton Gianmarco Gabriel';
+$code= '948';
+$clase = 'Cámara';
+$und = 1;
+$producto = 'Canon Powershot G9';
+$precio = '790';
+$fecha = 'Martes, 3 de Septiembre de 2018';
+$usuario= 'Yuri Paola';
+$dni= '44758514';
 // if($row['esCompra']=='0'){ $compra = 'Empeño';}else{ $compra = 'Compra';}
 
 ?>
@@ -20,6 +28,14 @@ $dueno= 'Pillaca Lobaton Gianmarco Gabriel';
 .mayuscula{text-transform: capitalize;}
 .elemPrintGrande{font-size: 18px;}
 .elemPrintMediano{font-size: 12px;}
+.fuerte{font-weight: 700;}
+.masJunto{margin-top: 5px;
+    margin-bottom: 5px;}
+img{margin: 0 auto;}
+hr{
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
 @media print{
    .elemPrintMediano{font-size: 12px!important;}
    .elemPrintGrande{font-size: 18px!important;}
@@ -27,24 +43,44 @@ $dueno= 'Pillaca Lobaton Gianmarco Gabriel';
 </style>
 <div class="container">
    <div class="row">
-      <div class="col-xs-4 col-sm-3" id="logoEmpresa"><img src="images/empresa.png?version=1.1" class="img-responsive" alt=""></div>
-      <div class="col-xs-8 col-sm-9" ><h3 class=''>HOJA INFORMATIVA</h3>
-      <h3 class=''>Agencia <?= $agencia; ?></h3></div>
+   <div class="col-xs-6 text-center">
+      <div class="col-xs-12" id="logoEmpresa"><img src="images/empresa.png?version=1.1" class="img-responsive" alt="">
+      <h4 class='fuerte'>Hoja Informativa «<?= $agencia; ?>»</h4>
+      <hr>
+      <h1 class="fuerte masJunto">#<?= $code; ?></h1>
+      <h4 class='masJunto'><?= $und; ?><?php if($und==1){echo ' Und.';}else{ echo ' Unds.';} ?> <?= $clase; ?></h4>
+      <h3 class='masJunto'><?= $producto; ?></h3>
+      <h3 class='masJunto'>S/ <?= number_format($precio,2); ?></h3>
+      <hr>
+      <h4><?= $dueno; ?></h4>
+      <h4><?= $dni; ?></h4>
+      <hr>
+      <h4><?= $compra; ?></h4>
+      <h5><?= $fecha; ?></h5>
+      <h5><?= $usuario; ?></h5>
+      </div>
    </div>
-   <div class="row">
-      <div class="col-xs-8"> <span>Dueño: </span><span class="elemPrintGrande"><?= $dueno; ?></span> </div>
-      <div class="col-xs-4"><span>Adquirido por: <span class="elemPrintGrande"><?= $compra; ?></span></span></div>
+   
+   <div class="col-xs-6 text-center">
+      <div class="col-xs-12" id="logoEmpresa"><img src="images/empresa.png?version=1.1" class="img-responsive" alt="">
+      <h4 class='fuerte'>Hoja Informativa «<?= $agencia; ?>»</h4>
+      <hr>
+      <h1 class="fuerte masJunto">#<?= $code; ?></h1>
+      <h4 class='masJunto'><?= $und; ?><?php if($und==1){echo ' Und.';}else{ echo ' Unds.';} ?> <?= $clase; ?></h4>
+      <h3 class='masJunto'><?= $producto; ?></h3>
+      <h3 class='masJunto'>S/ <?= number_format($precio,2); ?></h3>
+      <hr>
+      <h4><?= $dueno; ?></h4>
+      <h4><?= $dni; ?></h4>
+      <hr>
+      <h4><?= $compra; ?></h4>
+      <h5><?= $fecha; ?></h5>
+      <h5><?= $usuario; ?></h5>
+      </div>
    </div>
-   <div class="row">
-      <table class="table">
-         <thead>
-            <tr><th>Código</th><th>Cantidad</th><th>Tipo</th><th>Producto</th><th>Monto</th></tr>
-         </thead>
-         <tbody>
-            <tr><td>#725</td><td>1 und.</td></tr>
-         </tbody>
-      </table>
+
    </div>
+  
 </div>
 </body>
 </html>

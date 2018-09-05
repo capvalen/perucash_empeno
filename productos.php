@@ -178,7 +178,7 @@ $cochera=0;
 					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
-					<p>Préstamo inicial: S/. <span id="spanPresInicial"><?php echo number_format($rowProducto['prodMontoEntregado'],2); ?></span></p>
+					<p>Préstamo inicial: S/. <span id="spanPresInicial"><?= str_replace(',', '', number_format($rowProducto['prodMontoEntregado'],2)); ?></span></p>
 					<p>Cantidad: <span id="spanCantp"><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 				<?php if($esCompra=='0'){ ?>
 					<p>Adquisición: <strong><span>Por empeño</span></strong></p>
@@ -1266,7 +1266,7 @@ $('#liEditDescription').click(function() {
 $('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
-	var interes = <?php echo $interesJson; ?>;
+	var interes = <?  $interesFloat=str_replace(',', '', $interesJson); echo $interesFloat; ?>;
 	var valor = parseFloat($(this).val());
 	console.log(valor)
 	var hayGasto='';
@@ -1277,16 +1277,16 @@ $('#txtMontoTicketIntereses').focusout(function () {
 			$('#btnCrearTicketPagoInteres').addClass('hidden');
 			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 		}
-		else if(valor < ( <?php echo $interesJson + $gastosAdmin; ?> ) ){
+		else if(valor < ( <?php echo $interesFloat + $gastosAdmin; ?> ) ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
 			$('#spanInteresTipo').html('Pago parcial de interés de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-		}else if(valor == ( <?php  echo $interesJson + $gastosAdmin; ?> )   ){
+		}else if(valor == ( <?php  echo $interesFloat + $gastosAdmin; ?> )   ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
 			$('#spanInteresTipo').html('Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto).toFixed(2) );
-		}else if(valor >=  <?php echo $interesJson + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
+		}else if(valor >=  <?php echo $interesFloat + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
 			$('#spanInteresTipo').html('Final de préstamo de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-		}else if((valor >  <?php echo $interesJson + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesJson + $gastosAdmin; ?>) ){
+		}else if((valor >  <?php echo $interesFloat + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesFloat + $gastosAdmin; ?>) ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
 			$('#spanInteresTipo').html('Amortización de S/ ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/ " + parseFloat(interes).toFixed(2) + hayGasto );
 		}
