@@ -12,15 +12,17 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni, tpr.tipopDescripcion 
 		FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
 		inner join usuario u on u.idUsuario=p.idUsuario
+		inner join tipoProducto tpr on tpr.idTipoProducto = p.idTipoProducto
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}else{//Cuando es una compra
-		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres
+		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres, tpr.tipopDescripcion 
 		FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
 		inner join usuario u on u.idUsuario=p.idUsuario
+		inner join tipoProducto tpr on tpr.idTipoProducto = p.idTipoProducto
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}
@@ -172,12 +174,13 @@ $cochera=0;
 					}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 				</div>
 				<div class="col-xs-12 col-sm-5 divDatosProducto">
-					<h2 class="mayuscula purple-text text-lighten-1 h2Producto"><?php echo  $rowProducto['prodNombre']; ?></h2>
+					<h2 class="mayuscula purple-text text-lighten-1 "><span id="spanType"><?= $rowProducto['tipopDescripcion']; ?></span>: <span class="h2Producto"><?= $rowProducto['prodNombre']; ?></span></h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 				<?php if($esCompra=='0'){ ?>
 					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
+					
 					<p>Préstamo inicial: S/. <span id="spanPresInicial"><?= str_replace(',', '', number_format($rowProducto['prodMontoEntregado'],2)); ?></span></p>
 					<p>Cantidad: <span id="spanCantp"><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 				<?php if($esCompra=='0'){ ?>
