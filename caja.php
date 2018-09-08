@@ -64,6 +64,7 @@ th{color:#a35bb4}
 			<h2 class="purple-text text-lighten-1">Cuadre de caja <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
 			<div class="container-fluid">
 				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
+				<button id="btnPrueba1">prueba</button>
 			</div>
 			
 			<div class="container-fluid">
@@ -371,8 +372,8 @@ $('#btnCajaCerrar').click(()=> {
 		
 	});
 	//console.log(sumaIngresos.toFixed(2))
-	$('#btnGuardarCierre').attr('data-sumaIngreso',sumaIngresos.toFixed(2));
-	$('#btnGuardarCierre').attr('data-sumaTarjetas',sumaTarjetas.toFixed(2));
+	$('#spanResultadoFinal').attr('data-sumaIngreso',sumaIngresos.toFixed(2));
+	$('#spanResultadoFinal').attr('data-sumaTarjetas',sumaTarjetas.toFixed(2));
 	$('.modal-cerrarCaja').modal('show');
 });
 $('.modal-cerrarCaja').on('shown.bs.modal', function () { 
@@ -381,6 +382,12 @@ $('.modal-cerrarCaja').on('shown.bs.modal', function () {
 $('#btnGuardarCierre').click(function () {
 	var monto = parseFloat($('#txtMontoCierre').val());
 	var obs = $('#txtObsCierre').val();
+	var sumaEfectivo =0;
+	var sumaVisa=0;
+	var sumaMastercard=0;
+	var sumaBanco=0;
+	var sumaSalidaEfectivo = 0
+	var sumaSalidaBanco = 0
 
 	if( $('#txtMontoCierre').val() == '' || monto <0){
 		$('.modal-cerrarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto de cierre'); 
@@ -388,8 +395,29 @@ $('#btnGuardarCierre').click(function () {
 		console.log('Abrio con: ' + $('#spanApertura').text());
 		console.log('Cierra con: ' + $('#txtMontoCierre').val());
 		$.each( $('#divEntradas .tdMoneda') , function(i, mone){
-			console.log($(mone).attr('data-id'));
+			if($(mone).attr('data-id')==1){
+				sumaEfectivo+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}else if($(mone).attr('data-id')==2){
+				sumaBanco+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}else if($(mone).attr('data-id')==3){
+				sumaMastercard+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}else if($(mone).attr('data-id')==4){
+				sumaVisa+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}
 		});
+		$.each( $('#divSalidas .tdMoneda') , function(i, mone){
+			if($(mone).attr('data-id')==1){
+				sumaSalidaEfectivo+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}else if($(mone).attr('data-id')==3 || $(mone).attr('data-id')==4){
+				sumaSalidaBanco+=parseFloat($(mone).prev().find('.spanCantv3').text());
+			}
+		});
+		$('#spanResultadoFinal').attr('sumaEfectivo',sumaEfectivo);
+		$('#spanResultadoFinal').attr('sumaBanco',sumaBanco);
+		$('#spanResultadoFinal').attr('sumaMastercard',sumaMastercard);
+		$('#spanResultadoFinal').attr('sumaVisa',sumaVisa);
+		$('#spanResultadoFinal').attr('sumaSalidaEfectivo',sumaSalidaEfectivo);
+		$('#spanResultadoFinal').attr('sumaSalidaBanco',sumaSalidaBanco);
 		
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
@@ -404,7 +432,15 @@ $('#btnGuardarCierre').click(function () {
 	}
 });
 $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
-	console.log('hola');
+	$.ajax({url: 'php/printTicketCierre.php', type: 'POST', data: {
+		apertura: $('#spanResultadoFinal').text(),
+		efectivoEntrada:$('#spanResultadoFinal').attr('sumaEfectivo'),
+		bancos :$('#spanResultadoFinal').attr('sumaBanco'),
+		tarjetaEntrada :$('#spanResultadoFinal').attr('sumaMastercard') + $('#spanResultadoFinal').attr('sumaVisa');
+	}}).done(function(resp) {
+		console.log(resp)
+	});
+
 });
 $('.aLiProcesos').click(function() {
 	//console.log($(this).attr('data-id'));
