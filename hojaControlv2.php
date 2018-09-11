@@ -31,7 +31,7 @@ $dni= '44758514';
 .fuerte{font-weight: 700;}
 .masJunto{margin-top: 5px;
     margin-bottom: 5px;}
-img{margin: 0 auto;}
+img{margin: 0 auto; width: 80%;}
 hr{
    margin-top: 10px;
    margin-bottom: 10px;

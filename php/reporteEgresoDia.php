@@ -5,7 +5,7 @@ $sql = mysqli_query($conection,"call reporteEgresoDia('".$_GET['fecha']."');");
 $totalRow= mysqli_num_rows($sql);
 $sumaIngr=0;
 $boton='';
-
+ 
 $i=0;
 
 if($totalRow==0){

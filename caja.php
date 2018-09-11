@@ -64,7 +64,6 @@ th{color:#a35bb4}
 			<h2 class="purple-text text-lighten-1">Cuadre de caja <small><?php echo $_COOKIE['ckAtiende']; ?></small></h2>
 			<div class="container-fluid">
 				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
-				<button id="btnPrueba1">prueba</button>
 			</div>
 			
 			<div class="container-fluid">
@@ -387,7 +386,7 @@ $('#btnGuardarCierre').click(function () {
 	var sumaMastercard=0;
 	var sumaBanco=0;
 	var sumaSalidaEfectivo = 0
-	var sumaSalidaBanco = 0
+	var sumaSalidaTarjeta = 0
 
 	if( $('#txtMontoCierre').val() == '' || monto <0){
 		$('.modal-cerrarCaja .divError').removeClass('hidden').find('.spanError').text('Error con el monto de cierre'); 
@@ -409,7 +408,7 @@ $('#btnGuardarCierre').click(function () {
 			if($(mone).attr('data-id')==1){
 				sumaSalidaEfectivo+=parseFloat($(mone).prev().find('.spanCantv3').text());
 			}else if($(mone).attr('data-id')==3 || $(mone).attr('data-id')==4){
-				sumaSalidaBanco+=parseFloat($(mone).prev().find('.spanCantv3').text());
+				sumaSalidaTarjeta+=parseFloat($(mone).prev().find('.spanCantv3').text());
 			}
 		});
 		$('#spanResultadoFinal').attr('sumaEfectivo',sumaEfectivo);
@@ -417,7 +416,7 @@ $('#btnGuardarCierre').click(function () {
 		$('#spanResultadoFinal').attr('sumaMastercard',sumaMastercard);
 		$('#spanResultadoFinal').attr('sumaVisa',sumaVisa);
 		$('#spanResultadoFinal').attr('sumaSalidaEfectivo',sumaSalidaEfectivo);
-		$('#spanResultadoFinal').attr('sumaSalidaBanco',sumaSalidaBanco);
+		$('#spanResultadoFinal').attr('sumaSalidaTarjeta',sumaSalidaTarjeta);
 		
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
@@ -432,11 +431,15 @@ $('#btnGuardarCierre').click(function () {
 	}
 });
 $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
-	$.ajax({url: 'php/printTicketCierre.php', type: 'POST', data: {
-		apertura: $('#spanResultadoFinal').text(),
-		efectivoEntrada:$('#spanResultadoFinal').attr('sumaEfectivo'),
+	$.ajax({url: 'http://192.168.1.17/perucash/printTicketCierre.php', type: 'POST', data: {
+		apertura: $('#spanApertura').text(),
+		cierre: $('#txtMontoCierre').val(),
+		efectivoEntrada: $('#spanResultadoFinal').attr('sumaEfectivo'),
+		tarjetaEntrada : parseFloat($('#spanResultadoFinal').attr('sumaMastercard')) + parseFloat($('#spanResultadoFinal').attr('sumaVisa')),
 		bancos :$('#spanResultadoFinal').attr('sumaBanco'),
-		tarjetaEntrada :$('#spanResultadoFinal').attr('sumaMastercard') + $('#spanResultadoFinal').attr('sumaVisa');
+		efectivoSalida: $('#spanResultadoFinal').attr('sumaSalidaEfectivo'),
+		tarjetaSalida: $('#spanResultadoFinal').attr('sumaSalidaTarjeta'),
+		usuario: '<?= $_COOKIE['ckAtiende']; ?>'
 	}}).done(function(resp) {
 		console.log(resp)
 	});

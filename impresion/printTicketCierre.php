@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('America/Lima');
 /* Change to the correct path if you copy this example! */
 require __DIR__ . '/vendor/mike42/escpos-php/autoload.php';
 use Mike42\Escpos\Printer;
@@ -22,24 +22,24 @@ try {
     // $connector = new FilePrintConnector("LPT1");
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connectorV31);
-    $printer -> text("                PeruCash\n");
-    $printer -> text("      Casa de Préstamos y Empeños\n");
-    $printer -> text("          Oficina de Apoyo N° 1\n");
-    $printer -> text("   ----------------------------------\n");
+    $printer -> text("         PeruCash - Las Retamas\n");
     $printer -> setEmphasis(true);    
-    $printer -> text("{$_POST['titulo']}\n");
+    $printer -> text("             Cierre de caja \n");
+    $printer -> text("   ----------------------------------\n");
+    $printer -> text(date("d/m/Y, g:i a")."\n");
     $printer -> setEmphasis(false);
-    $printer -> text("{$_POST['fecha']}\n\n");
-    $printer -> text("Código: ".ucwords($_POST['codigo'])."\n");
-    $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
-    $printer -> text("Monto: S/. {$_POST['monto']}\n");
-    //$printer -> text("Fecha límite Sábado, 4 Enero 2017. Posterior a ésta fecha el monto incrementará.\n");
-    $printer -> text("Usuario: {$_POST['usuario']}\n");
+    $printer -> text("Apertura con: S/ ".number_format($_POST['apertura'], 2)."\n");
+    $printer -> text("Cierra con: S/ ".number_format($_POST['cierre'], 2)."\n");
+    $printer -> text("   ------  Entradas  ----\n");
+    $printer -> text("Efectivo: S/ ".number_format($_POST['efectivoEntrada'], 2)."\n");
+    $printer -> text("Tarjetas: S/ ".number_format($_POST['tarjetaEntrada'], 2)."\n");
+    $printer -> text("Depositos bancarios: S/ ".number_format($_POST['bancos'], 2)."\n");
+    $printer -> text("   ------  Salidas  ----\n");
+    $printer -> text("Efectivo: S/ (".number_format($_POST['efectivoSalida'], 2).")\n");
+    $printer -> text("Tarjetas: S/ (".number_format($_POST['tarjetaSalida'], 2).")\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("Consultas al # Whatsapp: 943 798696\n");
-    $printer -> text("   ----------------------------------\n");
-    $printer -> text("         Web: www.perucash.com\n");
-    $printer -> text("       Gracias por tu preferencia\n\n");
+    $printer -> text("TOTAL: S/ ".number_format($_POST['apertura']+$_POST['efectivoEntrada']-$_POST['efectivoSalida'], 2)."\n");
+    $printer -> text("Usuario: ".$_POST['usuario']."\n");
     $printer -> cut();
     /* Close printer */
     $printer -> close();
