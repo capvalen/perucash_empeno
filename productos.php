@@ -174,7 +174,7 @@ $cochera=0;
 					}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 				</div>
 				<div class="col-xs-12 col-sm-5 divDatosProducto">
-					<h2 class="mayuscula purple-text text-lighten-1"><?= $rowProducto['tipopDescripcion']; ?>: <span class="h2Producto"><?php echo  $rowProducto['prodNombre']; ?></span></h2>
+					<h2 class="mayuscula purple-text text-lighten-1"><span id="spanClase"><?= $rowProducto['tipopDescripcion']; ?></span>: <span class="h2Producto"><?php echo  $rowProducto['prodNombre']; ?></span></h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
 				<?php if($esCompra=='0'){ ?>
 					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
@@ -857,7 +857,7 @@ $cochera=0;
 <?php include 'footer.php'; ?>
 <script type="text/javascript" src="js/jquery.flexslider.js"></script>
 <script type="text/javascript" src="js/lightbox.js"></script>
-<script type="text/javascript" src="js/jquery.printPage.js?version=1.4"></script>
+<script type="text/javascript" src="js/jquery.printPage.js?version=1.0.12"></script>
 <script type="text/javascript" src="js/stupidtable.min.js"></script>
 <script type="text/javascript" src="js/moment-precise-range.js"></script>
 <script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.7"></script>
@@ -1195,11 +1195,15 @@ $('#btnInsertNegativo').click(function () {
 	});
 });
 $('#liHojaControl').click(function () {
-	loadPrintDocument(this,{
-		url: "hojaControl.php?idProd="+<?php if( isset ($_GET['idProducto']) ){echo $_GET['idProducto'];}else{echo 0;}?>,
-		attr: "href",
-		message:"Tu documento está siendo creado"
-	});
+	var dataUrl="hojaControlv2.php?idProd="+<?= $_GET['idProducto'] ?>+"&compra=<?= $esCompra;?>"+"&producto="+encodeURIComponent($('.h2Producto').text())+"&dueno="+encodeURIComponent($('.spanDueno').text())+"&clase="+encodeURIComponent($('#spanClase').text())+"&und="+$('#spanCantp').text()+"&precio="+encodeURIComponent($('#spanPresInicial').text())+"&fecha="+encodeURIComponent($('#tablita tr').eq(1).find('.spanFechaFormat').text())+"&usuario="+encodeURIComponent($('#tablita tr').eq(1).find('.spanQuienRegistra').text())+"&dni="+$('#spanIdDueno').text();
+	
+	window.open(dataUrl, '_blank' );
+	// loadPrintDocument(this,{
+	// 	url: dataUrl,
+	// 	attr: "url",
+	// 	message:"Su documento se está creando"
+	// });
+	
 });
 $('#btnLlamarTicketVenta').click(function () {
 	$('.modal-ticketVenta').modal('show');

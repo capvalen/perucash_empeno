@@ -71,7 +71,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color:#777;padding-top: 9px;"></span>
 							</div>
 						 </li>
-						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span id="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p></a></li>
+						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span class="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?php echo $_SESSION['nomCompleto']; ?></span></p><p class="icoUser"><i class="icofont icofont-archive"></i> <?= $_COOKIE['ckSucursal'];?></p></a></li>
 						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
 

@@ -204,6 +204,7 @@ input[type=number] {-moz-appearance:textfield;}
 
 .divError, .txtObligatorio{color: rgb(213, 0, 0);}
 .divError i{font-size: 20px;}
+.icoUser i {font-size: 16px;}
 #ulListadoProductos{font-size: 14px}
 #ulListadoProductos .icoMedia{font-size: 18px}
 .colNewProduct p{color: #f12855!important;}
