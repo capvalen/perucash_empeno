@@ -16,7 +16,7 @@ $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 if($numRow>=1){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
 	<p><strong>Sessión activa de: </strong> <?php echo $row['usuNombres']; ?></p>
-	<p><strong>Aperturó con:</strong> S/ <span id="spanApertura" ><?php echo number_format($row['cuaApertura'],2); ?></span></p>
+	<p><strong>Aperturó con:</strong> S/ <span id="spanApertura" ><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></p>
 	<p><strong>Hora:</strong> <?php echo $row['fechaInicio'],2; ?></p>
 </div>
 <?php if($_COOKIE['ckidUsuario']==$row['idUsuario'] ){ ?>

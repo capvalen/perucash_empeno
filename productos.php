@@ -1273,7 +1273,7 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
 	var interes = <?  $interesFloat=str_replace(',', '', $interesJson); echo $interesFloat; ?>;
-	var valor = parseFloat($(this).val());
+	var valor = parseFloat($(this).val()); 
 	console.log(valor)
 	var hayGasto='';
 	if($('#txtMontoTicketIntereses').val().length!=0){

@@ -431,7 +431,7 @@ $('#btnGuardarCierre').click(function () {
 	}
 });
 $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
-	$.ajax({url: 'http://192.168.1.17/perucash/printTicketCierre.php', type: 'POST', data: {
+	$.ajax({url: 'http://127.0.0.1/perucash/printTicketCierre.php', type: 'POST', data: {
 		apertura: $('#spanApertura').text(),
 		cierre: $('#txtMontoCierre').val(),
 		efectivoEntrada: $('#spanResultadoFinal').attr('sumaEfectivo'),

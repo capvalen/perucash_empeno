@@ -16,7 +16,11 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
     //$connector = new WindowsPrintConnector("smb://192.168.1.131/TM-U220");
 $connectorV31 = new WindowsPrintConnector("smb://127.0.0.1/TM-U220");
 try {
-    
+    $cierreVirtual= $_POST['apertura']+$_POST['efectivoEntrada']-$_POST['efectivoSalida']-$_POST['tarjetaSalida'];
+    $sobra=$cierreVirtual-$_POST['cierre'];
+    if($sobra==0){ $resto = 'Exacto';}
+    else if($sobra>0){$resto = 'Falta ';}
+    else if($sobra<0){$resto = 'Sobra ';}
     // A FilePrintConnector will also work, but on non-Windows systems, writes
     // to an actual file called 'LPT1' rather than giving a useful error.
     // $connector = new FilePrintConnector("LPT1");
@@ -28,8 +32,7 @@ try {
     $printer -> text("   ----------------------------------\n");
     $printer -> text(date("d/m/Y, g:i a")."\n");
     $printer -> setEmphasis(false);
-    $printer -> text("Apertura con: S/ ".number_format($_POST['apertura'], 2)."\n");
-    $printer -> text("Cierra con: S/ ".number_format($_POST['cierre'], 2)."\n");
+    $printer -> text("Apertura: S/ ".number_format($_POST['apertura'], 2)."\n");
     $printer -> text("   ------  Entradas  ----\n");
     $printer -> text("Efectivo: S/ ".number_format($_POST['efectivoEntrada'], 2)."\n");
     $printer -> text("Tarjetas: S/ ".number_format($_POST['tarjetaEntrada'], 2)."\n");
@@ -38,7 +41,9 @@ try {
     $printer -> text("Efectivo: S/ (".number_format($_POST['efectivoSalida'], 2).")\n");
     $printer -> text("Tarjetas: S/ (".number_format($_POST['tarjetaSalida'], 2).")\n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text("TOTAL: S/ ".number_format($_POST['apertura']+$_POST['efectivoEntrada']-$_POST['efectivoSalida'], 2)."\n");
+    $printer -> text("Cierre manual: S/ ".number_format($_POST['cierre'], 2)."\n");
+    $printer -> text("TOTAL: S/ ".number_format($cierreVirtual, 2)."\n");
+    $printer -> text($resto." S/ ".number_format($sobra,2)."\n");
     $printer -> text("Usuario: ".$_POST['usuario']."\n");
     $printer -> cut();
     /* Close printer */
