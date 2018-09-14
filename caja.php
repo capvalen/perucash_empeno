@@ -152,7 +152,7 @@ th{color:#a35bb4}
 </div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
-<?php if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ ?>
+<?php if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ ?>
 <!-- Modal para Abrir caja  -->
 
 <div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">

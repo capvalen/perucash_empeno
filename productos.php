@@ -243,7 +243,7 @@ $cochera=0;
 				<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 			<?php }
-				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){ //zona de pago especial ?>
+				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
 						<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
 					<?php }
@@ -669,7 +669,7 @@ $cochera=0;
 
 
 
-<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
+<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4) { ?>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
@@ -1301,7 +1301,7 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	}
 });
 
-<?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8){ ?>
+<?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4){ ?>
 $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
 });

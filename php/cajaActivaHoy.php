@@ -24,7 +24,7 @@ if($numRow>=1){ ?>
 	<button class="btn btn-warning btn-outline btn-lg" id="btnCajaCerrar"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
 </div>
 <?php } }else{ 
-	if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 ){?>
+	if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){?>
 	<div class="col-xs-12 col-sm-6 text-center">
 	<?php if( date('Y-m-d')== $_GET['fecha'] ){ ?>
 		<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>

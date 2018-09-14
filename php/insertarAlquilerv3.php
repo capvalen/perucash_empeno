@@ -66,7 +66,7 @@ for ($i=0; $i < count($productos) ; $i++) {
 	}
 	
 	$sqlProducto= "call insertarProductov3 ('".$productos[$i]['nombre'].$placa."', '".$productos[$i]['montoDado']."', ".$productos[$i]['interes'].", '".$productos[$i]['fechaRegistro']."', '".$productos[$i]['observaciones']."', ".$idCliente." , ".$_COOKIE['ckidUsuario'].", ".$idPrestamo.", ".$productos[$i]['cantidad'].",".$productos[$i]['tipoProducto'].");";
-	echo $sqlProducto;
+	//echo $sqlProducto;
 
 	$consultaProd = $conection->prepare($sqlProducto);
 	$consultaProd->execute();

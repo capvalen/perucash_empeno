@@ -1,7 +1,7 @@
 <?php 
 require("conkarl.php");
 $filas=array();
-$sql = mysqli_query($conection,"SELECT cb.*, p.prodNombre, p.idCliente, p.prodMontoEntregado FROM `cubicaje` cb
+$sql = mysqli_query($conection,"SELECT cb.*, p.prodNombre, p.idCliente, p.prodMontoEntregado, p.prodCantidad FROM `cubicaje` cb
 inner join producto p on p.idProducto = cb.idProducto
 where cuaVigente=1 or ( p.esCompra =1 and p.prodActivo =1 )");
 //echo "call listarInventarioPorEstado('".$_POST['estado']."');";
