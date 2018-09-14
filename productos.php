@@ -883,31 +883,30 @@ $(document).ready(function(){
 	});
 
 $('#sltEstantes').on('changed.bs.select', function (e) {
- 	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens');
+ 	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); console.log( id );
 	if(id==1){
 		$('#sltPiso').attr('disabled',true).selectpicker('refresh');
 		$('#sltSeccion').attr('disabled',true).selectpicker('refresh');
 	}else{
 		$('#sltPiso').removeAttr('disabled').selectpicker('refresh');
 		$('#sltSeccion').removeAttr('disabled').selectpicker('refresh');
+
+		$('#sltSeccion').find('option[data-tokens=5]').attr('disabled', true);
+		$('#sltSeccion').find('option[data-tokens=6]').attr('disabled', true);
+		$('#sltSeccion').find('option[data-tokens=7]').attr('disabled', true);
+
 		if(id==4 || id==7){
 			$('#sltPiso').find('option[data-tokens=6]').removeAttr('disabled', true);
-			$('#sltPiso').selectpicker('refresh');
-		}else{
-			$('#sltPiso').find('option[data-tokens=6]').attr('disabled', true);
-			$('#sltPiso').selectpicker('refresh');
 		}
 		if(id==3){
 			$('#sltSeccion').find('option[data-tokens=5]').removeAttr('disabled', true);
 			$('#sltSeccion').find('option[data-tokens=6]').removeAttr('disabled', true);
 			$('#sltSeccion').find('option[data-tokens=7]').removeAttr('disabled', true);
-			$('#sltSeccion').selectpicker('refresh');
-		}else{
-			$('#sltSeccion').find('option[data-tokens=5]').attr('disabled', true);
-			$('#sltSeccion').find('option[data-tokens=6]').attr('disabled', true);
-			$('#sltSeccion').find('option[data-tokens=7]').attr('disabled', true);
-			$('#sltSeccion').selectpicker('refresh');
 		}
+		if(id==8){
+			$('#sltSeccion').find('option[data-tokens=5]').removeAttr('disabled', true);
+		}
+		$('#sltSeccion').selectpicker('refresh');
 	}
 });
 });
