@@ -1,15 +1,24 @@
-<select name="" id="" class="form-control" >
-<option value="0">Todos los movimientos</option>
+<select name="" id="sltHistorialCierres" class="form-control" >
+<option class="optMovesBox" value="0">Todos los movimientos</option>
 <?php 
 include 'conkarl.php';
-$sql= "select cu.*, u.usuNombres from cuadre cu 
+if ( ! isset ($_GET['cuadre'])){
+  $sql= "select cu.*, u.usuNombres from cuadre cu 
 inner join usuario u on u.idUsuario=cu.idUsuario where date_format(fechaInicio,'%Y-%m-%d') =date_format('{$_GET['fecha']}','%Y-%m-%d') ";
-echo $sql;
-$llamadoSQL = $conection->query($sql);
-while($row = $llamadoSQL->fetch_assoc()){ ?>
-  <option value="1" data-cuadre = '<?php echo cu.idCuadre ?>'><?php echo $row['usuNombres'] ?></option>
-<?php 
+}else{
+  $sql= "select cu.*, u.usuNombres from cuadre cu 
+inner join usuario u on u.idUsuario=cu.idUsuario where idCuadre = {$_GET['cuadre']}; ";
 }
+//echo $sql;
+$llamadoSQL = $conection->query($sql);
+while($row = $llamadoSQL->fetch_assoc()): 
+  if( $row['fechaFin']=='0000-00-00 00:00:00' ){ $fechaFinal = " - ahora"; }
+  else{ $fechaFinal = ' - '.date( 'g:i a', strtotime($row['fechaFin'])); }
+  ?>
+  
+  <option class="optMovesBox" value="<?= $row['idCuadre'] ?>" ><?= $row['usuNombres'].' ('.date( 'g:i a', strtotime($row['fechaInicio'])).$fechaFinal.")"; ?></option>
+<?php 
+endwhile;
 ?>
 
 </select> 

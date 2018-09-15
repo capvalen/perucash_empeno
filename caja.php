@@ -114,7 +114,11 @@ th{color:#a35bb4}
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
+					if( ! isset($_GET['cuadre']) ):
 						require_once 'php/reporteIngresoDia.php';
+					else:
+						require_once 'php/reporteIngresoDiaxCuadre.php';
+					endif;
 					?>
 					</tbody> </table>
 				</div>
@@ -136,7 +140,11 @@ th{color:#a35bb4}
 					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
 					<tbody>
 					<?php
-						require_once 'php/reporteEgresoDia.php';
+						if( ! isset($_GET['cuadre']) ):
+							require_once 'php/reporteEgresoDia.php';
+						else:
+							require_once 'php/reporteEgresoDiaxCuadre.php';
+						endif;
 					?>
 					</tbody> </table>
 				</div>
@@ -298,7 +306,11 @@ th{color:#a35bb4}
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
-
+$(document).ready(function () {
+	$('#sltHistorialCierres').change(function () {
+		window.location.href = 'caja.php?cuadre='+$('#sltHistorialCierres').val();
+	});
+});
 $('#dtpFechaIniciov3').val('<?php
 		if (isset($_GET['fecha'])) { //si existe lista fecha requerida
 			$date = new DateTime($_GET['fecha']);
@@ -505,11 +517,6 @@ $('#btnUpdateCajaMaestra').click(function() {
 	});
 });
 <?php } ?>
-
-
-
-
-
 
 
 
