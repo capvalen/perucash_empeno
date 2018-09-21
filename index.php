@@ -124,7 +124,7 @@ $('#btnAcceder').click(function() {
 		success: function(iduser) {
 			if (parseInt(iduser)>0){//console.log('el id es '+data)
 				//console.log(iduser)
-				window.location="registro.php";
+				window.location="principal.php";
 			}
 			else {
 				$('#divError').removeClass('hidden');

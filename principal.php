@@ -68,8 +68,8 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 			<h3 class="purple-text text-lighten-1">Panel de administración</h3>
 		</div>
 		<div class="col-xs-5">
-			<div class="col-xs-6" id="divMontoMes"><p>Éste mes</p><h4 id="montoMes">S/. 50.00</h4> <h4><i class="icofont icofont-chart-histogram-alt"></i></h4> </div>
-			<div class="col-xs-6" id="divMontoMesAnt"><p>Anterior mes</p><h4 id="montoMesAnt">S/. 50.00</h4> <h4><i class="icofont icofont-chart-histogram-alt"></i></h4> </div>
+			<div class="col-xs-6" id="divMontoMes" data-toggle="tooltip" title="Suma de Recuperación - Inversión"><p>Éste mes</p><h4 id="montoMes">S/. <?php include 'php/recuperacionEsteMes.php'; ?></h4> <h4><i class="icofont icofont-chart-histogram-alt"></i></h4> </div>
+			<div class="col-xs-6" id="divMontoMesAnt" data-toggle="tooltip" title="Suma de Recuperación - Inversión"><p>Anterior mes</p><h4 id="montoMesAnt">S/. <?php include 'php/recuperacionAnteriorMes.php'; ?></h4> <h4><i class="icofont icofont-chart-histogram-alt"></i></h4> </div>
 		</div>
 	</div>
 	<div class="container-fluid contenedorDeslizable">
@@ -83,7 +83,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 							<i class="icofont icofont-support-faq"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanValue">0</span><br>
+							<span class="spanValue"><?php include 'php/contarPrestamosHoy.php'; ?></span><br>
 							<label>Total préstamos</label>
 						</div>
 					</div>
@@ -94,7 +94,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 								<i class="icofont icofont-support-faq"></i> 
 							</div>
 							<div class="col-xs-9">
-								<span class="spanValue ">0</span> <br>
+								<span class="spanValue "><?php include 'php/contarComprasHoy.php'; ?></span> <br>
 								<label>Total compras</label>
 							</div>
 						</div>
@@ -105,7 +105,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 							<i class="icofont icofont-money"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarInyeccionHoy.php'; ?></span> <br>
 							<label>Inyección</label>
 						</div>
 					</div>
@@ -116,7 +116,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 							<i class="icofont icofont-money"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarInversionHoy.php'; ?></span> <br>
 							<label>Inversión</label>
 						</div>
 					</div>
@@ -127,7 +127,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 							<i class="icofont icofont-money"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarRetornoHoy.php'; ?></span> <br>
 							<label>Retorno</label>
 						</div>
 					</div>
@@ -138,30 +138,30 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 							<i class="icofont icofont-card"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarTarjetasHoy.php'; ?></span> <br>
 							<label>Tarjetas</label>
 						</div>
 					</div>
 				</div></div>
-				<div class="col-xs-6 col-sm-4"  style="padding-left: 0;"><div class="rowBlanco cuadroPeque">
+				<div class="col-xs-6 col-sm-4 hidden"  ><div class="rowBlanco cuadroPeque">
 					<div class="container-fluid">
 						<div class="col-xs-3 divIcono round round-success">
 							<i class="icofont icofont-ui-rate-add"></i> 
 						</div>
 						<div class="col-xs-9">
 							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
-							<label>Entradas</label>
+							<label>Entradas extras</label>
 						</div>
 					</div>
 				</div></div>
-				<div class="col-xs-6 col-sm-4" ><div class="rowBlanco cuadroPeque">
+				<div class="col-xs-6 col-sm-4" style="padding-left: 0;"><div class="rowBlanco cuadroPeque">
 					<div class="container-fluid">
 						<div class="col-xs-3 divIcono round round-danger">
 							<i class="icofont icofont-ui-rate-remove"></i> 
 						</div>
 						<div class="col-xs-9">
-							<span class="spanRelleno ">S/</span> <span class="spanValue ">0.00</span> <br>
-							<label>Salidas</label>
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarSalidasHoy.php' ?></span> <br>
+							<label>Salidas extras</label>
 						</div>
 					</div>
 				</div></div>
@@ -188,7 +188,7 @@ datosUsuario();
 
 
 $(document).ready(function(){
-
+	$('[data-toggle="tooltip"]').tooltip(); 
 });
 
 
