@@ -6,12 +6,12 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 			<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
 		</div>
 		<li <?php if($nomArchivo =='principal.php') echo 'class="active"'; ?>>
-				<a href="#!"><i class="icofont icofont-home"></i> Inicio</a>
+				<a href="principal.php"><i class="icofont icofont-home"></i> Inicio</a>
 		</li>
 		<li <?php if($nomArchivo =='registro.php') echo 'class="active"'; ?>>
 				<a href="registro.php"><i class="icofont icofont-ui-music-player"></i> Registro</a>
 		</li>
-		<li <?php if($nomArchivo =='principal.php') echo 'class="active"'; ?>>
+		<li <?php if($nomArchivo =='productos.php') echo 'class="active"'; ?>>
 				<a href="#!"><i class="icofont icofont-cube"></i> Productos</a>
 		</li>
 		<li <?php if($nomArchivo =='caja.php') echo 'class="active"'; ?>>
