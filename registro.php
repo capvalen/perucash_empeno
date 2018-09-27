@@ -305,7 +305,7 @@ $('#btnActualizarItem').click(function () {
 	else if(cantItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('La cantidad No puede ser negativa o cero'); }
 	else if(nomItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Ingrese un nombre de producto'); }
 	else if(capiItem<1){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El monto prestado no puede ser negativo o cero'); }
-	else if(interesItem<=0){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
+	else if(interesItem<=0 && $('.queMichiEs').attr('data-id')=='esRemate' ){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('El interés no puede ser negativo o cero'); }
 	else if(fechaItem==''){ $('.modal-nuevoProductoLista .divError').removeClass('hidden').find('.spanError').text('Tiene que ingresar una fecha de inicio de préstamo'); }
 	else{ //console.log(index)
 		$('#conjuntoElementos li').eq(index).remove();
@@ -383,11 +383,14 @@ $('#btnGuardarDatos').click(function () {
 						fechaRegistro: moment($(elem).find('.spanfechaIngresov3').text(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' '+moment().format('H:mm'), 
 						observaciones: $(elem).find('.spanObservacionv3').text().replace('Sin observaciones', '')
 					});
-					//console.log(jsonProductos);
+					console.log(jsonProductos);
 					if($('.rowProduct').length-1==i){
 						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) { //console.log(resp)
 							if( resp.indexOf('ticket') ){//$.isNumeric(resp)
-								window.location= 'productos.php?idProducto='+resp;
+								$('.modal-GuardadoCorrecto #spanBien').text('Códigos - Ticket(s) a pagar:');
+								$('.modal-GuardadoCorrecto #h1Bien').html( resp );
+								$('.modal-GuardadoCorrecto').modal('show');
+								
 							}else{
 								$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
 								$('.modal-GuardadoError').modal('show');}

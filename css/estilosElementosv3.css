@@ -114,13 +114,17 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-morita.btn-outline:active,.btn-morita.btn-outline:hover,.btn-rosaKit.btn-outline:active,.btn-rosaKit.btn-outline:hover
 .btn-rojoFresa.btn-outline:hover, .btn-rojoFresa.btn-outline:active, .btn-infocat.btn-outline:active,.btn-infocat.btn-outline:hover
 {color: white;}
-.btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: : black;}
+.btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: black;}
 
 
 .modal-backdrop.in{filter:alpha(opacity=60);opacity:.6}
 .modal-content{box-shadow: 0 0px 15px rgba(255, 255, 255, 0.65);}
 .modal-title >i{color: rgba(255, 255, 255, 0.67);}
 .close{opacity: 0.5; color: #fff;}
+
+.modal-GuardadoCorrecto a{color: #8b33b7;}
+.modal-GuardadoCorrecto a:hover{color: #5d1d71;}
+
 
 .material-switch > input[type="checkbox"] {
     display: none;   

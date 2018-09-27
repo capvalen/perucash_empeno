@@ -399,7 +399,7 @@ $('#cmbEstadoCombo').change(function () {
 				 <tr><td>${dato.idProducto}</td>
 					<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 					<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
-					<td data-sort-value="${moment(dato.desFechaContarInteres).format('X')}">${moment(dato.desFechaContarInteres).format('YYYY-MM-DD')}</td>
+					<td data-sort-value="${moment(dato.desFechaContarInteres).format('X')}">${moment(dato.desFechaContarInteres).format('DD/MM/YYYY')}</td>
 					<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 				</tr>`);
 				if(data.length==i+1){
@@ -444,7 +444,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						
@@ -473,7 +473,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						
@@ -502,7 +502,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						
@@ -531,7 +531,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						
@@ -560,7 +560,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						
@@ -589,7 +589,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
-							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('YYYY-MM-DD')}</td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);
 						

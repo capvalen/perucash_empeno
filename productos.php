@@ -417,7 +417,7 @@ $cochera=0;
 								inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
 								inner join usuario u on u.idUsuario=ca.idUsuario
 								inner join moneda m on m.idMoneda = ca.cajaMoneda
-								where idProducto=".$_GET['idProducto']." and cajaActivo =1 ;");
+								where idProducto=".$_GET['idProducto']." and cajaActivo =1 order by cajaFecha asc;");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
 								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>

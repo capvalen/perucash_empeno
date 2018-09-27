@@ -1,4 +1,5 @@
 <?php session_start();
+date_default_timezone_set('America/Lima');
 require("php/conkarl.php");
 ?>
 <!DOCTYPE html>
@@ -14,12 +15,13 @@ require("php/conkarl.php");
 <style>
 #page-content-wrapper { padding: 5px!important;}
 #miniMenu{padding: 12px;background-color:white;}
+
 .contenedorDeslizable{background-color:#f3f7f8;}
 .contenedorDeslizable h2{margin-top: 10px;}
 #rowConPeques{padding: 20px 0;}
 #rowConPeques>div{margin-bottom: 10px;}
 .contenedorDeslizable .row{padding:20px;}
-.contenedorDeslizable .rowBlanco{background-color:white; border-radius: .25rem;}
+.contenedorDeslizable .rowBlanco, .tarjeta{background-color:white; border-radius: .25rem;}
 .cuadroPeque{padding: 20px;border: 1px solid rgba(0,0,0,.0625);}
 .cuadroPeque i{font-size: 30px;}
 .spanRelleno{font-size: 12px;color: #455a64;}
@@ -166,6 +168,11 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 					</div>
 				</div></div>
 			</div>
+			<div class="tarjeta">
+				<div class="col-xs-12 col-sm-6  tarjeta"><h3>Record 15 productos</h3>
+					<canvas id="myChart" width="400" height="400"></canvas>
+				</div>
+			</div>
 			
 		<!-- Fin de contenido principal -->
 		</div>
@@ -178,6 +185,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 <?php include 'footer.php'; ?>
 <script src="js/stupidtable.min.js"></script>
 <script src="js/bootstrap-material-datetimepicker.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -187,11 +195,90 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 datosUsuario();
 
 
+<?php 
+$sqlCh = "SELECT count(p.idTipoProducto) as conteo, tp.tipopDescripcion FROM `producto` p
+inner join tipoProducto tp on p.idTipoProducto = tp.idTipoProducto
+where date_format(curdate(), '%Y-%m') = date_format(p.prodFechaRegistro, '%Y-%m')
+group by p.idTipoProducto
+order by conteo asc
+limit 15;";
+
+$llamadoCh = $cadena->query($sqlCh);
+
+
+
+// liberar el conjunto de resultados
+//$llamadoCh->close();
+?>
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip(); 
 });
 
-
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+		  labels: [<?
+			while ($resultadoCh = $llamadoCh->fetch_assoc()){ ?>
+				"<?= $resultadoCh['tipopDescripcion']; ?>"<? echo ',';
+			} ?>],
+        datasets: [{
+            label: 'Cantidad de préstamos',
+            data: [<?
+				$llamadoCh->data_seek(0); 
+				while ($resultadoCh = $llamadoCh->fetch_assoc()){ ?>
+					"<?= $resultadoCh['conteo']; ?>"<? echo ',';
+				} ?>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+					 'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+					 
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+					 'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 0.5
+        }]
+    },
+   options: {
+		scales: {
+      	yAxes: [{
+				ticks: {
+					beginAtZero:true,
+					display: false
+				}
+			}]
+		}
+   },
+	pieceLabel: { mode: 'percentage', precision: 2 } 
+});
 </script>
 <?php } ?>
 </body>
