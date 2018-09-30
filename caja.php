@@ -464,7 +464,7 @@ $('.aLiProcesos').click(function() {
 	$('.modal-pagoMaestro').modal('show');
 });
 $(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#txtMontoPagos').val('0.00').focus(); });
-<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8) { ?>
+<?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4) { ?>
 $('#btnInsertPagoOmiso').click(()=> {
 	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
 	if(idMoneda == null ){

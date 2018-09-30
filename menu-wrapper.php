@@ -30,15 +30,12 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 				<a href="almacen.php"><i class="icofont icofont-box"></i> Almacén</a>
 		</li>
 		<?php if( $_COOKIE['ckPower']==1){ ?>
-		<li <?php if($nomArchivo =='usuarios.php') echo 'class="active"'; ?>>
-				<a href="#!"><i class="icofont icofont-users"></i> Usuarios</a>
-		</li>
 		<li <?php if($nomArchivo =='configuraciones.php') echo 'class="active"'; ?>>
-				<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
+			<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
 		</li>
-		 <?php } ?>
+		<?php } ?>
 		<li>
-				<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
+			<a href="#!" class="ocultar-mostrar-menu"><i class="icofont icofont-swoosh-left"></i> Ocultar menú</a>
 		</li>
 	</ul>
 </div>
