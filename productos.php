@@ -125,8 +125,12 @@ $cochera=0;
 .dropdown-menu li a {padding: 0px 32px;}
 .dropdown-menu li:hover{background: #f3f3f3;}
 .dropdown-menu>.active>a:hover{ background-color: #9658d0; }
-.badge{background-color: #9658d0;    font-size: 10px;}
+.open>.dropdown-menu>li>a{color: #a35bb4;padding: 7px 25px;}
+.open>.dropdown-menu{margin-top: -10px;}
+.badge{background-color: #9658d0; font-size: 10px;}
 .divImagen li{list-style-type: none;}
+#txtMontoTicketIntereses{font-size: 26px;}
+#txtMontoTicketIntereses::placeholder{font-size: 12px;}
 </style>
 <div class="" id="wrapper">
 
@@ -142,7 +146,7 @@ $cochera=0;
 			<div class="container row" style="margin-bottom: 20px;">
 				<div class="divBotonesEdicion" style="margin-bottom: 10px">
 					<div class="btn-group">
-					  <button type="button" class="btn btn-azul btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					  <button type="button" class="btn btn-infocat btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="icofont icofont-settings"></i> <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu">
@@ -578,13 +582,14 @@ $cochera=0;
 							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial"><?php echo $rowInteres['preCapital']; ?></span></li>
 							<li><strong>Interés:</strong> S/. <span id="spanInteresInt"><?php echo number_format($interesJson,2); ?></span></li>
 							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena"><?php echo number_format($gastosAdmin,2); ?></span></li>
+							<? if($cochera>0): ?><li><strong>Cochera:</strong> S/. <span id="spanCocheraPena"><?php echo number_format($cochera,2); ?></span></li><? endif;?>
 							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo number_format($rowInteres['preCapital']+$interesJson+$gastosAdmin,2); ?></span></li>
 						</ul>
 					</div>
 						
 					
 					<label for=""><span class="txtObligatorio">*</span> Monto S/.</label>
-					<input type="number" class="form-control input-lg esDecimal " id="txtMontoTicketIntereses" placeholder="S/.">
+					<input type="number" class="form-control input-lg esDecimal text-center" id="txtMontoTicketIntereses" placeholder="S/.">
 					<label for="">Comentario extra:</label>
 					<input type="text" class="form-control input-lg mayuscula" id="txtRazonTicketIntereses" placeholder="Comentario" autocomplete="off">
 					<label for="">El cliente está pagando:</label> <p id="spanInteresTipo">-</p>
@@ -1141,7 +1146,6 @@ $('#txtSubirArchivo').change(function () {
 			error: function (error) {
 				// Mostrar algo de error
 			}
-
 		})
 	}else{
 		//archivo incorrecto
@@ -1271,29 +1275,32 @@ $('#liEditDescription').click(function() {
 $('#txtMontoTicketIntereses').focusout(function () {
 	var capital = <?php echo $rowInteres['preCapital']; ?>;
 	var gastos = <?php echo $gastosAdmin; ?>;
+	var cochera = <?= $cochera; ?>;
 	var interes = <?  $interesFloat=str_replace(',', '', $interesJson); echo $interesFloat; ?>;
 	var valor = parseFloat($(this).val()); 
-	console.log(valor)
+	console.log(cochera);
 	var hayGasto='';
 	if($('#txtMontoTicketIntereses').val().length!=0){
 		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-	if(gastos >0){	hayGasto= '<br>Penalización de S/. <?= number_format($gastosAdmin,2); ?> '} 
-		if(gastos==<?= $gastosAdmin; ?>  && valor <gastos ){
+	if(gastos >0){	hayGasto= '<br>Penalización de S/. <?= number_format($gastosAdmin,2); ?>';} 
+		if(gastos==<?= $gastosAdmin; ?>  && valor <(gastos+ cochera) ){
 			$('#btnCrearTicketPagoInteres').addClass('hidden');
-			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
-		}
-		else if(valor < ( <?php echo $interesFloat + $gastosAdmin; ?> ) ){
+			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos y/o cochera');
+		}else if(valor == <?= $cochera; ?>){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Pago parcial de interés de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-		}else if(valor == ( <?php  echo $interesFloat + $gastosAdmin; ?> )   ){
+			$('#spanInteresTipo').html('Pago de cochera S/ ' + parseFloat(valor-gastos - hayGasto ).toFixed(2) );
+		}else if(valor < ( <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto).toFixed(2) );
-		}else if(valor >=  <?php echo $interesFloat + $gastosAdmin + floatval($rowInteres['preCapital']) ; ?> ) {
+			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Pago parcial de interés de S/ ' + parseFloat(valor-gastos- cochera ).toFixed(2) + hayGasto );
+		}else if(valor == ( <?php  echo $interesFloat + $gastosAdmin + $cochera; ?> )   ){
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Final de préstamo de S/ ' + parseFloat(valor-gastos).toFixed(2) + hayGasto );
-		}else if((valor >  <?php echo $interesFloat + $gastosAdmin; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesFloat + $gastosAdmin; ?>) ){
+			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto - cochera).toFixed(2) );
+		}else if(valor >=  <?php echo $interesFloat + $gastosAdmin + $cochera + floatval($rowInteres['preCapital']) ; ?> ) {
 			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Amortización de S/ ' + parseFloat(valor-gastos-interes).toFixed(2)  + " <br> "+ " Cancela Interés de S/ " + parseFloat(interes).toFixed(2) + hayGasto );
+			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Final de préstamo de S/ ' + parseFloat(valor-gastos- cochera).toFixed(2) + hayGasto );
+		}else if((valor >  <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesFloat + $gastosAdmin+ $cochera; ?>) ){
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancela Interés de S/ ' + parseFloat(interes).toFixed(2) + hayGasto + ' <br> ' + 'Amortización de S/ ' + parseFloat(valor-gastos-interes-cochera).toFixed(2) );
 		}
 	}else{
 		$('#btnCrearTicketPagoInteres').addClass('hidden');
