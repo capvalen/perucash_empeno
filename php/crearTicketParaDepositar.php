@@ -8,6 +8,7 @@ $tipoProc=19;
 $idProd= $_POST['idProducto'];
 $dinero = $_POST['dinero'];
 $ticket='';
+$cochera = $_POST['cochera'];
 
 if ($_POST['obs']==''){
 	$obs= "";
@@ -30,7 +31,7 @@ $tasaInteres= $rowInteres['preInteres'];
 
 if($diasDebe==0){$diasDebe=1;}
 if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
-	$debe= round($capital * $tasaInteres/100, 1,PHP_ROUND_HALF_UP); //caso que interés es 4% primero
+	$debe= round(($capital * $tasaInteres/100)+$cochera, 1,PHP_ROUND_HALF_UP); //caso que interés es 4% primero
 
 	if ( $dinero < $debe ){
 		echo ' Pago parcial de interés';
@@ -43,15 +44,45 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 	}
 }else if( $diasDebe>=8 && $diasDebe <=35 ){ //caso normal fuera de gracia. Interes semanal
 	$interesDiario= ($tasaInteres /100)/7;
+
+	if($capital >=1 && $capital<= 200){ $gastos=5;}
+	if($capital >200 && $capital<= 1000){ $gastos=10;}
+	if($capital >1001 && $capital<= 3000){ $gastos=20;}
+	if($capital >3000){ $gastos=30;}
 	
-	$debe = number_format(round($capital *$interesDiario*$diasDebe,1,PHP_ROUND_HALF_UP),2);
-	//echo $debe;
+	$debe = number_format(round(($capital *$interesDiario*$diasDebe)+$cochera,1,PHP_ROUND_HALF_UP),2);
+	echo "debe ".$debe."<br>";
 	
-	if ( $dinero < $debe ){
+	if($dinero == $cochera ){
+		$tipoProc= 34;
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$consultaDepos = $conection->prepare($sql);
+		$consultaDepos ->execute();
+		$resultadoDepos = $consultaDepos->get_result();
+		$numLineaDeposs=$resultadoDepos->num_rows;
+		$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+		$ticket .='#'.$rowDepos['idTicket'].'<br />';
+		$consultaDepos->fetch();
+		$consultaDepos->close();
+
+		echo $ticket;
+	}else if ( $dinero < $debe ){
 		//echo ' Pago parcial de interés = S/. ' . number_format($dinero,2) ;
 
+		if($cochera>0){
+			$tipoProc= 34;
+			$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$cochera} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+			$consultaDepos = $conection->prepare($sql);
+			$consultaDepos ->execute();
+			$resultadoDepos = $consultaDepos->get_result();
+			$numLineaDeposs=$resultadoDepos->num_rows;
+			$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+			$ticket .='#'.$rowDepos['idTicket'].'<br />';
+			$consultaDepos->fetch();
+			$consultaDepos->close();
+		}
 		$tipoProc= 33;
-		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ".($dinero-$cochera)." , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
 		$consultaDepos = $conection->prepare($sql);
 		$consultaDepos ->execute();
 		$resultadoDepos = $consultaDepos->get_result();
@@ -64,9 +95,20 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		echo $ticket;
 	}else if( $dinero == $debe ){
 		//echo ' Cancelación de interés S/. ' . number_format($dinero,2) ;
-
+		if($cochera>0){
+			$tipoProc= 34;
+			$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$cochera} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+			$consultaDepos = $conection->prepare($sql);
+			$consultaDepos ->execute();
+			$resultadoDepos = $consultaDepos->get_result();
+			$numLineaDeposs=$resultadoDepos->num_rows;
+			$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+			$ticket .='#'.$rowDepos['idTicket'].'<br />';
+			$consultaDepos->fetch();
+			$consultaDepos->close();
+		}
 		$tipoProc= 44;
-		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ".($dinero-$cochera)." , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
 		$consultaDepos = $conection->prepare($sql);
 		$consultaDepos ->execute();
 		$resultadoDepos = $consultaDepos->get_result();
@@ -77,11 +119,22 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		$consultaDepos->close();
 
 		echo $ticket;
-	}else if ( $dinero == $debe+$capital ){
+	}else if ( $dinero >= $debe+$capital ){
 		//echo ' Final de préstamo S/. ' . number_format($dinero,2) ;
-
+		if($cochera>0){
+			$tipoProc= 34;
+			$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$cochera} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+			$consultaDepos = $conection->prepare($sql);
+			$consultaDepos ->execute();
+			$resultadoDepos = $consultaDepos->get_result();
+			$numLineaDeposs=$resultadoDepos->num_rows;
+			$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+			$ticket .='#'.$rowDepos['idTicket'].'<br />';
+			$consultaDepos->fetch();
+			$consultaDepos->close();
+		}
 		$tipoProc= 44;
-		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ".($debe-$cochera)." , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
 		$consultaDepos = $conection->prepare($sql);
 		$consultaDepos ->execute();
 		$resultadoDepos = $consultaDepos->get_result();
@@ -106,9 +159,20 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		echo $ticket;
 	}else if ( $dinero > $debe ){
 		//echo ' Amortización S/. ' . number_format($dinero-$debe,2) . ' e Interés: S/. '. number_format($debe,2);
-
+		if($cochera>0){
+			$tipoProc= 34;
+			$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$cochera} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+			$consultaDepos = $conection->prepare($sql);
+			$consultaDepos ->execute();
+			$resultadoDepos = $consultaDepos->get_result();
+			$numLineaDeposs=$resultadoDepos->num_rows;
+			$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+			$ticket .='#'.$rowDepos['idTicket'].'<br />';
+			$consultaDepos->fetch();
+			$consultaDepos->close();
+		}
 		$tipoProc= 44;
-		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, {$debe} , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
+		$sql= "call crearTicketDepositar ({$idProd}, {$tipoProc}, ".($debe-$cochera)." , '{$obs}', ".$_COOKIE['ckidUsuario'].")";
 		$consultaDepos = $conection->prepare($sql);
 		$consultaDepos ->execute();
 		$resultadoDepos = $consultaDepos->get_result();
@@ -132,7 +196,7 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		
 		echo $ticket;
 	}
-}else if($diasDebe >=36 && $diasDebe <=1000){ // caso prórroga. Interes compuesto.
+}/*else if($diasDebe >=36 && $diasDebe <=1000){ // caso prórroga. Interes compuesto.
 	$gastos =35;
 	$_GET['inicio']=$capital;
 	$_GET['numhoy']=$diasDebe;
@@ -282,7 +346,7 @@ if($diasDebe>=1 && $diasDebe <=7){ //plazo de gracia
 		echo $ticket;
 	}
 
-}
+}*/
 //print_r($capital);
 
 

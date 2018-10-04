@@ -23,7 +23,7 @@
 			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido principal -->
 			<h2 class="purple-text text-lighten-1">Área de verificación </h2><hr>
-			<h4 class="purple-text text-lighten-1">Actividades sin aprobar</h4>
+			<h4 class="purple-text text-lighten-1">Tickets por aprobar</h4>
 			<p>Los siguientes códigos son para verificar, sea responsable por favor</p>
 			<table class="table table-hover table-responsive">
 				<thead>
@@ -40,15 +40,13 @@
 				<tbody>
 				
 			<?php
-				if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
+				//if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
 					include "php/listarTicketsSinAprobar.php";
-				}else{
-					echo '<p>No tienes permmiso para estar husmeando acá.</p>';
-				}
+				//}
 			?>
 				</tbody>
 			</table>
-			<h4 class="purple-text text-lighten-1">Actividades rechazadas</h4>
+			<h4 class="purple-text text-lighten-1">Tickets rechazados</h4>
 			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
@@ -61,7 +59,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php include "php/listarTicketsNoAprobado.php"; ?>
+					<?php include "php/listarTicketsNoAprobado.php"; ?> 
 				</tbody>
 			</table>
 

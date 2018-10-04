@@ -146,8 +146,8 @@ $cochera=0;
 			<div class="container row" style="margin-bottom: 20px;">
 				<div class="divBotonesEdicion" style="margin-bottom: 10px">
 					<div class="btn-group">
-					  <button type="button" class="btn btn-infocat btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="icofont icofont-settings"></i> <span class="caret"></span>
+					  <button type="button" class="btn btn-infocat btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+						<i class="icofont icofont-settings"></i> Acciones <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
@@ -263,13 +263,13 @@ $cochera=0;
 						<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
 				<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
 					<?php }
-					if( $limite >= 37 && $limite <= 49 ){ //zona venta de remate ?>
+					if( $limite >= 37 ){ //zona venta de remate  && $limite <= 49 ?>
 					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-						<p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button>
+						<!-- <p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
+						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button> -->
 					<?php }
-					if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
+					/* if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
 					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
 						<p style="margin-top: 10px;" ><strong>Zona remate</strong> Vender a 200%</p>
@@ -290,7 +290,7 @@ $cochera=0;
 					if( $limite >= 80 ){ //zona de venta de remate ?>
 						<p style="margin-top: 10px;" ><strong>Zona remate administrativo</strong> Proponer una solución. Hueso</p>
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de remate admin.</button>
-					<?php }
+					<?php } */
 					}
 				}//fin de if de requireonce comproibar cajahoy
 			}
@@ -581,9 +581,13 @@ $cochera=0;
 						<ul>
 							<li><strong>Monto inicial:</strong> S/. <span id="spanInteresInicial"><?php echo $rowInteres['preCapital']; ?></span></li>
 							<li><strong>Interés:</strong> S/. <span id="spanInteresInt"><?php echo number_format($interesJson,2); ?></span></li>
+						<? if($gastosAdmin>0): ?>
 							<li><strong>Penalización:</strong> S/. <span id="spanInteresPena"><?php echo number_format($gastosAdmin,2); ?></span></li>
-							<? if($cochera>0): ?><li><strong>Cochera:</strong> S/. <span id="spanCocheraPena"><?php echo number_format($cochera,2); ?></span></li><? endif;?>
-							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo number_format($rowInteres['preCapital']+$interesJson+$gastosAdmin,2); ?></span></li>
+						<? endif; ?>
+						<? if($cochera>0): ?>
+							<li><strong>Cochera:</strong> S/. <span id="spanCocheraPena"><?php echo number_format($cochera,2); ?></span></li>
+						<? endif;?>
+							<li><strong>Total:</strong> S/. <span id="spanInteresTotal"><?php echo number_format($rowInteres['preCapital']+$interesJson+$gastosAdmin+$cochera,2); ?></span></li>
 						</ul>
 					</div>
 						
@@ -1246,7 +1250,8 @@ $('#btnCrearTicketPagoInteres').click(function () {
 	else {
 		
 	}*/
-	if($('#txtMontoTicketIntereses').val().length!=0){$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val() }}).done(function (resp) { console.log(resp)
+	if($('#txtMontoTicketIntereses').val().length!=0){
+		$.ajax({url: 'php/crearTicketParaDepositar.php', type: 'POST', data: { idProducto: <?php echo $_GET['idProducto'] ?>, dinero: $('#txtMontoTicketIntereses').val(), obs: $('#txtRazonTicketIntereses').val(), cochera: <?= $cochera; ?> }}).done(function (resp) { console.log(resp)
 			if(resp.indexOf("#")>=0){
 				$('.modal-ticketZonaIntereses').modal('hide');
 				$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
@@ -1272,40 +1277,49 @@ $('#liEditDescription').click(function() {
 });
 
 <?php if( $rowProducto['prodActivo']==1 && $esCompra==0 ){ ?>
-$('#txtMontoTicketIntereses').focusout(function () {
-	var capital = <?php echo $rowInteres['preCapital']; ?>;
-	var gastos = <?php echo $gastosAdmin; ?>;
-	var cochera = <?= $cochera; ?>;
-	var interes = <?  $interesFloat=str_replace(',', '', $interesJson); echo $interesFloat; ?>;
-	var valor = parseFloat($(this).val()); 
-	console.log(cochera);
-	var hayGasto='';
-	if($('#txtMontoTicketIntereses').val().length!=0){
-		$('#btnCrearTicketPagoInteres').removeClass('hidden');
-	if(gastos >0){	hayGasto= '<br>Penalización de S/. <?= number_format($gastosAdmin,2); ?>';} 
-		if(gastos==<?= $gastosAdmin; ?>  && valor <(gastos+ cochera) ){
+$('#txtMontoTicketIntereses').keyup(function(e) {
+	var code = e.which;
+	if(code==13){ e.preventDefault();
+		var capital = <?php echo $rowInteres['preCapital']; ?>;
+		var gastos = <?php echo $gastosAdmin; ?>;
+		var cochera = <?= $cochera; ?>;
+		var interes = <?  $interesFloat=str_replace(',', '', $interesJson); echo $interesFloat; ?>;
+		var valor = parseFloat($(this).val()); 
+		//console.log(cochera);
+		var hayGasto='';
+		if($('#txtMontoTicketIntereses').val().length!=0){
+			$('#btnCrearTicketPagoInteres').removeClass('hidden');
+		if(gastos >0){	hayGasto= '<br>Penalización de S/. <?= number_format($gastosAdmin,2); ?>';} 
+			if(gastos==<?= $gastosAdmin; ?>  && valor <(gastos+ cochera) ){
+				$('#btnCrearTicketPagoInteres').addClass('hidden');
+				$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos y/o cochera');
+			}else if(valor == <?= $cochera; ?>){
+				$('#btnCrearTicketPagoInteres').removeClass('hidden');
+				$('#spanInteresTipo').html('Pago de cochera S/ ' + parseFloat(valor-gastos - hayGasto ).toFixed(2) );
+			}else if(valor < ( <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) ){
+				$('#btnCrearTicketPagoInteres').removeClass('hidden');
+				$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Pago parcial de interés de S/ ' + parseFloat(valor-gastos- cochera ).toFixed(2) + hayGasto );
+			}else if(valor == ( <?php  echo $interesFloat + $gastosAdmin + $cochera; ?> )   ){
+				$('#btnCrearTicketPagoInteres').removeClass('hidden');
+				$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto - cochera).toFixed(2) );
+			}else if(valor >=  <?php echo $interesFloat + $gastosAdmin + $cochera + floatval($rowInteres['preCapital']) ; ?> ) {
+				$('#btnCrearTicketPagoInteres').removeClass('hidden');
+				$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Final de préstamo de S/ ' + parseFloat(valor-gastos- cochera).toFixed(2) + hayGasto );
+			}else if((valor >  <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesFloat + $gastosAdmin+ $cochera; ?>) ){
+				$('#btnCrearTicketPagoInteres').removeClass('hidden');
+				$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancela Interés de S/ ' + parseFloat(interes).toFixed(2) + hayGasto + ' <br> ' + 'Amortización de S/ ' + parseFloat(valor-gastos-interes-cochera).toFixed(2) );
+			}
+		}else{
 			$('#btnCrearTicketPagoInteres').addClass('hidden');
-			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos y/o cochera');
-		}else if(valor == <?= $cochera; ?>){
-			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('Pago de cochera S/ ' + parseFloat(valor-gastos - hayGasto ).toFixed(2) );
-		}else if(valor < ( <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) ){
-			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Pago parcial de interés de S/ ' + parseFloat(valor-gastos- cochera ).toFixed(2) + hayGasto );
-		}else if(valor == ( <?php  echo $interesFloat + $gastosAdmin + $cochera; ?> )   ){
-			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancelación de interés de S/ ' + parseFloat(valor-gastos + hayGasto - cochera).toFixed(2) );
-		}else if(valor >=  <?php echo $interesFloat + $gastosAdmin + $cochera + floatval($rowInteres['preCapital']) ; ?> ) {
-			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Final de préstamo de S/ ' + parseFloat(valor-gastos- cochera).toFixed(2) + hayGasto );
-		}else if((valor >  <?php echo $interesFloat + $gastosAdmin+ $cochera; ?> ) && (valor < <?php echo (float)$rowInteres['preCapital']+$interesFloat + $gastosAdmin+ $cochera; ?>) ){
-			$('#btnCrearTicketPagoInteres').removeClass('hidden');
-			$('#spanInteresTipo').html('<? if($cochera>0){echo 'Pago de cochera S/ '.number_format($cochera, 2).'<br>';} ?> Cancela Interés de S/ ' + parseFloat(interes).toFixed(2) + hayGasto + ' <br> ' + 'Amortización de S/ ' + parseFloat(valor-gastos-interes-cochera).toFixed(2) );
+			$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 		}
-	}else{
-		$('#btnCrearTicketPagoInteres').addClass('hidden');
-		$('#spanInteresTipo').html('Debe pagar como mínimo los Gastos Administrativos');
 	}
+});
+$('#txtMontoTicketIntereses').focusout(function () {
+	var e = jQuery.Event("keyup");
+	e.which = 13; //choose the one you want
+	e.keyCode = 13;
+	$("#txtMontoTicketIntereses").trigger(e);
 });
 
 <?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4){ ?>
