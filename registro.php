@@ -123,12 +123,31 @@
 						<input type="numeric" id="txtSinTasa" class="form-control text-center" readonly>
 					</div>
 					<div class="col-sm-3">
-						<label for="">Cuota S/</label>
-						<input type="numeric" id="txtSinCuota"  class="form-control text-center" readonly>
+						<label class="" for=""></label>
+						<input type="numeric" id="txtSinCuota"  class="form-control text-center hidden" readonly>
+						<button class="btn btn-lg btn-infocat btn-outline" id="btnResolverProblema"><i class="icofont icofont-score-board"></i> Resolver</button>
+						<button class="btn btn-lg btn-default btn-outline" id="btnLimpiarProblema"><i class="icofont icofont-eraser"></i> Limpiar</button>
 					</div>
 				</div>
-				</div>
+			</div>
 			
+			<div class="container-fluid panel panel-default ">
+			<div class="panel-body">
+				<table class="table">
+				<thead>
+				<tr>
+					<th>Dia</th>
+					<th>Fecha</th>
+					<th>Cuota</th>
+				</tr>
+				</thead>
+				<tbody id="tbodySimulador">
+				</tbody>
+
+				</table>
+			</div>
+			</div>
+
 			<div class="col-sm-12 text-right">
 					<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
 					<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
@@ -540,6 +559,38 @@ $('#sltModoPrestamo').change(function () {
 });
 $('#txtSinMonto').change(function() {
 	
+});
+$('#btnResolverProblema').click(function() {
+	if($('#sltModoPrestamo').val()!='' && $('#txtSinMonto').val()!=''){
+		var inte=0;
+		var inicial = $('#txtSinMonto').val();
+		var habiles =0;
+		var cuota=0;
+		switch ( $('#divSelectProductoListado').find('.selected a').attr('data-tokens') ) {
+			case '1':
+				inte=1.12;//1.12
+				habiles=20; //20 dias habiles
+				break;
+			case '2':
+				inte=1.14;//1.12
+				habiles=4; //4 semanas 
+				break;
+			case '3':
+				inte=1.16;//1.12
+				habiles=1; //1 mes
+				break;
+			default:
+				break;
+		}
+		// cuota = inicial*inte;		
+		// $('#txtSinCuota').val(parseFloat(cuota).toFixed(2))//parseFloat(cuota.toPrecision(2)).toFixed(2)
+		$.ajax({url: 'php/simuladorConDni.php', type: 'POST', data: { modo: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+			$('#tbodySimulador').html(resp);
+		});
+	}
+});
+$('#btnLimpiarProblema').click(function() {
+	$('#tbodySimulador').html('');
 });
 </script>
 <?php } ?>
