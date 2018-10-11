@@ -39,7 +39,7 @@ if( $numRow>0){
 }
 
 //echo "hola 7. \n";
-	$sqlPre= "call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 4, {$_COOKIE['ckidUsuario']} );";
+	$sqlPre= "call inicializarPrestamoV3({$idCliente}, '{$_POST['total']}', '".date('Y-m-d H:i')."', 28, {$_COOKIE['ckidUsuario']} );";
 	//echo $sqlPre;
 	// Iniciamos préstamo
 	$consulta = $conection->prepare($sqlPre);

@@ -77,7 +77,7 @@ require("php/conkarl.php");
 					<thead>
 					  <tr>
 						<th data-sort="int"># <i class="icofont icofont-expand-alt"></i></th>
-						<th data-sort="int">Unds. <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="int" id="thUnds">Unds. <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Descripción del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
@@ -132,6 +132,7 @@ $('#cmbEstadoCombo').change(function () {
 	$('tbody').children().remove();
 	$('tfoot').children().remove();
 	$('.divAnalitica').addClass('hidden');
+	$('#thUnds').removeClass('hidden');
 	switch(estado){
 		case '23':
 		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
@@ -379,6 +380,12 @@ $('#cmbEstadoCombo').change(function () {
 							</th></tfoot>`);
 					}
 				});
+			});
+		break;
+		case '78':
+			$('#thUnds').addClass('hidden');
+			$.ajax({url: 'php/listarCreditosOnline.php', type: 'POST'}).done(function(resp) {
+				$('tbody').html(resp);
 			});
 		break;
 		case '9999':
