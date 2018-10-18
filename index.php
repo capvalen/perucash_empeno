@@ -123,7 +123,7 @@ $('#btnAcceder').click(function() {
 		data: {user: $('#txtUser_app').val(), pws: $('#txtPassw').val()},
 		success: function(iduser) {
 			if (parseInt(iduser)>0){//console.log('el id es '+data)
-				//console.log(iduser)
+				console.log(iduser)
 				window.location="principal.php";
 			}
 			else {

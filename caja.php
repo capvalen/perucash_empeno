@@ -207,7 +207,7 @@ th{color:#a35bb4}
 			<div class="container-fluid">
 			<div class="row">
 				<p>¿Con qué monto inicias?</p>
-				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoApertura" value="0.00" readonly>
+				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoApertura" value="0.00" >
 				<p>¿Alguna observación?</p>
 				<input type="text" class="form-control input-lg text-center" id="txtObsApertura">
 			</div>
