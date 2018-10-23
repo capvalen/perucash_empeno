@@ -20,7 +20,7 @@ if(isset($_GET['cuadre'])){
 $numRow = mysqli_num_rows($sql);
 $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
-if($numRow>=1){ ?>
+if($numRow>=1 ){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
 	<p><strong>Sessión de: </strong> <?php echo $row['usuNombres']; ?></p>
 	<p><strong>Apertura:</strong> S/ <span id="spanApertura" ><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></p>
@@ -31,11 +31,12 @@ if($numRow>=1){ ?>
 	<p><strong>Cierre con:</strong> S/ <span id="spanCierrev3" ><?= str_replace(",", '', number_format($row['cuaCierre'],2)); ?></span></p>
 	<p><strong>Fecha & Hora:</strong> <?php if($row['fechaFin']=='0000-00-00 00:00:00'){ echo 'Sin cerrar aún';}else{ $fechaN= new DateTime($row['fechaFin']); echo $fechaN->format('j/n/Y g:i a'); } ?></p>
 </div>
-<?php if($_COOKIE['ckidUsuario']==$row['idUsuario'] ){ ?>
+<?php if($_COOKIE['ckidUsuario']==$row['idUsuario'] && $row['cuaVigente']==1  ){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
 	<button class="btn btn-warning btn-outline btn-lg" id="btnCajaCerrar"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
 </div>
-<?php } }else{ 
+<?php } }
+if( !isset($_GET['cuadre']) && !isset($_GET['fecha']) ){
 	if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){?>
 	<div class="col-xs-12 col-sm-6 text-center">
 	<?php if( date('Y-m-d')== $_GET['fecha'] ){ ?>

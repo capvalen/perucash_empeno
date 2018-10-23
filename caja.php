@@ -82,7 +82,7 @@ th{color:#a35bb4}
 					</div>
 				</div>
 			</div>
-	<?php if( isset($_GET['cuadre']) ): ?>
+	
 			<div class="container-fluid">
 					<p class="pheader col-xs-7">Datos del cuadre</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
@@ -96,6 +96,7 @@ th{color:#a35bb4}
 					</div>
 			</div>
 			
+			<?php if( isset($_GET['cuadre']) ): ?>		
 			<div class="container-fluid col-xs-12 ">
 				<div class="pheader">
 					<h4 >Entradas de dinero </h4>
