@@ -65,9 +65,26 @@ th{color:#a35bb4}
 			<div class="container-fluid">
 				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
 			</div>
-			
+
+			<div class="container-fluid  ">
+				<p class="pheader col-xs-7"><i class="icofont icofont-filter"></i> Filtros</p>
+				<div class="panel panel-default container-fluid ">
+					<div class=" col-xs-12 col-sm-7 ">
+						<div style="padding: 10px;">
+							<p style="color: #a35bb4;">Por: <?php require "php/historialCierres.php"; ?></p>
+							<!-- <p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p> -->
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
+							<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
+						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
+					</div>
+				</div>
+			</div>
+	<?php if( isset($_GET['cuadre']) ): ?>
 			<div class="container-fluid">
-					<p class="pheader col-xs-7">Acciones en caja</p>
+					<p class="pheader col-xs-7">Datos del cuadre</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
 						<!-- <div class="col-xs-12 col-sm-6 text-center">
 							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
@@ -79,23 +96,6 @@ th{color:#a35bb4}
 					</div>
 			</div>
 			
-			<div class="container-fluid  ">
-				<p class="pheader col-xs-7">Filtros</p>
-				<div class="panel panel-default container-fluid ">
-					<div class=" col-xs-12 col-sm-7 ">
-						<div style="padding: 10px;">
-							<p style="color: #a35bb4;">Por: <?php require "php/historialCierres.php"; ?></p>
-								<p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-5">
-						<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
-							<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
-						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
-					</div>
-				</div>
-			</div>
-
 			<div class="container-fluid col-xs-12 ">
 				<div class="pheader">
 					<h4 >Entradas de dinero </h4>
@@ -115,7 +115,8 @@ th{color:#a35bb4}
 					<tbody>
 					<?php
 					if( ! isset($_GET['cuadre']) ):
-						require_once 'php/reporteIngresoDia.php';
+						// require_once 'php/reporteIngresoDia.php';+
+						echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
 					else:
 						require_once 'php/reporteIngresoDiaxCuadre.php';
 					endif;
@@ -141,7 +142,8 @@ th{color:#a35bb4}
 					<tbody>
 					<?php
 						if( ! isset($_GET['cuadre']) ):
-							require_once 'php/reporteEgresoDia.php';
+							// require_once 'php/reporteEgresoDia.php';+
+							echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
 						else:
 							require_once 'php/reporteEgresoDiaxCuadre.php';
 						endif;
@@ -152,6 +154,7 @@ th{color:#a35bb4}
 			<div class="container-fluid col-xs-12 text-center">
 				<h4 class="pheader">Efectivo total del día: <strong>S/ <span id="spanResultadoFinal"></span></strong></h4>
 			</div>
+	<?php endif; //if de isset ?>
 			<!-- Fin de contenido 2 -->
 			</div>
 
@@ -321,7 +324,11 @@ $('#dtpFechaIniciov3').val('<?php
 		?>');
 moment.locale('es');
 
-$('#spanResultadoFinal').text(parseFloat(parseFloat($('#strSumaEntrada').text().replace(',', '.') ) - parseFloat($('#strSumaSalida').text().replace(',', '.') )).toFixed(2));
+$('#spanResultadoFinal').text(parseFloat( parseFloat($('#strSumaEntrada').text().replace(',', '.')) - parseFloat($('#strSumaSalida').text().replace(',', '.')) + parseFloat($('#spanApertura').text().replace(',', '.')) ).toFixed(2));
+
+<?php if(isset($_GET['cuadre'])){ ?>
+	$('#sltHistorialCierres').val(<?php echo $_GET['cuadre']; ?>);
+<?php } ?>
 $('#dtpFechaIniciov3').change(function () {
 	//console.log(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid())
 	if(moment($('#dtpFechaIniciov3').val(), 'DD/MM/YYYY').isValid()){

@@ -1,6 +1,6 @@
 <?php 
 require("conkarl.php");
-echo "call reporteEgresoDiaxCuadre('".$_GET['cuadre']."');";
+//echo "call reporteEgresoDiaxCuadre('".$_GET['cuadre']."');";
 $sql = mysqli_query($conection,"call reporteEgresoDiaxCuadre('".$_GET['cuadre']."');");
 $totalRow= mysqli_num_rows($sql);
 $sumaIngr=0;

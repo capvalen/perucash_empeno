@@ -1,5 +1,5 @@
 <select name="" id="sltHistorialCierres" class="form-control" >
-<option class="optMovesBox" value="0">Todos los movimientos</option>
+<option class="optMovesBox" value="0">Historial de cuadres</option>
 <?php 
 include 'conkarl.php';
 if ( ! isset ($_GET['cuadre'])){
