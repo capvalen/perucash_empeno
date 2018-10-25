@@ -440,7 +440,7 @@ $('#btnGuardarCierre').click(function () {
 		
 		$.ajax({url: 'php/cajaCierreHoy.php', type: 'POST', data:{
 			monto: monto, obs: obs
-		}}).done((resp)=> {
+		}}).done((resp)=> { console.log(resp);
 			//location.reload();
 			$('#btnCajaCerrar').remove();
 			$('.modal-cerrarCaja').modal('hide');

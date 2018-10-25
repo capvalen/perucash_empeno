@@ -1,5 +1,8 @@
 <?php 
 require("conkarl.php");
+date_default_timezone_set('America/Lima');
+
+$hayCaja= require_once("comprobarCajaHoy.php");
 $filas=array();
 if (! isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');
@@ -12,15 +15,51 @@ if(isset($_GET['cuadre'])){
 	$sql = mysqli_query($conection,"call cajaActivaHoy('".$_GET['fecha']."');"); // $_GET['fecha']
 }
 
+if($hayCaja==true){
+	$row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+	?>
+	<div class="container-fluid row ">
+		<div class="col-xs-12 col-md-8">
+			<div class="alert alert-warning" role="alert"><strong>Tip!</strong> Caja perteneciente a sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong> </div>
+		<?php
+			
+			$fechaHoy = new DateTime();
+			$fechaReporte = new DateTime($row['fechaInicio']);
+		?>
+		</div>
+		<div class="col-xs-12 col-md-4">
+		<?php 
+		if( $fechaReporte->format('j/n/Y')== $fechaReporte->format('j/n/Y') && ( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 )  ){
+			?> <button class="btn btn-warning btn-outline btn-lg" id="btnCajaCerrar"><i class="icofont icofont-money-bag"></i> Cerrar caja</button> <?php
+		}
+		?>
+		</div>
+	</div>
+	<?php
+}else{
+	?>
+	<div class="container-fluid row ">
+		<div class="col-xs-12 col-md-8">
+			<div class="alert alert-danger" role="alert"><strong>Alerta</strong> No se encuentra ninguna caja aperturada.</div>
+		</div>
+		<div class="col-xs-12 col-md-4">
+					<?php 
+					if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){
+						if( date('Y-m-d')== $_GET['fecha'] ){
+							?>
+							<div class="text-center">
+							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
+							</div>
+							<?php
+						}
+					} ?>
+				</div>
+	</div>
+	<?php
+}
 
-// if (!$sql) { ////codigo para ver donde esta el error
-//     printf("Error: %s\n", mysqli_error($conection));
-//     exit();
-// }
-$numRow = mysqli_num_rows($sql);
-$row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 
-if($numRow>=1 ){ ?>
+if( isset($_GET['cuadre']) ){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
 	<p><strong>Sessión de: </strong> <?php echo $row['usuNombres']; ?></p>
 	<p><strong>Apertura:</strong> S/ <span id="spanApertura" ><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></p>
@@ -33,20 +72,17 @@ if($numRow>=1 ){ ?>
 </div>
 <?php if($_COOKIE['ckidUsuario']==$row['idUsuario'] && $row['cuaVigente']==1  ){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
-	<button class="btn btn-warning btn-outline btn-lg" id="btnCajaCerrar"><i class="icofont icofont-money-bag"></i> Cerrar caja</button>
+	
 </div>
 <?php } }
-if( !isset($_GET['cuadre']) && !isset($_GET['fecha']) ){
-	if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){?>
-	<div class="col-xs-12 col-sm-6 text-center">
-	<?php if( date('Y-m-d')== $_GET['fecha'] ){ ?>
-		<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
-	<?php } ?>
-	</div>
-	<div class="col-xs-12 col-sm-6 ">
-	
-	</div>
-<?php } }
+
+
+
+// if (!$sql) { ////codigo para ver donde esta el error
+//     printf("Error: %s\n", mysqli_error($conection));
+//     exit();
+// }
+
 /*while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
 {
 	$filas[$i]= $row;

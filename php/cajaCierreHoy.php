@@ -7,7 +7,7 @@ if($_POST['obs']<>''){
 }else{$obs ='';}
 
 $sql= "call cajaCierreHoy (".$_COOKIE['ckidUsuario'].", ".$_POST['monto'].", '".$_POST['obs']."' )";
-//echo $sql;
+
 if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	// obtener el array de objetos 
 	echo true;
