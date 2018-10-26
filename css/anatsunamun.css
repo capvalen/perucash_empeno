@@ -64,7 +64,7 @@ input[type=number] {-moz-appearance:textfield;}
 .btn-morado.btn-outline:active,.btn-morado.btn-outline:hover, .btn-indigo.btn-outline:active,.btn-indigo.btn-outline:hover,
 .btn-morita.btn-outline:active,.btn-morita.btn-outline:hover
 {color: white;}
-.btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: : black;}
+.btn-negro.btn-outline:focus,.btn-negro.btn-outline:active,.btn-negro.btn-outline:hover{background-color: black;}
 
 .panel.with-nav-tabs>.panel-heading{
     padding: 5px 5px 0 5px;

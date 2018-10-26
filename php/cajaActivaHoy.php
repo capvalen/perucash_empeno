@@ -14,9 +14,9 @@ if(isset($_GET['cuadre'])){
 }else{
 	$sql = mysqli_query($conection,"call cajaActivaHoy('".$_GET['fecha']."');"); // $_GET['fecha']
 }
-
+$row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 if($hayCaja==true){
-	$row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
+	
 	?>
 	<div class="container-fluid row ">
 		<div class="col-xs-12 col-md-8">
@@ -39,16 +39,23 @@ if($hayCaja==true){
 }else{
 	?>
 	<div class="container-fluid row ">
-		<div class="col-xs-12 col-md-8">
-			<div class="alert alert-danger" role="alert"><strong>Alerta</strong> No se encuentra ninguna caja aperturada.</div>
+		<div class="col-xs-12 col-md-7">
+			<div class="alert alert-morado container-fluid" role="alert">
+				<div class="col-xs-4 col-sm-2 col-md-3">
+					<img src="images/ghost.png" alt="img-responsive" width="100%">
+				</div>
+				<div class="col-xs-8">
+					<strong>Alerta</strong> <p>No se encuentra ninguna caja aperturada.</p>
+				</div>
+			</div>
 		</div>
-		<div class="col-xs-12 col-md-4">
+		<div class="col-xs-12 col-md-5">
 					<?php 
 					if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){
 						if( date('Y-m-d')== $_GET['fecha'] ){
 							?>
 							<div class="text-center">
-							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
+							<button class="btn btn-morado btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
 							</div>
 							<?php
 						}

@@ -233,7 +233,15 @@ $cochera=0;
 			}else{
 				$vari = require_once 'php/comprobarCajaHoy.php';
 				if($vari==false){
-					echo '<h3 class="red-text text-darken-1" >No hay ninguna caja aperturada</h3>';
+					//echo '<h3 class="red-text text-darken-1" >No hay ninguna caja aperturada</h3>';
+					echo '<div class="alert alert-morado container-fluid" role="alert">
+					<div class="col-xs-4 col-sm-2 col-md-3">
+						<img src="images/ghost.png" alt="img-responsive" width="100%">
+					</div>
+					<div class="col-xs-8">
+						<strong>Alerta</strong> <p>No se encuentra ninguna caja aperturada.</p>
+					</div>
+				</div>';
 				//fin de if de fallse
 				}else{
 

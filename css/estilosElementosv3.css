@@ -252,3 +252,11 @@ display: inline-block;
 }
 .prodSiActivo{color: #a35bb4;}
 .prodNoActivo{color: #989898;}
+
+.alert-morado{
+color: white!important;
+background-color: #332f63;
+border-color: transparent;
+border-radius: 10px;}
+.alert-morado strong{ font-size: 15px; }
+.alert-morado p{color: white!important;}

@@ -1,4 +1,5 @@
-<?php session_start(); ?>
+<?php session_start();
+$hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -92,13 +93,26 @@
 					</div>
 				</div>
 				</div>
-				
+			<?php if( $hayCaja==true ): ?>
 				<div class="col-sm-12 text-right">
 					<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
 					<button class="btn btn-azul btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
 					<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar</button>
 					<button class="btn btn-azul sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
 				</div>
+			<?php else:  ?>
+					<div class="col-xs-12 col-md-7">
+						<div class="alert alert-morado container-fluid" role="alert">
+							<div class="col-xs-4 col-sm-2 col-md-3">
+								<img src="images/ghost.png" alt="img-responsive" width="100%">
+							</div>
+							<div class="col-xs-8">
+								<strong>Alerta</strong> <p>No se encuentra ninguna caja aperturada.</p>
+								<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" style="color:#333"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+							</div>
+						</div>
+					</div>
+			<?php endif; ?>
 			</div>
 			
 			</div>
