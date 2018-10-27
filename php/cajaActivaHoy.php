@@ -19,8 +19,18 @@ if($hayCaja==true){
 	
 	?>
 	<div class="container-fluid row ">
-		<div class="col-xs-12 col-md-8">
-			<div class="alert alert-warning" role="alert"><strong>Tip!</strong> Caja perteneciente a sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong> </div>
+		<div class="col-xs-12 col-md-8" >
+				<div class='divTopLinea'></div>
+				<div class="alert alert-success-degradado container-fluid" role="alert">
+					<div class="col-xs-4">
+						<div class="divLargoCircular">
+						<h3><i class="icofont icofont-tick-mark"></i> <span>EXCELENTE</span></h3>
+						</div>
+					</div>
+					<div class="col-xs-8">
+						<h4 class="h3Title">Tip!</h4> Caja perteneciente a sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong>
+					</div>
+				</div>
 		<?php
 			
 			$fechaHoy = new DateTime();

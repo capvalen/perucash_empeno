@@ -260,3 +260,25 @@ border-color: transparent;
 border-radius: 10px;}
 .alert-morado strong{ font-size: 15px; }
 .alert-morado p{color: white!important;}
+.alert-success-degradado{
+    color: #747373;
+    background-color: white;
+    border-color: #cccccc;
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+}
+.divTopLinea{
+content: '';
+height: 7px;
+width: 100%;
+background-image: linear-gradient(to right, #a7d132 0%, #449015 50%);
+    border-radius: 5px 5px 0 0;
+}
+.divLargoCircular {
+    color: white;
+    text-align: center;
+    background: linear-gradient(45deg, #61c831 0%,#aad232 100%);
+    padding: 7px;
+    border-radius: 70px;
+}
+.h3Title{color: #6dbe1b!important;}
