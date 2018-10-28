@@ -11,7 +11,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 <body>
 
 <style>
-.btnMasterEntrada{ width: 60%; height: 150px; font-size: 24px; }
+.btnMasterEntrada{ width: 90%; height: 100px; font-size: 20px; }
 .btnMasterEntrada i{font-size: 48px;}
 .spanNomProductov3{font-size: 17px;}
 .divMonto{color: #191c1f;}
@@ -27,15 +27,18 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable ">
 			<!-- Empieza a meter contenido 2 -->
-			<h2 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
+			<h3 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h3><hr>
 			<div class="contenedorBienvenida">
-				<h4>Bienvenido a PeruCash, para empezar selecciona que tipo de producto deseas registrar</h4>
+				<h5>Elija una opción de registro</h5>
 				<div class="row"><br>
-					<div class="col-sm-6 text-center">
-						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Empeño</button>
+					<div class="col-sm-4 text-center">
+						<button class="btn btn-warning btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Préstamo prendario</button>
 					</div>
-					<div class="col-sm-6 text-center">
-						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-shopping-cart"></i> <br>Compra</button>
+					<div class="col-sm-4 text-center">
+						<button class="btn btn-azul btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-shopping-cart"></i> <br>Compra</button>
+					</div>
+					<div class="col-sm-4 text-center">
+						<button class="btn btn-infocat btn-outline btnMasterEntrada" id="btnPrestamosSinDni"><i class="icofont icofont-id"></i> <br>Préstamos con Dni</button>
 					</div>
 				</div>
 			</div>
@@ -60,58 +63,110 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			<!-- Fin de contenido 2 -->
 			</div>
 			<div class="row contenedorDatosProductos hidden">
-						<div class="col-sm-12 ">
-						<div class="row text-center hidden">
-							<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
-						</div><br>
-							
-						<div class="row">
-						<div class="col-xs-12" style="">
-							<div class="panel panel-default list-group-panel">
-							<div class="panel-body">
-								<ul class="list-group list-group-header">
-									<li class="list-group-item list-group-body">
-									<div class="row"><strong>
-										<div class="col-xs-8 text-left">Nombre producto</div>
-										<div class="col-xs-2 text-center">Precio</div>
-										<div class="col-xs-2 text-center">Porcentaje Semanal</div></strong>
-									</div>
-									</li>
-								</ul>
-								<ul class="list-group list-group-body" id="ulListadoProductos">
-									<div class="row text-center">
-										<div class="container-fluid" id="conjuntoElementos"></div>
-										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
-										</div>
-										<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/ <span class="spanTotalSumasv3"></span></strong></div>
-									</div>
-								</ul>
+				<div class="col-sm-12 ">
+				<div class="row text-center hidden">
+					<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
+				</div><br>
+					
+				<div class="row">
+				<div class="col-xs-12" style="">
+					<div class="panel panel-default list-group-panel">
+					<div class="panel-body">
+						<ul class="list-group list-group-header">
+							<li class="list-group-item list-group-body">
+							<div class="row"><strong>
+								<div class="col-xs-8 text-left">Nombre producto</div>
+								<div class="col-xs-2 text-center">Precio</div>
+								<div class="col-xs-2 text-center">Porcentaje Semanal</div></strong>
 							</div>
-							</div>
-						</div>
-						</div>
-					<?php if( $hayCaja==true ): ?>
-						<div class="col-sm-12 text-right">
-							<button class="btn btn-default btn-lg btn-outline pull-left" id="btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
-							<button class="btn btn-azul btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
-							<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar</button>
-							<button class="btn btn-azul sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
-						</div>
-						<?php else:  ?>
-						<div class="col-xs-12 col-md-7">
-							<div class="alert alert-morado container-fluid" role="alert">
-								<div class="col-xs-4 col-sm-2 col-md-3">
-									<img src="images/ghost.png" alt="img-responsive" width="100%">
+							</li>
+						</ul>
+						<ul class="list-group list-group-body" id="ulListadoProductos">
+							<div class="row text-center">
+								<div class="container-fluid" id="conjuntoElementos"></div>
+								<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
 								</div>
-								<div class="col-xs-8">
-									<strong>Alerta</strong> <p>No se encuentra ninguna caja aperturada.</p>
-									<button class="btn btn-default btn-lg btn-outline pull-left" id="btnVolver" style="color:#333"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
-								</div>
+								<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/ <span class="spanTotalSumasv3"></span></strong></div>
 							</div>
-						</div>
-					<?php endif; ?>
+						</ul>
+					</div>
 					</div>
 				</div>
+				</div>
+			<?php if( $hayCaja==true ): ?>
+				<div class="col-sm-12 text-right">
+					<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+					<button class="btn btn-azul btn-lg btn-outline" id="btnCronogramaPagosVer"><i class="icofont icofont-chart-histogram-alt"></i> Cronograma de pagos</button>
+					<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarDatos"><i class="icofont icofont-diskette"></i> Guardar</button>
+					<button class="btn btn-azul sr-only btn-lg btn-outline" id="btnGuardarCompra"><i class="icofont icofont-diskette"></i> Guardar compra</button>
+				</div>
+			<?php else:  ?>
+					<div class="col-xs-12 col-md-7">
+						<div class="alert alert-morado container-fluid" role="alert">
+							<div class="col-xs-4 col-sm-2 col-md-3">
+								<img src="images/ghost.png" alt="img-responsive" width="100%">
+							</div>
+							<div class="col-xs-8">
+								<strong>Alerta</strong> <p>No se encuentra ninguna caja aperturada.</p>
+								<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" style="color:#333"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+							</div>
+						</div>
+					</div>
+			<?php endif; ?>
+			</div>
+			
+			</div>
+			<div class='row contenedorDatosSinDni hidden'>
+				<div class="container-fluid panel panel-default" sytle="margin: 0 16px;">
+				<div class="panel-body">
+					<p><strong>Datos de préstamo:</strong></p>
+					<div class="col-sm-3">
+						<label for="">Temporada de préstamo</label>
+						<div  id="divSelectProductoListado">
+							<select class="selectpicker mayuscula" id="sltModoPrestamo" title="Tipo de producto..."  data-width="100%" data-live-search="true" data-size="15">
+								<?php require 'php/listarModoPrestamo.php'; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<label for="">Monto inicial S/</label>
+						<input type="numeric" id="txtSinMonto"  class="form-control esMoneda text-center">
+					</div>
+					<div class="col-sm-3">
+						<label for="">Tasa de interés %</label>
+						<input type="numeric" id="txtSinTasa" class="form-control text-center" readonly>
+					</div>
+					<div class="col-sm-3">
+						<label class="" for=""></label>
+						<input type="numeric" id="txtSinCuota"  class="form-control text-center hidden" readonly>
+						<button class="btn btn-lg btn-infocat btn-outline" id="btnResolverProblema"><i class="icofont icofont-score-board"></i> Resolver</button>
+						<button class="btn btn-lg btn-default btn-outline" id="btnLimpiarProblema"><i class="icofont icofont-eraser"></i> Limpiar</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="container-fluid panel panel-default ">
+			<div class="panel-body">
+				<table class="table">
+				<thead>
+				<tr>
+					<th>Dia</th>
+					<th>Fecha</th>
+					<th>Cuota</th>
+				</tr>
+				</thead>
+				<tbody id="tbodySimulador">
+				</tbody>
+
+				</table>
+			</div>
+			</div>
+
+			<div class="col-sm-12 text-right">
+					<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+					<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
+				</div>
+			</div>
 			
 		</div>
 </div>
@@ -468,20 +523,26 @@ $('#txtBuscarNivelGod').keyup(function (e) {
 });
 $('.btnMasterEntrada').click(function () {
 	$('.contenedorBienvenida').addClass('hidden');
-	if( $(this).attr('id')=='btnRemateMaster'){
+	var nomBtn=$(this).attr('id');
+	if( nomBtn=='btnRemateMaster'){
 		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
 		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esRemate');
 		$('#txtDni').focus();
+	}else if(nomBtn =='btnPrestamosSinDni'){
+		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
+		$('.contenedorDatosSinDni').addClass('animated fadeInRight').removeClass('hidden');
+		
 	}else{
 		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esCompra');
 	}
 });
-$('#btnVolver').click(function () {
+$('.btnVolver').click(function () {
 	$('.contenedorBienvenida').removeClass('hidden').addClass('animated fadeInLeft');
 	$('.contenedorDatosCliente').removeClass('animated fadeInRight').addClass('hidden');
 	$('.contenedorDatosProductos').removeClass('animated fadeInRight').addClass('hidden');
+	$('.contenedorDatosSinDni').removeClass('animated fadeInRight').addClass('hidden');
 });
 $('#divSelectProductoListado').on('click', '.optProducto ', function () {
 	var tipo = $('#divSelectProductoListado').find('.selected a').attr('data-tokens');
@@ -499,6 +560,51 @@ $('#divSelectProductoListado').on('click', '.optProducto ', function () {
 			$('.datosCheck').html(resp).parent().addClass('animated fadeIn').removeClass('hidden');
 		}
 	});
+});
+$('#btnGuardarPrestamoSinDni').click(function() {
+	if($('#sltModoPrestamo').val()==""){
+		console.log( 'esta vacio' );
+	}
+});
+$('#sltModoPrestamo').change(function () {
+	//if($('#sltModoPrestamo').val()!=""){
+		$('#txtSinTasa').val( $('#sltModoPrestamo').val() );
+	//}
+});
+$('#txtSinMonto').change(function() {
+	
+});
+$('#btnResolverProblema').click(function() {
+	if($('#sltModoPrestamo').val()!='' && $('#txtSinMonto').val()!=''){
+		var inte=0;
+		var inicial = $('#txtSinMonto').val();
+		var habiles =0;
+		var cuota=0;
+		switch ( $('#divSelectProductoListado').find('.selected a').attr('data-tokens') ) {
+			case '1':
+				inte=1.12;//1.12
+				habiles=20; //20 dias habiles
+				break;
+			case '2':
+				inte=1.14;//1.12
+				habiles=4; //4 semanas 
+				break;
+			case '3':
+				inte=1.16;//1.12
+				habiles=1; //1 mes
+				break;
+			default:
+				break;
+		}
+		// cuota = inicial*inte;		
+		// $('#txtSinCuota').val(parseFloat(cuota).toFixed(2))//parseFloat(cuota.toPrecision(2)).toFixed(2)
+		$.ajax({url: 'php/simuladorConDni.php', type: 'POST', data: { modo: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+			$('#tbodySimulador').html(resp);
+		});
+	}
+});
+$('#btnLimpiarProblema').click(function() {
+	$('#tbodySimulador').html('');
 });
 </script>
 <?php } ?>
