@@ -129,8 +129,11 @@ $cochera=0;
 .open>.dropdown-menu{margin-top: -10px;}
 .badge{background-color: #9658d0; font-size: 10px;}
 .divImagen li{list-style-type: none;}
-#txtMontoTicketIntereses{font-size: 26px;}
-#txtMontoTicketIntereses::placeholder{font-size: 12px;}
+#txtMontoTicketIntereses, #txtNuevoCapital{font-size: 26px;}
+#txtMontoTicketIntereses::placeholder, #txtNuevoCapital::placeholder{font-size: 12px;}
+body {cursor : url("images/curs85612.png") 2 2, pointer;} 
+body a, body .btn{cursor : url("images/curs85625.png") 2 2, pointer;}
+input{ cursor: url("images/curs85617.png") 2 2, text;  }
 </style>
 <div class="" id="wrapper">
 
@@ -353,7 +356,7 @@ $cochera=0;
 
 							?>
 						<ul>
-							<li>Capital: <span>S/. <?php echo $rowInteres['preCapital']; ?></span></li>
+							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 || $_COOKIE['ckPower']==8 ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
 							<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
 						<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
@@ -704,7 +707,7 @@ $cochera=0;
 						<?php require 'php/detallePagosOPT.php'; ?>
 					</select></div>
 					<label for="">Fecha de pago</label>
-					<div class="sandbox-container"><input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off"></div>
+					<input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
 					<label for="">Método de pago</label>
 					<div id="divCmbMetodoPago">
 						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
@@ -725,7 +728,7 @@ $cochera=0;
 	</div>
 </div>
 
-<!--Modal Para insertar pago maestro -->
+<!--Modal Para insertar pago cajamaestra -->
 <div class="modal fade modal-cajaMaestra" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
@@ -810,6 +813,25 @@ $cochera=0;
 		</div>
 	</div>
 </div>
+
+<!--Modal Para asignar nuevo capital al prestamo-->
+<div class="modal animated fadeIn modal-nuevoCapital" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-morado">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Nuevo capital</h4>
+			</div>
+			<div class="modal-body">
+				<p>Ingrese el nuevo capital</p>
+				<input type="number" class="form-control input-lg esMoneda text-center" id="txtNuevoCapital">
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-morado btn-outline" data-dismiss="modal" id="btnActualizarCapital" ><i class="icofont icofont-check"></i> Actualizar</button>
+		</div>
+		</div>
+	</div>
+</div>
 <?php } ?>
 
 
@@ -877,7 +899,7 @@ $cochera=0;
 <script type="text/javascript" src="js/jquery.printPage.js?version=1.0.12"></script>
 <script type="text/javascript" src="js/stupidtable.min.js"></script>
 <script type="text/javascript" src="js/moment-precise-range.js"></script>
-<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.7"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.8"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 
@@ -890,7 +912,7 @@ datosUsuario();
 
 $(document).ready(function(){
 	moment.locale('es');
-	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
+	//$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
@@ -899,6 +921,20 @@ $(document).ready(function(){
 		//$(dato).attr('data-sort');//
 	});
 
+$('#dtpFechaPago').val('<?php
+	$date = new DateTime($_GET['fecha']);
+	echo  $date->format('d/m/Y h:mm a');
+?>');
+$('#dtpFechaPago').bootstrapMaterialDatePicker({
+	format: 'DD/MM/YYYY h:m a',
+	lang: 'es',
+	time: true,
+	weekStart: 1,
+	cancelText : 'Cerrar',
+	nowButton : true,
+	switchOnClick : true,
+	okText: 'Aceptar', nowText: 'Hoy'
+});
 $('#sltEstantes').on('changed.bs.select', function (e) {
  	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); console.log( id );
 	if(id==1){
@@ -1171,7 +1207,7 @@ $('#btnInventariarNegativo').click(function () {
 	$('.modal-inventarioNegativo').modal('show');
 });
 $('.modal-pagoMaestro').on('shown.bs.modal', function () {
-	$('#dtpFechaPago').val( moment().format('DD/MM/YYYY') );
+	$('#dtpFechaPago').val( moment().format('DD/MM/YYYY h:mm a') );
 });
 $('#btnInsertPositivo').click(function () {
 	$.ajax({
@@ -1413,6 +1449,22 @@ $('#btnUpdateCajaMaestra').click(function() {
 	});
 });
 <?php } ?>
+
+<?php  if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==9){ ?>
+$('#btnChangeCapital').click(function() {
+	$('#txtNuevoCapital').val( $('#spanCapitalDefault').text() );
+	$('.modal-nuevoCapital').modal('show');
+});
+$('#btnActualizarCapital').click(function() {
+	$.ajax({url: 'php/updateMontoCapital.php', type: 'POST', data: {
+		monto: $('#txtNuevoCapital').val(),
+		idProd: <?= $_GET['idProducto']; ?>
+	 }}).done(function(resp) {
+		//console.log(resp)
+		if( resp==true){ location.reload(); }
+	});
+});
+<?php }?>
 $('#btnGuardarCubicaje').click( ()=> {
 	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
 	var estante= $('#divSelectEstante').find('.selected a').attr('data-tokens');

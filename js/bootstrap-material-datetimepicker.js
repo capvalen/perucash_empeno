@@ -266,10 +266,10 @@
                          '</div>' +
                          '</div>' +
                          '<div class="dtp-buttons">' +
-                         '<button class="dtp-btn-now btn btn-default hidden">' + this.params.nowText + '</button>' +
+                         '<button class="dtp-btn-cancel btn btn-rojoFresa btn-outline">' + this.params.cancelText + '</button>' +
+                         '<button class="dtp-btn-now btn btn-indigo btn-outline hidden">' + this.params.nowText + '</button>' +
                          '<button class="dtp-btn-clear btn btn-default hidden">' + this.params.clearText + '</button>' +
-                         '<button class="dtp-btn-cancel btn btn-default">' + this.params.cancelText + '</button>' +
-                         '<button class="dtp-btn-ok btn btn-default">' + this.params.okText + '</button>' +
+                         '<button class="dtp-btn-ok btn btn-dark btn-outline">' + this.params.okText + '</button>' +
                          '<div class="clearfix"></div>' +
                          '</div>' +
                          '</div>' +
@@ -301,6 +301,10 @@
                  {
                     this._attachEvent(this.$dtpElement.find('.dtp-btn-clear'), 'click', this._onClearClick.bind(this));
                     this.$dtpElement.find('.dtp-btn-clear').removeClass('hidden');
+                 }
+                 if (this.params.okButton === false)
+                 {
+                    this.$dtpElement.find('.dtp-btn-ok').addClass('hidden');
                  }
 
                  if (this.params.nowButton === true)

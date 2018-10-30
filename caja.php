@@ -302,7 +302,7 @@ th{color:#a35bb4}
 
 <?php include 'footer.php'; ?>
 <script type="text/javascript" src="js/moment-precise-range.js"></script>
-<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.7"></script>
+<script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.8"></script>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 

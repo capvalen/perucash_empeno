@@ -11,12 +11,12 @@
 <link rel="shortcut icon" href="images/favicon.png">
 <link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
 <link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
-<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.67" >
+<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.71" >
 <link rel="stylesheet" href="css/colorsmaterial.css">
 <link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 <link rel="stylesheet" href="css/bootstrap-datepicker3.css">
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
 <link rel="stylesheet" href="css/animate.css" >
 
-<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.2" />
+<link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.3" />
 <link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->

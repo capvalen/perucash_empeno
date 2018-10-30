@@ -282,3 +282,8 @@ background-image: linear-gradient(to right, #a7d132 0%, #449015 50%);
     border-radius: 70px;
 }
 .h3Title{color: #6dbe1b!important;}
+.active a span { color: white; }
+a:focus{outline: none;}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+    background-color: #9658d0;
+}
