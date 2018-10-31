@@ -61,7 +61,7 @@ $cochera=0;
 	transition: all 0.6s ease-in-out;
 }
 .h3Nombres{margin-top: 0px;}
-.divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; cursor:default; color: #546e7a;}
+.divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; /* cursor:default; */ color: #546e7a;}
 .divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
 .divImagen img{border-radius: 7px;}
 .divBotonesAccion{margin: 15px 0;}
@@ -131,9 +131,6 @@ $cochera=0;
 .divImagen li{list-style-type: none;}
 #txtMontoTicketIntereses, #txtNuevoCapital{font-size: 26px;}
 #txtMontoTicketIntereses::placeholder, #txtNuevoCapital::placeholder{font-size: 12px;}
-body {cursor : url("images/curs85612.png") 2 2, pointer;} 
-body a, body .btn{cursor : url("images/curs85625.png") 2 2, pointer;}
-input{ cursor: url("images/curs85617.png") 2 2, text;  }
 </style>
 <div class="" id="wrapper">
 
@@ -1380,7 +1377,7 @@ $('#btnInsertPagoMaestro').click(()=> {
 			quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
 			cuanto: $('#txtMontoPagos').val(),
 			moneda: idMoneda,
-			fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY').format('YYYY-MM-DD')+' 00:00:00',
+			fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY h:mm a').format('YYYY-MM-DD H:mm'),
 			obs: $('#txtObsPagos').val()
 		}}).done((resp)=> { console.log (resp);
 			if( $.isNumeric(resp) ){
