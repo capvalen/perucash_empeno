@@ -125,7 +125,7 @@ $cochera=0;
 .dropdown-menu li a {padding: 0px 32px;}
 .dropdown-menu li:hover{background: #f3f3f3;}
 .dropdown-menu>.active>a:hover{ background-color: #9658d0; }
-.open>.dropdown-menu>li>a{color: #a35bb4;padding: 7px 25px;}
+.open>.dropdown-menu>li>a{color: #a35bb4;padding: 7px 45px;}
 .open>.dropdown-menu{margin-top: -10px;}
 .badge{background-color: #9658d0; font-size: 10px;}
 .divImagen li{list-style-type: none;}
