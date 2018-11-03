@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 

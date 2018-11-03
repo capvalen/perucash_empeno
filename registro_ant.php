@@ -1,4 +1,4 @@
-<?php session_start();
+<?php 
 date_default_timezone_set('America/Lima');
 $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 <!DOCTYPE html>

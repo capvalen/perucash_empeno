@@ -1,7 +1,5 @@
 <?php 
 
-session_start();
-
 include 'conkarl.php';
 
 
@@ -9,7 +7,7 @@ $filas=array();
 if($_SESSION['Power']==1){
 $log = mysqli_query($conection,"call returnTotalProductos();"); }
 else{
-$log = mysqli_query($conection,"call returnTotalProductosPorId(".$_SESSION['idSucursal'].");");
+$log = mysqli_query($conection,"call returnTotalProductosPorId(".$_COOKIE['ckidSucursal'].");");
 }
 
 

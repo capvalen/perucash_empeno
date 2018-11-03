@@ -1,5 +1,5 @@
 <?php 
-session_start();
+// session_start();
 include 'conkarl.php';
 
 $log = mysqli_query($conection,"call recuperacionAnteriorMes();");

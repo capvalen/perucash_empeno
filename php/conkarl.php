@@ -2,7 +2,7 @@
 $server="localhost";
 
 /* Net	*/
-$username="perucash2018_dem";
+$username="perucash2018_demo";
 $password="7Aug]yo4tq!,";
 $db='perucash2018_demo';
 

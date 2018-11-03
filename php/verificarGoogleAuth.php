@@ -16,4 +16,4 @@ $result = $ga->verifyCode($secret, $mycode, 3);
 
 echo $result;
 
- ?>
+?>

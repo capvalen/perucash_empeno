@@ -1,4 +1,4 @@
-<?php session_start();
+<?php /* session_start(); */
 $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,7 +26,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 	<div class="container-fluid ">
 		<div class="row noselect">
 			<div class="col-lg-12 contenedorDeslizable ">
-			<!-- Empieza a meter contenido 2 -->
+			<!-- Empieza a meter contenido 2 --> 
 			<h3 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h3><hr>
 			<div class="contenedorBienvenida">
 				<h5>Elija una opción de registro</h5>
@@ -598,7 +598,7 @@ $('#btnResolverProblema').click(function() {
 		}
 		// cuota = inicial*inte;		
 		// $('#txtSinCuota').val(parseFloat(cuota).toFixed(2))//parseFloat(cuota.toPrecision(2)).toFixed(2)
-		$.ajax({url: 'php/simuladorConDni.php', type: 'POST', data: { modo: $('#divSelectProductoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+		$.ajax({url: 'php/simuladorConDni.php', type: 'POST', data: { modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
 			$('#tbodySimulador').html(resp);
 		});
 	}

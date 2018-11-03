@@ -1,11 +1,11 @@
 <?php 
-session_start();
+
 include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
 
 
 
-$sql = "call updatePassSinDatos( '".$_POST['texto']."',".$_SESSION['idUsuario'].");";
+$sql = "call updatePassSinDatos( '".$_POST['texto']."',".$_COOKIE['ckidUsuario'].");";
 
 
 

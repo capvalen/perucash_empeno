@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 require("conkarl.php");
 $filas=array();
 $sql = mysqli_query($conection,"call datosBasicosUsuario(".$_COOKIE['ckidUsuario'].");");
