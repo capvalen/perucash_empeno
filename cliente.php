@@ -40,7 +40,7 @@ if( isset($_GET['idCliente'])){
 	.divPrestamo .vigente{color: #050506;}
 	.spanIcoProd {
     font-size: 18px;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 	/* .contenedorPres{margin-bottom: 20px;} */
 </style>
@@ -92,9 +92,9 @@ if( isset($_GET['idCliente'])){
 							<div class=' paPrestamo'><div>
 							<div class='row <? if( $rowPrestamos['prodActivo']==1 ){ echo $rowPrestamos['tipColorMaterial'];} else{ echo 'grey-text text-darken-3'; } ?>'>
 								<div class='hidden codRegistro'><?= $rowPrestamos['idProducto']; ?></div>
-								<div class='col-xs-5 mayuscula'><span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'];?> </div>
+								<div class='col-xs-6 mayuscula'> <i class="icofont icofont-social-slack"></i> <span><?= $rowPrestamos['idProducto']; ?></span> <span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'];?> </div>
 								<div class='col-xs-2'>S/. <?= number_format($rowPrestamos['preCapital'],2); ?></div>
-								<div class='col-xs-3 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
+								<div class='col-xs-2 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
 								<div class='col-xs-2'><? if( $rowPrestamos['prodActivo']==1 ){ echo 'Pendiente'; }else{ echo 'Inactivo'; } ?> <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
 							</div>
 						</div></div>
