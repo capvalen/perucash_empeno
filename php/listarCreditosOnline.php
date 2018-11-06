@@ -15,7 +15,7 @@ order by preFechaInicio asc");// ".$_POST['idSucursal']."
 $i=0;
 while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 {?>
-	<tr> <td><?= $i+1; ?></td> <td><?= $row['modDescripcion'];?></td> 
+	<tr> <td><a href="creditos.php?credito=<?= $row['idPrestamo']; ?>">#<?= $row['idPrestamo']; ?></a></td> <td><?= $row['modDescripcion'];?></td> 
       <td class="mayuscula"><?= $row['cliApellidos'].', '.$row['cliNombres']; ?></td> <td><?= $row['preFechaInicio']; ?></td> <td><?= $row['preCapital']; ?></td>
    </tr>
 <? }

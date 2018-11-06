@@ -36,15 +36,16 @@ switch ($_POST['modo']){
 		$intervalo = new DateInterval('P28D'); //aumenta 1 día
 		break;
 	default:
-	?> <tr><td>Datos inválidos</td></tr><?
+		echo "Error en modo";
 	break;
 }
 
-$sql="INSERT INTO `prestamo`(`idPrestamo`, `idCliente`, `preCapital`, `idModo`, `prePorcentaje`, `preFechaInicio`, `idUsuario`, `presActivo`, `presObservaciones`, `preIdEstado`)
-value (null, idCli, monto, {$_POST['modo']}, interes, now(), {$_COOKIE['ckidUsuario']}, 1, '', 78 )";
-if($conection->query($sql)){
+$sql="INSERT INTO `prestamo`(`idPrestamo`, `idCliente`, `preCapital`, `idModo`, `prePorcentaje`, `preFechaInicio`, `idUsuario`, `presActivo`, `presObservaciones`, `preIdEstado`, `prePlazo`)
+value (null, 942, {$_POST['monto']}, {$_POST['modo']}, {$interes}, now(), {$_COOKIE['ckidUsuario']}, 1, '', 78 , {$plazo});";
+
+if($cadena->query($sql)){
 	//$row = mysqli_fetch_array($log, MYSQLI_ASSOC);
-	$idPrestamo = $conection->insert_id;
+	$idPrestamo = $cadena->insert_id;
 	
 }else{
 	echo "hubo un error";
@@ -53,7 +54,6 @@ if($conection->query($sql)){
 $cuota = round($monto*$interes/$plazo,2);
 $sqlCuotas='';
 for ($i=0; $i < $plazo ; $i++) {
-?> <tr> <?
 	$fecha->add($intervalo);
 	$razon = esFeriado($feriados, $fecha->format('Y-m-d'));
 	if($razon!=false ){
@@ -75,11 +75,12 @@ for ($i=0; $i < $plazo ; $i++) {
 		}else{
 			$suma+=$cuota;
          //echo "Día #".($i+1).": ". $fecha->format('d/m/Y') . "<br>";
-         $sqlCuotas=$sqlCuotas."INSERT INTO `prestamo_cuotas`(`idCuota`, `idPrestamo`, `cuotFechaPago`, `cuotCuota`, `cuotFechaCancelacion`, `cuotPago`, `cuotSaldo`, `cuotObservaciones`, `idTipoPrestamo`) VALUES (null,{$idPrestamo},{$fecha->format('d/m/Y')},'',{round($cuota,2)},'',0,'');";
+         $sqlCuotas=$sqlCuotas."INSERT INTO `prestamo_cuotas`(`idCuota`, `idPrestamo`, `cuotFechaPago`, `cuotCuota`, `cuotFechaCancelacion`, `cuotPago`, `cuotObservaciones`, `idTipoPrestamo`) VALUES (null,{$idPrestamo},'{$fecha->format('Y-m-d')}',".round($cuota,2).",null,0,'', 79);";
 		}
 	}
-   $cadena->multi_query($sqlCuotas);
 }
+echo $sqlCuotas;
+$esclavo->multi_query($sqlCuotas);
 
 
 

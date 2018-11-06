@@ -142,9 +142,16 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 						<button class="btn btn-lg btn-infocat btn-outline" id="btnResolverProblema"><i class="icofont icofont-score-board"></i> Resolver</button>
 						<button class="btn btn-lg btn-default btn-outline" id="btnLimpiarProblema"><i class="icofont icofont-eraser"></i> Limpiar</button>
 					</div>
+				
+					<div class="col-sm-12 text-right">
+						<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+						<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
+					</div>
 				</div>
 			</div>
-			
+
+		
+
 			<div class="container-fluid panel panel-default ">
 			<div class="panel-body">
 				<table class="table">
@@ -162,10 +169,6 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			</div>
 			</div>
 
-			<div class="col-sm-12 text-right">
-					<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
-					<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
-				</div>
 			</div>
 			
 		</div>
@@ -561,11 +564,6 @@ $('#divSelectProductoListado').on('click', '.optProducto ', function () {
 		}
 	});
 });
-$('#btnGuardarPrestamoSinDni').click(function() {
-	if($('#sltModoPrestamo').val()==""){
-		console.log( 'esta vacio' );
-	}
-});
 $('#sltModoPrestamo').change(function () {
 	//if($('#sltModoPrestamo').val()!=""){
 		$('#txtSinTasa').val( $('#sltModoPrestamo').val() );
@@ -605,6 +603,14 @@ $('#btnResolverProblema').click(function() {
 });
 $('#btnLimpiarProblema').click(function() {
 	$('#tbodySimulador').html('');
+});
+$('#btnGuardarPrestamoSinDni').click(function() {
+	//if($('#txtDni').val()=='' || $('#txtApellidos').val()=='' || $('#txtNombres').val()=='' || $('#txtCelular').val()==''  || $('#txtDireccion').val()=='' ){
+	if($('#sltModoPrestamo').val()!=""){
+		$.ajax({url: 'php/guardarSimulacionPrestamo.php', type: 'POST', data: { modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+			console.log(resp);
+		});
+	}
 });
 </script>
 <?php } ?>
