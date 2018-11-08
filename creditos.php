@@ -22,7 +22,9 @@ if ( isset($_GET['credito'])){
 <body>
 
 <style>
-
+#contenedorCreditosFluid label{font-weight: 500;}
+#contenedorCreditosFluid p, #contenedorCreditosFluid td {color: #a35bb4;}
+.modal p{color: #333;}
 </style>
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -32,30 +34,35 @@ if ( isset($_GET['credito'])){
 <div id="page-content-wrapper">
 	<div class="container-fluid ">
 		<div class="row noselect">
-			<div class="col-lg-12 contenedorDeslizable ">
+			<div class="col-lg-12 contenedorDeslizable " id="contenedorCreditosFluid">
 			<!-- Empieza a meter contenido principal -->
-			<h3 class="purple-text text-lighten-1">Créditos sólo con DNI</h3><hr>
+			<h3 class="purple-text text-lighten-1">Créditos online / sólo con DNI</h3><hr>
 		<?php if ( isset($_GET['credito'])){ 
 			if($llamadoCre=$conection->query($sqlCre)){
 				$rowCr=$llamadoCre->fetch_assoc();
 			} ?>
+			<h3 class="purple-text text-lighten-1">CR-<?= $_GET['credito']; ?></h3>
 			<div class="container-fluid">
 				<p><strong>Datos de crédito</strong></p>
 				<div class="row">
-					<div class="col-sm-2"><label for="">Fecha préstamo</label><p><?php $fechaAut= new DateTime($rowCr['preFechaInicio']); echo $fechaAut->format('j/m/Y H:m a'); ?></p></div>
+					<div class="col-sm-2"><label for="">Fecha préstamo</label><p><?php $fechaAut= new DateTime($rowCr['preFechaInicio']); echo $fechaAut->format('j/m/Y h:m a'); ?></p></div>
 					<div class="col-sm-2"><label for="">Desembolso</label><p>S/ <?= number_format($rowCr['preCapital'],2); ?></p></div>
 					<div class="col-sm-2"><label for="">Periodo</label><p><?= $rowCr['modDescripcion']; ?></p></div>
+					<div class="col-sm-2 mayuscula"><label for="">Solicitante</label><p><?= $rowCr['cliNombres']; ?></p></div>
 					<div class="col-sm-2"><label for="">Analista</label><p><?= $rowCr['usuNombres']; ?></p></div>
 				</div>	
 			</div>
-
-			<table class="table">
+			<br>
+			<p><strong>Cuotas planificadas</strong></p>
+			<table class="table table-hover" >
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Fecha Pago</th>
-						<th>Estado</th>
-						<th>Observaciones</th>
+						<th>N°</th>
+						<th>Fecha programada</th>
+						<th>Cuota</th>
+						<th>Cancelación</th>
+						<th>Pago</th>
+						<th>@</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,9 +72,11 @@ if ( isset($_GET['credito'])){
 					while ($row = $llamadoSQL->fetch_assoc()) { ?>
 					<tr>
 						<td><?= $i; ?></td>
-						<td><?php $fechaP= new DateTime($row['cuotFechaPago']); echo $fechaP->format('d/m/Y'); ?></td>
-						<td><?= $row['tipoDescripcion']; ?></td>
-						<td><?= $row['cuotObservaciones']; ?></td>
+						<td><?php $fechaCu= new DateTime($row['cuotFechaPago']); echo $fechaCu->format('d/m/Y'); ?></td>
+						<td><?= number_format($row['cuotCuota'],2); ?></td>
+						<td><?php if(is_null($row['cuotFechaCancelacion'])): echo 'Pendiente'; else: echo $row['cuotFechaCancelacion']; endif;  ?></td>
+						<td><?= number_format($row['cuotPago'],2); ?></td>
+						<td><?php if($row['cuotPago']=='0.00'): ?> <button class="btn btn-primary btn-outline btn-sm btnPagarCuota"><i class="icofont icofont-money"></i> Pagar</button> <?php endif;?> </td>
 					</tr>
 					<?php $i++;	}
 					$llamadoSQL->close();

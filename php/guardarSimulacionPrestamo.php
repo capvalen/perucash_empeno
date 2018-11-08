@@ -1,7 +1,7 @@
 <?
 date_default_timezone_set('America/Lima');
 include 'conkarl.php';
-$fecha = new DateTime();
+$fecha = new DateTime($_POST['sinFecha']);
 
 //echo "Hoy es: ". $fecha->format('d/m/Y') . "<br>";
 
@@ -10,6 +10,23 @@ $fecha = new DateTime();
 
 // $fecha->add($intervalo);
 // echo $fecha->format('d/m/Y') . "<br>";
+
+$idCliente='';
+$cliente= $_POST['jsonCliente'];
+
+$log = mysqli_query($conection,"SELECT idCliente from Cliente where cliDNI ='".$_POST['jsonCliente'][0]['dniCli']."';");
+$row = mysqli_fetch_array($log, MYSQLI_ASSOC);
+
+// Primero creamos o verificamos si el cliente ya se encuentra en las BD;
+if( count($row)===1 ){
+	$idCliente=$row['idCliente'];
+}else{
+	$newCliente= "INSERT INTO `Cliente`(`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`, `cliFijo`, `cliCalificacion`) VALUES (null,'".$_POST['jsonCliente'][0]['apellidosCli']."','".$_POST['jsonCliente'][0]['nombreCli']."','".$_POST['jsonCliente'][0]['dniCli']."','".$_POST['jsonCliente'][0]['direccionCli']."','".$_POST['jsonCliente'][0]['correoCli']."','".$_POST['jsonCliente'][0]['celularCli']."','".$_POST['jsonCliente'][0]['fijoCli']."',0)";
+
+	$conection->query($newCliente);
+
+	$idCliente=$conection->insert_id;
+}
 
 
 
@@ -41,7 +58,7 @@ switch ($_POST['modo']){
 }
 
 $sql="INSERT INTO `prestamo`(`idPrestamo`, `idCliente`, `preCapital`, `idModo`, `prePorcentaje`, `preFechaInicio`, `idUsuario`, `presActivo`, `presObservaciones`, `preIdEstado`, `prePlazo`)
-value (null, 942, {$_POST['monto']}, {$_POST['modo']}, {$interes}, now(), {$_COOKIE['ckidUsuario']}, 1, '', 78 , {$plazo});";
+value (null, {$idCliente}, {$_POST['monto']}, {$_POST['modo']}, {$interes}, now(), {$_COOKIE['ckidUsuario']}, 1, '', 78 , {$plazo});";
 
 if($cadena->query($sql)){
 	//$row = mysqli_fetch_array($log, MYSQLI_ASSOC);
@@ -79,7 +96,7 @@ for ($i=0; $i < $plazo ; $i++) {
 		}
 	}
 }
-echo $sqlCuotas;
+//echo $sqlCuotas;
 $esclavo->multi_query($sqlCuotas);
 
 

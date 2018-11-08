@@ -133,6 +133,7 @@ $('#cmbEstadoCombo').change(function () {
 	$('tfoot').children().remove();
 	$('.divAnalitica').addClass('hidden');
 	$('#thUnds').removeClass('hidden');
+	$('#tdUltPago').text('Último pago');
 	switch(estado){
 		case '23':
 		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
@@ -384,6 +385,7 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '78':
 			$('#thUnds').addClass('hidden');
+			$('#tdUltPago').text('Desembolso');
 			$.ajax({url: 'php/listarCreditosOnline.php', type: 'POST'}).done(function(resp) {
 				$('tbody').html(resp);
 			});

@@ -137,15 +137,23 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 						<input type="numeric" id="txtSinTasa" class="form-control text-center" readonly>
 					</div>
 					<div class="col-sm-3">
+						<label for="">Fecha de préstamo</label>
+						<div class="sandbox-container">
+							<input type="text" id="txtSinFecha" class="form-control text-center">
+						</div>
+					</div>
+					<div class="col-sm-3">
 						<label class="" for=""></label>
 						<input type="numeric" id="txtSinCuota"  class="form-control text-center hidden" readonly>
 						<button class="btn btn-lg btn-infocat btn-outline" id="btnResolverProblema"><i class="icofont icofont-score-board"></i> Resolver</button>
 						<button class="btn btn-lg btn-default btn-outline" id="btnLimpiarProblema"><i class="icofont icofont-eraser"></i> Limpiar</button>
 					</div>
+
+					<div class="col-sm-12 text-right" style="margin-top:20px;">
+					
+							<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+							<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
 				
-					<div class="col-sm-12 text-right">
-						<button class="btn btn-default btn-lg btn-outline pull-left btnVolver" ><i class="icofont icofont-rounded-double-left"></i> Volver</button>
-						<button class="btn btn-azul btn-lg btn-outline" id="btnGuardarPrestamoSinDni"><i class="icofont icofont-diskette"></i> Guardar préstamo</button>
 					</div>
 				</div>
 			</div>
@@ -241,6 +249,7 @@ datosUsuario();
 
 $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
+	$('#txtSinFecha').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });
 $('#btnBienvenido').click(function () {
@@ -607,8 +616,14 @@ $('#btnLimpiarProblema').click(function() {
 $('#btnGuardarPrestamoSinDni').click(function() {
 	//if($('#txtDni').val()=='' || $('#txtApellidos').val()=='' || $('#txtNombres').val()=='' || $('#txtCelular').val()==''  || $('#txtDireccion').val()=='' ){
 	if($('#sltModoPrestamo').val()!=""){
-		$.ajax({url: 'php/guardarSimulacionPrestamo.php', type: 'POST', data: { modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+		var jsonCliente= [];
+		jsonCliente.push({dniCli: $('#txtDni').val(), apellidoCli: $('#txtApellidos').val(), nombresCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), fijoCli: $('#txtFono').val() });
+
+		$.ajax({url: 'php/guardarSimulacionPrestamo.php', type: 'POST', data: { jsonCliente: jsonCliente, sinFecha: moment( $('#txtSinFecha').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') ,  modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
 			console.log(resp);
+			if(esNumero(resp)){
+				window.location.href = 'creditos.php?credito='+resp;
+			}
 		});
 	}
 });
