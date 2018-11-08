@@ -48,11 +48,19 @@
 	},
 	"add Class":{
 		"prefix": "jqAdd",
-		"body": ["$('#$0').addClass('');"]
+		"body": ["$('#$1').addClass('$0');"]
+	},
+	"remove Class":{
+		"prefix": "jqRem",
+		"body": ["$('#$1').removeClass('$0');"]
 	},
 	"val jQuery":{
 		"prefix": "jqVal",
 		"body": ["$('#$0').val();"]
+	},
+	"modal show jQuery":{
+		"prefix": "jqShowModal",
+		"body": ["$('#$0').modal('show');"]
 	},
 	"focus jQuery":{
 		"prefix": "jqFocus",
@@ -72,8 +80,16 @@
 	},
 	"bsModal Open jQuery":{
 		"prefix": "jqOpenModal",
-		"body": ["$('.myModal').on('shown.bs.modal', function () { ",
+		"body": ["$('#myModal').on('shown.bs.modal', function () { ",
 					"\tconsole.log('Se abrió el modal');",
 					"});"]
-	}
+	},
+	"enter Open jQuery":{
+		"prefix": "jqEnter",
+		"body": ["$('#$0').keypress(function (e) { ",
+					"\tif(e.keyCode == 13){ ",
+					"\t\t//Código",
+					"\t}",
+					"});"]
+	
 }
