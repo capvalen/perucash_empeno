@@ -17,5 +17,25 @@
 		"body": ["<?php",
 			"$0",
 			"?>"]
+	},
+	"Cierra un bloque php": {
+		"prefix": "endPhp",
+		"body":" ?>"
+	},
+	"Etiqueta php con función isset": {
+		"prefix": "issetPhp",
+		"body": "if (isset(\\$${1:variable})) echo \\$${1:variable};"
+	},
+	"query mySql Php": {
+		"prefix": "sqlPhp",
+		"body": ["\\$${sql}='$1';",
+			"\\$${resultado}=\\$${cadena}->query(\\$${sql});",
+			"while(\\$${row}=\\$${resultado}->fetch_assoc()){ ",
+			"\t",
+			"}"]
+	},
+	"if inline php":{
+		"prefix": "ifinline",
+		"body": "if( $1 ): $2; else: $0; endif; "
 	}
 }
