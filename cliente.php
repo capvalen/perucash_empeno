@@ -86,38 +86,43 @@ if( isset($_GET['idCliente'])){
 					inner join tipoProceso tp on tp.idTipoProceso = pp.presidTipoProceso
 					where p.idCliente = ".$_GET['idCliente']."
 					order by p.prodActivo desc, p.idProducto desc;");
-					while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
-						?>
-						<div class="contenedorPres">
-							<div class=' paPrestamo'><div>
-							<div class='row <? if( $rowPrestamos['prodActivo']==1 ){ echo $rowPrestamos['tipColorMaterial'];} else{ echo 'grey-text text-darken-3'; } ?>'>
-								<div class='hidden codRegistro'><?= $rowPrestamos['idProducto']; ?></div>
-								<div class='col-xs-6 mayuscula'> <i class="icofont icofont-social-slack"></i> <span><?= $rowPrestamos['idProducto']; ?></span> <span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'];?> </div>
-								<div class='col-xs-2'>S/. <?= number_format($rowPrestamos['preCapital'],2); ?></div>
-								<div class='col-xs-2 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
-								<div class='col-xs-2'><? if( $rowPrestamos['prodActivo']==1 ){ echo 'Pendiente'; }else{ echo 'Inactivo'; } ?> <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
+					$rowCount = mysqli_num_rows($sql);
+					if( $rowCount==0){?>
+						<p>Éste cliente no tiene productos a su nombre.</p>
+					<?php	}else{
+						while($rowPrestamos = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
+							?>
+							<div class="contenedorPres">
+								<div class=' paPrestamo'><div>
+								<div class='row <? if( $rowPrestamos['prodActivo']==1 ){ echo $rowPrestamos['tipColorMaterial'];} else{ echo 'grey-text text-darken-3'; } ?>'>
+									<div class='hidden codRegistro'><?= $rowPrestamos['idProducto']; ?></div>
+									<div class='col-xs-6 mayuscula'> <i class="icofont icofont-social-slack"></i> <span><?= $rowPrestamos['idProducto']; ?></span> <span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'];?> </div>
+									<div class='col-xs-2'>S/. <?= number_format($rowPrestamos['preCapital'],2); ?></div>
+									<div class='col-xs-2 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
+									<div class='col-xs-2'><? if( $rowPrestamos['prodActivo']==1 ){ echo 'Pendiente'; }else{ echo 'Inactivo'; } ?> <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
+								</div>
+							</div></div>
 							</div>
-						</div></div>
-						</div>
-						<?php 
-					// 	$i++;
-					// 	$j=0;
-					// 	$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
-					// 	while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
-					// 		echo "<div class=' paPrestamo'><div>
-					// 	<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
-					// 		<div class='hidden codRegistro'>{$rowPrestamosProductos['idProducto']}</div>
-					// 		<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
-					// 		<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
-					// 		<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
-					// 	</div>
-					// </div></div>";
-					// 		$j++;
-					// 	}
+							<?php 
+						// 	$i++;
+						// 	$j=0;
+						// 	$sqlNue = mysqli_query($conection,"SELECT p.*,  tp.tipoDescripcion, tp.tipColorMaterial FROM `prestamo_producto` pp inner join `producto` p on pp.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pp.presidTipoProceso where pp.idPrestamo= {$rowPrestamos['idPrestamo']};");
+						// 	while($rowPrestamosProductos = mysqli_fetch_array($sqlNue, MYSQLI_ASSOC)){
+						// 		echo "<div class=' paPrestamo'><div>
+						// 	<div class='row {$rowPrestamosProductos['tipColorMaterial']}'>
+						// 		<div class='hidden codRegistro'>{$rowPrestamosProductos['idProducto']}</div>
+						// 		<div class='col-xs-5 mayuscula'>{$rowPrestamosProductos['prodNombre']}</div>
+						// 		<div class='col-xs-3'>S/. ".number_format($rowPrestamosProductos['prodMontoEntregado'],2)."</div>
+						// 		<div class='col-xs-4'><i class='icofont icofont-info-circle'></i> {$rowPrestamosProductos['tipoDescripcion']} <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>
+						// 	</div>
+						// </div></div>";
+						// 		$j++;
+						// 	}
+						
+						}//fin de while rowprestamos
+					}//fin de else de rowcount
 					
-					}
-					
-				}
+				} //Fin de isset idcliente
 				?>
 					<!-- <div class=" paPrestamo"><strong>
 						<div class="row yellow-text text-darken-2">

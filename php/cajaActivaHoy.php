@@ -24,7 +24,7 @@ if($hayCaja==true){
 				<div class="alert alert-success-degradado container-fluid" role="alert">
 					<div class="col-xs-4">
 						<div class="divLargoCircular">
-						<h3><i class="icofont icofont-tick-mark"></i> <span>EXCELENTE</span></h3>
+						<h3><i class="icofont icofont-tick-mark"></i> <span class="hidden-xs">EXCELENTE</span></h3>
 						</div>
 					</div>
 					<div class="col-xs-8">

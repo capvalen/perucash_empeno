@@ -3,7 +3,7 @@
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
-@import url('https://fonts.googleapis.com/css?family=Poppins');
+ @import url('https://fonts.googleapis.com/css?family=Poppins');
 
 
  body {
@@ -84,8 +84,8 @@
 	color: #a35bb4;
 	/*background: rgba(255,255,255,0.2);*/
 	border-bottom: solid #a35bb4 3px;
-	padding: 0 10px;  margin-left: 25px;
-	margin-right: 30px;
+	padding: 0 10px;  margin-left: 10px;
+	margin-right: 20px;
 }
 
 .sidebar-nav .active{
@@ -149,22 +149,22 @@ li a i {font-size:24px; padding-right:10px}
 
 #sidebar-wrapper::-webkit-scrollbar-track
 {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color:#4c5266;
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+	border-radius: 0px;
+	background-color: #dcdcdc;/* #4c5266; */
 }
 
 #sidebar-wrapper::-webkit-scrollbar
 {
-	width: 8px;
-	background-color: #393f56;
+	width: 5px;
+	background-color: #ffffff9e; /* #393f56; */
 	position: absolute;
 }
 
 #sidebar-wrapper::-webkit-scrollbar-thumb
 {
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #1c1a1a;
+	border-radius: 5px;
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
+	background-color: #9649a9;/* #1c1a1a; */
 }
 #icoUser i{ font-size: 18px;}

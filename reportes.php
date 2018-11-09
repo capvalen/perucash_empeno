@@ -62,6 +62,7 @@ require("php/conkarl.php");
 						<option value="3">Préstamos finalizados</option>
 						<option value="1">Préstamos y Desembolsos</option>
 						<option value="6">Rematados</option>
+						<option value="8">Retiro por socios</option>
 						<option value="5">Vendidos</option>
 					</select>
 					<div class="container-fluid" style="margin-top: 10px;">
@@ -618,7 +619,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					if(resp.length==0){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -629,6 +630,36 @@ $('#btnFiltroAnaticica').click(()=> {
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '8':
+				$.ajax({url: 'php/reporteRetiroSocios.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 41 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
 						</tr>`);

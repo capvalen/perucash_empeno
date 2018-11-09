@@ -9,9 +9,9 @@
 
 <!-- Custom CSS -->
 <link rel="shortcut icon" href="images/favicon.png">
-<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.7" >
+<link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.9" >
 <link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.5">
-<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.76" >
+<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.77" >
 <link rel="stylesheet" href="css/colorsmaterial.css">
 <link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 <link rel="stylesheet" href="css/bootstrap-datepicker3.css">

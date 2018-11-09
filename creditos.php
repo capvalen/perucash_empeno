@@ -39,8 +39,11 @@ if ( isset($_GET['credito'])){
 			<h3 class="purple-text text-lighten-1">Créditos online / sólo con DNI</h3><hr>
 		<?php if ( isset($_GET['credito'])){ 
 			if($llamadoCre=$conection->query($sqlCre)){
+				
 				$rowCr=$llamadoCre->fetch_assoc();
-			} ?>
+			}
+			$numRow=$llamadoCre->num_rows;
+			if( $numRow>=1): ?> 
 			<h3 class="purple-text text-lighten-1">CR-<?= $_GET['credito']; ?></h3>
 			<div class="container-fluid">
 				<p><strong>Datos de crédito</strong></p>
@@ -48,7 +51,7 @@ if ( isset($_GET['credito'])){
 					<div class="col-sm-2"><label for="">Fecha préstamo</label><p><?php $fechaAut= new DateTime($rowCr['preFechaInicio']); echo $fechaAut->format('j/m/Y h:m a'); ?></p></div>
 					<div class="col-sm-2"><label for="">Desembolso</label><p>S/ <?= number_format($rowCr['preCapital'],2); ?></p></div>
 					<div class="col-sm-2"><label for="">Periodo</label><p><?= $rowCr['modDescripcion']; ?></p></div>
-					<div class="col-sm-2 mayuscula"><label for="">Solicitante</label><p><?= $rowCr['cliNombres']; ?></p></div>
+					<div class="col-sm-2 mayuscula"><label for="">Solicitante</label><p><a href="cliente.php?idCliente=<?= $rowCr['idCliente']; ?>"><?= $rowCr['cliNombres']; ?></a></p></div>
 					<div class="col-sm-2"><label for="">Analista</label><p><?= $rowCr['usuNombres']; ?></p></div>
 				</div>	
 			</div>
@@ -81,9 +84,27 @@ if ( isset($_GET['credito'])){
 					<?php $i++;	}
 					$llamadoSQL->close();
 				}
+			  endif;
+			  if($numRow==0){
+				 echo '<p>El código solicitado no está asociado a ningún crédito, revise el código o comuníquelo al área responsable. </p> ';
+			  }
 				?>
 				</tbody>
 			</table>
+		<?php } /* fin de if de credito */ else{ ?>
+			<div class="panel panel-default">
+				<div class="panel-body">
+				<p><strong>Filtro de créditos:</strong></p>
+					<div class="row">
+						<div class="col-xs-6 col-sm-3">
+							<input type="text" id="txtBuscarCredito" class="form-control">
+						</div>
+						<div class="col-xs-3">
+							<button class="btn btn-primary btn-outline" id="btnBuscarCreditoSin"><i class="icofont icofont-search"></i> Buscar</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		<?php } ?>
 				
 			<!-- Fin de contenido principal -->
@@ -103,7 +124,16 @@ if ( isset($_GET['credito'])){
 datosUsuario();
 
 $(document).ready(function(){
-	
+
+$('#btnBuscarCreditoSin').click(function() {
+	if( $('#txtBuscarCredito').val()!='' && $('#txtBuscarCredito').val().toUpperCase().indexOf('CR-')==0 ){
+		window.location.href = 'creditos.php?credito='+$('#txtBuscarCredito').val().toUpperCase().replace('CR-', '');
+	/* $.ajax({url: 'php/buscarCredito.php', type: 'POST', data: { idCred: $('#txtBuscarCredito').val().toUpperCase().replace('CR-', '') }}).done(function(resp) {
+		
+	});*/
+	} 
+});
+
 });
 
 </script>

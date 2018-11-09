@@ -133,3 +133,9 @@ $('#txtBuscarNivelGod').keypress(function (e) {
 		}
 	}
 });
+$('#liDatosPersonales').mouseenter(function() {
+	$(this).addClass('open');
+});
+$('#liDatosPersonales').mouseleave(function() {
+	$(this).removeClass('open');
+});
