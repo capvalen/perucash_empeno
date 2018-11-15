@@ -21,7 +21,7 @@ $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if( count($row)===1 ){
 	$idCliente=$row['idCliente'];
 }else{
-	$newCliente= "INSERT INTO `Cliente`(`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`, `cliFijo`, `cliCalificacion`) VALUES (null,'".$_POST['jsonCliente'][0]['apellidosCli']."','".$_POST['jsonCliente'][0]['nombreCli']."','".$_POST['jsonCliente'][0]['dniCli']."','".$_POST['jsonCliente'][0]['direccionCli']."','".$_POST['jsonCliente'][0]['correoCli']."','".$_POST['jsonCliente'][0]['celularCli']."','".$_POST['jsonCliente'][0]['fijoCli']."',0)";
+	$newCliente= "INSERT INTO `Cliente`(`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`, `cliFijo`, `cliCalificacion`) VALUES (null,'".$_POST['jsonCliente'][0]['apellidoCli']."','".$_POST['jsonCliente'][0]['nombresCli']."','".$_POST['jsonCliente'][0]['dniCli']."','".$_POST['jsonCliente'][0]['direccionCli']."','".$_POST['jsonCliente'][0]['correoCli']."','".$_POST['jsonCliente'][0]['celularCli']."','".$_POST['jsonCliente'][0]['fijoCli']."',0)";
 
 	$conection->query($newCliente);
 

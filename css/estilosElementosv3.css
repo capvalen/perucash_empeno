@@ -287,6 +287,6 @@ a:focus{outline: none;}
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .open>.dropdown-menu>.selected>a{
     background-color: #9658d0;
 }
-body {cursor : url("../images/curs85612.png") 2 2, pointer;} 
+/* body {cursor : url("../images/curs85612.png") 2 2, pointer;} 
 body a, body .btn{cursor : url("../images/curs85612.png") 2 2, pointer;}
-input{ cursor: url("../images/curs85617.png") 2 2, text;  }
+input{ cursor: url("../images/curs85617.png") 2 2, text;  } */
