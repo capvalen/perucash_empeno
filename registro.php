@@ -623,7 +623,7 @@ $('#btnGuardarPrestamoSinDni').click(function() {
 		$.ajax({url: 'php/guardarSimulacionPrestamo.php', type: 'POST', data: { jsonCliente: jsonCliente, sinFecha: moment( $('#txtSinFecha').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') ,  modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
 			console.log(resp);
 			if(esNumero(resp)){
-				window.location.href = 'creditos.php?credito='+resp;
+				//window.location.href = 'creditos.php?credito='+resp;
 			}
 		});
 	}

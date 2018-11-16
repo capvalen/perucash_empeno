@@ -21,14 +21,12 @@ $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if( count($row)===1 ){
 	$idCliente=$row['idCliente'];
 }else{
-	$newCliente= "INSERT INTO `Cliente`(`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`, `cliFijo`, `cliCalificacion`) VALUES (null,'".$_POST['jsonCliente'][0]['apellidoCli']."','".$_POST['jsonCliente'][0]['nombresCli']."','".$_POST['jsonCliente'][0]['dniCli']."','".$_POST['jsonCliente'][0]['direccionCli']."','".$_POST['jsonCliente'][0]['correoCli']."','".$_POST['jsonCliente'][0]['celularCli']."','".$_POST['jsonCliente'][0]['fijoCli']."',0)";
+	$newCliente= "INSERT INTO `Cliente`(`idCliente`, `cliApellidos`, `cliNombres`, `cliDni`, `cliDireccion`, `cliCorreo`, `cliCelular`, `cliFijo`, `cliCalificacion`) VALUES (null,'".$_POST['jsonCliente'][0]['apellidoCli']."','".$_POST['jsonCliente'][0]['nombresCli']."','".$_POST['jsonCliente'][0]['dniCli']."','".$_POST['jsonCliente'][0]['direccionCli']."','".$_POST['jsonCliente'][0]['correoCli']."','".$_POST['jsonCliente'][0]['celularCli']."','".$_POST['jsonCliente'][0]['fijoCli']."',0);";
 
 	$conection->query($newCliente);
 
 	$idCliente=$conection->insert_id;
 }
-
-
 
 
 $feriados = include "feriadosProximos.php";
@@ -63,6 +61,10 @@ value (null, {$idCliente}, {$_POST['monto']}, {$_POST['modo']}, {$interes}, now(
 if($cadena->query($sql)){
 	//$row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 	$idPrestamo = $cadena->insert_id;
+	
+	$sqlCaja= "INSERT INTO `caja`(`idCaja`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`, `idSucursal`) VALUES (null,0,78,now(),{$monto},'<a href=creditos.php?credito={$idPrestamo}>CR-{$idPrestamo}</a>',1,{$_COOKIE['ckidUsuario']},0,1);";
+	echo $sqlCaja;
+	$cadena->query($sqlCaja);
 	
 }else{
 	echo "hubo un error";

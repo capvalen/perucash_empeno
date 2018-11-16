@@ -2,6 +2,8 @@
 //session_start();
 date_default_timezone_set('America/Lima');
 require("php/conkarl.php");
+require 'php/variablesGlobales.php';
+
 if ( isset($_GET['credito'])){
 	$sqlCre= "SELECT pe.*, mp.modDescripcion, lower(concat(c.cliApellidos,', ', c.cliNombres)) as `cliNombres`, u.usuNombres FROM `prestamo` pe inner join modoPrestamo mp on mp.idModoPrestamo = pe.idModo inner join Cliente c on c.idCliente = pe.idCliente inner join usuario u on u.idUsuario = pe.idUsuario where idPrestamo= {$_GET['credito']} and preIdEstado=78";
 
@@ -79,14 +81,14 @@ if ( isset($_GET['credito'])){
 						<td><?= number_format($row['cuotCuota'],2); ?></td>
 						<td><?php if(is_null($row['cuotFechaCancelacion'])): echo 'Pendiente'; else: echo $row['cuotFechaCancelacion']; endif;  ?></td>
 						<td><?= number_format($row['cuotPago'],2); ?></td>
-						<td><?php if($row['cuotPago']=='0.00'): ?> <button class="btn btn-primary btn-outline btn-sm btnPagarCuota"><i class="icofont icofont-money"></i> Pagar</button> <?php endif;?> </td>
+						<td><?php if($row['cuotPago']=='0.00'): ?> <button class="btn btn-azul btn-outline btn-sm btnPagarCuota" data-id="<?= $row['idCuota'];?>"><i class="icofont icofont-money"></i> Pagar</button> <?php endif;?> </td>
 					</tr>
 					<?php $i++;	}
 					$llamadoSQL->close();
 				}
 			  endif;
 			  if($numRow==0){
-				 echo '<p>El código solicitado no está asociado a ningún crédito, revise el código o comuníquelo al área responsable. </p> ';
+				 echo '<p>El código solicitado no está asociado a ningún <strong>crédito activo</strong>, revise el código o comuníquelo al área responsable. </p> ';
 			  }
 				?>
 				</tbody>
@@ -133,7 +135,22 @@ $('#btnBuscarCreditoSin').click(function() {
 	});*/
 	} 
 });
-
+$('#txtBuscarCredito').keypress(function (e) { 
+	if(e.keyCode == 13){ 
+		$('#btnBuscarCreditoSin').click();
+	}
+});
+<?php if(  isset( $_GET['credito'] ) ):  //in_array($_COOKIE['ckPower'],$soloAdmis) && ?>
+$('.btnPagarCuota').click(function() {
+	id=$(this).attr('data-id');
+	$.ajax({url: 'php/cancelarCuotaOnline.php', type: 'POST', data: { idCuo: id, idPre: <?= $_GET['credito'];?> }}).done(function(resp) {
+		console.log(resp)
+		if(resp == true){
+			location.reload();
+		}
+	});
+});
+<?php endif; ?>
 });
 
 </script>
