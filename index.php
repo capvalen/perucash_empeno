@@ -75,7 +75,7 @@ a:hover{color:#462782;}
 
 			<div class="form-group text-center"><br>
 				<button class="btn btn-danger btn-outline hidden" id="btnCancelar"><i class="icofont icofont-logout"></i> Cancelar</button>
-				<button class="btn btn-morado btn-outline btn-block btn-lg" id="btnAcceder"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i> </div><i class="icofont icofont-key"></i> Iniciar sesión</button>
+				<button class="btn btn-morado btn-outline btn-block btn-lg" id="btnAcceder"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-key"></i> Iniciar sesión</button>
 			</div>
 			<div class="form-group text-center text-danger hidden" id="divError">Error en alguno de los datos, complételos todos cuidadosamente.</div>
 
