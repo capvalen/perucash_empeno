@@ -1,3 +1,11 @@
+<?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+require "php/conkarl.php";
+require_once('vendor/autoload.php');
+$base58 = new StephenHill\Base58();
+$correo=$base58->decode($_GET['solicita']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,7 +32,8 @@ body{
 	background-color: #39bcf0;
 	background: url('images/shutterstock_360655751.jpg?v=0.1');
 	background-repeat: no-repeat;
-	background-size: 100%;
+	background-position: center;
+	background-size: cover;
 	margin: 0; padding: 0;
 }
 .puntos{ background: url(images/gridtile_3x3.png); position: absolute;}
@@ -60,6 +69,9 @@ border-color: transparent; color: white; padding: 15px 0; border-radius: 50px;le
 	padding: 30px;
 	border-radius: 50%;margin-bottom: 20px;
 }
+#modalmostrarResetMail .form-control{color: #6C56B8;}
+#txtCorreoElectronicoUs:focus{border-color: #ad66e9; box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(150, 159, 255,.6);}
+#modalmostrarResetMail h4{color: #717171;}
 @media only screen and (max-width: 1100px){
 #rowGrande{
 	
@@ -150,20 +162,23 @@ border-color: transparent; color: white; padding: 15px 0; border-radius: 50px;le
 .md-input .md-form-control:focus ~ .bar:before, .md-input .md-form-control:focus ~ .bar:after {
     width: 50%;
 }
-#btnAcceder{
-	
+#btnAcceder, #btnResetContador, #btnReset{ color: white;
 	background: linear-gradient(90deg,#A97EDA, #4C9BDD);
    border: transparent;
 }
-#btnAcceder:focus{outline: 0;}
+#btnAcceder:focus, #btnReset:focus{outline: 0;}
 #secDiv{width: 80%; margin: 0 auto; margin-bottom: 60px;}
 #divError{margin-top: 25px;}
+.inputGrande{font-size: 21px;}
+.inputGrande::placeholder{font-size: 12px;}
+#imgNutria{max-width: 60%; margin: 0 auto; padding-top: 30px;}
 .fa-spin {
 -webkit-animation: spin 1000ms infinite linear;
 animation: spin 1000ms infinite linear;
 text-align: center;
 display: inline-block;
 }
+.modal-backdrop{ background-color: #7f54bb; }
 @-webkit-keyframes spin {
 0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
 100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
@@ -193,31 +208,67 @@ display: inline-block;
 			</div>
 			
 			<div class="text-center contenidoCambiante animated " id="primDiv">
-				<h2 >BIENVENIDO</h2>
+			<?php if( isset($_GET['solicita']) ): ?>
+				<h2>Restablezca su contraseña</h2>
+				<p class="subText">Hola continúe por favor para cambiar su contraseña.</p>
+				<p>Procedencia de link: <?= $correo; ?></p>
+			<?php else: ?>
+				<h2>Bienvenido</h2>
 				<p class="subText"><i class="icofont icofont-quote-left"></i> Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas.<i class="icofont icofont-quote-right"></i></p>
 				<p>Friedrich Nietzsche</p>
+			<?php endif; ?>
 				<button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button>
 				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a>
 			</div>
+			<?php if( isset($_GET['solicita']) ): ?>
 			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
 				<div class="divF1">
+					<div class="md-input">
+						<input class="md-form-control text-center" type="text" required='' id="txtPrimContra">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Contraseña nueva</label>
+					</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-text-loading"></i>
+					</div>
+				</div><br>
+				<div class="divF2">
 						<div class="md-input">
-							<input class="md-form-control text-center" type="text" required='' id="txtUser_app">
+							<input class="md-form-control text-center" required='' type="password" id="txtSecContra">
 							<span class="highlight"></span>
 							<span class="bar"></span>
-							<label>Correo electrónico</label>
+							<label>Repita su contraseña</label>
 						</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-text-loading"></i>
+					</div>
+				</div>
+				<div class="divF3" style="padding-top:40px;">
+					<button class="btn btn-block btn-primary btn-lg" id="btnReset"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-ui-lock"></i> Resetear</button>
+					<div class="text-center hidden divError" style="padding-top:20px;" ><p><i class="icofont icofont-exclamation-circle"></i> <span id="spanTextErr"></span></p></div>
+				</div>
+			</div>
+			<?php else: ?>
+			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
+				<div class="divF1">
+					<div class="md-input">
+						<input class="md-form-control text-center" type="text" required='' id="txtUser_app">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Correo electrónico</label>
+					</div>
 					<div class="icoTransparent">
 						<i class="icofont icofont-ui-user"></i>
 					</div>
 				</div><br>
 				<div class="divF2">
 						<div class="md-input">
-								<input class="md-form-control text-center" required='' type="password" id="txtPassw">
-								<span class="highlight"></span>
-								<span class="bar"></span>
-								<label>Contraseña</label>
-						  </div>
+							<input class="md-form-control text-center" required='' type="password" id="txtPassw">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Contraseña</label>
+						</div>
 					<div class="icoTransparent">
 						<i class="icofont icofont-ui-text-loading"></i>
 					</div>
@@ -227,16 +278,36 @@ display: inline-block;
 					<div class="text-center hidden" id="divError"><i class="icofont icofont-exclamation-circle"></i> Error en alguno de los datos, complételos todos cuidadosamente.</div>
 				</div>
 			</div>
+			<?php endif; ?>
 		</div>
 		
 		<div class="divAbajo text-center">
-			<p style="margin: 0px;">¿No recuedas tu contraseña? <a href="#!">Click aquí</a></p>
+			<p style="margin: 0px;">¿No recuedas tu contraseña? <a href="#!" id="aClick">Click aquí</a></p>
 		</div>
 	</div>
 	</div>
 
 </div>
+
+
+<!-- Modal para mostrar los clientes coincidentes -->
+<div class="modal fade" id="modalmostrarResetMail" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<img src="images/nutritrans.png" alt="" class="img-responsive" id="imgNutria">
+				<h4 class="text-center">Solicitar reseteo de contraseña</h4>
+				<p class="text-center" style="color: #868686;">Por favor, ingrese su usuario para que podamos hacerle llegar un correo asociado a su cuenta:</p>
+				<input type="text" class='form-control input-lg inputGrande text-center' id="txtCorreoElectronicoUs"><br>
+				<button class="btn btn-azul btn-block btn-lg btn-outline" id="btnResetContador"><i class="icofont icofont-alarm"></i> Solicitar cambio</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
 $('#btnEmpezar').click(function() {
 	$('#primDiv').addClass('fadeOut').one(animationEnd, function () {
@@ -302,9 +373,29 @@ $('#btnAcceder').click(function() {
 		}
 	});
 });
-$('#btnCancelar').click(function(){
-	window.location.href = 'www.google.com.pe';
+$('#aClick').click(function() {
+	$('#modalmostrarResetMail').modal('show');
 });
+$('#btnResetContador').click(function() {
+	$.ajax({url: 'php/enviarCorreo.php', type: 'POST', data: { queUser: $('#txtCorreoElectronicoUs').val() }}).done(function(resp) {
+		console.log(resp)
+	});
+});
+<?php if( isset($_GET['solicita']) ): ?>
+$('#btnReset').click(function() {
+	if($('#txtPrimContra').val() == '' || $('#txtSecContra').val()==''){
+		$('#spanTextErr').text('Falta el rellenado')
+		$('.divF3 .divError').removeClass('hidden');
+	}else if($('#txtPrimContra').val() != $('#txtSecContra').val()){
+		$('#spanTextErr').text('Las contraseñas son diferentes')
+		$('.divF3 .divError').removeClass('hidden');
+	}else{
+		$.ajax({url: 'php/resetpass.php', type: 'POST', data: { solicita: '<? $_GET['solicita']?>' , pass: $('#txtPrimContra').val()  }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
+});
+<?php endif; ?>
 
 </script>
 	
