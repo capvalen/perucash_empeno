@@ -4,7 +4,7 @@ ini_set('display_errors', 'On');
 require "php/conkarl.php";
 require_once('vendor/autoload.php');
 $base58 = new StephenHill\Base58();
-$correo=$base58->decode($_GET['solicita']);
+if(isset($_GET['solicita'])){$correo=$base58->decode($_GET['solicita']);}
 ?>
 <!DOCTYPE html>
 <html lang="es">

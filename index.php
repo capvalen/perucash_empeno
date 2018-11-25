@@ -1,103 +1,336 @@
 <?php 
-
-//require_once('php/desconectar.php');
-/*if(isset($_SESSION['usuario'])){
-	echo '<script> window.location="Cliente.php"; </script>';
-
-}*/
-
- ?>
-
-
-
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+require "php/conkarl.php";
+require_once('vendor/autoload.php');
+$base58 = new StephenHill\Base58();
+if(isset($_GET['solicita'])){$correo=$base58->decode($_GET['solicita']);}
+?>
 <!DOCTYPE html>
 <html lang="es">
-<head >
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/icofont.css">
-
-	<title>Bienvenido: PeruCash</title>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Infocat Soluciones - App Login</title>
+	<!-- Bootstrap Core CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link href="css/inicio.css?version=1.0" rel="stylesheet">
-	<link href="css/animate.css" rel="stylesheet">
 	<link rel="shortcut icon" href="images/favicon.png">
-
+	<link rel="stylesheet" href="css/animate.css" >
+	<link rel="stylesheet" href="css/icofont.css">
 </head>
-
-<body >
-<style type="text/css">
-.form-control:focus{    border-color: #FFEB3B;box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px rgba(255, 193, 7, 0.55);}
-body{background: linear-gradient(90deg, #100b19 10%, #291c40 90%);}
-main{ margin-top:80px; padding:0 50px}
-.wello{padding:40px 50px; border-radius: 6px;padding-bottom: 58px;}
-.noselect {
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none;   /* Chrome/Safari/Opera */
-	-khtml-user-select: none;    /* Konqueror */
-	-moz-user-select: none;      /* Firefox */
-	-ms-user-select: none;       /* Internet Explorer/Edge */
-	user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+<body>
+<style>
+body{
+	background-color: #cacaca;
 }
-input{height: 40px!important;}
-label{font-size: 14px!important}
-input::placeholder{font-size: 14px!important;}
-input{height: 45px!important; color: #673ab7!important;
-display: inline-block!important; font-size: 18px!important;
-    /* width: 95%!important; */}
-.icoTransparent{display: inline-block; color: #555; font-size: 16px;
-margin-left: -25px; opacity: 0.5}
-a{    color: #6d3cca;
-    font-weight: 700;}
-a:hover{color:#462782;}
+#rowGrande, .puntos{
+	width: 100vw;
+	height: 100vh;
+}
+#rowGrande{
+	background-color: #39bcf0;
+	background: url('images/shutterstock_360655751.jpg?v=0.1');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	margin: 0; padding: 0;
+}
+.puntos{ background: url(images/gridtile_3x3.png); position: absolute;}
+#conPrincipal{
+ margin-top:100px; padding: 20px 60px;
+}
+#contSecundario{
+	background: rgba(255, 255, 255, 0.472); border-radius: 10px;
+	padding-top:80px;
+	
+	padding-bottom: 0px;
+	background: linear-gradient(-45deg, rgba(255, 124, 124, 0.25), rgba(82, 74, 133, 0.8));
+}
+#contSubSecundario{
+	padding-left:20px;padding-right:20px;
+}
+#subContCenter img{ width:128px;
+	/*margin: 0 auto;
+	margin-left: auto;
+	margin-right: auto; */
+}
+.contenidoCambiante{color: white; margin-bottom: 60px ;}
+.subText{font-size: 15px;}
+#btnEmpezar{width: 60%; margin: 0 auto;
+background-color: #6C56B8; margin-top: 40px ;  font-size: 16px;
+border-color: transparent; color: white; padding: 15px 0; border-radius: 50px;letter-spacing: 0.2rem;
+}
+.subText i{font-size: 12px;}
+#btnEmpezar:focus { outline: 0; }
+#divIntCenter{
+	background: white;
+	width: 188px;
+	padding: 30px;
+	border-radius: 50%;margin-bottom: 20px;
+}
+#modalmostrarResetMail .form-control{color: #6C56B8;}
+#txtCorreoElectronicoUs:focus{border-color: #ad66e9; box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(150, 159, 255,.6);}
+#modalmostrarResetMail h4{color: #717171;}
+@media only screen and (max-width: 1100px){
+#rowGrande{
+	
+	background-position: center;
+	background-size: cover;
+}
+}
+.divAbajo{
+	background-color: #8663ff;
+	color: #ffffff99;
+	padding: 20px 15px;
+	border-radius: 0 0 10px 10px;
+}
+.divAbajo a{color: #fff; text-decoration: none;}
+.divAbajo a:hover{color: #ffffffc7;}
+.icoTransparent{
+	display: inline-block;
+	color: #dfd4f9d6;
+	font-size: 16px;
+	margin-left: 16px;
+
+	margin-top: -30px;
+	position: fixed;
+}
+.md-input {
+    position: relative;
+    /* margin-bottom: 30px; */
+    
+}
+    .md-input .md-form-control {
+        font-size: 16px;
+        padding: 10px 10px 10px 5px;
+        display: block;
+        border: none;
+        border-bottom: 2px solid #dfd4f9;
+        box-shadow: none;
+        width: 100%;outline: 0;
+		  background: transparent;
+    }
+
+    .md-input label {
+        color: #dfd4f9d6;
+        font-size: 16px;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 52px;
+        top: 14px;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+    }
+
+    .md-input .bar:before {
+        left: 50%;
+    }
+
+    .md-input .bar:after {
+        right: 50%;
+    }
+
+    .md-input .highlight {
+        position: absolute;
+        height: 60%;
+        width: 100px;
+        top: 25%;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    .md-input .md-form-control:focus ~ label, .md-input .md-form-control:valid ~ label {
+    top: -15px;
+    font-size: 12px;
+    color: #e8daff;
+}
+.md-input .bar:before, .md-input .bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 0px;
+    position: absolute;
+    background: #8663ff;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.md-input .md-form-control:focus ~ .bar:before, .md-input .md-form-control:focus ~ .bar:after {
+    width: 50%;
+}
+#btnAcceder, #btnResetContador, #btnReset{ color: white;
+	background: linear-gradient(90deg,#A97EDA, #4C9BDD);
+   border: transparent;
+}
+#btnAcceder:focus, #btnReset:focus{outline: 0;}
+#secDiv{width: 80%; margin: 0 auto; margin-bottom: 60px;}
+#divError{margin-top: 25px;}
+.inputGrande{font-size: 21px;}
+.inputGrande::placeholder{font-size: 12px;}
+#imgNutria{max-width: 60%; margin: 0 auto; padding-top: 30px;}
+.fa-spin {
+-webkit-animation: spin 1000ms infinite linear;
+animation: spin 1000ms infinite linear;
+text-align: center;
+display: inline-block;
+}
+.modal-backdrop{ background-color: #7f54bb; }
+@-webkit-keyframes spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
+@keyframes spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
+
+@keyframes fa-spin {
+0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+100% {-webkit-transform: rotate(359deg);transform: rotate(359deg);}
+}
 </style>
 
-<main class="noselect">
-	<div class="container-fluid">
-		<div class="col-md-12">
-			<div class="wello login-box " style="color: #673ab7"  >
-				<div class="row">
-					<div class="col-xs-4"><img src="images/VirtualCorto.png" class="img-responsive" alt=""></div>
-					<div class="col-xs-8"><h3 class="text-center" style="margin-top: 10px;margin-bottom: 0px;">Perucash</h3>
-						<div class="text-center"><span >Una web app de «Infocat» <strong>Local: Las Retamas</strong></span></div>
-						<legend  style="color:#7956C1"><small style=" font-size: 70%;"></small></legend></div>
+<div class="row" style="margin:0;" id="rowGrande">
+	<div class="puntos"></div>
+	<div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 col-sm-offset-3 col-md-offset-4" id="conPrincipal">
+	<div id="contSecundario">
+		<div class="contSubSecundario">
+			<div id="subContCenter">
+				<center>
+					<div id="divIntCenter">
+						<img src="images/peto.png" alt="" >
+					</div>
+				</center>
+			</div>
+			
+			<div class="text-center contenidoCambiante animated " id="primDiv">
+			<?php if( isset($_GET['solicita']) ): ?>
+				<h2>Restablezca su contraseña</h2>
+				<p class="subText">Hola continúe por favor para cambiar su contraseña.</p>
+				<p>Procedencia de link: <?= $correo; ?></p>
+			<?php else: ?>
+				<h2>Bienvenido</h2>
+				<p class="subText"><i class="icofont icofont-quote-left"></i> Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas.<i class="icofont icofont-quote-right"></i></p>
+				<p>Friedrich Nietzsche</p>
+			<?php endif; ?>
+				<button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button>
+				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a>
+			</div>
+			<?php if( isset($_GET['solicita']) ): ?>
+			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
+				<div class="divF1">
+					<div class="md-input">
+						<input class="md-form-control text-center" type="text" required='' id="txtPrimContra">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Contraseña nueva</label>
+					</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-text-loading"></i>
+					</div>
+				</div><br>
+				<div class="divF2">
+						<div class="md-input">
+							<input class="md-form-control text-center" required='' type="password" id="txtSecContra">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Repita su contraseña</label>
+						</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-text-loading"></i>
+					</div>
 				</div>
-
-			<div class="form-group">
-				<label class="hidden" for="username"><i class="icofont icofont-user"></i> Usuario</label>
-				<input class="form-control text-center" value='' id="txtUser_app" name="campo2" placeholder="Usuario" type="text" autocomplete="off" /><div class="icoTransparent"><i class="icofont icofont-user"></i> </div>
+				<div class="divF3" style="padding-top:40px;">
+					<button class="btn btn-block btn-primary btn-lg" id="btnReset"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-ui-lock"></i> Resetear</button>
+					<div class="text-center hidden divError" style="padding-top:20px;" ><p><i class="icofont icofont-exclamation-circle"></i> <span id="spanTextErr"></span></p></div>
+				</div>
 			</div>
-			<div class="form-group">
-				<label class="hidden" for="password"><i class="icofont icofont-key"></i> Contraseña</label>
-				<input class="form-control text-center" id="txtPassw" value='' name="campo3" placeholder="Contraseña" type="password" autocomplete="off" /><div class="icoTransparent"><i class="icofont icofont-ui-text-loading"></i>
+			<?php else: ?>
+			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
+				<div class="divF1">
+					<div class="md-input">
+						<input class="md-form-control text-center" type="text" required='' id="txtUser_app">
+						<span class="highlight"></span>
+						<span class="bar"></span>
+						<label>Usuario</label>
+					</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-user"></i>
+					</div>
+				</div><br>
+				<div class="divF2">
+						<div class="md-input">
+							<input class="md-form-control text-center" required='' type="password" id="txtPassw">
+							<span class="highlight"></span>
+							<span class="bar"></span>
+							<label>Contraseña</label>
+						</div>
+					<div class="icoTransparent">
+						<i class="icofont icofont-ui-text-loading"></i>
+					</div>
+				</div>
+				<div class="divF3" style="padding-top:40px;">
+					<button class="btn btn-block btn-primary btn-lg" id="btnAcceder"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-ui-lock"></i> Iniciar sesión</button>
+					<div class="text-center hidden" id="divError"><i class="icofont icofont-exclamation-circle"></i> Error en alguno de los datos, complételos todos cuidadosamente.</div>
+				</div>
 			</div>
+			<?php endif; ?>
+		</div>
+		
+		<div class="divAbajo text-center">
+			<p style="margin: 0px;">¿No recuedas tu contraseña? <a href="#!" id="aClick">Click aquí</a></p>
+		</div>
+	</div>
+	</div>
 
-			<div class="form-group text-center"><br>
-				<button class="btn btn-danger btn-outline hidden" id="btnCancelar"><i class="icofont icofont-logout"></i> Cancelar</button>
-				<button class="btn btn-morado btn-outline btn-block btn-lg" id="btnAcceder"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-key"></i> Iniciar sesión</button>
-			</div>
-			<div class="form-group text-center text-danger hidden" id="divError">Error en alguno de los datos, complételos todos cuidadosamente.</div>
+</div>
 
-			<div class="pull-left" ><small><?php include 'php/version.php' ?> | 2016 - <?php echo date("Y"); ?> <a href="https://facebook.com/pg/infocat.soluciones/photos/?tab=album&album_id=2040393179508347"><br>®  Info-cat</a></small> <small>Hosted Google Cloud</small></div>
 
+<!-- Modal para mostrar los clientes coincidentes -->
+<div class="modal fade" id="modalmostrarResetMail" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<img src="images/nutritrans.png" alt="" class="img-responsive" id="imgNutria">
+				<h4 class="text-center">Solicitar reseteo de contraseña</h4>
+				<p class="text-center" style="color: #868686;">Por favor, ingrese su usuario para que podamos hacerle llegar un correo asociado a su cuenta:</p>
+				<input type="text" class='form-control input-lg inputGrande text-center' id="txtCorreoElectronicoUs"><br>
+				<button class="btn btn-azul btn-block btn-lg btn-outline" id="btnResetContador"><i class="icofont icofont-alarm"></i> Solicitar cambio</button>
 			</div>
 		</div>
 	</div>
-</main>
-</body>
+</div>
 
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-<!-- Bootstrap Core JavaScript -->
-
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!-- <script src="./node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script> 
-<script src="js/socketCliente.js"></script>-->
-
 <script>
+$('#btnEmpezar').click(function() {
+	$('#primDiv').addClass('fadeOut').one(animationEnd, function () {
+		$('#primDiv').addClass('hidden');
+		$('#secDiv').addClass('fadeIn').removeClass('hidden');
+	});;
+});
+var animationEnd = (function(el) {
+  var animations = {
+    animation: 'animationend',
+    OAnimation: 'oAnimationEnd',
+    MozAnimation: 'mozAnimationEnd',
+    WebkitAnimation: 'webkitAnimationEnd',
+  };
+
+  for (var t in animations) {
+    if (el.style[t] !== undefined) {
+      return animations[t];
+    }
+  }
+})(document.createElement('div'));
+
+
 $(document).ready(function () {
 	$('#txtUser_app').val('');
 	$('#txtPassw').val('');
@@ -115,7 +348,7 @@ $('#txtPassw').keypress(function(event){
 });
 
 $('#btnAcceder').click(function() {
-	$('.fa-spin').removeClass('sr-only');$('.icofont-key').addClass('sr-only');
+	$('.fa-spin').removeClass('sr-only');$('.icofont-ui-lock').addClass('sr-only');
 	$('#divError').addClass('hidden');
 	$.ajax({
 		type:'POST',
@@ -133,15 +366,38 @@ $('#btnAcceder').click(function() {
 				// 		$(this).removeClass('animated wobble');
 				// });
 				$('#txtUser_app').select();
-				$('.fa-spin').addClass('sr-only');$('.icofont-key').removeClass('sr-only');
+				$('.fa-spin').addClass('sr-only');$('.icofont-ui-lock').removeClass('sr-only');
 				//console.log(iduser);
+				$('#txtPassw').val(''); $('#txtPassw').focus();
 				console.log('error en los datos')}
 		}
 	});
 });
-$('#btnCancelar').click(function(){
-	window.location.href = 'www.google.com.pe';
+$('#aClick').click(function() {
+	$('#modalmostrarResetMail').modal('show');
 });
+$('#btnResetContador').click(function() {
+	$.ajax({url: 'php/enviarCorreo.php', type: 'POST', data: { queUser: $('#txtCorreoElectronicoUs').val() }}).done(function(resp) {
+		console.log(resp)
+	});
+});
+<?php if( isset($_GET['solicita']) ): ?>
+$('#btnReset').click(function() {
+	if($('#txtPrimContra').val() == '' || $('#txtSecContra').val()==''){
+		$('#spanTextErr').text('Falta el rellenado')
+		$('.divF3 .divError').removeClass('hidden');
+	}else if($('#txtPrimContra').val() != $('#txtSecContra').val()){
+		$('#spanTextErr').text('Las contraseñas son diferentes')
+		$('.divF3 .divError').removeClass('hidden');
+	}else{
+		$.ajax({url: 'php/resetpass.php', type: 'POST', data: { solicita: '<? $_GET['solicita']?>' , nP: $('#txtPrimContra').val()  }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
+});
+<?php endif; ?>
 
 </script>
+	
+</body>
 </html>
