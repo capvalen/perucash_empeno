@@ -51,6 +51,9 @@ $('#btnVolverIniciarSesion').click(function () {
 		}
 	}
 });
+$('#btnRefre2').click(function() { console.log('a');
+	location.reload();
+});
 });
 $.fn.modal.prototype.constructor.Constructor.DEFAULTS.backdrop = 'static'; //Para que no cierre el modal, cuando hacen clic en cualquier parte
 
@@ -139,3 +142,7 @@ $('#liDatosPersonales').mouseenter(function() {
 $('#liDatosPersonales').mouseleave(function() {
 	$(this).removeClass('open');
 });
+function pantallaOver(tipo) {
+	if(tipo){$('#overlay').css('display', 'initial');}
+	else{ $('#overlay').css('display', 'none'); }
+}

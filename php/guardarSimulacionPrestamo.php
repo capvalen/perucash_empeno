@@ -63,7 +63,7 @@ if($cadena->query($sql)){
 	$idPrestamo = $cadena->insert_id;
 	
 	$sqlCaja= "INSERT INTO `caja`(`idCaja`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`, `idSucursal`) VALUES (null,0,78,now(),{$monto},'<a href=creditos.php?credito={$idPrestamo}>CR-{$idPrestamo}</a>',1,{$_COOKIE['ckidUsuario']},0,1);";
-	echo $sqlCaja;
+	//echo $sqlCaja;
 	$cadena->query($sqlCaja);
 	
 }else{

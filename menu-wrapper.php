@@ -80,3 +80,6 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		</nav>
 	</div>
 </div>
+<div id="overlay">
+	<div class="text"><span id="hojita"><i class="icofont icofont-leaf"></i></span> <p id="pFrase"> Guardando los datos... <br> <span>«Pregúntate si lo que estás haciendo hoy <br> te acerca al lugar en el que quieres estar mañana» <br> Walt Disney</span></p></div>
+</div>

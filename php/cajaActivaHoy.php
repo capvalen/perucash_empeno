@@ -28,7 +28,7 @@ if($hayCaja==true){
 						</div>
 					</div>
 					<div class="col-xs-8">
-						<h4 class="h3Title">Tip!</h4> Caja perteneciente a sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong>
+						<h4 class="h3Title">¡Caja abierta!</h4> De la sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong>
 					</div>
 				</div>
 		<?php

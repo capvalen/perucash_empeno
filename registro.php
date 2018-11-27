@@ -450,10 +450,12 @@ if($('#txtDni').val()!=''){
 }
 });
 $('#btnGuardarDatos').click(function () {
+	pantallaOver(true);
 
 	switch( $('.queMichiEs').attr('data-id') ){
 		case 'esCompra':
 			if($('.rowProduct').length==0){
+				pantallaOver(false);
 				$('#spanMalo').text('La lista de items no puede estar vacía.');
 				$('.modal-GuardadoError').modal('show');
 			}else{
@@ -468,6 +470,7 @@ $('#btnGuardarDatos').click(function () {
 					console.log(jsonProductos);
 					if($('.rowProduct').length-1==i){
 						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) { //console.log(resp)
+						pantallaOver(false);
 							if( resp.indexOf('ticket') ){//$.isNumeric(resp)
 								$('.modal-GuardadoCorrecto #spanBien').text('Códigos - Ticket(s) a pagar:');
 								$('.modal-GuardadoCorrecto #h1Bien').html( resp );
@@ -479,6 +482,7 @@ $('#btnGuardarDatos').click(function () {
 						});
 					}
 				});
+				
 			}
 		break;
 		case 'esRemate':
@@ -487,13 +491,16 @@ $('#btnGuardarDatos').click(function () {
 				$('.modal-GuardadoError').modal('show');
 			}
 			else if( $('#txtApellidos').val()=='' || $('#txtNombres').val()==''){
+				pantallaOver(false);
 				$('#spanMalo').text('Nombres y apellidos incorrecto o vacío.');
 				$('.modal-GuardadoError').modal('show');
 			}
 			else if( $('#txtCelular').val()=='' || $('#txtFono').val()==''){
+				pantallaOver(false);
 				$('#spanMalo').text('Tiene que haber dos números de teléfono del cliente y alguna referencia (familiar, amigo, pareja).');
 				$('.modal-GuardadoError').modal('show');
 			}else if($('.rowProduct').length==0){
+				pantallaOver(false);
 				$('#spanMalo').text('La lista de items no puede estar vacía.');
 				$('.modal-GuardadoError').modal('show');
 			}else{
@@ -510,12 +517,14 @@ $('#btnGuardarDatos').click(function () {
 					if($('.rowProduct').length-1==i){
 						$.ajax({url: 'php/insertarAlquilerv3.php', type: 'POST',  data: {jsonCliente:jsonCliente, jsonProductos: jsonProducto, idUser: $.JsonUsuario.idUsuario, total: $('.spanTotalSumasv3').text() }}).done(function (resp) {
 							console.log(resp);
+							pantallaOver(false);
 							if($.isNumeric(resp)){ 
 								window.location= 'cliente.php?idCliente='+resp;
 							}
 						});
 					}
 				});
+			
 			}
 		break;
 	}
@@ -615,15 +624,17 @@ $('#btnLimpiarProblema').click(function() {
 	$('#tbodySimulador').html('');
 });
 $('#btnGuardarPrestamoSinDni').click(function() {
+	pantallaOver(true);
 	//if($('#txtDni').val()=='' || $('#txtApellidos').val()=='' || $('#txtNombres').val()=='' || $('#txtCelular').val()==''  || $('#txtDireccion').val()=='' ){
 	if($('#sltModoPrestamo').val()!=""){
 		var jsonCliente= [];
 		jsonCliente.push({dniCli: $('#txtDni').val(), apellidoCli: $('#txtApellidos').val(), nombresCli: $('#txtNombres').val(), direccionCli: $('#txtDireccion').val(), correoCli: $('#txtCorreo').val(), celularCli: $('#txtCelular').val(), fijoCli: $('#txtFono').val() });
 
 		$.ajax({url: 'php/guardarSimulacionPrestamo.php', type: 'POST', data: { jsonCliente: jsonCliente, sinFecha: moment( $('#txtSinFecha').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') ,  modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+			pantallaOver(false);
 			console.log(resp);
 			if(esNumero(resp)){
-				//window.location.href = 'creditos.php?credito='+resp;
+				window.location.href = 'creditos.php?credito='+resp;
 			}
 		});
 	}

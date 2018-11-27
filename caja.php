@@ -14,41 +14,20 @@ if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
 
 <body>
 <style>
-#overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.65); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
-   /* Add a pointer on hover */
-}
-#overlay .text{position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 36px;
-    color: white;
-    user-select: none;
-    transform: translate(-50%,-50%);}
 hr{ margin-bottom: 5px;}
 h3{ margin-top: 5px;}
 .pheader{background-color: #a35bb4;padding: 10px 10px; color: white; font-size: 17px; display: block;
 clear: left; }
 .pheader li>a{color: #a35bb4;}
 .pheader li>a:hover{color: #a35bb4;background: #f2f2f2;}
-
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
 #txtMontoApertura, #txtMontoCierre, #txtMontoPagos {font-size: 26px;}
+a{color: #a35bb4;}
+a:focus, a:hover { color: #62286f; }
 </style>
-<div id="overlay">
-	<div class="text"><i class="icofont icofont-leaf"></i> Guardando data...</div>
-</div>
+
 
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -99,7 +78,7 @@ th{color:#a35bb4}
 			<?php if( isset($_GET['cuadre']) ): ?>		
 			<div class="container-fluid col-xs-12 ">
 				<div class="pheader">
-					<h4 >Entradas de dinero </h4>
+					<h4> <i class="icofont icofont-plus-circle"></i> Entradas de dinero </h4>
 					<?php 
 					if(date('Y-m-d')==$_GET['fecha']){ ?>
 						<div class="dropdown">
@@ -127,7 +106,7 @@ th{color:#a35bb4}
 			</div>
 			<div class="container-fluid col-xs-12 ">
 				<div class="pheader">
-					<h4>Salidas de dinero</h4>
+					<h4><i class="icofont icofont-minus-circle"></i> Salidas de dinero</h4>
 					<?php 
 					if(date('Y-m-d')==$_GET['fecha']){ ?>
 						<div class="dropdown">
@@ -364,6 +343,7 @@ $('#btnCajaAbrir').click(function () {
 	$('.modal-aperturarCaja').modal('show');
 });
 $('#btnGuardarApertura').click(function () {
+	pantallaOver(true);
 	var monto = parseFloat($('#txtMontoApertura').attr('data-val'));
 	var obs = $('#txtObsApertura').val();
 
@@ -373,6 +353,7 @@ $('#btnGuardarApertura').click(function () {
 		$.ajax({url: 'php/cajaAperturar.php', type: 'POST', data:{
 			monto: monto, obs: obs
 		}}).done((resp)=> { console.log(resp);
+			pantallaOver(false);
 			if(resp==1){
 				location.reload();
 			}

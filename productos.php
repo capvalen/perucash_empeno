@@ -1367,9 +1367,11 @@ $('#txtMontoTicketIntereses').focusout(function () {
 $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
 });
-$('#btnInsertPagoMaestro').click(()=> {
+$('#btnInsertPagoMaestro').click(function() {
+	pantallaOver(true);
 	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
 	if(idMoneda == null ){
+		pantallaOver(false);
 		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
 	}else{ 
 		$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
@@ -1380,8 +1382,10 @@ $('#btnInsertPagoMaestro').click(()=> {
 			fecha : moment($('#dtpFechaPago').val(), 'DD/MM/YYYY h:mm a').format('YYYY-MM-DD H:mm'),
 			obs: $('#txtObsPagos').val()
 		}}).done((resp)=> { console.log (resp);
+			pantallaOver(false);
 			if( $.isNumeric(resp) ){
 				$('.modal-pagoMaestro').modal('hide');
+				$('#btnRefre2').removeClass('hidden'); $('#btnBien').addClass('hidden');
 				$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
 				$('.modal-GuardadoCorrecto').modal('show');
 			}

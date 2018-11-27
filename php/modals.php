@@ -16,7 +16,8 @@
 		</div>
 			
 		<div class="modal-footer">
-			<button class="btn btn-primary btn-outline" data-dismiss="modal" ><i class="icofont icofont-social-smugmug"></i> Bien</button>
+			<button class="btn btn-primary btn-outline hidden" id="btnRefre2" data-dismiss="modal" ><i class="icofont icofont-social-smugmug"></i> Ok</button>
+			<button class="btn btn-primary btn-outline" id="btnBien" data-dismiss="modal" ><i class="icofont icofont-social-smugmug"></i> Bien</button>
 		</div>
 	</div>
 	</div>
