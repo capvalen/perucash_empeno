@@ -135,7 +135,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 					</div>
 					<div class="col-sm-3">
 						<label for="">Tasa de interés %</label>
-						<input type="numeric" id="txtSinTasa" class="form-control text-center" readonly>
+						<input type="numeric" id="txtSinTasa" class="form-control text-center" >
 					</div>
 					<div class="col-sm-3">
 						<label for="">Fecha de préstamo</label>
@@ -592,6 +592,7 @@ $('#txtSinMonto').change(function() {
 	
 });
 $('#btnResolverProblema').click(function() {
+	pantallaOver(true);
 	if($('#sltModoPrestamo').val()!='' && $('#txtSinMonto').val()!=''){
 		var inte=0;
 		var inicial = $('#txtSinMonto').val();
@@ -599,11 +600,11 @@ $('#btnResolverProblema').click(function() {
 		var cuota=0;
 		switch ( $('#divSelectProductoListado').find('.selected a').attr('data-tokens') ) {
 			case '1':
-				inte=1.12;//1.12
+				inte=1.16;//1.12
 				habiles=20; //20 dias habiles
 				break;
 			case '2':
-				inte=1.14;//1.12
+				inte=1.16;//1.12
 				habiles=4; //4 semanas 
 				break;
 			case '3':
@@ -616,6 +617,7 @@ $('#btnResolverProblema').click(function() {
 		// cuota = inicial*inte;		
 		// $('#txtSinCuota').val(parseFloat(cuota).toFixed(2))//parseFloat(cuota.toPrecision(2)).toFixed(2)
 		$.ajax({url: 'php/simuladorConDni.php', type: 'POST', data: { modo: $('#divSelectPeriodoListado').find('.selected a').attr('data-tokens'), monto: $('#txtSinMonto').val() }}).done(function(resp) {
+			pantallaOver(false);
 			$('#tbodySimulador').html(resp);
 		});
 	}
