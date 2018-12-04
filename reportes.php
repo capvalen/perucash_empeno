@@ -83,7 +83,7 @@ require("php/conkarl.php");
 						<th data-sort="string">Descripción del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
-						<th data-sort="float">Capital S/.<i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="float">Capital S/<i class="icofont icofont-expand-alt"></i></th>
 					  </tr>
 					</thead>
 					<tbody>
