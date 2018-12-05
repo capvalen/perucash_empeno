@@ -42,6 +42,8 @@ if( isset($_GET['idCliente'])){
     font-size: 18px;
     margin-left: 10px;
 }
+a{color: #ab47bc;}
+a:focus, a:hover{color: #782786;}
 	/* .contenedorPres{margin-bottom: 20px;} */
 </style>
 <div class="" id="wrapper">
@@ -58,7 +60,7 @@ if( isset($_GET['idCliente'])){
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
-				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-brush"></i></button></h3>
+				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-edit"></i></button></h3>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
 						for ($i=0; $i <5 ; $i++) { 
@@ -76,6 +78,13 @@ if( isset($_GET['idCliente'])){
 			</div>
 			<div class="col-xs-12 col-md-8 contenedorDatosCliente">
 			<!-- Empieza a meter contenido 2.2 -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#tabEmpeno" aria-controls="tabEmpeno" role="tab" data-toggle="tab">Empeños</a></li>
+				<li role="presentation"><a href="#tabCredito" aria-controls="tabCredito" role="tab" data-toggle="tab">Créditos</a></li>
+			</ul>
+			<div class="tab-content">
+			<div role="tabpanel" class="tab-pane fade in active" id="tabEmpeno">
+				<h4 class="deep-purple-text text-lighten-1">Productos empeñados por el cliente:</h4>
 				<div class="divPrestamo">
 				<?php
 				$i=0;
@@ -141,7 +150,14 @@ if( isset($_GET['idCliente'])){
 					</strong></div>
 									</div> -->
 			<!-- Fin de contenido 2.2 -->
+
 			</div>
+			</div> <!-- Fin de tabEmpeno -->
+			<div role="tabpanel" class="tab-pane fade" id="tabCredito">
+			<h4 class="deep-purple-text text-lighten-1">Créditos comprometidos:</h4>
+				<p>El sistema aún se está adaptando al cambio</p>
+			</div> <!-- Fin de tabCredito -->
+			</div> <!-- Fin de tab-Content -->
 			</div>
 		</div>
 </div>

@@ -37,12 +37,12 @@ $suma=0;
 switch ($_POST['modo']){
 	case "1":
 		$plazo = 20;
-		$interes = 1.12;
+		$interes = 1.16;
 		$intervalo = new DateInterval('P1D'); //aumenta 1 día
 		break;
 	case "2":
 		$plazo = 4;
-		$interes = 1.14;
+		$interes = 1.16;
 		$intervalo = new DateInterval('P1W'); //aumenta 1 día
 		break;
 	case "3":

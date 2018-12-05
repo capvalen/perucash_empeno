@@ -26,7 +26,7 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 ?>
    <tr> <td></td>
    <td></td>
-   <td></td> <td><strong>Total:</strong></td> <td><strong><?=number_format($sumTot,2); ?></strong></td> </tr>
+   <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?=number_format($sumTot,2); ?></strong></td> </tr>
 <?
 /* liberar la serie de resultados */
 mysqli_free_result($log);
