@@ -39,6 +39,28 @@ if ( isset($_GET['credito'])){
 			<div class="col-lg-12 contenedorDeslizable " id="contenedorCreditosFluid">
 			<!-- Empieza a meter contenido principal -->
 			<h3 class="purple-text text-lighten-1">Créditos online / sólo con DNI</h3><hr>
+			<div class="panel panel-default">
+				<div class="panel-body">
+				<p><strong>Filtro de créditos:</strong></p>
+					<div class="row">
+						<div class="col-xs-6 col-sm-3">
+							<input type="text" id="txtBuscarCredito" class="form-control">
+						</div>
+						<div class="col-xs-3">
+							<button class="btn btn-primary btn-outline" id="btnBuscarCreditoSin"><i class="icofont icofont-search"></i> Buscar</button>
+							<button class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Lista clientes colocados"><i class="icofont 
+							icofont-users-alt-1"></i></button>
+							<a href="creditos.php?recordHoy" class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Reporte de Cobranzas (hoy)"><i class="icofont icofont-paper"></i></a>
+						</div>
+					</div>
+					<div class="row container-fluid hidden" id="rowReporteNewCliente">
+						<div class="col-xs-6">
+							<label for="">Elija la fecha para generar el reporte</label>
+							<input type="text" class="form-control" id="dtpFechaCliente">
+						</div>
+					</div>
+				</div>
+			</div>
 		<?php if ( isset($_GET['credito'])){ 
 			if($llamadoCre=$conection->query($sqlCre)){
 				
@@ -99,21 +121,100 @@ if ( isset($_GET['credito'])){
 				?>
 				</tbody>
 			</table>
-		<?php } /* fin de if de credito */ else{ ?>
-			<div class="panel panel-default">
-				<div class="panel-body">
-				<p><strong>Filtro de créditos:</strong></p>
-					<div class="row">
-						<div class="col-xs-6 col-sm-3">
-							<input type="text" id="txtBuscarCredito" class="form-control">
-						</div>
-						<div class="col-xs-3">
-							<button class="btn btn-primary btn-outline" id="btnBuscarCreditoSin"><i class="icofont icofont-search"></i> Buscar</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		<?php } ?>
+		<?php } /* fin de if de credito */ 
+		if( isset($_GET['nuevos']) ){ ?>
+			<h4 class="purple-text text-lighten-1">Lista de clientes nuevos por fecha</h4>
+			<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>DNI</th>
+					<th>Apellidos y Nombres</th>
+					<th>Saldo</th>
+					<th>Plazo</th>
+					<th>Zona</th>
+				</tr>
+			</thead>
+			<tbody>
+			
+			<?php
+			$sumaNow=0;
+			$sqlCliNow="SELECT idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion
+			FROM `prestamo` pre
+			inner join Cliente c on c.idCliente = pre.idCliente
+			inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
+			where preIdEstado=78 and date_format(preFechaInicio, '%Y-%m-%d') = '{$_GET['nuevos']}';";
+//			echo $sqlCliNow;
+			$resultadoCliNow=$cadena->query($sqlCliNow);
+			$rowsCliNow = $resultadoCliNow->num_rows;
+			if( $rowsCliNow==0){ ?>
+				<tr><td>No hay datos en ésta fecha</td></tr> <?php
+			}else{
+				while($rowCliNow=$resultadoCliNow->fetch_assoc()){ $sumaNow+=$rowCliNow['preCapital']; ?>
+					<tr>
+						<td><?= $rowCliNow['cliDni'];?></td>
+						<td class="mayuscula"><a href="clientes.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
+						<td><?= number_format($rowCliNow['preCapital'],2);?></td>
+						<td><?= $rowCliNow['modDescripcion'];?></td>
+						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
+					</tr>		
+		<?php }?>
+				<tr><td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td></tr>
+		<?php
+			}
+			?>
+			</tbody>
+			</table>
+		<?php } /*Fin de if get nuevos*/ 
+		if( isset($_GET['recordHoy'])){?>
+			<h4 class="purple-text text-lighten-1">Reporte de cobranzas del día</h4>
+			<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Código</th>
+					<th>Apellidos y Nombres</th>
+					<th>Zona</th>
+					<th>Plazo</th>
+					<th>Debe</th>
+					<th>Días vencidos</th>
+				</tr>
+			</thead>
+			<tbody>
+			
+			<?php
+			$sumaNow=0;
+			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
+			count(idCuota) -1 as cuotasDebe, round(sum(cuotCuota),2) as cuotNormal
+			FROM `prestamo` pre
+			inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
+			inner join Cliente c on c.idCliente = pre.idCliente
+			inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
+			where prc.idTipoPrestamo=79 and prc.cuotFechaPago <= CURDATE()
+			group by pre.idPrestamo
+			order by idPrestamo DESC;";
+//			echo $sqlCliNow;
+			$resultadoCliNow=$cadena->query($sqlCliNow);
+			$rowsCliNow = $resultadoCliNow->num_rows;
+			if( $rowsCliNow==0){ ?>
+				<tr><td>No hay datos en ésta fecha</td></tr> <?php
+			}else{
+				while($rowCliNow=$resultadoCliNow->fetch_assoc()){ $sumaNow+=$rowCliNow['preCapital']; ?>
+					<tr>
+						<td><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
+						<td class="mayuscula"><a href="clientes.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
+						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
+						<td><?= $rowCliNow['modDescripcion'];?></td>
+						<td><?= number_format($rowCliNow['cuotNormal'],2);?></td>
+						<td><?= $rowCliNow['cuotasDebe'];?></td>
+					</tr>		
+		<?php }?>
+				<tr><td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td></tr>
+		<?php
+			}
+			?>
+			</tbody>
+			</table>
+		<?php }
+		?>
 				
 			<!-- Fin de contenido principal -->
 			</div>
@@ -126,13 +227,27 @@ if ( isset($_GET['credito'])){
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
+<script src="js/bootstrap-material-datetimepicker.js"></script>
 
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
 datosUsuario();
 
 $(document).ready(function(){
-
+$('.miToolTip').tooltip();
+$('#dtpFechaCliente').bootstrapMaterialDatePicker({	format: 'DD/MM/YYYY',
+	lang: 'es',
+	time: false,
+	weekStart: 1,
+	cancelText : 'Cerrar',
+	nowButton : true,
+	switchOnClick : true,
+	okText: 'Aceptar', nowText: 'Hoy'
+});
+$('#dtpFechaCliente').bootstrapMaterialDatePicker('setDate', moment(<? if(isset($_GET['nuevos'])) {echo "'".$_GET['nuevos']."'";}?>));
+$('#dtpFechaCliente').change(function () {
+	window.location.href = 'creditos.php?nuevos=' + moment( $('#dtpFechaCliente').val() , 'DD/MM/YYYY').format('YYYY-MM-DD');
+});
 $('#btnBuscarCreditoSin').click(function() {
 	if( $('#txtBuscarCredito').val()!='' && $('#txtBuscarCredito').val().toUpperCase().indexOf('CR-')==0 ){
 		window.location.href = 'creditos.php?credito='+$('#txtBuscarCredito').val().toUpperCase().replace('CR-', '');
@@ -157,6 +272,9 @@ $('.btnPagarCuota').click(function() {
 	});
 });
 <?php endif; ?>
+$('#btnReporteNewCliente').click(function() {
+	$('#rowReporteNewCliente').removeClass('hidden');
+});
 });
 
 </script>
