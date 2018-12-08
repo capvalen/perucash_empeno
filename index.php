@@ -24,19 +24,37 @@ if(isset($_GET['solicita'])){$correo=$base58->decode($_GET['solicita']);}
 body{
 	background-color: #cacaca;
 }
-#rowGrande, .puntos{
-	width: 100vw;
-	height: 100vh;
-}
-#rowGrande{
+
+body{
 	background-color: #39bcf0;
 	background: url('images/shutterstock_360655751.jpg?v=0.1');
-	background-repeat: no-repeat;
+	/*background-repeat: no-repeat;
 	background-position: center;
-	background-size: cover;
-	margin: 0; padding: 0;
+	background-size: cover;*/
+	background-attachment: fixed;
+	
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-repeat: no-repeat;
+	background-position: top;
+	background-size: inherit;
 }
-.puntos{ background: url(images/gridtile_3x3.png); position: absolute;}
+.puntos{ background: url(images/gridtile_3x3.png);
+	position: fixed;
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
 #conPrincipal{
  margin-top:100px; padding: 20px 60px;
 }
@@ -92,9 +110,8 @@ border-color: transparent; color: white; padding: 15px 0; border-radius: 50px;le
 	color: #dfd4f9d6;
 	font-size: 16px;
 	margin-left: 16px;
-
 	margin-top: -30px;
-	position: fixed;
+	position: absolute;
 }
 .md-input {
     position: relative;
