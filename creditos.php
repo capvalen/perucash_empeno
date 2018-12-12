@@ -226,15 +226,16 @@ if ( isset($_GET['credito'])){
 
 		if( isset($_GET['recordLibre'])){?>
 			<h4 class="purple-text text-lighten-1">Reporte de cobranzas para hoy</h4>
-			<table class="table table-hover">
+			<table class="table table-hover" id="tblRecordCobro">
 			<thead>
 				<tr>
-					<th>Código</th>
-					<th>Apellidos y Nombres</th>
-					<th>Zona</th>
-					<th>Plazo</th>
-					<th>Debe</th>
-					<th>Monto</th>
+					<th data-sort="int">Código</th>
+					<th data-sort="string">Apellidos y Nombres</th>
+					<th data-sort="string">Zona</th>
+					<th data-sort="string">Plazo</th>
+					<th data-sort="float">Debe</th>
+					<th data-sort="float">Monto</th>
+					<th>@</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -259,12 +260,13 @@ if ( isset($_GET['credito'])){
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
 					$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
 					<tr>
-						<td><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
+						<td data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
 						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
 						<td><?= $rowCliNow['modDescripcion'];?></td>
-						<td><?= number_format($rowCliNow['cuotNormal'],2);?></td>
-						<td><?= $rowCliNow['preCapital'];?></td>
+						<td data-sort-value="<?= $rowCliNow['cuotNormal'];?>"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
+						<td data-sort-value="<?= $rowCliNow['preCapital'];?>"><?= number_format($rowCliNow['preCapital'],2);?></td>
+						<td><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
 					</tr>		
 		<?php }?>
 				<tr><td></td> <td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> 
@@ -285,10 +287,37 @@ if ( isset($_GET['credito'])){
 </div><!-- /#wrapper -->
 
 
+<?php if(isset($_GET['recordLibre'])){?>
+<!-- Modal para decir que hubo un error  -->
+<div class="modal fade modalPagarPuntual" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Pago de cuota</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+			<p>La deuda del cliente es <strong>S/ <span id="spanMonedaCliente"></span></strong> ¿Cuánto pagó el cliente?</p>
+			<input type="number" class="form-control esMoneda">
+			</div>
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> Ok</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+<?php } //end recordLibre ?>
+
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
 <script src="js/bootstrap-material-datetimepicker.js"></script>
+<script src="js/stupidtable.min.js"></script>
 
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
 <script>
@@ -317,6 +346,12 @@ $('#btnBuscarCreditoSin').click(function() {
 	});*/
 	} 
 });
+<?php if(isset($_GET['recordLibre'])){?>
+$("#tblRecordCobro").stupidtable();
+$('#btnCobrarCuota').click(function () {
+	$('#modalPagarPuntual').modal('show');
+});
+<?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 
 	if(e.keyCode == 13){ 
 		$('#btnBuscarCreditoSin').click();
