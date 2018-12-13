@@ -260,11 +260,11 @@ if ( isset($_GET['credito'])){
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
 					$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
 					<tr>
-						<td data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
+						<td class="tdCobrarId" data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
 						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
 						<td><?= $rowCliNow['modDescripcion'];?></td>
-						<td data-sort-value="<?= $rowCliNow['cuotNormal'];?>"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
+						<td class="tdDebe" data-sort-value="<?= $rowCliNow['cuotNormal'];?>" data-debe="<?= $rowCliNow['cuotNormal'];?>"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
 						<td data-sort-value="<?= $rowCliNow['preCapital'];?>"><?= number_format($rowCliNow['preCapital'],2);?></td>
 						<td><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
 					</tr>		
@@ -292,20 +292,22 @@ if ( isset($_GET['credito'])){
 <div class="modal fade modalPagarPuntual" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
-		<div class="modal-header-danger">
+		<div class="modal-header-primary">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Pago de cuota</h4>
 		</div>
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row">
-			<p>La deuda del cliente es <strong>S/ <span id="spanMonedaCliente"></span></strong> ¿Cuánto pagó el cliente?</p>
-			<input type="number" class="form-control esMoneda">
+			<p>Deuda del cliente es:</p>
+			<p><strong>S/ <span id="spanMonedaCliente"></span></strong></p>
+			<p>¿Cuánto pagó el cliente?</p>
+			<input type="number" class="form-control esMoneda" value="0.00">
 			</div>
 		</div>
 			
 		<div class="modal-footer">
-			<button class="btn btn-danger btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> Ok</button>
+			<button class="btn btn-primary btn-outline" data-dismiss="modal" id="btnPagarPuntual" ><i class="icofont icofont-save"></i> Ingresar pago</button>
 		</div>
 	</div>
 	</div>
@@ -348,8 +350,11 @@ $('#btnBuscarCreditoSin').click(function() {
 });
 <?php if(isset($_GET['recordLibre'])){?>
 $("#tblRecordCobro").stupidtable();
-$('#btnCobrarCuota').click(function () {
-	$('#modalPagarPuntual').modal('show');
+$('.btnCobrarCuota').click(function () {
+	var padre= $(this).parent().parent();
+	$('#btnPagarPuntual').attr('data-id', padre.find('.tdCobrarId').attr('data-id') )
+	$('#spanMonedaCliente').text(padre.find('.tdDebe').attr('data-debe'));
+	$('.modalPagarPuntual').modal('show');
 });
 <?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 
