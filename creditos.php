@@ -169,17 +169,17 @@ if ( isset($_GET['credito'])){
 		<?php } /*Fin de if get nuevos*/ 
 		if( isset($_GET['recordHoy'])){?>
 			<h4 class="purple-text text-lighten-1">Reporte de cuotas vencidas a la fecha</h4>
-			<table class="table table-hover">
+			<table class="table table-hover" id="tblRecordCobro">
 			<thead>
 				<tr>
-					<th>Código</th>
-					<th>Apellidos y Nombres</th>
-					<th>Zona</th>
-					<th>Plazo</th>
-					<th>Debe</th>
-					<th>Cuotas vencidas</th>
-					<th>Mora</th>
-					<th>Monto</th>
+					<th data-sort="int">Código</th>
+					<th data-sort="string">Apellidos y Nombres</th>
+					<th data-sort="string">Zona</th>
+					<th data-sort="float">Capital</th>
+					<th data-sort="string">Plazo</th>
+					<th data-sort="float">Debe</th>
+					<th data-sort="float">Días venc.</th>
+					<th data-sort="float">Mora</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -187,14 +187,13 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumaMora=0; $sumMonto=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			count(idCuota) as cuotasDebe, round(sum(cuotCuota),2) as cuotNormal
-			FROM `prestamo` pre
-			inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
-			inner join Cliente c on c.idCliente = pre.idCliente
-			inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
-			where prc.idTipoPrestamo=79 and prc.cuotFechaPago < CURDATE()
-			group by pre.idPrestamo
-			order by idPrestamo DESC;";
+			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota),2) as cuotNormal, count(idCuota) as cuotasDebe
+					FROM `prestamo` pre
+					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
+					inner join Cliente c on c.idCliente = pre.idCliente
+					inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
+					where prc.idTipoPrestamo=79 and prc.cuotFechaPago<=curdate() 
+					group by  pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, c.cliApellidos,  c.cliNombres, c.cliDireccion, modDescripcion;";
 //			echo $sqlCliNow;
 			$resultadoCliNow=$cadena->query($sqlCliNow);
 			$rowsCliNow = $resultadoCliNow->num_rows;
@@ -202,22 +201,25 @@ if ( isset($_GET['credito'])){
 				<tr><td>No hay datos en ésta fecha</td></tr> <?php
 			}else{
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
+					if($rowCliNow['diasDuda']>0){
 					$sumaNow+=floatval($rowCliNow['cuotNormal']);
 					$sumaMora+=floatval($rowCliNow['cuotasDebe']);
 					$sumMonto+=floatval($rowCliNow['preCapital']); ?>
 					<tr>
-						<td><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
+						<td class="tdCobrarId" data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
 						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
+						<td><?= number_format($rowCliNow['preCapital'],2);?></td>
 						<td><?= $rowCliNow['modDescripcion'];?></td>
 						<td><?= number_format($rowCliNow['cuotNormal'],2);?></td>
 						<td><?= $rowCliNow['cuotasDebe'];?></td>
 						<td><?= number_format($rowCliNow['cuotasDebe']*2,2);?></td>
-						<td><?= $rowCliNow['preCapital'];?></td>
 					</tr>		
-		<?php }?>
-				<tr><td></td> <td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> <td><strong>Mota total:</strong></td> <td><strong>S/ <?= number_format($sumaMora*2,2);?></strong></td> <td><?= number_format($sumMonto,2)?></td></tr>
-		<?php
+		<?php }} ?>
+				<tfoot>
+					<tr><td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumMonto,2)?></strong></td> <td></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> <td><strong>Mota total:</strong></td> <td><strong>S/ <?= number_format($sumaMora*2,2);?></strong></td> </tr>
+				</tfoot>
+		<?php 
 			}
 			?>
 			</tbody>
@@ -234,7 +236,7 @@ if ( isset($_GET['credito'])){
 					<th data-sort="string">Zona</th>
 					<th data-sort="string">Plazo</th>
 					<th data-sort="float">Debe</th>
-					<th data-sort="float">Monto</th>
+					<th data-sort="float">Capital</th>
 					<th>@</th>
 				</tr>
 			</thead>
@@ -243,14 +245,13 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumLibre=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			count(idCuota) -1 as cuotasDebe, round(sum(cuotCuota),2) as cuotNormal
-			FROM `prestamo` pre
-			inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
-			inner join Cliente c on c.idCliente = pre.idCliente
-			inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
-			where prc.idTipoPrestamo=79 and prc.cuotFechaPago = CURDATE()
-			group by pre.idPrestamo
-			order by idPrestamo DESC;";
+			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota),2) as cuotNormal
+					FROM `prestamo` pre
+					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
+					inner join Cliente c on c.idCliente = pre.idCliente
+					inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
+					where prc.idTipoPrestamo=79 and prc.cuotFechaPago<=curdate() 
+					group by  pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, c.cliApellidos,  c.cliNombres, c.cliDireccion, modDescripcion;";
 		//			echo $sqlCliNow;
 			$resultadoCliNow=$cadena->query($sqlCliNow);
 			$rowsCliNow = $resultadoCliNow->num_rows;
@@ -258,7 +259,8 @@ if ( isset($_GET['credito'])){
 				<tr><td>No hay datos en ésta fecha</td></tr> <?php
 			}else{
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
-					$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
+					if($rowCliNow['diasDuda']==0){
+						$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
 					<tr>
 						<td class="tdCobrarId" data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=<?= $rowCliNow['idCliente']?>"><?= $rowCliNow['cliNombres'];?></a></td>
@@ -268,9 +270,11 @@ if ( isset($_GET['credito'])){
 						<td data-sort-value="<?= $rowCliNow['preCapital'];?>"><?= number_format($rowCliNow['preCapital'],2);?></td>
 						<td><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
 					</tr>		
-		<?php }?>
-				<tr><td></td> <td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> 
-				<td><strong>S/ <?= number_format($sumLibre,2);?></strong></td></tr>
+		<?php }}?>
+				<tfoot>
+					<tr><td></td> <td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> 
+					<td><strong>S/ <?= number_format($sumLibre,2);?></strong></td></tr>
+				</tfoot>
 		<?php
 			}
 			?>
@@ -282,13 +286,15 @@ if ( isset($_GET['credito'])){
 			<!-- Fin de contenido principal -->
 			</div>
 		</div>
+    </div>
 </div>
 <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 
+
 <?php if(isset($_GET['recordLibre'])){?>
-<!-- Modal para decir que hubo un error  -->
+<!-- Modal para decir pagosw puntuales  -->
 <div class="modal fade modalPagarPuntual" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
@@ -302,7 +308,7 @@ if ( isset($_GET['credito'])){
 			<p>Deuda del cliente es:</p>
 			<p><strong>S/ <span id="spanMonedaCliente"></span></strong></p>
 			<p>¿Cuánto pagó el cliente?</p>
-			<input type="number" class="form-control esMoneda" value="0.00">
+			<input type="number" class="form-control esMoneda text-center inputGrande" value="0.00" id="txtPagaClienteFijo">
 			</div>
 		</div>
 			
@@ -322,6 +328,7 @@ if ( isset($_GET['credito'])){
 <script src="js/stupidtable.min.js"></script>
 
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
+
 <script>
 datosUsuario();
 
@@ -336,7 +343,8 @@ $('#dtpFechaCliente').bootstrapMaterialDatePicker({	format: 'DD/MM/YYYY',
 	switchOnClick : true,
 	okText: 'Aceptar', nowText: 'Hoy'
 });
-$('#dtpFechaCliente').bootstrapMaterialDatePicker('setDate', moment(<? if(isset($_GET['nuevos'])) {echo "'".$_GET['nuevos']."'";}?>));
+
+$('#dtpFechaCliente').bootstrapMaterialDatePicker('setDate', moment(<?php if(isset($_GET['nuevos'])): echo "'".$_GET['nuevos']."'"; endif;?>));
 $('#dtpFechaCliente').change(function () {
 	window.location.href = 'creditos.php?nuevos=' + moment( $('#dtpFechaCliente').val() , 'DD/MM/YYYY').format('YYYY-MM-DD');
 });
@@ -348,11 +356,12 @@ $('#btnBuscarCreditoSin').click(function() {
 	});*/
 	} 
 });
-<?php if(isset($_GET['recordLibre'])){?>
+<?php if(isset($_GET['recordLibre']) || isset($_GET['recordHoy'])){ ?>
 $("#tblRecordCobro").stupidtable();
 $('.btnCobrarCuota').click(function () {
 	var padre= $(this).parent().parent();
-	$('#btnPagarPuntual').attr('data-id', padre.find('.tdCobrarId').attr('data-id') )
+	$('#btnPagarPuntual').attr('data-id', padre.find('.tdCobrarId').attr('data-sort-value'));
+	$('#txtPagaClienteFijo').val(padre.find('.tdDebe').attr('data-debe'));
 	$('#spanMonedaCliente').text(padre.find('.tdDebe').attr('data-debe'));
 	$('.modalPagarPuntual').modal('show');
 });
@@ -362,7 +371,7 @@ $('#txtBuscarCredito').keypress(function (e) {
 		$('#btnBuscarCreditoSin').click();
 	}
 });
-<?php if(  isset( $_GET['credito'] ) ):  //in_array($_COOKIE['ckPower'],$soloAdmis) && ?>
+<?php if(isset($_GET['credito'])): ?>//in_array($_COOKIE['ckPower'],$soloAdmis) && ?>
 $('.btnPagarCuota').click(function() {
 	id=$(this).attr('data-id');
 	$.ajax({url: 'php/cancelarCuotaOnline.php', type: 'POST', data: { idCuo: id, idPre: <?= $_GET['credito'];?> }}).done(function(resp) {

@@ -279,7 +279,7 @@ a:focus, a:hover { color: #62286f; }
 </div>
 <?php } ?>
 
-<?php include 'footer.php'; ?>
+<?php include 'footer.php';?>
 <script type="text/javascript" src="js/moment-precise-range.js"></script>
 <script type="text/javascript" src="js/bootstrap-material-datetimepicker.js?version=2.0.8"></script>
 <?php include 'php/modals.php'; ?>

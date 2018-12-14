@@ -12,7 +12,7 @@ if(isset($_GET['cuadre'])){
 	inner join usuario u on u.idUsuario = cu.idUsuario
 	where cu.idCuadre = {$_GET['cuadre']}");
 }else{
-	$sql = mysqli_query($conection,"call cajaActivaHoy('".$_GET['fecha']."');"); // $_GET['fecha']
+	$sql = mysqli_query($conection,"call cajaActivaHoy();"); // $_GET['fecha']
 }
 $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 if($hayCaja==true){
