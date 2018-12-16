@@ -192,7 +192,7 @@ if ( isset($_GET['credito'])){
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
 					inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
-					where prc.idTipoPrestamo=79 and prc.cuotFechaPago<=curdate() 
+					where prc.idTipoPrestamo in (79, 33) and prc.cuotFechaPago<=curdate() 
 					group by  pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, c.cliApellidos,  c.cliNombres, c.cliDireccion, modDescripcion;";
 //			echo $sqlCliNow;
 			$resultadoCliNow=$cadena->query($sqlCliNow);
@@ -250,7 +250,7 @@ if ( isset($_GET['credito'])){
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
 					inner join `modoPrestamo` mp on mp.idModoPrestamo = pre.idModo
-					where prc.idTipoPrestamo=79 and prc.cuotFechaPago<=curdate() 
+					where prc.idTipoPrestamo in (79, 33) and prc.cuotFechaPago<=curdate() 
 					group by  pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, c.cliApellidos,  c.cliNombres, c.cliDireccion, modDescripcion;";
 		//			echo $sqlCliNow;
 			$resultadoCliNow=$cadena->query($sqlCliNow);
@@ -364,6 +364,9 @@ $('.btnCobrarCuota').click(function () {
 	$('#txtPagaClienteFijo').val(padre.find('.tdDebe').attr('data-debe'));
 	$('#spanMonedaCliente').text(padre.find('.tdDebe').attr('data-debe'));
 	$('.modalPagarPuntual').modal('show');
+});
+$('#btnPagarPuntual').click(function() {
+	
 });
 <?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 
