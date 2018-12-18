@@ -20,7 +20,7 @@ $resultado = $esclavo->multi_query($sqlCaja);
 
 $sqlCuot="SELECT count(idCUota) as `restanCuotas` FROM `prestamo_cuotas`
 where idPrestamo =  {$_POST['idPre']}
-and idTipoPrestamo = 79;";
+and idTipoPrestamo in (33, 79);";
 
 $resultadoCuot=$cadena->query($sqlCuot);
 $rowCuot=$resultadoCuot->fetch_assoc();

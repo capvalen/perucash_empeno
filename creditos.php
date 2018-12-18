@@ -172,14 +172,15 @@ if ( isset($_GET['credito'])){
 			<table class="table table-hover" id="tblRecordCobro">
 			<thead>
 				<tr>
-					<th data-sort="int">Código</th>
-					<th data-sort="string">Apellidos y Nombres</th>
-					<th data-sort="string">Zona</th>
-					<th data-sort="float">Capital</th>
-					<th data-sort="string">Plazo</th>
-					<th data-sort="float">Debe</th>
-					<th data-sort="float">Días venc.</th>
-					<th data-sort="float">Mora</th>
+					<th data-sort="int">Código <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="string">Apellidos y Nombres <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="string">Zona <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="float">Capital <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="string">Plazo <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="float">Debe <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="float">Días venc. <i class="icofont icofont-expand-alt"></i></th>
+					<th data-sort="float">Mora <i class="icofont icofont-expand-alt"></i></th>
+					<th>@</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -187,7 +188,7 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumaMora=0; $sumMonto=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota),2) as cuotNormal, count(idCuota) as cuotasDebe
+			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota-cuotPago),2) as cuotNormal, count(idCuota) as cuotasDebe
 					FROM `prestamo` pre
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
@@ -211,9 +212,10 @@ if ( isset($_GET['credito'])){
 						<td class="mayuscula"><?= $rowCliNow['cliDireccion'];?></td>
 						<td><?= number_format($rowCliNow['preCapital'],2);?></td>
 						<td><?= $rowCliNow['modDescripcion'];?></td>
-						<td><?= number_format($rowCliNow['cuotNormal'],2);?></td>
+						<td class="tdCuotaDebe"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
 						<td><?= $rowCliNow['cuotasDebe'];?></td>
-						<td><?= number_format($rowCliNow['cuotasDebe']*2,2);?></td>
+						<td class="tdMoraDebe"><?= number_format($rowCliNow['cuotasDebe']*2,2);?></td>
+						<td><button class="btn btn-danger btn-outline btnSinBorde miToolTip btnSubsanar" data-toggle="tooltip" title="Subsanar crédito"><i class="icofont icofont-warning-alt"></i></button></td>
 					</tr>		
 		<?php }} ?>
 				<tfoot>
@@ -245,7 +247,7 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumLibre=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota),2) as cuotNormal
+			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota-cuotPago),2) as cuotNormal
 					FROM `prestamo` pre
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
@@ -293,7 +295,7 @@ if ( isset($_GET['credito'])){
 
 
 
-<?php if(isset($_GET['recordLibre'])){?>
+<?php if(isset($_GET['recordLibre']) || isset($_GET['recordHoy'])){?>
 <!-- Modal para decir pagosw puntuales  -->
 <div class="modal fade modalPagarPuntual" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
@@ -314,6 +316,34 @@ if ( isset($_GET['credito'])){
 			
 		<div class="modal-footer">
 			<button class="btn btn-primary btn-outline" data-dismiss="modal" id="btnPagarPuntual" ><i class="icofont icofont-save"></i> Ingresar pago</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal para decir pagosw de mora  -->
+<div class="modal fade modalPagarAtras" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-danger">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Pago de cuota</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+			<p>Deuda del cliente es:</p>
+			<p>Interés: <strong>S/ <span id="spanMonedaClienteAtras"></span></strong></p>
+			<p>Mora: <strong>S/ <span id="spanMonedaMoraAtras"></span></strong></p>
+			<p class="spanTotal">Total: <strong>S/ <span id="spanMonedaTotalAtras"></span></strong></p>
+			<p>¿Cuánto pagó el cliente?</p>
+			<input type="number" class="form-control esMoneda text-center inputGrande" value="0.00" id="txtPagaClienteAtras">
+			</div>
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-danger btn-outline" data-dismiss="modal" id="btnPagarAtras" ><i class="icofont icofont-save"></i> Ingresar pago</button>
 		</div>
 	</div>
 	</div>
@@ -366,7 +396,20 @@ $('.btnCobrarCuota').click(function () {
 	$('.modalPagarPuntual').modal('show');
 });
 $('#btnPagarPuntual').click(function() {
-	
+	var idPre= $(this).attr('data-id');
+	if( $('#txtPagaClienteFijo').val()>0 ){
+		$.ajax({url: 'php/pagoCuasiCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteFijo').val()  }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
+});
+$('.btnSubsanar').click(function() {
+	var padre = $(this).parent().parent();
+	$('#spanMonedaClienteAtras').text(padre.find('.tdCuotaDebe').text());
+	$('#spanMonedaMoraAtras').text(padre.find('.tdMoraDebe').text());
+	$('#spanMonedaTotalAtras').text( parseFloat(parseFloat($('#spanMonedaClienteAtras').text()) + parseFloat($('#spanMonedaMoraAtras').text())).toFixed(2) );
+	$('#btnPagarAtras').attr('data-id', padre.find('.tdCobrarId').attr('data-sort-value'));
+	$('.modalPagarAtras').modal('show');
 });
 <?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 
