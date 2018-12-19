@@ -16,22 +16,28 @@ if($log=$conection->query($sql)){
    
    if($debe == $dinero ){
       // cambiar estado pagado # 81
+      $sqlCuotaVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
+      (null,0,81,now(),$dinero,'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
       $sqlPagar="UPDATE `prestamo_cuotas` SET
       `cuotFechaCancelacion` = now(),
       `cuotPago` = $dinero,
       `idTipoPrestamo` = 81
       where idPrestamo = {$_POST['idPre']} and idTipoPrestamo in (79, 33) and cuotFechaPago<=curdate();";
-      if($cadena->query($sqlPagar)) { echo 'reto cumplido completo';}
+      $esclavo->query($sqlCuotaVerif);
+      if($cadena->query($sqlPagar)) { /* echo 'reto cumplido completo'; */}
       
    }else if( $dinero <= $debe ){
       // cambiar estado semi pago #33
+      $sqlCuotaVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
+      (null,0,81,now(),$dinero,'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
       $sqlPagar="UPDATE `prestamo_cuotas` SET
       `cuotFechaCancelacion` = now(),
       `cuotPago` = $dinero,
       `idTipoPrestamo` = 33
       where idPrestamo = {$_POST['idPre']} and idTipoPrestamo in (79, 33) and cuotFechaPago<=curdate();";
       //echo $sqlPagar;
-      if($cadena->query($sqlPagar)){ echo 'reto cumplido parcial';}
+      $esclavo->query($sqlCuotaVerif);
+      if($cadena->query($sqlPagar)){ /* echo 'reto cumplido parcial'; */}
       
    }
 	
@@ -51,6 +57,7 @@ if($log=$conection->query($sql)){
       where `idPrestamo`={$_POST['idPre']}";
       $resultadoPres=$cadena->query($sqlPres);
    }
+   echo true;
 }else{
 	echo "hubo un error";
 }

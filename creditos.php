@@ -270,7 +270,7 @@ if ( isset($_GET['credito'])){
 						<td><?= $rowCliNow['modDescripcion'];?></td>
 						<td class="tdDebe" data-sort-value="<?= $rowCliNow['cuotNormal'];?>" data-debe="<?= $rowCliNow['cuotNormal'];?>"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
 						<td data-sort-value="<?= $rowCliNow['preCapital'];?>"><?= number_format($rowCliNow['preCapital'],2);?></td>
-						<td><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
+						<td class="tdButton"><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
 					</tr>		
 		<?php }}?>
 				<tfoot>
@@ -397,9 +397,15 @@ $('.btnCobrarCuota').click(function () {
 });
 $('#btnPagarPuntual').click(function() {
 	var idPre= $(this).attr('data-id');
+	var padre = $('td[data-sort-value="'+idPre+'"]').parent();
+	
 	if( $('#txtPagaClienteFijo').val()>0 ){
-		$.ajax({url: 'php/pagoCuasiCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteFijo').val()  }}).done(function(resp) {
-			console.log(resp)
+		$.ajax({url: 'php/pagoCuasiCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteFijo').val() }}).done(function(resp) {
+			//console.log(resp=='1');
+			if(resp=='1'){
+				//padre.children().find('.tdButton').children().remove();
+				padre.find('.tdButton').html(`<span><i class="icofont icofont-check-circled"></i></span>`);
+			}
 		});
 	}
 });
@@ -421,7 +427,7 @@ $('#txtBuscarCredito').keypress(function (e) {
 $('.btnPagarCuota').click(function() {
 	id=$(this).attr('data-id');
 	$.ajax({url: 'php/cancelarCuotaOnline.php', type: 'POST', data: { idCuo: id, idPre: <?= $_GET['credito'];?> }}).done(function(resp) {
-		console.log(resp)
+		//console.log(resp)
 		if(resp == true){
 			location.reload();
 		}
