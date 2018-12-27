@@ -155,7 +155,45 @@ a:focus, a:hover{color: #782786;}
 			</div> <!-- Fin de tabEmpeno -->
 			<div role="tabpanel" class="tab-pane fade" id="tabCredito">
 			<h4 class="deep-purple-text text-lighten-1">Créditos comprometidos:</h4>
-				<p>El sistema aún se está adaptando al cambio</p>
+			<?php
+			$sqlCreds="SELECT 
+			idPrestamo, preCapital, prePorcentaje, preFechaInicio, tp.tipoDescripcion, prePlazo, tp.tipColorMaterial
+			FROM `prestamo` pre 
+			inner join tipoProceso tp on tp.idTipoProceso = pre.preIdEstado
+			where idCliente = {$_GET['idCliente']};";
+//			echo $sqlCreds;
+			$resultadoCreds=$cadena->query($sqlCreds);
+			$filas = $resultadoCreds->num_rows;
+			
+			if($filas>0){ ?>
+			<p>Se encontraron <strong><?= $filas; ?></strong> créditos con éste cliente.</p>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Cod</th>
+						<th>Capital</th>
+						<th>Interés</th>
+						<th>Fecha inicio</th>
+						<th>Cuotas</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					<? while($rowCreds = $resultadoCreds->fetch_assoc()){ ?>
+						<tr>
+							<td><a href="creditos.php?credito=<?= $rowCreds['idPrestamo']; ?>"><?= 'CR-'.$rowCreds['idPrestamo']; ?></a></td>
+							<td>S/ <?= number_format($rowCreds['preCapital'],2); ?></td>
+							<td><?= ($rowCreds['prePorcentaje']-1)*100; ?>%</td>
+							<td><? $fNuev= new DateTime($rowCreds['preFechaInicio']); echo $fNuev->format('d/m/Y h:m a'); ?></td>
+							<td><?= $rowCreds['prePlazo']; ?></td>
+							<td class="<?= $rowCreds['tipColorMaterial']; ?>"><?= $rowCreds['tipoDescripcion']; ?></td>
+						</tr>
+					<? } ?>
+				</tbody>
+			</table>
+			<? }else{ ?>
+				<p>El cliente no tiene préstamos online a su nombre</p>
+			<? } ?>
 			</div> <!-- Fin de tabCredito -->
 			</div> <!-- Fin de tab-Content -->
 			</div>

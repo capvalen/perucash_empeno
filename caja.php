@@ -63,7 +63,7 @@ a:focus, a:hover { color: #62286f; }
 			</div>
 	
 			<div class="container-fluid">
-					<p class="pheader col-xs-7">Datos del cuadre</p>
+					<p class="pheader col-xs-7"><i class="icofont icofont-hard-disk"></i> Datos del cuadre</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
 						<!-- <div class="col-xs-12 col-sm-6 text-center">
 							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>

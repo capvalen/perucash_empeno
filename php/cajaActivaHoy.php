@@ -15,9 +15,9 @@ if(isset($_GET['cuadre'])){
 	$sql = mysqli_query($conection,"call cajaActivaHoy();"); // $_GET['fecha']
 }
 $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
-if($hayCaja==true){
-	
-	?>
+
+if($hayCaja>0  ){ 
+	if( $hayCaja==$row['idCuadre'] && (isset($_GET['cuadre']) )){ ?>
 	<div class="container-fluid row ">
 		<div class="col-xs-12 col-md-8" >
 				<div class='divTopLinea'></div>
@@ -28,11 +28,10 @@ if($hayCaja==true){
 						</div>
 					</div>
 					<div class="col-xs-8">
-						<h4 class="h3Title">¡Caja abierta!</h4> De la sesión <strong><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong>
+						<h4 class="h3Title">¡Caja abierta!</h4> Sesión <strong class="mayuscula"><?php echo $row['usuNombres']; ?></strong> aperturada <strong>«<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?>»</strong>
 					</div>
 				</div>
 		<?php
-			
 			$fechaHoy = new DateTime();
 			$fechaReporte = new DateTime($row['fechaInicio']);
 		?>
@@ -45,7 +44,7 @@ if($hayCaja==true){
 		?>
 		</div>
 	</div>
-	<?php
+	<?php } //fin de if get cuadre
 }else{
 	?>
 	<div class="container-fluid row ">
@@ -77,20 +76,26 @@ if($hayCaja==true){
 
 
 if( isset($_GET['cuadre']) ){ ?>
-<div class="col-xs-12 col-sm-6 text-center">
-	<p><strong>Sessión de: </strong> <?php echo $row['usuNombres']; ?></p>
-	<p><strong>Apertura:</strong> S/ <span id="spanApertura" ><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></p>
-	<p><strong>Fecha & Hora:</strong> <?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?></p>
+<div class="col-xs-12 text-center purple-text text-lighten-1">
+	<h4 class="mayuscula"><strong>Cajero: </strong> <?php echo $row['usuNombres']; ?></h4>
 </div>
-<div class="col-xs-12 col-sm-6 text-center">
-	<p></p>
-	<p><strong>Cierre con:</strong> S/ <span id="spanCierrev3" ><?= str_replace(",", '', number_format($row['cuaCierre'],2)); ?></span></p>
-	<p><strong>Fecha & Hora:</strong> <?php if($row['fechaFin']=='0000-00-00 00:00:00'){ echo 'Sin cerrar aún';}else{ $fechaN= new DateTime($row['fechaFin']); echo $fechaN->format('j/n/Y g:i a'); } ?></p>
+<div class="col-xs-12 col-sm-6 text-center purple-text text-lighten-1">
+	<h4>Apertura:</h4>
+	<h4><strong >S/ <span id="spanApertura"><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></strong></h4>
+	<p><?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?></p>
+	<p><strong>Obs.</strong> <span class="mayuscula"><? if($row['cuaObs']==''){echo '-'; }else{echo $row['cuaObs'];} ?></span></p>
+</div>
+<div class="col-xs-12 col-sm-6 text-center purple-text text-lighten-1">
+	<h4>Cierre:</h4>
+	<h4><strong>S/ <span id="spanCierrev3"><?= str_replace(",", '', number_format($row['cuaCierre'],2)); ?></span></strong></h4>
+	<p><?php if($row['fechaFin']=='0000-00-00 00:00:00'){ echo 'Sin cerrar aún';}else{ $fechaN= new DateTime($row['fechaFin']); echo $fechaN->format('j/n/Y g:i a'); } ?></p>
+	<p><strong>Obs.</strong> <span class="mayuscula"><? if($row['cuaObsCierre']==''){echo '-'; }else{echo $row['cuaObsCierre'];} ?></span></p>
 </div>
 <?php if($_COOKIE['ckidUsuario']==$row['idUsuario'] && $row['cuaVigente']==1  ){ ?>
 <div class="col-xs-12 col-sm-6 text-center">
 	
 </div>
+
 <?php } }
 
 

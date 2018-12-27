@@ -224,7 +224,7 @@ display: inline-block;
 				</center>
 			</div>
 			
-			<div class="text-center contenidoCambiante animated " id="primDiv">
+			<div class="text-center contenidoCambiante  " id="primDiv">
 			<?php if( isset($_GET['solicita']) ): ?>
 				<h2>Restablezca su contraseña</h2>
 				<p class="subText">Hola continúe por favor para cambiar su contraseña.</p>
@@ -238,7 +238,7 @@ display: inline-block;
 				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a>
 			</div>
 			<?php if( isset($_GET['solicita']) ): ?>
-			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
+			<div class="contenidoCambiante  container-fluid hidden" id="secDiv">
 				<div class="divF1">
 					<div class="md-input">
 						<input class="md-form-control text-center" type="text" required='' id="txtPrimContra">
@@ -329,8 +329,8 @@ display: inline-block;
 $('#btnEmpezar').click(function() {
 	$('#primDiv').addClass('fadeOut').one(animationEnd, function () {
 		$('#primDiv').addClass('hidden');
-		$('#secDiv').addClass('fadeIn').removeClass('hidden');
-	});;
+		$('#secDiv').removeClass('hidden'); //addClass('fadeIn').
+	});
 });
 var animationEnd = (function(el) {
   var animations = {
