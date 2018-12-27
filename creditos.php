@@ -19,6 +19,7 @@ if ( isset($_GET['credito'])){
 <head>
 	<title>Créditos: PeruCash</title>
 	<?php include "header.php"; ?>
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css?ver=1.0.2">
 </head>
 
 <body>
@@ -336,14 +337,22 @@ if ( isset($_GET['credito'])){
 			<p>Deuda del cliente es:</p>
 			<p>Interés: <strong>S/ <span id="spanMonedaClienteAtras"></span></strong></p>
 			<p>Mora: <strong>S/ <span id="spanMonedaMoraAtras"></span></strong></p>
-			<p class="spanTotal">Total: <strong>S/ <span id="spanMonedaTotalAtras"></span></strong></p>
+			<div class="checkbox checkbox-infocat checkbox-circle">
+				<input id="chkExonerar" class="styled" type="checkbox" >
+				<label for="chkExonerar"> Exonerar mora </label>
+			</div>
+			<div id="divExonerarHid" class="hidden">
+				<p>¿Cuánto de mora pagó el cliente?</p>
+				<input type="number" class="form-control esMoneda text-center inputGrande" value='0.00' id="txtMoraExonerar">
+			</div>
+			<p class="spanTotal">Total: <strong>S/ <span id="spanMonedaTotalAtras" data-value=''></span></strong></p>
 			<p>¿Cuánto pagó el cliente?</p>
 			<input type="number" class="form-control esMoneda text-center inputGrande" value="0.00" id="txtPagaClienteAtras">
 			</div>
 		</div>
-			
 		<div class="modal-footer">
-			<button class="btn btn-danger btn-outline" data-dismiss="modal" id="btnPagarAtras" ><i class="icofont icofont-save"></i> Ingresar pago</button>
+			<div class="divError text-left animated fadeIn hidden" style="margin-bottom: 20px;"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+			<button class="btn btn-danger btn-outline" id="btnPagarAtras" ><i class="icofont icofont-save"></i> Ingresar pago</button>
 		</div>
 	</div>
 	</div>
@@ -386,6 +395,37 @@ $('#btnBuscarCreditoSin').click(function() {
 	});*/
 	} 
 });
+$('#chkExonerar').change(function(){
+	var total = parseFloat($('#spanMonedaTotalAtras').text());
+	if( $('#chkExonerar').prop('checked') ){
+		//var mora= parseFloat($('#spanMonedaMoraAtras').text());
+		$('#spanMonedaMoraAtras').attr('data-mora', $('#spanMonedaMoraAtras').text());
+		//$('#spanMonedaTotalAtras').text((total-mora).toFixed(2));
+		//$('#spanMonedaMoraAtras').text('0.00');
+		
+	}else{
+		$('#spanMonedaMoraAtras').text( $('#spanMonedaMoraAtras').attr('data-mora'));
+		//var mora= parseFloat($('#spanMonedaMoraAtras').text());
+		//$('#spanMonedaTotalAtras').text((total+mora).toFixed(2));
+	}
+	$('#divExonerarHid').toggleClass('hidden');
+	calcularNuevoMora()
+});
+$('#txtMoraExonerar').keyup(function(e) {
+	calcularNuevoMora()
+});
+function calcularNuevoMora() {
+	if( $('#chkExonerar').prop('checked') && ($('#txtMoraExonerar').val()>=0 || $('#txtMoraExonerar').val()=='' ) ){
+		var total = parseFloat($('#spanMonedaClienteAtras').text().replace(',', ''));
+		//var moraNormal = parseFloat($('#spanMonedaMoraAtras').attr('data-mora'));
+		var moraCliente=0;
+		if( $('#txtMoraExonerar').val()!='' ){ moraCliente = parseFloat($('#txtMoraExonerar').val()) }
+		var moraFinal =  total + moraCliente;
+		$('#spanMonedaTotalAtras').text( moraFinal.toFixed(2) );
+		$('#spanMonedaTotalAtras').attr('data-value', moraFinal);
+		$('#txtPagaClienteAtras').val(moraFinal.toFixed(2));
+	}
+}
 <?php if(isset($_GET['recordLibre']) || isset($_GET['recordHoy'])){ ?>
 $("#tblRecordCobro").stupidtable();
 $('.btnCobrarCuota').click(function () {
@@ -411,11 +451,33 @@ $('#btnPagarPuntual').click(function() {
 });
 $('.btnSubsanar').click(function() {
 	var padre = $(this).parent().parent();
-	$('#spanMonedaClienteAtras').text(padre.find('.tdCuotaDebe').text());
+	$('#spanMonedaClienteAtras').text(padre.find('.tdCuotaDebe').text().replace(',',''));
 	$('#spanMonedaMoraAtras').text(padre.find('.tdMoraDebe').text());
+	$('#spanMonedaMoraAtras').attr( 'data-mora', padre.find('.tdMoraDebe').text());
 	$('#spanMonedaTotalAtras').text( parseFloat(parseFloat($('#spanMonedaClienteAtras').text()) + parseFloat($('#spanMonedaMoraAtras').text())).toFixed(2) );
+	$('#spanMonedaTotalAtras').attr( 'data-value', parseFloat(parseFloat($('#spanMonedaClienteAtras').text()) + parseFloat($('#spanMonedaMoraAtras').text())) );
+	$('#txtPagaClienteAtras').val( parseFloat(parseFloat($('#spanMonedaClienteAtras').text()) + parseFloat($('#spanMonedaMoraAtras').text())).toFixed(2) );
 	$('#btnPagarAtras').attr('data-id', padre.find('.tdCobrarId').attr('data-sort-value'));
 	$('.modalPagarAtras').modal('show');
+});
+$('#btnPagarAtras').click(function() {
+	var idPre= $(this).attr('data-id');
+	if( parseFloat($('#txtPagaClienteAtras').val()) > parseFloat($('#spanMonedaTotalAtras').attr('data-value')) ){
+		$('.modalPagarAtras .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser mayor que el pago total.');
+	}else{
+		var mora = 0;
+		if( $('#chkExonerar').prop('checked') ){
+			mora = parseFloat($('#txtMoraExonerar').val());
+		}else{
+			mora = parseFloat($('#spanMonedaMoraAtras').attr('data-mora'));
+		}
+		 $('#txtMoraExonerar').val();
+		$.ajax({url: 'php/pagoCuasiMoraCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteAtras').val(), perdonaMora: $('#chkExonerar').prop('checked'), cuantoPerdona: mora, moraOrigen: $('#spanMonedaMoraAtras').attr('data-mora') }}).done(function(resp) {
+			console.log(resp)
+		});
+		$('.modalPagarAtras .divError').addClass('hidden');
+
+	}
 });
 <?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 

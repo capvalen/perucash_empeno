@@ -46,24 +46,24 @@ a:focus, a:hover { color: #62286f; }
 			</div>
 
 			<div class="container-fluid  ">
-				<p class="pheader col-xs-7"><i class="icofont icofont-filter"></i> Filtros</p>
+				<p class="pheader col-xs-12"><i class="icofont icofont-filter"></i> Filtros</p>
 				<div class="panel panel-default container-fluid ">
-					<div class=" col-xs-12 col-sm-7 ">
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
+							<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
+						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
+					</div>
+					<div class=" col-xs-12 col-sm-6 col-md-4">
 						<div style="padding: 10px;">
 							<p style="color: #a35bb4;">Por: <?php require "php/historialCierres.php"; ?></p>
 							<!-- <p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p> -->
 						</div>
 					</div>
-					<div class="col-xs-12 col-sm-5">
-						<p style="color: #a35bb4;"><strong>Seleccione fecha de reporte:</strong></p>
-							<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para controlar citas">
-						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
-					</div>
 				</div>
 			</div>
 	
 			<div class="container-fluid">
-					<p class="pheader col-xs-7"><i class="icofont icofont-hard-disk"></i> Datos del cuadre</p>
+					<p class="pheader col-xs-12"><i class="icofont icofont-hard-disk"></i> Datos del cuadre</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
 						<!-- <div class="col-xs-12 col-sm-6 text-center">
 							<button class="btn btn-azul btn-outline btn-lg" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar Caja</button>
@@ -131,8 +131,12 @@ a:focus, a:hover { color: #62286f; }
 					</tbody> </table>
 				</div>
 			</div>
-			<div class="container-fluid col-xs-12 text-center">
-				<h4 class="pheader">Efectivo total del día: <strong>S/ <span id="spanResultadoFinal"></span></strong></h4>
+			<div class="container-fluid col-xs-12">
+				<div class="pheader"><h4><i class="icofont icofont-fax"></i> Resumen <strong>S/ <span id="spanResultadoFinal"></span></strong></h4></div>
+				<div class="panel panel-default">
+					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam hic dignissimos animi harum similique. Qui dolor rerum et magnam cupiditate maiores at nihil consectetur deserunt, pariatur fugiat? Quas, repudiandae et.</p>
+				</div>
+				
 			</div>
 	<?php endif; //if de isset ?>
 			<!-- Fin de contenido 2 -->
