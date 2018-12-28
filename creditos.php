@@ -27,6 +27,10 @@ if ( isset($_GET['credito'])){
 <style>
 #contenedorCreditosFluid label{font-weight: 500;}
 #contenedorCreditosFluid p, #contenedorCreditosFluid td {color: #a35bb4;}
+.table a{
+	font-weight: 700;
+	color: #a35bb4;
+}
 .modal p{color: #333;}
 </style>
 <div id="wrapper">
@@ -47,12 +51,12 @@ if ( isset($_GET['credito'])){
 						<div class="col-xs-6 col-sm-3">
 							<input type="text" id="txtBuscarCredito" class="form-control">
 						</div>
-						<div class="col-xs-3">
+						<div class="col-xs-6">
 							<button class="btn btn-primary btn-outline" id="btnBuscarCreditoSin"><i class="icofont icofont-search"></i> Buscar</button>
 							<button class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Lista clientes colocados"><i class="icofont 
-							icofont-users-alt-1"></i></button>
-							<a href="creditos.php?recordHoy" class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Reporte de Morosos (hoy)"><i class="icofont icofont-paper"></i></a>
-							<a href="creditos.php?recordLibre" class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Reporte de cobros libres (hoy)"><i class="icofont icofont-newspaper"></i></a>
+							icofont-users-alt-1"></i> Clientes colocados</button>
+							<a href="creditos.php?recordHoy" class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Reporte de Morosos (hoy)"><i class="icofont icofont-paper"></i> Cobros morosos</a>
+							<a href="creditos.php?recordLibre" class="btn btn-azul btn-outline miToolTip btnSinBorde"  id="btnReporteNewCliente" data-toggle="tooltip" title="Reporte de cobros libres (hoy)"><i class="icofont icofont-newspaper"></i> Cobros libres</a>
 						</div>
 					</div>
 					<div class="row container-fluid hidden" id="rowReporteNewCliente">
@@ -106,7 +110,7 @@ if ( isset($_GET['credito'])){
 						<td><?php if(is_null($row['cuotFechaCancelacion'])): echo 'Pendiente'; else: $fechaNce= new DateTime($rowCr['cuotFechaCancelacion']); echo $fechaNce->format('j/m/Y h:m a'); endif; ?></td>
 						<td> <?= number_format($row['cuotPago'],2); ?></td>
 						<td><?php if($row['cuotPago']=='0.00'):
-							if($hayCaja): ?> <button class="btn btn-azul btn-outline btn-sm btnPagarCuota" data-id="<?= $row['idCuota'];?>"><i class="icofont icofont-money"></i> Pagar</button> <?php 
+							if($hayCaja && in_array($_COOKIE['ckPower'],$soloAdmis)): ?> <button class="btn btn-azul btn-outline btn-sm btnPagarCuota" data-id="<?= $row['idCuota'];?>"><i class="icofont icofont-money"></i> Pagar</button> <?php 
 							else:?>
 							<p>No hay caja abierta</p>
 						<?php endif; else:
@@ -189,7 +193,7 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumaMora=0; $sumMonto=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota-cuotPago),2) as cuotNormal, count(idCuota) as cuotasDebe
+			round(sum(cuotCuota-cuotPago),2) as cuotNormal, count(idCuota) as cuotasDebe, diasDeudaPrestamo(pre.idPrestamo) as diasDeuda
 					FROM `prestamo` pre
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
@@ -203,7 +207,7 @@ if ( isset($_GET['credito'])){
 				<tr><td>No hay datos en ésta fecha</td></tr> <?php
 			}else{
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
-					if($rowCliNow['diasDuda']>0){
+					if($rowCliNow['diasDeuda']>0){
 					$sumaNow+=floatval($rowCliNow['cuotNormal']);
 					$sumaMora+=floatval($rowCliNow['cuotasDebe']);
 					$sumMonto+=floatval($rowCliNow['preCapital']); ?>
@@ -214,8 +218,8 @@ if ( isset($_GET['credito'])){
 						<td><?= number_format($rowCliNow['preCapital'],2);?></td>
 						<td><?= $rowCliNow['modDescripcion'];?></td>
 						<td class="tdCuotaDebe"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
-						<td><?= $rowCliNow['cuotasDebe'];?></td>
-						<td class="tdMoraDebe"><?= number_format($rowCliNow['cuotasDebe']*2,2);?></td>
+						<td><?= $rowCliNow['diasDeuda'];?></td>
+						<td class="tdMoraDebe"><?= number_format($rowCliNow['diasDeuda']*2,2);?></td>
 						<td><button class="btn btn-danger btn-outline btnSinBorde miToolTip btnSubsanar" data-toggle="tooltip" title="Subsanar crédito"><i class="icofont icofont-warning-alt"></i></button></td>
 					</tr>		
 		<?php }} ?>
@@ -248,7 +252,7 @@ if ( isset($_GET['credito'])){
 			<?php
 			$sumaNow=0; $sumLibre=0;
 			$sqlCliNow="SELECT pre.idPrestamo, pre.idCliente, c.cliDni , preCapital, lower(concat( c.cliApellidos, ', ', c.cliNombres)) as cliNombres, c.cliDireccion, modDescripcion,
-			sum(datediff( curdate() , prc.cuotFechaPago )) as diasDuda, round(sum(cuotCuota-cuotPago),2) as cuotNormal
+			round(sum(cuotCuota-cuotPago),2) as cuotNormal, diasDeudaPrestamo(pre.idPrestamo) as diasDeuda
 					FROM `prestamo` pre
 					inner join prestamo_cuotas prc on prc.idPrestamo = pre.idPrestamo
 					inner join Cliente c on c.idCliente = pre.idCliente
@@ -262,7 +266,7 @@ if ( isset($_GET['credito'])){
 				<tr><td>No hay datos en ésta fecha</td></tr> <?php
 			}else{
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
-					if($rowCliNow['diasDuda']==0){
+					if($rowCliNow['diasDeuda']==0){
 						$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
 					<tr>
 						<td class="tdCobrarId" data-sort-value="<?= $rowCliNow['idPrestamo'];?>"><a href="creditos.php?credito=<?= $rowCliNow['idPrestamo'];?>">CR-<?= $rowCliNow['idPrestamo'];?></a></td>
@@ -397,6 +401,7 @@ $('#btnBuscarCreditoSin').click(function() {
 });
 $('#chkExonerar').change(function(){
 	var total = parseFloat($('#spanMonedaTotalAtras').text());
+	$('#txtMoraExonerar').val('0.00');
 	if( $('#chkExonerar').prop('checked') ){
 		//var mora= parseFloat($('#spanMonedaMoraAtras').text());
 		$('#spanMonedaMoraAtras').attr('data-mora', $('#spanMonedaMoraAtras').text());
@@ -465,14 +470,8 @@ $('#btnPagarAtras').click(function() {
 	if( parseFloat($('#txtPagaClienteAtras').val()) > parseFloat($('#spanMonedaTotalAtras').attr('data-value')) ){
 		$('.modalPagarAtras .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser mayor que el pago total.');
 	}else{
-		var mora = 0;
-		if( $('#chkExonerar').prop('checked') ){
-			mora = parseFloat($('#txtMoraExonerar').val());
-		}else{
-			mora = parseFloat($('#spanMonedaMoraAtras').attr('data-mora'));
-		}
-		 $('#txtMoraExonerar').val();
-		$.ajax({url: 'php/pagoCuasiMoraCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteAtras').val(), perdonaMora: $('#chkExonerar').prop('checked'), cuantoPerdona: mora, moraOrigen: $('#spanMonedaMoraAtras').attr('data-mora') }}).done(function(resp) {
+		
+		$.ajax({url: 'php/pagoCuasiMoraCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteAtras').val(), perdonaMora: $('#chkExonerar').prop('checked'), cuantoPerdona: $('#txtMoraExonerar').val() }}).done(function(resp) {
 			console.log(resp)
 		});
 		$('.modalPagarAtras .divError').addClass('hidden');
