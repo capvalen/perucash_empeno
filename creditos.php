@@ -220,7 +220,7 @@ if ( isset($_GET['credito'])){
 						<td class="tdCuotaDebe"><?= number_format($rowCliNow['cuotNormal'],2);?></td>
 						<td><?= $rowCliNow['diasDeuda'];?></td>
 						<td class="tdMoraDebe"><?= number_format($rowCliNow['diasDeuda']*2,2);?></td>
-						<td><button class="btn btn-danger btn-outline btnSinBorde miToolTip btnSubsanar" data-toggle="tooltip" title="Subsanar crédito"><i class="icofont icofont-warning-alt"></i></button></td>
+						<td class="text-center"><button class="btn btn-danger btn-outline btnSinBorde miToolTip btnSubsanar" data-toggle="tooltip" title="Subsanar crédito"><i class="icofont icofont-warning-alt"></i></button></td>
 					</tr>		
 		<?php }} ?>
 				<tfoot>
@@ -467,16 +467,23 @@ $('.btnSubsanar').click(function() {
 });
 $('#btnPagarAtras').click(function() {
 	var idPre= $(this).attr('data-id');
+	pantallaOver(true);
 	if( parseFloat($('#txtPagaClienteAtras').val()) > parseFloat($('#spanMonedaTotalAtras').attr('data-value')) ){
 		$('.modalPagarAtras .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser mayor que el pago total.');
 	}else{
-		
-		$.ajax({url: 'php/pagoCuasiMoraCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteAtras').val(), perdonaMora: $('#chkExonerar').prop('checked'), cuantoPerdona: $('#txtMoraExonerar').val() }}).done(function(resp) {
-			console.log(resp)
+		$.ajax({url: 'php/pagoCuasiMoraCompleto.php', type: 'POST', data: { idPre: idPre, dinero: $('#txtPagaClienteAtras').val(), perdonaMora: $('#chkExonerar').prop('checked'), cuantoPerdona: $('#txtMoraExonerar').val() }}).done(function(resp) { console.log( resp );
+			if(resp==true){
+				$('.tdCobrarId[data-sort-value="'+idPre+'"]').parent().find('.btnSubsanar').parent().html(`<span class="light-green-text text-darken-1"><i class="icofont icofont-check"></i></span>`);
+				$('.modalPagarAtras').modal('hide');
+				pantallaOver(false);
+			}
 		});
 		$('.modalPagarAtras .divError').addClass('hidden');
-
 	}
+});
+$('.modalPagarAtras').on('shown.bs.modal', function () { 
+	$('#chkExonerar').prop('checked', false);
+	$('#txtMoraExonerar').val('0.00');
 });
 <?php } ?>
 $('#txtBuscarCredito').keypress(function (e) { 

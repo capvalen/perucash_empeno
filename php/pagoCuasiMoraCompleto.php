@@ -29,24 +29,24 @@ if($log=$conection->query($sql)){
 	order by prc.cuotFechaPago asc
    limit 1";
 	$resultadoMoraCalc=$cadena->query($sqlMoraCalc);
-	while($rowMoraCalc=$resultadoMoraCalc->fetch_assoc()){ 
+	while($rowMoraCalc=$resultadoMoraCalc->fetch_assoc()){
 		$moraTotal = floatval($rowMoraCalc['diasDeuda'])*$precioMora;
 		$moraFuera = floatval($moraTotal-$_POST['cuantoPerdona']);
 		$moraPaga = $_POST['cuantoPerdona'];
 		
-
-		if( $_POST['perdonaMora'] ){ //Si Perdona
+		if( $_POST['perdonaMora']=='true' ){ //Si Perdona
 			//Cancelar una parte de Mora reducida por post
 			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
 			(null,0,84,now(),{$moraPaga},'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>Mora Exonerada: S/ {$moraFuera}</span>',1,{$_COOKIE['ckidUsuario']},0);";
-			$esclavo->query($sqlMoraVerif);
+			$dinero = $dinero-$moraPaga;
 		}else{ //No Perdona ->Cobra todo
 			//Cancelar toda la mora.
 			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
 			(null,0,83,now(),{$moraTotal},'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
-			$esclavo->query($sqlMoraVerif);
+			$dinero = $dinero-$moraTotal;
 		} 
-		$dinero = $dinero-$moraPaga;
+		//echo $sqlMoraVerif;
+		$esclavo->query($sqlMoraVerif);
 	}
 
 	
@@ -91,7 +91,7 @@ if($log=$conection->query($sql)){
 		where `idPrestamo`={$_POST['idPre']}";
 		$resultadoPres=$cadena->query($sqlPres);
 	} 
-	//echo true;
+	echo true;
 }else{
 	echo "hubo un error";
 }

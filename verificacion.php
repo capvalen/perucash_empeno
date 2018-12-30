@@ -29,11 +29,11 @@
 				<thead>
 					<tr>
 						<th>N° Ticket</th>
-						<th>Usuario</th>
+						<th class="hidden">Hora</th>
 						<th>Tipo de transacción</th>
-						<th>Monto</th>
-						<th>Producto</th>
 						<th>Observaciones</th>
+						<th>Monto</th>
+						<th>Usuario</th>
 						<th>@</th>
 					</tr>
 				</thead>
@@ -51,11 +51,11 @@
 				<thead>
 					<tr>
 						<th>N° Ticket</th>
-						<th>Usuario</th>
+						<th>Hora</th>
 						<th>Tipo de transacción</th>
 						<th>Monto</th>
-						<th>Producto</th>
 						<th>Observaciones</th>
+						<th>Usuario</th>
 					</tr>
 				</thead>
 				<tbody>
