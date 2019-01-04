@@ -160,7 +160,7 @@ a:focus, a:hover{color: #782786;}
 			idPrestamo, preCapital, prePorcentaje, preFechaInicio, tp.tipoDescripcion, prePlazo, tp.tipColorMaterial
 			FROM `prestamo` pre 
 			inner join tipoProceso tp on tp.idTipoProceso = pre.preIdEstado
-			where idCliente = {$_GET['idCliente']};";
+			where idCliente = {$_GET['idCliente']} and preidEstado in (78,82);";
 //			echo $sqlCreds;
 			$resultadoCreds=$cadena->query($sqlCreds);
 			$filas = $resultadoCreds->num_rows;
