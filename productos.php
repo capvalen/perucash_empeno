@@ -1,6 +1,7 @@
 <?php // session_start();
 date_default_timezone_set('America/Lima');
 require("php/conkarl.php");
+require "php/variablesGlobales.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -152,7 +153,7 @@ $cochera=0;
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
-                        <li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
+								<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
 					  </ul>
 					</div>
 				</div>
@@ -163,13 +164,13 @@ $cochera=0;
 					$cantImg=0; ?>
 					<div class="flexslider">
 						<ul class="slides">
-						   <?php 
+							<?php 
 								foreach($ficheros as $archivo){
 									$cantImg++;/*".$directorio."/".$archivo."*/
 									if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-								        /*echo $directorio."/".$archivo;*/
-								        echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
-								    }
+										  /*echo $directorio."/".$archivo;*/
+										  echo "<li><a href='".$directorio."/".$archivo."' data-lightbox='image-1'><img src='".$directorio."/".$archivo."' class='img-responsive' ></a></li>";
+									 }
 								}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 							?>
 						</ul>
@@ -354,7 +355,7 @@ $cochera=0;
 							?>
 						<ul>
 							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 || $_COOKIE['ckPower']==8 ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
-							<li>Tiempo de intereses: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span></li>
+							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if( in_array($_COOKIE['ckPower'], $admis)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? }?></li>
 						<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
 							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
@@ -421,7 +422,7 @@ $cochera=0;
 								<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Tipo Pago <i class="icofont icofont-expand-alt"></i></th><th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
 							</tr></thead>
 							<tbody>
-							<tr>
+							<tr class="hidden">
 								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
@@ -432,7 +433,7 @@ $cochera=0;
 								where idProducto=".$_GET['idProducto']." and cajaActivo =1 order by cajaFecha asc;");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
-								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-ui-clip-board'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td> <td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td><td class="tdObservacion"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-edit'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php 
 							$i++;
@@ -561,7 +562,7 @@ $cochera=0;
 					<!-- Fin de pestaña interior 05 -->
 					</div>
 				<!-- Fin de tab content -->
-            	</div>
+					</div>
 			</div>
 		</div>
 		
@@ -829,7 +830,28 @@ $cochera=0;
 		</div>
 	</div>
 </div>
-<?php } ?>
+<?php } //fin de if power ?>
+
+<? if( in_array($_COOKIE['ckPower'], $admis)){ ?>
+<!--Modal Para asignar nuevo capital al prestamo-->
+<div class="modal animated fadeIn " id="modalUpdateFechaInt" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-morado">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Nueva fecha</h4>
+			</div>
+			<div class="modal-body">
+				<p>Seleccione una nueva para para cambiar el cálculo de intereses</p>
+				<input type="text" class="form-control text-center inputGrande" id="txtNuevoFechaInt">
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-morado btn-outline" data-dismiss="modal" id="btnActualizarFechaInt" ><i class="icofont icofont-check"></i> Actualizar</button>
+		</div>
+		</div>
+	</div>
+</div>
+<? } //fin de if solo admis ?>
 
 
 <!--Modal Para asignar nuevo estado al producto-->
@@ -873,8 +895,8 @@ $cochera=0;
 						{
 							$cantImg++;/*".$directorio."/".$archivo."*/
 							if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-						      echo "<div class='col-xs-6 col-md-3  divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
-						    }
+								echo "<div class='col-xs-6 col-md-3  divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
+							 }
 						}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
 						}
 						echo '<div class="col-xs-6 col-md-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
@@ -931,6 +953,12 @@ $('#dtpFechaPago').bootstrapMaterialDatePicker({
 	nowButton : true,
 	switchOnClick : true,
 	okText: 'Aceptar', nowText: 'Hoy'
+});
+$('#txtNuevoFechaInt').val(moment().format('DD/MM/YYYY'));
+$('#txtNuevoFechaInt').datepicker({
+    format: "dd/mm/yyyy",
+    language: "es",
+    autoclose: true
 });
 $('#sltEstantes').on('changed.bs.select', function (e) {
  	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); console.log( id );
@@ -1451,7 +1479,7 @@ $('#btnUpdateCajaMaestra').click(function() {
 });
 <?php } ?>
 
-<?php  if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==9){ ?>
+<?php  if(in_array($_COOKIE['ckPower'], $admis) ){ ?>
 $('#btnChangeCapital').click(function() {
 	$('#txtNuevoCapital').val( $('#spanCapitalDefault').text() );
 	$('.modal-nuevoCapital').modal('show');
@@ -1464,6 +1492,18 @@ $('#btnActualizarCapital').click(function() {
 		//console.log(resp)
 		if( resp==true){ location.reload(); }
 	});
+});
+$('#btnChangeFechaInt').click(function() {
+	$('#modalUpdateFechaInt').modal('show');
+});
+$('#btnActualizarFechaInt').click(function() {
+	if( $('#txtNuevoFechaInt').val()!='' ){
+		pantallaOver(true);
+		$.ajax({url: 'php/updateFechaInteresProducto.php', type: 'POST', data: { newFecha: moment($('#txtNuevoFechaInt').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) {
+			//console.log(resp)
+			location.reload();
+		});
+	}
 });
 <?php }?>
 $('#btnGuardarCubicaje').click( ()=> {

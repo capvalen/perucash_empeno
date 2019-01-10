@@ -233,6 +233,32 @@ a:focus, a:hover { color: #62286f; }
 	</div>
 </div>
 </div>
+
+<!-- Modal para Cambiar entrada de caja  -->
+<div class="modal fade" id="modalCambiarEntradaCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-warning">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cierre de caja</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<p>¿Qué monto deseas poner en la apertura?</p>
+				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoChangeApertura" value="0.00">
+				<p>¿Alguna observación extra?</p>
+				<input type="text" class="form-control input-lg text-center inputGrande" id="txtObsChangeApertura" autocomplete="off">
+			</div>
+		</div>
+		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
+		<div class="modal-footer">
+			<button class="btn btn-warning btn-outline" id="btnUpdateApertura"><i class="icofont icofont-save"></i> Guardar</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-cajaMaestra" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
@@ -508,6 +534,15 @@ $('#btnUpdateCajaMaestra').click(function() {
 			location.reload();
 		}
 	});
+});
+
+<?php }
+if( in_array( $_COOKIE['ckPower'], $soloDios)){ ?>
+$('#btnCambiarApertura').click(function() {
+	$('#modalCambiarEntradaCaja').modal('show');
+});
+$('#btnUpdateApertura').click(function() {
+	
 });
 <?php } ?>
 

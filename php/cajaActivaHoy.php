@@ -1,5 +1,6 @@
 <?php 
 require("conkarl.php");
+require "variablesGlobales.php";
 date_default_timezone_set('America/Lima');
 
 $hayCaja= require_once("comprobarCajaHoy.php");
@@ -80,7 +81,7 @@ if( isset($_GET['cuadre']) ){ ?>
 	<h4 class="mayuscula"><strong>Cajero: </strong> <?php echo $row['usuNombres']; ?></h4>
 </div>
 <div class="col-xs-12 col-sm-6 text-center purple-text text-lighten-1">
-	<h4>Apertura:</h4>
+<h4>Apertura: <? if( in_array($_COOKIE['ckPower'], $admis) ): ?> <button class="btn btn-infocat btn-outline btn-xs" id="btnCambiarApertura"><i class="icofont icofont-cube"></i> Cambiar</button> <? endif;?> </h4>
 	<h4><strong >S/ <span id="spanApertura"><?= str_replace(",", '', number_format($row['cuaApertura'],2)); ?></span></strong></h4>
 	<p><?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('j/n/Y g:i a'); ?></p>
 	<p><strong>Obs.</strong> <span class="mayuscula"><? if($row['cuaObs']==''){echo '-'; }else{echo $row['cuaObs'];} ?></span></p>

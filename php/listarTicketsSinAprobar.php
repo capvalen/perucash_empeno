@@ -25,7 +25,7 @@ while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC)){
 		<td>T-<?= $row['idTicket'];?></td>
 		<td class="hidden"><? $fNew = new DateTime($row['cajaFecha']); echo $fNew->format('h:i a');?></td>
 		<td><?= $row['tipoDescripcion'];?></td>
-		<td><?= $row['cajaObservacion'];?></td>
+		<td class=""><?= $row['cajaObservacion'];?></td>
 		<td><?= number_format($row['cajaValor'],2);?></td>
 		<td><?= $row['usuNombres'];?></td>
 		<td data-ticket="<?= $row['idTicket'];?>"> <button class="btn btn-infocat btn-outline btnAprobarTicketCredito"><i class="icofont icofont-thumbs-up"></i> Aprobar</button> <button class="btn btn-danger btn-outline btnDesaprobarTicketCredito"><i class="icofont icofont-thumbs-down"></i> Denegar</button> </td>
