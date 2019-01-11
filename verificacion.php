@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php session_start();
+include 'php/variablesGlobales.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -37,14 +39,11 @@
 						<th>@</th>
 					</tr>
 				</thead>
-				<tbody>
-				
 			<?php
 				//if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 ){
 					include "php/listarTicketsSinAprobar.php";
 				//}
 			?>
-				</tbody>
 			</table>
 			<h4 class="purple-text text-lighten-1">Tickets rechazados</h4>
 			<table class="table table-hover table-responsive">
@@ -227,6 +226,16 @@ $('.btnEditTicket').click(function () {
 
 	$('.modal-modificarTicket').modal('show');
 });
+<?php 
+if( in_array( $_COOKIE['ckPower'], $admis ) ){ ?>
+$('.btnAprobarTicketCredito').click(function() {
+	var ticket = $(this).parent().attr('data-ticket');
+	$.ajax({url: 'php/updateTicketAprove.php', type: 'POST', data: { ticket: ticket  }}).done(function(resp) {
+		console.log(resp)
+	});
+});
+<?php  }
+?>
 $('#btnEditTicketModal').click(function () {
 	var observa='';
 	if($('#txtTckOtraObs').val()!==''){
@@ -303,6 +312,7 @@ $('#btnAceptarPago').click( ()=> {
 		}
 	});
 });
+
 </script>
 <?php } ?>
 </body>

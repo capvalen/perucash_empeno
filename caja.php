@@ -240,20 +240,20 @@ a:focus, a:hover { color: #62286f; }
 	<div class="modal-content">
 		<div class="modal-header-warning">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cierre de caja</h4>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cambiar apertura de caja</h4>
 		</div>
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row">
 				<p>¿Qué monto deseas poner en la apertura?</p>
-				<input type="number" class="form-control input-lg text-center esDecimal" id="txtMontoChangeApertura" value="0.00">
+				<input type="number" class="form-control input-lg text-center esDecimal inputGrande" id="txtMontoChangeApertura" value="0.00">
 				<p>¿Alguna observación extra?</p>
-				<input type="text" class="form-control input-lg text-center inputGrande" id="txtObsChangeApertura" autocomplete="off">
+				<input type="text" class="form-control input-lg text-center mayuscula" id="txtObsChangeApertura" autocomplete="off">
 			</div>
 		</div>
 		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
 		<div class="modal-footer">
-			<button class="btn btn-warning btn-outline" id="btnUpdateApertura"><i class="icofont icofont-save"></i> Guardar</button>
+			<button class="btn btn-warning btn-outline" id="btnUpdateApertura"><i class="icofont icofont-save"></i> Actualizar</button>
 		</div>
 	</div>
 	</div>
@@ -542,7 +542,11 @@ $('#btnCambiarApertura').click(function() {
 	$('#modalCambiarEntradaCaja').modal('show');
 });
 $('#btnUpdateApertura').click(function() {
-	
+	if( $('#txtMontoChangeApertura').val()>=0 ){
+		$.ajax({url: 'php/updateAperturaCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>'; nueVal: $('#txtMontoChangeApertura').val(), nueObs: $('#txtMontoChangeApertura').val() }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
 });
 <?php } ?>
 

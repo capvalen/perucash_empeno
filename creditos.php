@@ -350,7 +350,7 @@ if ( isset($_GET['credito'])){
 				<input type="number" class="form-control esMoneda text-center inputGrande" value='0.00' id="txtMoraExonerar">
 			</div>
 			<p class="spanTotal">Total: <strong>S/ <span id="spanMonedaTotalAtras" data-value=''></span></strong></p>
-			<p>¿Cuánto pagó el cliente?</p>
+			<p>¿Cuánto del interés paga el cliente?</p>
 			<input type="number" class="form-control esMoneda text-center inputGrande" value="0.00" id="txtPagaClienteAtras">
 			</div>
 		</div>
@@ -483,6 +483,7 @@ $('#btnPagarAtras').click(function() {
 });
 $('.modalPagarAtras').on('shown.bs.modal', function () { 
 	$('#chkExonerar').prop('checked', false);
+	$('#divExonerarHid').addClass('hidden');
 	$('#txtMoraExonerar').val('0.00');
 });
 <?php } ?>
