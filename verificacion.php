@@ -1,4 +1,5 @@
 <?php session_start();
+date_default_timezone_set('America/Lima');
 include 'php/variablesGlobales.php';
 ?>
 <!DOCTYPE html>
@@ -45,7 +46,7 @@ include 'php/variablesGlobales.php';
 				//}
 			?>
 			</table>
-			<h4 class="purple-text text-lighten-1">Tickets rechazados</h4>
+			<!-- <h4 class="purple-text text-lighten-1">Tickets rechazados</h4>
 			<table class="table table-hover table-responsive">
 				<thead>
 					<tr>
@@ -58,9 +59,9 @@ include 'php/variablesGlobales.php';
 					</tr>
 				</thead>
 				<tbody>
-					<?php include "php/listarTicketsNoAprobado.php"; ?> 
+					<?php /* include "php/listarTicketsNoAprobado.php"; */ ?> 
 				</tbody>
-			</table>
+			</table> -->
 
 			
 			<!-- Fin de contenido principal -->
@@ -229,9 +230,16 @@ $('.btnEditTicket').click(function () {
 <?php 
 if( in_array( $_COOKIE['ckPower'], $admis ) ){ ?>
 $('.btnAprobarTicketCredito').click(function() {
+	pantallaOver(true);
 	var ticket = $(this).parent().attr('data-ticket');
 	$.ajax({url: 'php/updateTicketAprove.php', type: 'POST', data: { ticket: ticket  }}).done(function(resp) {
-		console.log(resp)
+		pantallaOver(false);
+		if(resp=='1'){
+			location.reload();
+		}else{
+			$('#spanMalo').text(resp);
+			$('.modal-GuardadoError').modal('show');
+		}
 	});
 });
 <?php  }

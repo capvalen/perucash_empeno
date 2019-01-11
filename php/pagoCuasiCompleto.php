@@ -17,7 +17,7 @@ if($log=$conection->query($sql)){
    if($debe == $dinero ){
       // cambiar estado pagado # 81
       $sqlCuotaVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
-      (null,0,81,now(),$dinero,'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
+      (null,0,81,now(),$dinero,'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
       $sqlPagar="UPDATE `prestamo_cuotas` SET
       `cuotFechaCancelacion` = now(),
       `cuotPago` = $dinero,
@@ -29,7 +29,7 @@ if($log=$conection->query($sql)){
    }else if( $dinero <= $debe ){
       // cambiar estado semi pago #33
       $sqlCuotaVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
-      (null,0,81,now(),$dinero,'<a href=creditos.php={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
+      (null,0,81,now(),$dinero,'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
       $sqlPagar="UPDATE `prestamo_cuotas` SET
       `cuotFechaCancelacion` = now(),
       `cuotPago` = $dinero,

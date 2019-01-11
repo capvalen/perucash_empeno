@@ -5,7 +5,7 @@ require("conkarl.php");
 $sql = mysqli_query($conection,"SELECT t.*, u.usuNombres, tp.tipoDescripcion FROM `tickets` t
 inner join usuario u on u.idUsuario = t.idUsuario
 inner join tipoProceso tp on tp.idTipoProceso = t.idTipoProceso
-where  date_format(t.cajaFecha, '%Y-%m-%d') = curdate() or t.idTipoProceso in (33, 81, 84)
+where  date_format(t.cajaFecha, '%Y-%m-%d') = curdate() and t.idTipoProceso in (33, 81, 84)
 and cajaActivo in (0, 1) and idAprueba=0
 order by idTicket asc;"); //call listarTicketsSinAprobar('".date("Y-m-d")."')
 
