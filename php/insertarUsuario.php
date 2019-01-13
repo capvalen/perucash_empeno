@@ -1,17 +1,14 @@
 <?php 
-session_start();
-include 'conkarl.php';
 header('Content-Type: text/html; charset=utf8');
-
-
-$sql= "call insertarUsuario ('".$_POST['nombre']."','".$_POST['apellido']."','".$_POST['nick']."','".$_POST['passw']."', ".$_POST['nivel']." , ".$_POST['sucursal'].")";
-
+require("conkarl.php");
+$sql= "call insertarUsuario ('".$_POST['nombres']."', '".$_POST['apellidos']."', '".$_POST['nick']."', '".$_POST['pass']."', ".$_POST['poder']." );";
 //echo $sql;
-$conection->query($sql);
+if ($llamadoSQL = $conection->query($sql)) { //Ejecución mas compleja con retorno de dato de sql del procedure.
 	/* obtener el array de objetos */
-	
-		echo 1; //Retorna los resultados via post del procedure
-	
+	while ($resultado = $llamadoSQL->fetch_row()) {
+		echo $resultado[0]; //Retorna los resultados via post del procedure
+	}
 	/* liberar el conjunto de resultados */
-
- ?>
+	$llamadoSQL->close();
+}else{echo '0';}
+?>

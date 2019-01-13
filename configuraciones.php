@@ -48,6 +48,7 @@ include 'php/conkarl.php'; ?>
 			<h2 class="purple-text text-lighten-1">Configuración de usuarios</h2>
 			<div class="panel panel-default">
 				<div class="panel-body">
+				<button class="btn btn-azul btn-outline" id="btnAgregarNuevoUsuario"><i class="icofont icofont-ui-add"></i> Agregar nuevo usuario</button>
 					<table class='table'>
 					<caption>Listado de todos los usuarios registrados</caption>
 					<thead>
@@ -97,8 +98,46 @@ include 'php/conkarl.php'; ?>
 			</div>
 		</div>
 </div>
-<!-- /#page-content-wrapper -->
+</div> <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
+
+<!-- Modal para agregar producto nuevo a la BD -->
+<div class="modal fade" id="modalAddUserBD" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-infocat">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Agregar nuevo usuario</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<label for="">Apellidos:</label> <input type="text" class="form-control text-center mayuscula" id="txtModalApellidUser">
+				<label for="">Nombres:</label>
+				<input type="text" class="form-control text-center mayuscula" id="txtModalNombUser">
+				<!-- <label for="">D.N.I.:</label>
+				<input type="text" class="form-control text-center mayuscula" id="txtModalDniUser"> -->
+				<label for="">Nick: </label> <span id="spanRespDuplicado"></span>
+				<input type="text" class="form-control text-center" id="txtModalNickUser">
+				<label for="">Contraseña.:</label>
+				<input type="text" class="form-control text-center" id="txtModalPassUser">
+				<label for="">Nivel:</label>
+				<div  id="divSelectNivelListNew">
+					<select class="selectpicker mayuscula" title="Nivel de usuario..."  data-width="100%" data-live-search="true">
+						<?php require 'php/listarNivelesOption.php'; ?>
+					</select>
+				</div>
+			</div>
+			</div>
+			<label class="red-text text-darken-1 labelError hidden" for=""><i class="icofont icofont-animal-squirrel"></i> Lo siento! <span class=mensaje></span></label>
+		</div>
+		
+		<div class="modal-footer">
+			<button class="btn btn-infocat btn-outline" id="btnGuardarAddUser"><i class="icofont icofont-save"></i> Guardar</button>
+		</div>
+	</div>
+</div>
+</div>
 
 
 
@@ -163,6 +202,31 @@ $('.sltActivo').change(function() {
 	}}).done(function(resp) {
 		console.log(resp)
 	});
+});
+$('#btnAgregarNuevoUsuario').click(function() {
+	$('#modalAddUserBD').modal('show');
+});
+$('#txtModalNickUser').focusout(function () {
+	
+	$.ajax({url: 'php/contarNickRepetidos.php', type: 'POST', data: { texto:$('#txtModalNickUser').val()  }}).done(function(resp) {
+		console.log(resp)
+		$('#spanRespDuplicado').html(resp);
+	});
+});
+$('#btnGuardarAddUser').click(function () {
+	var idNivel=$('#divSelectNivelListNew').find('li.selected a').attr('data-tokens');// console.log(idNivel)
+	if($('#txtModalApellidUser').val()==''){$('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe ingresar los apellidos.');}
+	else if($('#txtModalNombUser').val()==''){$('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe ingresar los nombres.');}
+	/*else if($('#txtModalDniUser').val()==''){$('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe ingresar un Dni.');}*/
+	else if($('#txtModalNickUser').val()==''){$('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe ingresar un nick para iniciar sesión.');}
+	else if($('#txtModalPassUser').val()==''){$('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe ingresar una contraseña.');}
+	else if(idNivel === null || idNivel === undefined  ){ $('.modal-addUserBD .labelError').removeClass('hidden').find('.mensaje').text('Debe selecionar un nivel.');}
+	else{
+		$('.modal-addUserBD .labelError').addClass('hidden');
+		$.ajax({url:'php/insertarUsuario.php', type:'POST', data:{nombres:$('#txtModalNombUser').val(), apellidos:$('#txtModalApellidUser').val(), nick: $('#txtModalNickUser').val(), pass: $('#txtModalPassUser').val(), poder: idNivel }}).done(function (resp) { console.log(resp)
+			if(resp>0){ location.reload();/* window.location.href = 'usuarios.php'; */}
+		});
+	}
 });
 </script>
 <?php } ?>

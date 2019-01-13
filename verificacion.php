@@ -242,6 +242,19 @@ $('.btnAprobarTicketCredito').click(function() {
 		}
 	});
 });
+$('.btnDesaprobarTicketCredito').click(function() {
+	pantallaOver(true);
+	var ticket = $(this).parent().attr('data-ticket');
+	$.ajax({url: 'php/updateDenyTicket.php', type: 'POST', data: { ticket: ticket  }}).done(function(resp) {
+		pantallaOver(false);
+		if(resp=='1'){
+			location.reload();
+		}else{
+			$('#spanMalo').text(resp);
+			$('.modal-GuardadoError').modal('show');
+		}
+	});
+});
 <?php  }
 ?>
 $('#btnEditTicketModal').click(function () {
@@ -296,6 +309,7 @@ $('#btnAcceptTicketModal').click(function () {
 		}
 	});
 });
+
 $('.btnCobrarTicket').click(function() {
 	var padre = $(this).parent().parent();
 	var idTick= padre.attr('data-id');

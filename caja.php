@@ -54,8 +54,8 @@ a:focus, a:hover { color: #62286f; }
 						<!--<div class="sandbox-container"><input id="dtpFechaIniciov3" type="text" class="form-control text-center inputConIco" placeholder="" style="color: #a35bb4;" autocomplete="off"> <span class="icoTransparent"><i class="icofont icofont-caret-down"></i></span></div> -->
 					</div>
 					<div class=" col-xs-12 col-sm-6 col-md-4">
-						<div style="padding: 10px;">
-							<p style="color: #a35bb4;">Por: <?php require "php/historialCierres.php"; ?></p>
+						<div>
+              <p style="color: #a35bb4;"><strong>Por:</strong> </p> <?php require "php/historialCierres.php"; ?>
 							<!-- <p style="color: #a35bb4;">Fecha: <strong id="strFechaAhora"></strong></p> -->
 						</div>
 					</div>
@@ -134,7 +134,7 @@ a:focus, a:hover { color: #62286f; }
 			<div class="container-fluid col-xs-12">
 				<div class="pheader"><h4><i class="icofont icofont-fax"></i> Resumen <strong>S/ <span id="spanResultadoFinal"></span></strong></h4></div>
 				<div class="panel panel-default">
-					<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam hic dignissimos animi harum similique. Qui dolor rerum et magnam cupiditate maiores at nihil consectetur deserunt, pariatur fugiat? Quas, repudiandae et.</p>
+					<p class="hidden">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam hic dignissimos animi harum similique. Qui dolor rerum et magnam cupiditate maiores at nihil consectetur deserunt, pariatur fugiat? Quas, repudiandae et.</p>
 				</div>
 				
 			</div>
@@ -543,7 +543,7 @@ $('#btnCambiarApertura').click(function() {
 });
 $('#btnUpdateApertura').click(function() {
 	if( $('#txtMontoChangeApertura').val()>=0 ){
-		$.ajax({url: 'php/updateAperturaCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>'; nueVal: $('#txtMontoChangeApertura').val(), nueObs: $('#txtMontoChangeApertura').val() }}).done(function(resp) {
+		$.ajax({url: 'php/updateAperturaCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>', nueVal: $('#txtMontoChangeApertura').val(), nueObs: $('#txtMontoChangeApertura').val() }}).done(function(resp) {
 			console.log(resp)
 		});
 	}
