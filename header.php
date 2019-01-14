@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/bootstrap-datepicker3.css">
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
 <link rel="stylesheet" href="css/animate.css" >
+<link rel="stylesheet" href="css/icocat.css" >
 
 <link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.3" />
 <link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->

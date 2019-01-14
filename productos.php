@@ -28,6 +28,7 @@ if( isset($_GET['idProducto'])){
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}
 	$sqlComrpa->close();
+	$filas = mysqli_num_rows($sql);
 }
 /*Días para tener en cuenta*/
 $iniGracia=0;
@@ -144,6 +145,7 @@ $cochera=0;
 	<div class="row continer-fluid">
 		<div class="col-xs-12 contenedorDeslizable contenedorDatosCliente ">
 		<!-- Empieza a meter contenido 2.1 -->
+		<? if($filas >0):?>
 			<div class="container row" style="margin-bottom: 20px;">
 				<div class="divBotonesEdicion" style="margin-bottom: 10px">
 					<div class="btn-group">
@@ -564,15 +566,16 @@ $cochera=0;
 				<!-- Fin de tab content -->
 					</div>
 			</div>
-		</div>
+            <? else:
+            ?> <h4 class="purple-text text-lighten-1"> <i class="icofont icofont-animal-cat-alt-4"></i> Éste código no pertenece a ningún producto en la Base de datos.</h4> <?
+            endif; //fin de if de $filas >=0 ?>
+		</div> <!-- contenedorDeslizable -->
 		
 	</div>
 </div>
-<!-- /#page-content-wrapper -->
+</div> <!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
-
-</div>
 
 <!--Modal Para insertar ticket de venta a BD-->
 <div class="modal fade modal-ticketZonaIntereses noselect" tabindex="-1" role="dialog">
@@ -910,7 +913,7 @@ $cochera=0;
 		</div>
 	</div>
 </div>
-</div>
+
 
 <?php include 'footer.php'; ?>
 <script type="text/javascript" src="js/jquery.flexslider.js"></script>
@@ -1542,6 +1545,7 @@ $('.modal-GuardadoCorrecto').modal('show');
 <?php  } ?>
 
 <?php } ?>
+
 </body>
 
 </html>

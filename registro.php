@@ -531,7 +531,7 @@ $('#btnGuardarDatos').click(function () {
 });
 $('#txtBuscarNivelGod').keyup(function (e) {
 	var valor= $(this).val();
-    if(code==13){
+    if(e.keyCode==13){
     	e.preventDefault();
     	if($.isNumeric(valor)){
     		//Buscar código interno, DNI's, celulares o teléfonos

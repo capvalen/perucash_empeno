@@ -131,6 +131,7 @@ $('#txtBuscarNivelGod').keypress(function (e) {
 					</div>`);
 			});*/
 			$('.modal-mostrarResultadosProducto').modal('show');
+			$('.mitooltip').tooltip();
 			});
 			}
 		}

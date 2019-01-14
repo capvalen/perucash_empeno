@@ -98,7 +98,7 @@
 <div class="modal fade modal-mostrarResultadosProducto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-lg" role="document">
 	<div class="modal-content">
-		<div class="modal-header-indigo">
+		<div class="modal-header-indigo" style="background-color: #6C5BBB;">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Resultados de la búsqueda</h4>
 		</div>
@@ -113,7 +113,7 @@
 			</div>
 			
 		</div>
-		<div class="modal-footer"> <button class="btn btn-primary btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Aceptar</button></div>
+		<div class="modal-footer hidden"> <button class="btn btn-primary btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Aceptar</button></div>
 	</div>
 	</div>
 </div>
