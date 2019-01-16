@@ -356,8 +356,8 @@ $cochera=0;
 
 							?>
 						<ul>
-							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==9 || $_COOKIE['ckPower']==8 ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
-							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if( in_array($_COOKIE['ckPower'], $admis)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? }?></li>
+							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if( in_array($_COOKIE['ckPower'], $soloDios) ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
+							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? }?></li>
 						<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
 							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>

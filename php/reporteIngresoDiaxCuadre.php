@@ -21,7 +21,7 @@ if($totalRow==0){
 		<tr data-id="<?= $row['idCaja']; ?>" data-activo="<?= $row['cajaActivo']; ?>"> <th scope='row'><a href='productos.php?idProducto=<?= $row['idProducto'];?>#tabMovEstados'>#<?= $row['idProducto'];?></a> </th> <td class='mayuscula'><?= $row['tipopDescripcion'].' '. $row['prodNombre'];?></td> <td class='mayuscula tpIdDescripcion'><?= $row['tipoDescripcion'];?></td> <td><i class="icofont icofont-bubble-right"></i> <em><?= $row['usuNick'];?></em></td> <td>S/ <span class='spanCantv3'><?= $row['pagoMonto'];?></span></td> <td class='mayuscula tdMoneda' data-id="<?= $row['cajaMoneda'];?>" ><?= $row['moneDescripcion'];?></td> <td class='mayuscula tdObservacion'><?= $row['cajaObservacion'];?></td> <td><span class="sr-only fechaPagov3"><?= $row['cajaFecha']; ?></span> <?= $boton; ?></td> </tr>
 		<?php 
 		if($totalRow==$i){
-			echo '<tr> <th scope="row"  style="border-top: transparent;"></th> <td style="border-top: transparent;"></td> <td style="border-top: transparent;"></td> <td class="text-center" style="border-top: 1px solid #989898; color: #636363"><strong >Total</strong></td> <td style="border-top: 1px solid #989898; color: #636363"><strong >S/. <span id="strSumaEntrada">'.number_format(round($sumaIngr,1,PHP_ROUND_HALF_UP),2, ',', '').'</span></strong></td><tr>';
+			echo '<tr> <th scope="row"  style="border-top: transparent;"></th> <td style="border-top: transparent;"></td> <td style="border-top: transparent;"></td> <td class="text-center" style="border-top: 1px solid #989898; color: #636363"><strong >Total</strong></td> <td style="border-top: 1px solid #989898; color: #636363"><strong >S/ <span id="strSumaEntrada">'.number_format(round($sumaIngr,1,PHP_ROUND_HALF_UP),2, ',', '').'</span></strong></td><tr>';
 		}
 	}
 }
