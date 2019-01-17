@@ -196,14 +196,12 @@ a:focus, a:hover{color: #782786;}
 			<? } ?>
 			</div> <!-- Fin de tabCredito -->
 			</div> <!-- Fin de tab-Content -->
-			</div>
-		</div>
-</div>
-<!-- /#page-content-wrapper -->
+                
+			</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
-
-
-</div>
 
 <!-- Modal para agregar nuevo producto  -->
 <div class="modal fade modal-nuevoProductoLista" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">

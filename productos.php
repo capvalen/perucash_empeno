@@ -569,11 +569,10 @@ $cochera=0;
             <? else:
             ?> <h4 class="purple-text text-lighten-1"> <i class="icofont icofont-animal-cat-alt-4"></i> Éste código no pertenece a ningún producto en la Base de datos.</h4> <?
             endif; //fin de if de $filas >=0 ?>
-		</div> <!-- contenedorDeslizable -->
-		
-	</div>
-</div>
-</div> <!-- /#page-content-wrapper -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 
@@ -897,15 +896,15 @@ $cochera=0;
 						foreach($ficheros as $archivo)
 						{
 							$cantImg++;/*".$directorio."/".$archivo."*/
-							if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){
-								echo "<div class='col-xs-6 col-md-3  divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>";
-							 }
+							if (preg_match("/jpeg/", $archivo) || preg_match("/jpg/", $archivo) || preg_match("/png/", $archivo)){ ?>
+								<div class='col-xs-6 col-md-3  divFotoGestion' id='foto{$i}'><span class='iEliminarFoto pull-right'><i class='icofont icofont-close'></i></span> <img src='".$directorio."/".$archivo."' class='img-responsive' > </div>
+							 <?php }
 						}/*<img src="images/imgBlanca.png" class="img-responsive" alt="">*/
-						}
-						echo '<div class="col-xs-6 col-md-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
+						} ?>
+						<div class="col-xs-6 col-md-3 divFotoGestion libreSubida text-center" ><i class="icofont icofont-cloud-upload"></i> <div class="upload-btn-wrapper">
 							  <button class="btn btn-primary btn-outline"><span><i class="icofont icofont-upload"></i></span> Subir archivo</button>
 							  <input type="file" id="txtSubirArchivo" />
-							</div>'; ?>
+							</div> </div>
 					</div>
 					
 				</div>

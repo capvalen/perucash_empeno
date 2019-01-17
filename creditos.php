@@ -188,7 +188,7 @@ if ( isset($_GET['credito'])){
 					<th>@</th>
 				</tr>
 			</thead>
-			<tbody>
+			
 			
 			<?php
 			$sumaNow=0; $sumaMora=0; $sumMonto=0;
@@ -204,8 +204,8 @@ if ( isset($_GET['credito'])){
 			$resultadoCliNow=$cadena->query($sqlCliNow);
 			$rowsCliNow = $resultadoCliNow->num_rows;
 			if( $rowsCliNow==0){ ?>
-				<tr><td>No hay datos en ésta fecha</td></tr> <?php
-			}else{
+				<tbody> <tr><td>No hay datos en ésta fecha</td></tr> </tbody>  <?php
+			}else{ ?> <tbody> <?php
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
 					if($rowCliNow['diasDeuda']>0){
 					$sumaNow+=floatval($rowCliNow['cuotNormal']);
@@ -223,15 +223,23 @@ if ( isset($_GET['credito'])){
 						<td class="text-center"><button class="btn btn-danger btn-outline btnSinBorde miToolTip btnSubsanar" data-toggle="tooltip" title="Subsanar crédito"><i class="icofont icofont-warning-alt"></i></button></td>
 					</tr>		
 		<?php }} ?>
-				<tfoot>
-					<tr><td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumMonto,2)?></strong></td> <td></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> <td><strong>Mota total:</strong></td> <td><strong>S/ <?= number_format($sumaMora*2,2);?></strong></td> </tr>
-				</tfoot>
-		<?php 
-			}
-			?>
+                
 			</tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Total:</strong></td>
+                    <td><strong>S/ <?= number_format($sumMonto,2)?></strong></td>
+                    <td></td>
+                    <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td>
+                    <td><strong>Mota total:</strong></td>
+                    <td><strong>S/ <?= number_format($sumaMora*2,2);?></strong></td> 
+                </tr>
+            </tfoot>
+        <?php } //fin de else ?>
 			</table>
-		<?php } //fin de if Get record Hoy
+		<?php } //fin de if Get recordHoy
 
 		if( isset($_GET['recordLibre'])){?>
 			<h4 class="purple-text text-lighten-1">Reporte de cobranzas para hoy</h4>
@@ -247,7 +255,7 @@ if ( isset($_GET['credito'])){
 					<th>@</th>
 				</tr>
 			</thead>
-			<tbody>
+			
 			
 			<?php
 			$sumaNow=0; $sumLibre=0;
@@ -263,8 +271,8 @@ if ( isset($_GET['credito'])){
 			$resultadoCliNow=$cadena->query($sqlCliNow);
 			$rowsCliNow = $resultadoCliNow->num_rows;
 			if( $rowsCliNow==0){ ?>
-				<tr><td>No hay datos en ésta fecha</td></tr> <?php
-			}else{
+				<tbody>  <tr><td>No hay datos en ésta fecha</td></tr> </tbody> <?php
+			}else{ ?> <tbody> <?php
 				while($rowCliNow=$resultadoCliNow->fetch_assoc()){
 					if($rowCliNow['diasDeuda']==0){
 						$sumaNow+=floatval($rowCliNow['cuotNormal']); $sumLibre+=floatval($rowCliNow['preCapital']); ?>
@@ -278,24 +286,25 @@ if ( isset($_GET['credito'])){
 						<td class="tdButton"><button class="btn btn-negro btn-outline btnSinBorde miToolTip btnCobrarCuota" title="Pre-pago" ><i class="icofont icofont-win-trophy"></i></button></td>
 					</tr>		
 		<?php }}?>
-				<tfoot>
+				
+		
+			</tbody>
+                <tfoot>
 					<tr><td></td> <td></td> <td></td> <td><strong>Total:</strong></td> <td><strong>S/ <?= number_format($sumaNow,2); ?></strong></td> 
 					<td><strong>S/ <?= number_format($sumLibre,2);?></strong></td></tr>
 				</tfoot>
-		<?php
+                <?php
 			}
 			?>
-			</tbody>
 			</table>
 		<?php } //fin de if Get record Hoy
 		?>
 				
 			<!-- Fin de contenido principal -->
-			</div>
-		</div>
-    </div>
-</div>
-<!-- /#page-content-wrapper -->
+			</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 

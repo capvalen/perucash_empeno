@@ -11,7 +11,7 @@
 			<div class="row">
 			<img src="images/path4585.png?ver=1.1" class="img-responsive" alt=""><br>
 			<p class="text-center blue-text text-darken-1"><strong>Tu información fue guardada:</strong></p>
-			<p class="text-center blue-text text-darken-1"><span id="spanBien"></span><h1 class="text-center blue-text text-darken-1" id="h1Bien"></h1></p>
+			<div class="text-center blue-text text-darken-1"><span id="spanBien"></span><h1 class="text-center blue-text text-darken-1" id="h1Bien"></h1></div>
 			</div>
 		</div>
 			
@@ -91,7 +91,7 @@
 		</div>
 
 	</div>
-	</div>
+</div>
 </div>
 
 <!-- Modal para mostrar los clientes coincidentes -->
@@ -115,5 +115,5 @@
 		</div>
 		<div class="modal-footer hidden"> <button class="btn btn-primary btn-outline" data-dismiss="modal"><i class="icofont icofont-alarm"></i> Aceptar</button></div>
 	</div>
-	</div>
+</div>
 </div>

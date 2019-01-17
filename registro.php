@@ -179,10 +179,11 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			</div>
 
 			</div>
-			
-		</div>
-</div>
-<!-- /#page-content-wrapper -->
+			<!-- Fin de contenido principal -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 <!-- Modal para agregar nuevo producto  -->
@@ -237,7 +238,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 	</div>
 	</div>
 </div>
-</div>
+
 
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>

@@ -121,10 +121,10 @@ h3{color: #ab47bc;}
 
 				
 			<!-- Fin de contenido principal -->
-			</div>
-		</div>
-</div>
-<!-- /#page-content-wrapper -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 <!-- Modal para insertar productos a almacén -->

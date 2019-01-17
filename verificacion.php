@@ -65,10 +65,10 @@ include 'php/variablesGlobales.php';
 
 			
 			<!-- Fin de contenido principal -->
-			</div>
-		</div>
-</div>
-<!-- /#page-content-wrapper -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 
@@ -142,7 +142,7 @@ include 'php/variablesGlobales.php';
 			<p><strong>N° de Ticket:</strong> <span id="tckNum"></span></p>
 			<p><strong>Transacción:</strong> <span id="tckTransac"></span></p>
 			<p><strong>Producto:</strong> <span class="mayuscula" id="tckProd"></span></p>
-			<p><strong>Observaciones:</strong> <div id="tckObs"></div></p>
+			<p><strong>Observaciones:</strong> <span id="tckObs"></span></p>
 			<p><strong>Monto: S/. </strong> <input class="form-control input-lg text-center esDecimal" type="number" id="txtTckMonto"></p>
 			<p><strong>Otras Observaciones: S/. </strong> <input class="form-control input-lg" type="text" id="txtTckOtraObs"></p>
 			</div>
@@ -172,7 +172,7 @@ include 'php/variablesGlobales.php';
 			<p><strong>Monto: S/. </strong> S/. <span  id="aproTckMonto"></span></p>
 			<p><strong>Transacción:</strong> <span id="aproTckTransac"></span></p>
 			<p><strong>Producto:</strong> <span class="mayuscula" id="aproTckProd"></span></p>
-			<p><strong>Observaciones:</strong> <div id="aproTckObs"></div></p>
+			<p><strong>Observaciones:</strong> <span id="aproTckObs"></span></p>
 			</div>
 		</div>
 			

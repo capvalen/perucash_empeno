@@ -175,10 +175,10 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 			</div>
 			
 		<!-- Fin de contenido principal -->
-		</div>
-	</div>
-</div>
-<!-- /#page-content-wrapper -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 

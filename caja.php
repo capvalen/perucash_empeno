@@ -140,10 +140,9 @@ a:focus, a:hover { color: #62286f; }
 			</div>
 	<?php endif; //if de isset ?>
 			<!-- Fin de contenido 2 -->
-			</div>
-
-        </div>
-    </div>    
+			</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
 </div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 

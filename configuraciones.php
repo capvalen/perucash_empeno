@@ -95,10 +95,10 @@ include 'php/conkarl.php'; ?>
 
 				
 			<!-- Fin de contenido principal -->
-			</div>
-		</div>
-</div>
-</div> <!-- /#page-content-wrapper -->
+		</div> <!-- col-lg-12 contenedorDeslizable -->
+    </div><!-- row noselect -->
+    </div> <!-- container-fluid -->
+</div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
 <!-- Modal para agregar producto nuevo a la BD -->
