@@ -258,6 +258,32 @@ a:focus, a:hover { color: #62286f; }
 	</div>
 </div>
 </div>
+
+<!-- Modal para Cambiar salida de caja  -->
+<div class="modal fade" id="modalCambiarSalidaCaja" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-warning">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Cambiar cierre de caja</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+				<p>¿Qué monto deseas poner en el cierre?</p>
+				<input type="number" class="form-control input-lg text-center esDecimal inputGrande" id="txtMontoChangeCierre" value="0.00">
+				<p>¿Alguna observación extra?</p>
+				<input type="text" class="form-control input-lg text-center mayuscula" id="txtObsChangeCierre" autocomplete="off">
+			</div>
+		</div>
+		<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>	<br>
+		<div class="modal-footer">
+			<button class="btn btn-warning btn-outline" id="btnUpdateCierre"><i class="icofont icofont-save"></i> Actualizar</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-cajaMaestra" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
@@ -538,12 +564,32 @@ $('#btnUpdateCajaMaestra').click(function() {
 <?php }
 if( in_array( $_COOKIE['ckPower'], $soloDios)){ ?>
 $('#btnCambiarApertura').click(function() {
+	$('#txtMontoChangeApertura').val( $('#spanApertura').text());
 	$('#modalCambiarEntradaCaja').modal('show');
 });
+$('#btnCambiarCierre').click(function() {
+	$('#txtMontoChangeCierre').val( $('#spanCierrev3').text());
+	$('#modalCambiarSalidaCaja').modal('show');
+});
 $('#btnUpdateApertura').click(function() {
+	pantallaOver(true);
 	if( $('#txtMontoChangeApertura').val()>=0 ){
-		$.ajax({url: 'php/updateAperturaCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>', nueVal: $('#txtMontoChangeApertura').val(), nueObs: $('#txtMontoChangeApertura').val() }}).done(function(resp) {
-			console.log(resp)
+		$.ajax({url: 'php/updateAperturaCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>', nueVal: $('#txtMontoChangeApertura').val(), nueObs: $('#txtObsChangeApertura').val() }}).done(function(resp) {
+			if(resp!='-1'){
+				location.reload();
+				pantallaOver(false);
+			}
+		});
+	}
+});
+$('#btnUpdateCierre').click(function() {
+	pantallaOver(true);
+	if( $('#txtMontoChangeCierre').val()>=0 ){
+		$.ajax({url: 'php/updateCierreCaja.php', type: 'POST', data: { cuadre: '<? if(isset($_GET["cuadre"])){ echo $_GET["cuadre"]; }else{ echo ""; } ?>', nueVal: $('#txtMontoChangeCierre').val(), nueObs: $('#txtObsChangeCierre').val() }}).done(function(resp) {
+			if(resp!='-1'){
+				location.reload();
+				pantallaOver(false);
+			}
 		});
 	}
 });
