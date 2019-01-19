@@ -132,9 +132,24 @@ a:focus, a:hover { color: #62286f; }
 				</div>
 			</div>
 			<div class="container-fluid col-xs-12">
-				<div class="pheader"><h4><i class="icofont icofont-fax"></i> Resumen <strong>S/ <span id="spanResultadoFinal"></span></strong></h4></div>
+				<div class="pheader"><h4><i class="icofont icofont-fax"></i> Resumen <strong> <span id="spanResultadoFinal"></span></strong></h4></div>
 				<div class="panel panel-default">
-					<p class="hidden">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam hic dignissimos animi harum similique. Qui dolor rerum et magnam cupiditate maiores at nihil consectetur deserunt, pariatur fugiat? Quas, repudiandae et.</p>
+					<div class="container-fluid" style="padding:20px;">
+						<p class=""><strong>Apertura:</strong> S/ <span id="spanAperturaDia"></span></p>
+						<hr>
+						<p class=""><strong>*** Entradas ***</strong></p>
+						<p class=""><strong>Efectivo:</strong> S/ <span id="spanAperturaEfectivo"></span></p>
+						<p class=""><strong>Tarjetas:</strong>  S/ <span id="spanAperturaTarjetas"></span></p>
+						<p class=""><strong>Depósitos bancarios:</strong>  S/ <span id="spanAperturaBancos"></span></p>
+						<hr>
+						<p class=""><strong>*** Salidas ***</strong></p>
+						<p class=""><strong>Efectivo:</strong>  S/ <span id="spanCierreEfectivo"></span></p>
+						<p class=""><strong>Tarjetas:</strong>  S/ <span id="spanCierreTarjetas"></span></p>
+						<hr>
+						<p class=""><strong>Cierre Efectivo Manual:</strong>  S/ <span id="spanTotalEfectivo"></span></p>
+						<p class=""><strong>Cierre Efectivo Sistema:</strong>  S/ <span id="spanTotalSistema"></span></p>
+						<p class=""><strong>Resumen:</strong> <span id="spanSobra"></span></p>
+					</div>
 				</div>
 				
 			</div>
@@ -358,8 +373,49 @@ $('#dtpFechaIniciov3').val('<?php
 		}
 		?>');
 moment.locale('es');
+<? if(isset($_GET[cuadre])){ ?>
+calculoTicketVirtual();
 
-$('#spanResultadoFinal').text(parseFloat( parseFloat($('#strSumaEntrada').text().replace(',', '.')) - parseFloat($('#strSumaSalida').text().replace(',', '.')) + parseFloat($('#spanApertura').text().replace(',', '.')) ).toFixed(2));
+function calculoTicketVirtual() {
+
+	var apertura = parseFloat($('#spanApertura').text().replace(',', '.'));
+	var cierre = parseFloat($('#spanCierrev3').text().replace(',', '.'));
+	var cuadre =0, sobra =0;
+
+	var efectivosEntrada = parseFloat($('#strSumaEntrada').attr('data-efectivo').replace(',', '.'));
+	var tarjetasEntrada = parseFloat($('#strSumaEntrada').attr('data-tarjeta').replace(',', '.'));
+	var bancosEntrada = parseFloat($('#strSumaEntrada').attr('data-banco').replace(',', '.'));
+
+	var efectivosSalida = parseFloat($('#strSumaSalida').attr('data-efectivo').replace(',', '.'));
+	var tarjetasSalida = parseFloat($('#strSumaSalida').attr('data-tarjeta').replace(',', '.'));
+
+	$('#spanAperturaDia').text(apertura.toFixed(2));
+
+	$('#spanAperturaEfectivo').text(efectivosEntrada.toFixed(2));
+	$('#spanAperturaTarjetas').text(tarjetasEntrada.toFixed(2));
+	$('#spanAperturaBancos').text(bancosEntrada.toFixed(2));
+
+	$('#spanCierreEfectivo').text(efectivosSalida.toFixed(2));
+	$('#spanCierreTarjetas').text(tarjetasSalida.toFixed(2));
+
+	cuadre = parseFloat(apertura+efectivosEntrada-efectivosSalida-tarjetasSalida).toFixed(2);
+	sobra = parseFloat(cuadre-cierre);
+	$('#spanTotalEfectivo').text(cierre.toFixed(2));
+	$('#spanTotalSistema').text( cuadre);
+	
+	if(sobra ==0){
+		$('#spanSobra').text('Cuadre exacto');
+	}
+	if(sobra <0){
+		$('#spanSobra').text('Falta S/ '+ sobra.toFixed(2));		
+	}
+	if(sobra > 0){
+		$('#spanSobra').text('Sobra S/ '+ sobra.toFixed(2));		
+	}
+	
+	//$('#spanResultadoFinal').text(parseFloat( parseFloat($('#strSumaEntrada').text().replace(',', '.')) - parseFloat($('#strSumaSalida').text().replace(',', '.')) + parseFloat($('#spanApertura').text().replace(',', '.')) ).toFixed(2));
+}
+<? } ?>
 
 <?php if(isset($_GET['cuadre'])){ ?>
 	$('#sltHistorialCierres').val(<?php echo $_GET['cuadre']; ?>);
