@@ -654,6 +654,8 @@ $('#btnUpdateCierre').click(function() {
 
 
 
+
+
 //
 </script>
 <?php } ?>

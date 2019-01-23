@@ -36,13 +36,13 @@ if($log=$conection->query($sql)){
 		
 		if( $_POST['perdonaMora']=='true' ){ //Si Perdona
 			//Cancelar una parte de Mora reducida por post
-			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
-			(null,0,84,now(),{$moraPaga},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>Mora Exonerada: S/ {$moraFuera}</span>',1,{$_COOKIE['ckidUsuario']},0);";
+			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`, `subCuota`) VALUES
+			(null,0,84,now(),{$moraPaga},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>Mora Exonerada: S/ {$moraFuera}</span>',1,{$_COOKIE['ckidUsuario']},0, {$rowMoraCalc['idCuota']});";
 			$dinero = $dinero-$moraPaga;
 		}else{ //No Perdona ->Cobra todo
 			//Cancelar toda la mora.
-			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES
-			(null,0,83,now(),{$moraTotal},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0);";
+			$sqlMoraVerif= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`, `subCuota`) VALUES
+			(null,0,83,now(),{$moraTotal},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a>',1,{$_COOKIE['ckidUsuario']},0, {$rowMoraCalc['idCuota']});";
 			$dinero = $dinero-$moraTotal;
 		} 
 		//echo $sqlMoraVerif;
@@ -50,7 +50,7 @@ if($log=$conection->query($sql)){
 	}
 
 	
-	$sqlCuotaVerifCabeza= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`) VALUES ";
+	$sqlCuotaVerifCabeza= "INSERT INTO `tickets`(`idTicket`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaActivo`, `idUsuario`, `idAprueba`, `subCuota`) VALUES ";
 	
 	while( $rowN = mysqli_fetch_array($log, MYSQLI_ASSOC) ) {
 		
@@ -58,11 +58,11 @@ if($log=$conection->query($sql)){
 			if( $dinero >= $rowN['cuotCuota']){
 				//echo "\n".$rowN['idCuota'] . ' pago '. $rowN['cuotCuota'];
 
-				$sqlCuotaVerif=$sqlCuotaVerif." (null,0,81,now(),{$rowN['cuotCuota']},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>SP-{$rowN['idCuota']}</span>',1,{$_COOKIE['ckidUsuario']},0),";
+				$sqlCuotaVerif=$sqlCuotaVerif." (null,0,81,now(),{$rowN['cuotCuota']},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>SP-{$rowN['idCuota']}</span>',1,{$_COOKIE['ckidUsuario']},0, {$rowN['idCuota']}),";
 				
 			}
 			if($dinero<$rowN['cuotCuota']){
-				$sqlCuotaVerif=$sqlCuotaVerif." (null,0,33,now(),{$dinero},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>SP-{$rowN['idCuota']}</span>',1,{$_COOKIE['ckidUsuario']},0),";
+				$sqlCuotaVerif=$sqlCuotaVerif." (null,0,33,now(),{$dinero},'<a href=creditos.php?credito={$_POST['idPre']}>CR-{$_POST['idPre']}</a> <span>SP-{$rowN['idCuota']}</span>',1,{$_COOKIE['ckidUsuario']},0, {$rowN['idCuota']}),";
 				//echo "\n".$rowN['idCuota'] . ' adelanta '. $dinero;
 			}
 		}else{
