@@ -259,9 +259,11 @@ $cochera=0;
 				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 			<?php }
 				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
-						<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
-					<?php }
+					<button class="btn btn-infocat btn-outline btn-block btn-lg" id="btnPagoAutomatico">Automático</button>
+
+					<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
+					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
+				<?php }
 				if($esCompra==0 && $rowProducto['prodActivo']==1 ){
 				
 					if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
@@ -435,7 +437,7 @@ $cochera=0;
 								where idProducto=".$_GET['idProducto']." and cajaActivo =1 order by cajaFecha asc;");
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
-								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td>
+								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra mayuscula"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td>
 								<? if($i>=1):  $fechaAct=new DateTime($rowEstados['cajaFecha']); $calculo = $fechaAct->diff($fechaAnt)->format('%a'); ?><td><i class="icofont icofont-arrow-up"></i> <? if($calculo =='0'){echo 'Mismo día';} if($calculo =='1'){echo '1 día';} if($calculo >'1'){echo $calculo.' días';} ?></td><? else: ?><td></td> <? endif;?>
 								<td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td>
 								<td class="tdObservacion mayuscula"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-edit'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
@@ -835,6 +837,26 @@ $cochera=0;
 		</div>
 	</div>
 </div>
+
+<!--Modal Para llamar pago automático-->
+<div class="modal animated fadeIn " id="modalPagoAutomatico" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header-infocat">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Pago automático</h4>
+			</div>
+			<div class="modal-body">
+				<p>Ingrese el nuevo capital</p>
+				<input type="number" class="form-control input-lg esMoneda text-center" id="txtDineroAutomatico">
+			</div>
+			<div class="modal-footer">
+			<button class="btn btn-morado btn-outline" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-check"></i> Realizar pago</button>
+		</div>
+		</div>
+	</div>
+</div>
+
 <?php } //fin de if power ?>
 
 <? if( in_array($_COOKIE['ckPower'], $admis)){ ?>
@@ -1509,6 +1531,14 @@ $('#btnActualizarFechaInt').click(function() {
 			location.reload();
 		});
 	}
+});
+$('#btnPagoAutomatico').click(function() {
+	pantallaOver(true);
+	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) {
+		console.log(resp)
+		pantallaOver(false);
+		$('#modalPagoAutomatico').modal('show');
+	});
 });
 <?php }?>
 $('#btnGuardarCubicaje').click( ()=> {
