@@ -6,7 +6,7 @@ body{
 .encoger{left:250px; transition: all 0.5s ease;}
 
 .ocultar-mostrar-menu:focus{outline: none;}
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1200px) {
    .encoger{left:0px; }
 #page-content-wrapper{margin-top:70px;}
 .navbar-brand > img{display: inherit;  max-width: 75%;}

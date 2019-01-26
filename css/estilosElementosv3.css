@@ -333,3 +333,14 @@ input{ cursor: url("../images/curs85617.png") 2 2, text;  } */
 #liDatosPersonales .dropdown-menu>li>a:hover{
     color: #a167af;
 }
+#txtBuscarNivelGod::placeholder {
+    color: white;text-align: right;
+}
+#txtBuscarNivelGod .icofont-close{
+    color: #fff;
+    padding-top: 12px;
+}
+#txtBuscarNivelGod{background-color: #fff0;border: none;color: white;
+    box-shadow: none;}
+#txtBuscarNivelGod:focus{border-color: rgb(255, 255, 255);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 0 4px #f7f7f7;}

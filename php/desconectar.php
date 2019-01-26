@@ -18,6 +18,7 @@ setcookie("cknomCompleto", "", time() - 3600, $ruta);
 setcookie("ckPower", "", time() - 3600, $ruta);
 setcookie("ckoficina", "", time() - 3600, $ruta);
 setcookie("ckInventario", "", time() - 3600, $ruta);
+setcookie("ckCorreo", "", time() - 3600, $ruta);
 
 if ($_SESSION['Sucursal']) {
 	session_destroy();

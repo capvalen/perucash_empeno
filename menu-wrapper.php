@@ -45,7 +45,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 <div class="navbar-wrapper">
 	<div class="container-fluid">
 		<nav class="navbar navbar-fixed-top encoger">
-			<div class="container">
+			<div class="container-fluid">
 				<div class="navbar-header ">
 				<a class="navbar-brand ocultar-mostrar-menu" href="#"><img id="imgLogoInfocat" class="img-responsive" src="images/logoInfocat.png" alt=""></a>
 					<button type="button" class="navbar-toggle collapsed" id="btnColapsador" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -61,18 +61,22 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						 <li>
 							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs" style="color:white; font-weight: 500;">Buscar algo:</label>
 								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;">
-								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color:#777;padding-top: 9px;"></span>
+								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color: #fff; padding-top: 12px;"></span>
 							</div>
 						 </li>
 						 
 						 <li class="dropdown" id="liDatosPersonales">
 						 	
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-								<img src="../app/images/usuarios/noimg.jpg" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
+							<? $imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
+							if( file_exists($imagen) ):?>
+								<img src="<?= $imagen; ?>" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
+							<? else: ?>
+							<img src="https://perucash.com/app/images/usuarios/noimg.svg?ver=1.1" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
+							<? endif;?>
 							</a>
 							<ul class="dropdown-menu">
-								
-								<li><a href="miperfil.php"><i class="icofont icofont-ui-file"></i> Ver mi perfil</a></li>
+								<li><a href="miperfil.php?usuario=soloyo"><i class="icofont icofont-ui-file"></i> Ver mi perfil</a></li>
 								<li><a href="php/desconectar.php"><i class="icofont icofont-ui-power"></i> Salir del sistema</a></li>
 							</ul>
 						 </li>

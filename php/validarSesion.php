@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas. Friedrich Nietzsche';
 
-$local = '/chilca';
+$local = '/demo';
 
 $log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."' and usuActivo=1;");
 
@@ -28,6 +28,7 @@ if ($row['idUsuario']>=1){
 	setcookie('ckPower', $row['usuPoder'], $expira, $local);
 	setcookie('ckidUsuario', $row['idUsuario'], $expira, $local);
 	setcookie('ckoficina', $_POST['offi'], $expira, $local);
+	setcookie('ckCorreo', $row['usuEMail'], $expira, $local);
 
 	
 	$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
