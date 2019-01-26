@@ -8,14 +8,16 @@ unset($_COOKIE['cknomCompleto']);
 unset($_COOKIE['ckPower']);
 unset($_COOKIE['ckoficina']);
 
-setcookie("ckidUsuario", "", time() - 3600, '/');
-setcookie("ckidSucursal", "", time() - 3600, '/');
-setcookie("ckSucursal", "", time() - 3600, '/');
-setcookie("ckAtiende", "", time() - 3600, '/');
-setcookie("cknomCompleto", "", time() - 3600, '/');
-setcookie("ckPower", "", time() - 3600, '/');
-setcookie("ckoficina", "", time() - 3600, '/');
-setcookie("ckInventario", "", time() - 3600, '/');
+$ruta = '/demo';
+
+setcookie("ckidUsuario", "", time() - 3600, $ruta);
+setcookie("ckidSucursal", "", time() - 3600, $ruta);
+setcookie("ckSucursal", "", time() - 3600, $ruta);
+setcookie("ckAtiende", "", time() - 3600, $ruta);
+setcookie("cknomCompleto", "", time() - 3600, $ruta);
+setcookie("ckPower", "", time() - 3600, $ruta);
+setcookie("ckoficina", "", time() - 3600, $ruta);
+setcookie("ckInventario", "", time() - 3600, $ruta);
 
 if ($_SESSION['Sucursal']) {
 	session_destroy();

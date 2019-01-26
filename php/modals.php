@@ -84,8 +84,8 @@
 		<div class="modal-body">
 			<div class="text-center" style="margin: 0 auto; padding-bottom: 10px;"><img src="images/peto.png" width="128px" alt=""></div>
 			<p>Lo siento, tu sesión ya expiró, ingresa tus credenciales nuevamente para acceder.</p>
-			<input type="text" class="form-control input-lg input-block text-center" id="txtVolverUsuario" placeholder="Usuario" style="font-size: 24px;">
-			<input type="password" class="form-control input-lg input-block text-center" id="txtVolverPasw" placeholder="Contraseña" style="font-size: 24px;">
+			<input type="text" class="form-control input-lg input-block text-center" id="txtVolverUsuario" placeholder="Usuario" style="font-size: 24px;" autocomplete="nope">
+			<input type="text" class="form-control input-lg input-block text-center" id="txtVolverPasw" placeholder="Contraseña" style="font-size: 24px;" oninput="turnOnPasswordStyle()">
 			<div class="divError text-left animated fadeIn hidden" style="margin-bottom: 20px;"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
 			<button class="btn btn-morado btn-outline btn-block btn-lg" id='btnVolverIniciarSesion' ><i class="icofont icofont-atom"></i> Iniciar sesión</button>
 		</div>

@@ -324,3 +324,12 @@ input{ cursor: url("../images/curs85617.png") 2 2, text;  } */
     75% {color: #c173ce;}
     100% {color: #33dbdb;}
 }
+#liDatosPersonales>.dropdown-menu i{
+    font-size: 16px;
+}
+#liDatosPersonales .dropdown-menu>li>a{
+    color: #c27dd2;padding: 9px 20px;
+}
+#liDatosPersonales .dropdown-menu>li>a:hover{
+    color: #a167af;
+}

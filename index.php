@@ -281,7 +281,7 @@ display: inline-block;
 				</div><br>
 				<div class="divF2">
 						<div class="md-input">
-							<input class="md-form-control text-center" required='' type="password" id="txtPassw">
+							<input class="md-form-control text-center" required='' type="text" id="txtPassw" oninput="turnOnPasswordStyle()">
 							<span class="highlight"></span>
 							<span class="bar"></span>
 							<label>Contraseña</label>
@@ -330,6 +330,7 @@ $('#btnEmpezar').click(function() {
 	$('#primDiv').addClass('fadeOut').one(animationEnd, function () {
 		$('#primDiv').addClass('hidden');
 		$('#secDiv').removeClass('hidden'); //addClass('fadeIn').
+		$('#txtUser_app').focus();
 	});
 });
 var animationEnd = (function(el) {
@@ -355,8 +356,18 @@ $(document).ready(function () {
 	/*$('.wello').addClass('animated bounceIn');*/
 	$('.fa-spin').addClass('sr-only');
 	//$('body').css("background-image", "url(images/fondo.jpg)");		
+	
+	
 });
-
+function turnOnPasswordStyle() {
+	$('#txtPassw').attr('type', "password");
+}
+$('#txtUser_app').keypress(function(event){
+	if (event.keyCode === 10 || event.keyCode === 13) 
+		{event.preventDefault();
+		$('#btnAcceder').click();
+	 }
+});
 $('#txtPassw').keypress(function(event){
 	if (event.keyCode === 10 || event.keyCode === 13) 
 		{event.preventDefault();

@@ -16,7 +16,7 @@ require("php/conkarl.php");
 #page-content-wrapper { padding: 5px!important;}
 #miniMenu{padding: 12px;background-color:white;}
 
-.contenedorDeslizable{background-color:#f3f7f8;}
+.contenedorDeslizable{background-color: #f8f3f4;/* #f3f7f8; */}
 .contenedorDeslizable h2{margin-top: 10px;}
 #rowConPeques{padding: 20px 0;}
 #rowConPeques>div{margin-bottom: 10px;}

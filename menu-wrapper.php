@@ -56,14 +56,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					</button>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse ">
-					<ul class="nav navbar-nav">
-						<li class="hidden down"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">HR <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-										<li><a href="#">Change Time Entry</a></li>
-										<li><a href="#">Report</a></li>
-								</ul>
-							</li>
-					</ul>
+					
 					<ul class="nav navbar-nav navbar-right " style="padding:0 30px;">
 						 <li>
 							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs" style="color:white; font-weight: 500;">Buscar algo:</label>
@@ -71,8 +64,20 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color:#777;padding-top: 9px;"></span>
 							</div>
 						 </li>
-						 <li id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span class="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?= $_COOKIE['cknomCompleto']; ?></span></p><p class="icoUser"><i class="icofont icofont-archive"></i> <?= $_COOKIE['ckSucursal'];?></p></a></li>
-						 <li class="text-center"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
+						 
+						 <li class="dropdown" id="liDatosPersonales">
+						 	
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<img src="../app/images/usuarios/noimg.jpg" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								
+								<li><a href="miperfil.php"><i class="icofont icofont-ui-file"></i> Ver mi perfil</a></li>
+								<li><a href="php/desconectar.php"><i class="icofont icofont-ui-power"></i> Salir del sistema</a></li>
+							</ul>
+						 </li>
+						 <li class="hidden" id="liDatosPersonales"><a href="#!" style="padding-top: 12px;"><p> <span class="icoUser"><i class="icofont icofont-ui-user"></i></span><span class="mayuscula" id="menuNombreUsuario"><?= $_COOKIE['cknomCompleto']; ?></span></p><p class="icoUser"><i class="icofont icofont-archive"></i> <?= $_COOKIE['ckSucursal'];?></p></a></li>
+						 <li class="text-center hidden"><a href="php/desconectar.php"><span class="visible-xs">Cerrar Sesión</span><i class="icofont icofont-ui-power"></i></a></li>
 					</ul>
 
 				</div>
