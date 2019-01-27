@@ -61,11 +61,11 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						 <li>
 							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs" style="color:white; font-weight: 500;">Buscar algo:</label>
 								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;">
-								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" style="color: #fff; padding-top: 12px;"></span>
+								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" id="spanClear" style="color: #fff;"></span>
 							</div>
 						 </li>
 						 
-						 <li class="dropdown" id="liDatosPersonales">
+						 <li class="dropdown text-center" id="liDatosPersonales">
 						 	
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 							<? $imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
