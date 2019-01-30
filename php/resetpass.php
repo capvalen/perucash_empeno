@@ -1,10 +1,11 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-require "php/conkarl.php";
-require_once('vendor/autoload.php');
+require "conkarl.php";
+require_once('../vendor/autoload.php');
 $base58 = new StephenHill\Base58();
-$correo=$base58->decode($_GET['solicita']);
+//echo $_POST['solicita'];
+$correo=$base58->decode($_POST['solicita']);
 
 $sql="UPDATE `usuario` SET 
 `usuPass` = md5('".$_POST['nP']."')

@@ -318,6 +318,7 @@ display: inline-block;
 				<p class="text-center" style="color: #868686;">Por favor, ingrese su usuario para que podamos hacerle llegar un correo asociado a su cuenta:</p>
 				<input type="text" class='form-control input-lg inputGrande text-center' id="txtCorreoElectronicoUs"><br>
 				<button class="btn btn-azul btn-block btn-lg btn-outline" id="btnResetContador"><i class="icofont icofont-alarm"></i> Solicitar cambio</button>
+				<label class="hidden" id="lblRespuesta"></label>
 			</div>
 		</div>
 	</div>
@@ -406,7 +407,8 @@ $('#aClick').click(function() {
 });
 $('#btnResetContador').click(function() {
 	$.ajax({url: 'php/enviarCorreo.php', type: 'POST', data: { queUser: $('#txtCorreoElectronicoUs').val() }}).done(function(resp) {
-		console.log(resp)
+//		console.log(resp)
+		$('#lblRespuesta').text(resp).removeClass('hidden');
 	});
 });
 <?php if( isset($_GET['solicita']) ): ?>

@@ -224,7 +224,7 @@ display: inline-block;
 			<div class="contenidoCambiante animated container-fluid hidden" id="secDiv">
 				<div class="divF1">
 					<div class="md-input">
-						<input class="md-form-control text-center" type="text" required='' id="txtPrimContra">
+						<input class="md-form-control text-center" type="password" required='' id="txtPrimContra">
 						<span class="highlight"></span>
 						<span class="bar"></span>
 						<label>Contraseña nueva</label>
@@ -390,8 +390,12 @@ $('#btnReset').click(function() {
 		$('#spanTextErr').text('Las contraseñas son diferentes')
 		$('.divF3 .divError').removeClass('hidden');
 	}else{
-		$.ajax({url: 'php/resetpass.php', type: 'POST', data: { solicita: '<? $_GET['solicita']?>' , pass: $('#txtPrimContra').val()  }}).done(function(resp) {
+		$.ajax({url: 'php/resetpass.php', type: 'POST', data: { solicita: '<?= $_GET['solicita']?>' , nP: $('#txtPrimContra').val()  }}).done(function(resp) {
 			console.log(resp)
+			if(resp=='1'){
+				alert('Su contraseña fue cambiada con éxito');
+				window.location = 'index.php';
+			}
 		});
 	}
 });
