@@ -438,12 +438,12 @@ $cochera=0;
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
 								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra mayuscula"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td>
-								<? if($i>=1):  $fechaAct=new DateTime($rowEstados['cajaFecha']); $calculo = $fechaAct->diff($fechaAnt)->format('%a'); ?><td><i class="icofont icofont-arrow-up"></i> <? if($calculo =='0'){echo 'Mismo día';} if($calculo =='1'){echo '1 día';} if($calculo >'1'){echo $calculo.' días';} ?></td><? else: ?><td></td> <? endif;?>
+								<? if($i>=1):  $fechaAct=new DateTime($rowEstados['cajaFecha']); $fechaAct1= new DateTime($fechaAct->format('Y-m-d')); $calculo = $fechaAct1->diff($fechaAnt1)->format('%a'); ?><td><i class="icofont icofont-arrow-up"></i> <? if($calculo =='0'){echo 'Mismo día';} if($calculo =='1'){echo '1 día';} if($calculo >'1'){echo $calculo.' días';} ?></td><? else: ?><td></td> <? endif;?>
 								<td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td>
 								<td class="tdObservacion mayuscula"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-edit'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php 
-							$i++; $fechaAnt= new DateTime($rowEstados['cajaFecha']);
+							$i++; $fechaAnt= new DateTime($rowEstados['cajaFecha']);  $fechaAnt1= new DateTime($fechaAnt->format('Y-m-d'));
 							} ?>
 							</tbody>
 						</table>

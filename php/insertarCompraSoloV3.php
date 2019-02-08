@@ -29,19 +29,20 @@ if (mysqli_multi_query($conection, $sql)) {
 					}
 
 					$tipoProc=38;
-					$sqlTicket= "call crearTicket ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
-					//echo $sqlTicket;
-					$consultaDepos = $cadena->prepare($sqlTicket);
-					$consultaDepos ->execute();
-					$resultadoDepos = $consultaDepos->get_result();
-					//$numLineaDeposs=$resultadoDepos->num_rows;
-					$rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
-					$ticket = $rowDepos['idTicket'];
-					$consultaDepos->fetch();
-					$consultaDepos->close();
+					// $sqlTicket= "call crearTicket ({$idProd}, {$tipoProc}, {$dinero} , '{$obs}', ".$_COOKIE['ckidUsuario'].");";
+					// //echo $sqlTicket;
+					// $consultaDepos = $cadena->prepare($sqlTicket);
+					// $consultaDepos ->execute();
+					// $resultadoDepos = $consultaDepos->get_result();
+					// //$numLineaDeposs=$resultadoDepos->num_rows;
+					// $rowDepos = $resultadoDepos->fetch_array(MYSQLI_ASSOC);
+					// $ticket = $rowDepos['idTicket'];
+					// $consultaDepos->fetch();
+					// $consultaDepos->close();
 
 
-					echo "<h3><a href='productos.php?idProducto={$row[0]}&ticket={$ticket}' target='_blank'>#{$row[0]} - Ticket: {$ticket}</a></h3>"; //Retorna los resultados via post del procedure
+					//echo "<h3><a href='productos.php?idProducto={$row[0]}&ticket={$ticket}' target='_blank'>#{$row[0]} - Ticket: {$ticket}</a></h3>"; //Retorna los resultados via post del procedure
+					echo "<h3><a href='productos.php?idProducto={$row[0]}' >#{$row[0]}</a></h3>"; //Retorna los resultados via post del procedure
 			  }
 			  mysqli_free_result($result);
 		 }

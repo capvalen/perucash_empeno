@@ -292,7 +292,7 @@ display: inline-block;
 				</div>
 				<div class="divF3" style="padding-top:40px;">
 					<button class="btn btn-block btn-primary btn-lg" id="btnAcceder"><div class="fa-spin sr-only"><i class="icofont icofont-spinner "></i></div> <i class="icofont icofont-ui-lock"></i> Iniciar sesión</button>
-					<div class="text-center hidden" id="divError"><i class="icofont icofont-exclamation-circle"></i> Error en alguno de los datos, complételos todos cuidadosamente.</div>
+					<div class="text-center hidden" id="divError"><i class="icofont icofont-exclamation-circle"></i> <span id="spanError2"></span></div>
 				</div>
 			</div>
 			<?php endif; ?>
@@ -383,12 +383,20 @@ $('#btnAcceder').click(function() {
 		type:'POST',
 		url: 'php/validarSesion.php',
 		data: {user: $('#txtUser_app').val(), pws: $('#txtPassw').val()},
-		success: function(iduser) {
-			if (parseInt(iduser)>0){//console.log('el id es '+data)
-				console.log(iduser)
+		success: function(resp) {
+			//if (parseInt(iduser)>0){//console.log('el id es '+data)
+			if( resp=='concedido' ){
+				console.log(resp)
 				window.location="principal.php";
-			}
-			else {
+			}else if(resp=='inhabilitado'){
+				$('#spanError2').text('Tu usuario fue inhabilitado temporalmente. No inista o llame a soporte');
+				$('#divError').removeClass('hidden');
+				$('#txtUser_app').select();
+				$('.fa-spin').addClass('sr-only');$('.icofont-ui-lock').removeClass('sr-only');
+				$('#txtPassw').val(''); $('#txtPassw').focus();
+				console.log('error en los datos')
+			}else {
+				$('#spanError2').text('Error interno, comunicarse con soporte.');
 				$('#divError').removeClass('hidden');
 				//var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
 				// $('#btnAcceder').addClass('animated wobble' ).one(animationEnd, function() {
@@ -396,7 +404,7 @@ $('#btnAcceder').click(function() {
 				// });
 				$('#txtUser_app').select();
 				$('.fa-spin').addClass('sr-only');$('.icofont-ui-lock').removeClass('sr-only');
-				//console.log(iduser);
+				//console.log(resp);
 				$('#txtPassw').val(''); $('#txtPassw').focus();
 				console.log('error en los datos')}
 		}

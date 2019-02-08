@@ -473,7 +473,7 @@ $('#btnGuardarDatos').click(function () {
 						$.ajax({url: 'php/insertarCompraSoloV3.php', type: 'POST',  data: {jsonProductos: jsonProductos, idUser: $.JsonUsuario.idUsuario }}).done(function (resp) { //console.log(resp)
 						pantallaOver(false);
 							if( resp.indexOf('ticket') ){//$.isNumeric(resp)
-								$('.modal-GuardadoCorrecto #spanBien').text('Códigos - Ticket(s) a pagar:');
+								$('.modal-GuardadoCorrecto #spanBien').text('Código(s):');
 								$('.modal-GuardadoCorrecto #h1Bien').html( resp );
 								$('.modal-GuardadoCorrecto').modal('show');
 								

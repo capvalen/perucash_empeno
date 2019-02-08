@@ -41,8 +41,15 @@ $('#btnVolverIniciarSesion').click(function () {
 		}else{
 			$.ajax({url:'php/validarSesion.php', type: 'POST', data: { user: $('#txtVolverUsuario').val(), pws: $('#txtVolverPasw').val() } }).done(function (resp) {
 				console.log(resp);
-				if(parseInt(resp)>0 && esNumero(resp)){ location.reload();}
-				else{
+				//if(parseInt(resp)>0 && esNumero(resp)){ }
+				if( resp == 'inhabilitado' ){
+					$('.modal-iniciarSesion .spanError').text('Tu usuario fue inhabilitado temporalmente. No inista o llame a soporte');
+					$('.modal-iniciarSesion .divError').removeClass('hidden');
+					$('#btnVolverIniciarSesion i').removeClass('fa-spin');
+				}
+				else if(resp=='concedido'){
+					location.reload();
+				}else{
 					$('.modal-iniciarSesion .spanError').text('Las credenciales no coinciden');
 					$('.modal-iniciarSesion .divError').removeClass('hidden');
 					$('#btnVolverIniciarSesion i').removeClass('fa-spin');
