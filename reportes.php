@@ -426,7 +426,7 @@ $('#cmbEstadoCombo').change(function () {
 });
 $('#btnFiltroAnaticica').click(()=> {
 	$('#spanError').addClass('hidden');
-	var sumaElementos=0;
+	var sumaElementos=0, sumaCapitales=0;
 	if( $('#sltFiltroAnalitica').val()==0){
 		$('#spanError').removeClass('hidden');
 		$('#spanError').text('Tienes que seleccionar un filtro');
@@ -508,18 +508,21 @@ $('#btnFiltroAnaticica').click(()=> {
 					}
 					$.each(data, function (i, dato) {
 						sumaElementos+=parseFloat(dato.cajaValor);
+						sumaCapitales += parseFloat(dato.prodMontoEntregado);
 						$('tbody').append(`
 						<tr><td>${dato.idProducto}</td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+							<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 						</tr>`);
 						
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
 								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/. ${parseFloat(sumaCapitales).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
