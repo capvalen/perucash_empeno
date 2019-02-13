@@ -133,6 +133,10 @@ $cochera=0;
 .divImagen li{list-style-type: none;}
 #txtMontoTicketIntereses, #txtNuevoCapital{font-size: 26px;}
 #txtMontoTicketIntereses::placeholder, #txtNuevoCapital::placeholder{font-size: 12px;}
+.open>.dropdown-menu>.active>a {
+    color: #fefbff;
+    padding: 7px 45px;
+}
 </style>
 <div class="" id="wrapper">
 

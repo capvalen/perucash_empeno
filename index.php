@@ -383,7 +383,7 @@ $('#btnAcceder').click(function() {
 		type:'POST',
 		url: 'php/validarSesion.php',
 		data: {user: $('#txtUser_app').val(), pws: $('#txtPassw').val()},
-		success: function(resp) {
+		success: function(resp) { console.log( "respuesta " + resp);
 			//if (parseInt(iduser)>0){//console.log('el id es '+data)
 			if( resp=='concedido' ){
 				console.log(resp)

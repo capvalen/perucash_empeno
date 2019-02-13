@@ -2,13 +2,14 @@
 // ini_set("session.cookie_lifetime","7200");
 // ini_set("session.gc_maxlifetime","7200");
 //session_start();
-header('Content-Type: text/html; charset=utf8');
+//header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas. Friedrich Nietzsche';
 
-$local = '/demo';
+$local = '/app';
 
 $log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';");
+//echo "select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';";
 
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if ($row['idUsuario']>=1){
@@ -45,6 +46,8 @@ if ($row['idUsuario']>=1){
 
 	//echo $row['idUsuario'];
 	
+}else{
+	echo 'nada';
 }
 
 /* liberar la serie de resultados */

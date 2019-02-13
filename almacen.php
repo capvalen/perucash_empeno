@@ -38,13 +38,13 @@ h3{color: #ab47bc;}
 			</div>
 			<br>
 			<?php 
-			if( isset($_GET['estanteAmarillo']) || isset($_GET['estanteExhibicion']) || isset($_GET['estanteRojo']) ){
+			if(  isset($_GET['estanteExhibicion'])  ){
 				$estante = array (
-					array(5, 4, 3, 2, 1),//pisos
-					array('A','B','C'),//seccion
+					array(1),//pisos
+					array('A','B','C', 'D'),//seccion
 				);
 				if( isset($_GET['estanteAmarillo'])){ echo '<h3>Estante Amarillo</h3>';}
-				if( isset($_GET['estanteExhibicion'])){ echo '<h3>Estante Metálico de Exibición</h3>';}
+				if( isset($_GET['estanteExhibicion'])){ echo '<h3>Almacén 1</h3>';}
 				if( isset($_GET['estanteRojo'])){ echo '<h3>Estante Rojo</h3>';}
 			}
 			else if( isset($_GET['estanteNegro']) || isset($_GET['estantePlateado']) ){
