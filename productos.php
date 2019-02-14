@@ -13,8 +13,9 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni, tpr.tipopDescripcion
-		FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso 
+		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni, tpr.tipopDescripcion, pe.presFechaCongelacion
+		FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso
+		left join prestamo pe on pe.idPrestamo = pre.idPrestamo
 		inner join usuario u on u.idUsuario=p.idUsuario
 		inner join tipoProducto tpr on tpr.idTipoProducto = p.idTipoProducto
 		WHERE p.idProducto=".$_GET['idProducto'].";");
@@ -159,7 +160,10 @@ $cochera=0;
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
-								<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
+						<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
+						<? if( $_COOKIE['ckPower']=='1' ):?>
+						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
+						<? endif;?>
 					  </ul>
 					</div>
 				</div>
@@ -263,7 +267,7 @@ $cochera=0;
 				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 			<?php }
 				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
-					<button class="btn btn-infocat btn-outline btn-block btn-lg" id="btnPagoAutomatico">Automático</button>
+					<button class="btn btn-infocat btn-outline btn-block btn-lg hidden" id="btnPagoAutomatico">Automático</button>
 
 					<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
@@ -354,25 +358,30 @@ $cochera=0;
 						if($rowProducto['prodActivo']==='0'){
 						?><ul><li>El producto ya no genera intereses por haber finalizado.</li></ul><?php	
 						}else{
-							$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
-
+							if ( $rowProducto['presFechaCongelacion']==''){
+								$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
+							}else{
+								$sqlBaseInteres="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( '{$rowProducto['presFechaCongelacion']}', desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p where idProducto=".$_GET['idProducto'];
+							}
 							$sqlIntereses = $conection->query($sqlBaseInteres);
 							$rowInteres = $sqlIntereses->fetch_assoc();
 							$gastosAdmin=0;
-
 							?>
 						<ul>
 							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if( in_array($_COOKIE['ckPower'], $soloDios) ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
-							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? }?></li>
-						<?php if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
+						
+						
+							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if($rowProducto['presFechaCongelacion']<>''): echo '<strong>(Congelado)</strong>'; endif; if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? } ?></li>
+						<?php
+						
+						if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
 							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
-							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7).</span></li>
-						<?php 
-							}else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
+							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7)</span></li>
+						<?php }else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
 								$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
 							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% semanal = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$interesDiario*$rowInteres['diferenciaDias'],1,PHP_ROUND_HALF_UP),2); echo $interesJson.' ('.number_format($interesDiario*$rowInteres['diferenciaDias']*100,2).'%)'; ?></span></li>
-							<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 35).</span></li>
-						<?php  }else {
+							<li>Razón del cálculo: <span><strong>Interés Diario</strong> (del día 8 al 35)</span></li>
+						<?php }else {
 							$_GET['inicio']=floatval($rowInteres['preCapital']);
 
 							if($rowInteres['diferenciaDias']<=200){
@@ -387,7 +396,6 @@ $cochera=0;
 							//$razonInteres= $resultado[0]['intDiarioHoy']*100;
 							$razonInteres= $rowInteres['diferenciaDias']*($rowInteres['preInteres']/7);
 							$interesJson= round(($rowInteres['preCapital']*$razonInteres)/100,1,PHP_ROUND_HALF_UP );
-							
 							?>
 							<li>Interés <strong>simple</strong>: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php  echo number_format($interesJson,2).' ('.number_format($razonInteres,2).'%)'; ?></span></li>
 							<li>Razón del cálculo: <span><strong>Interés simple diario</strong> (más de 29 días).</span></li>
@@ -398,7 +406,8 @@ $cochera=0;
 							else if ($rowInteres['preCapital']>3000 ) { $gastosAdmin=30; }
 						?>
 							<li>Gastos admnistrativos: <span>S/ <?= number_format($gastosAdmin,2); ?></span></li>
-						<?php }} 
+						<?php }
+						} //fin de else antes de $_GET['inicio']
 						if($rowProducto['idTipoProducto']=="1" ):
 							$cochera=2*$rowInteres['diferenciaDias'];
 							echo "<li>Cochera: <span>S/. ". number_format($cochera,2) ."</span> (S/ 2.00 por día)</li>";
@@ -410,13 +419,14 @@ $cochera=0;
 						if( $rowProducto['idTipoProducto']=="42" ):
 							$cochera=1*$rowInteres['diferenciaDias'];
 							echo "<li>Cochera: <span>S/. ". number_format($cochera,2) ."</span> (S/ 1.00 por día)</li>";
-						endif;
+						endif; //fin de 
 						?>
-							
 							<li>Deuda total para hoy: <span><strong>S/. <?php echo number_format($interesJson+$rowInteres['preCapital']+$gastosAdmin+$cochera,2);  ?></strong></span></li>
+							
 						</ul>
 						<?php 
-						}
+					
+						} //Fin de else despues producto ya no genera intereses
 					} ?>
 					<!--Fin de pestaña interior 01-->
 					</div>
@@ -823,6 +833,28 @@ $cochera=0;
 	</div>
 </div>
 
+<? if( $_COOKIE['ckPower']=='1' ):?>
+<!-- Modal para: editar producto-->
+<div class='modal fade modalCongelarProducto' tabindex='-1' role='dialog' aria-hidden='true'>
+	<div class='modal-dialog modal-sm' >
+	<div class='modal-content '>
+		<div class='modal-header-danger'>
+			<button type='button' class='close' data-dismiss='modal' aria-label='Close' ><span aria-hidden='true'>&times;</span></button>
+			<h4 class='modal-tittle'><i class="icofont icofont-focus"></i> Congelar producto</h4>
+		</div>
+		<div class='modal-body'>
+			<label for="">Fecha en que se congelará el producto</label>
+			<input type="date" class='form-control mayuscula text-center inputGrande' id='txtFechaCongelar' autocomplete="off">
+			<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+		</div>
+		<div class='modal-footer'>
+			<button type='button' class='btn btn-danger btn-outline' id='btnCongelar'><i class="icofont icofont-ice-cream"></i> Congelar</button>
+		</div>
+		</div>
+	</div>
+</div>
+<? endif;?>
+
 <!--Modal Para asignar nuevo capital al prestamo-->
 <div class="modal animated fadeIn modal-nuevoCapital" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-sm">
@@ -975,6 +1007,7 @@ $('#dtpFechaPago').val('<?php
 	$date = new DateTime($_GET['fecha']);
 	echo  $date->format('d/m/Y h:mm a');
 ?>');
+$('#txtFechaCongelar').val(moment().format('YYYY-MM-DD'));
 $('#dtpFechaPago').bootstrapMaterialDatePicker({
 	format: 'DD/MM/YYYY h:m a',
 	lang: 'es',
@@ -1375,6 +1408,23 @@ $('#liEditDescription').click(function() {
 	$('#sltEstadoMod').val(<?= $rowProducto['prodActivo']; ?>);
 	$('.modalEditarProducto').modal('show');
 });
+<? if( $_COOKIE['ckPower']=='1' ):?>
+$('#liCongelar').click(function() {
+	$('.modalCongelarProducto').modal('show');
+});
+$('#btnCongelar').click(function() {
+	if( $('#txtFechaCongelar').val() ==''){}else{
+		var fecha = $('#txtFechaCongelar').val();
+	}
+	
+	$.ajax({url: 'php/productoCongelar.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?>, fecha: fecha }}).done(function(resp) {
+		console.log(resp)
+		if( resp =='1'){
+			location.reload();
+		}
+	});
+});
+<? endif;?>
 
 <?php if( $rowProducto['prodActivo']==1 && $esCompra==0 ){ ?>
 $('#txtMontoTicketIntereses').keyup(function(e) {
