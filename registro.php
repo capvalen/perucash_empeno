@@ -181,8 +181,8 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			</div>
 			<!-- Fin de contenido principal -->
 		</div> <!-- col-lg-12 contenedorDeslizable -->
-    </div><!-- row noselect -->
-    </div> <!-- container-fluid -->
+	 </div><!-- row noselect -->
+	 </div> <!-- container-fluid -->
 </div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
@@ -393,13 +393,13 @@ $('#btnActualizarItem').click(function () {
 	else{ //console.log(index)
 		$('#conjuntoElementos li').eq(index).remove();
 		$('#conjuntoElementos').append(`<li class="list-group-item animated fadeIn">
-			    <div class="row rowProduct">
-			        <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo mayuscula" style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
-			        <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
-			        <div class="col-xs-2 divMonto" >S/ <span class="spanPrecioEmpv3">${capiItem}</span></div>
-			        <div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
-			    <button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
-			    </li>`);
+				 <div class="row rowProduct">
+					  <div class="col-xs-8 text-left"> <p><span class="icoMedia"><i class="icofont icofont-cube"></i></span> <span class="spanCantidadv3">${cantItem}</span> und. <span class="mayuscula">${tipoItem}: <span class="spanNomProductov3">${nomItem}</span> <span class="spanPlacaVehiculo mayuscula" style="text-transform:uppercase">${itemPlaca}</span></span> <br><small class="mayuscula  tipProducto"><span class="spanTipov3ID hidden">${tipoItemID}</span> <span class="spanTipoStrv3 sr-only">${tipoItemStr}</span> <span class="spanObservacionv3">${observaItem}</span></small> </p>
+					  <span class="sr-only spanfechaIngresov3">${fechaItem}</span> </div>
+					  <div class="col-xs-2 divMonto" >S/ <span class="spanPrecioEmpv3">${capiItem}</span></div>
+					  <div class="col-xs-2 divMonto pull-right"><span class="spanInteresv3">${interesItem}</span>% </div></div>
+				 <button class="btn btn-sm btn-danger btn-outline btn-sinBorde pull-right btnBorrarFila" sytle="background-color: transparent;"><i class="icofont icofont-close"></i></button>
+				 </li>`);
 		calcularTotalesParc();
 	
 	$('.modal-nuevoProductoLista').modal('hide');
@@ -476,14 +476,12 @@ $('#btnGuardarDatos').click(function () {
 								$('.modal-GuardadoCorrecto #spanBien').text('Código(s):');
 								$('.modal-GuardadoCorrecto #h1Bien').html( resp );
 								$('.modal-GuardadoCorrecto').modal('show');
-								
 							}else{
 								$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
 								$('.modal-GuardadoError').modal('show');}
 						});
 					}
 				});
-				
 			}
 		break;
 		case 'esRemate':
@@ -532,17 +530,17 @@ $('#btnGuardarDatos').click(function () {
 });
 $('#txtBuscarNivelGod').keyup(function (e) {
 	var valor= $(this).val();
-    if(e.keyCode==13){
-    	e.preventDefault();
-    	if($.isNumeric(valor)){
-    		//Buscar código interno, DNI's, celulares o teléfonos
-    		$.ajax({url:'php/listarBuscarIdProducto.php', type:'POST', data: {campo: valor}}).done(function (resp) {
-    			// body...
-    		});
-    	}else{
-    		//Buscar descripciones, apellidos
-    	}
-    }
+	 if(e.keyCode==13){
+	 	e.preventDefault();
+	 	if($.isNumeric(valor)){
+	 		//Buscar código interno, DNI's, celulares o teléfonos
+	 		$.ajax({url:'php/listarBuscarIdProducto.php', type:'POST', data: {campo: valor}}).done(function (resp) {
+	 			// body...
+	 		});
+	 	}else{
+	 		//Buscar descripciones, apellidos
+	 	}
+	 }
 });
 $('.btnMasterEntrada').click(function () {
 	$('.contenedorBienvenida').addClass('hidden');

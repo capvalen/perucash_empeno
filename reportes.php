@@ -57,9 +57,13 @@ require("php/conkarl.php");
 					<select class="form-control" id="sltFiltroAnalitica">
 						<option value="0">Seleccione una opción</option>
 						<option value="4">Amortizaciones</option>
+						<option value="11">Gastos de almuerzo</option>
+						<option value="10">Gastos relacionados</option>
 						<option value="2">Intereses cobrados</option>
 						<option value="7">Inyecciones (otros)</option>
 						<option value="9">Inyecciones (por socios)</option>
+						<option value="12">Pagos de almuerzo</option>
+						<option value="13">Pagos de servicios</option>
 						<option value="3">Préstamos finalizados</option>
 						<option value="1">Préstamos y Desembolsos</option>
 						<option value="6">Rematados</option>
@@ -703,7 +707,126 @@ $('#btnFiltroAnaticica').click(()=> {
 						}
 					});
 				}); break;
-				break;
+				case '10':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 42 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '11':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 87 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '12':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 86 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '13':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 88 }}).done((resp)=> { //console.log(resp)
+					var data = JSON.parse(resp);
+					if(resp.length==0){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
 				
 			default:
 				break;

@@ -161,13 +161,13 @@ $cochera=0;
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
-						<? if( $_COOKIE['ckPower']=='1' ):?>
+						<? if( $_COOKIE['ckPower']==='1' )?>
 						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
-						<? endif;?>
+						<? ?>
 					  </ul>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-7 divImagen">
+				<div class="col-xs-12 col-sm-6 divImagen">
 					<?php 
 					$directorio = "images/productos/".$_GET['idProducto'];
 					if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
@@ -189,20 +189,21 @@ $cochera=0;
 					}else{echo '<li><a href="images/imgBlanca.png" data-lightbox="image-1"><img src="images/imgBlanca.png" class="img-responsive" ></a></li>';} ?>
 				</div>
 				<div class="col-xs-12 col-sm-5 divDatosProducto">
-					<h2 class="mayuscula purple-text text-lighten-1"><span id="spanClase"><?= $rowProducto['tipopDescripcion']; ?></span>: <span class="h2Producto"><?php echo  $rowProducto['prodNombre']; ?></span></h2>
+					<h2 class="mayuscula purple-text text-lighten-1"><span id="spanClase"><?= $rowProducto['tipopDescripcion']; ?></span>: <span class="h2Producto"><?php echo  $rowProducto['prodNombre']; ?></span> <span class="badge"><?php echo $rowProducto['tipoDescripcion'] ?></span> </h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
-				<?php if($esCompra=='0'){ ?>
+				<?php if($esCompra=='0'){ ?>			
 					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
 				<?php } ?>
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
-					<p>Préstamo inicial: S/. <span id="spanPresInicial"><?= str_replace(',', '', number_format($rowProducto['prodMontoEntregado'],2)); ?></span></p>
+					<p style="display:inline-block">Préstamo inicial: </p><h4 style="display:inline-block; padding-left:5px; margin-top: 0px;margin-bottom: 0px;"> S/ <span id="spanPresInicial"><?= str_replace(',', '', number_format($rowProducto['prodMontoEntregado'],2)); ?></span>
+					</h4>
 					<p>Cantidad: <span id="spanCantp"><?php echo $rowProducto['prodCantidad']; ?> </span><?php echo $rowProducto['prodCantidad']==='1' ? 'Und.' : 'Unds.' ?></p>
 				<?php if($esCompra=='0'){ ?>
 					<p>Adquisición: <strong><span>Por empeño</span></strong></p>
 				<?php }else { ?>
 					<p>Adquisición: <strong><span>Por compra</span></strong></p>
 				<?php } ?>
-					<p>Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
+					<p class="hidden">Estado del producto: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?> estadoProducto"><?php echo $rowProducto['tipoDescripcion'] ?></strong></p>
 					<p>Estado del sub-préstamo: <strong class="<?php echo $rowProducto['tipColorMaterial']; ?>"><?php echo $rowProducto['prodActivo']==='0' ? 'No vigente' : 'Vigente' ?></strong></p>
 
 					<?php 
@@ -440,7 +441,7 @@ $cochera=0;
 								<th data-sort="string">Responsable <i class="icofont icofont-expand-alt"></i></th><th>Fecha / Hora <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Acción <i class="icofont icofont-expand-alt"></i></th><th data-sort="string">Tipo Pago <i class="icofont icofont-expand-alt"></i></th> <th>Intervalos</th> <th data-sort="float">Montos S/<i class="icofont icofont-expand-alt"></i></th><th>Observaciones</th><th>@</th>
 							</tr></thead>
 							<tbody>
-							<tr class="hidden">
+							<tr class="">
 								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
@@ -462,7 +463,7 @@ $cochera=0;
 							</tbody>
 						</table>
 						</div>
-					<!-- 	<ul>
+						<!-- <ul>
 						<li>Registrado por <span class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></span>: <span class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?></span> <button class="btn btn-sm btn-azul btn-outline btnImprimirTicket" data-boton="<?php echo 0;/*$rowProducto['idTipoProceso']*/ ?>"><i class="icofont icofont-print"></i></button></li>
 						
 							echo "<li>{$rowEstados['tipoDescripcion']} por  <span class='spanQuienRegistra'>{$rowEstados['usuNombres']}</span>, con S/. <span class='spanCantv3'>".number_format($rowEstados['cajaValor'],2)."</span>: <span class='spanFechaFormat'>{$rowEstados['cajaFecha']}</span> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton={$rowEstados['idTipoProceso']}><i class='icofont icofont-print'></i></button></li>";
@@ -474,7 +475,7 @@ $cochera=0;
 					<!--Inicio de pestaña interior 03-->
 						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Financiera</h4>
 						<ul>
-							<li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li>
+							<!-- <li>Capital o desembolso	13/01/2018 03:37 p.m.	S/. 700.00	bmanrique</li> -->
 						</ul>
 					<!--Fin de pestaña interior 03-->
 					</div>

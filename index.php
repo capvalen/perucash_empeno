@@ -389,7 +389,7 @@ $('#btnAcceder').click(function() {
 				console.log(resp)
 				window.location="principal.php";
 			}else if(resp=='inhabilitado'){
-				$('#spanError2').text('Tu usuario fue inhabilitado temporalmente. No inista o llame a soporte');
+				$('#spanError2').text('Tu usuario fue inhabilitado temporalmente. No inista y llame a soporte informático.');
 				$('#divError').removeClass('hidden');
 				$('#txtUser_app').select();
 				$('.fa-spin').addClass('sr-only');$('.icofont-ui-lock').removeClass('sr-only');
