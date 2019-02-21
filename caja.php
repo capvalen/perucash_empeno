@@ -145,10 +145,12 @@ a:focus, a:hover { color: #62286f; }
 						<p class=""><strong>*** Salidas ***</strong></p>
 						<p class=""><strong>Efectivo:</strong>  S/ <span id="spanCierreEfectivo"></span></p>
 						<p class=""><strong>Tarjetas:</strong>  S/ <span id="spanCierreTarjetas"></span></p>
+						<p class=""><strong>Depósitos bancarios:</strong>  S/ <span id="spanCierreBancos"></span></p>
 						<hr>
 						<p class=""><strong>Cierre Efectivo Manual:</strong>  S/ <span id="spanTotalEfectivo"></span></p>
 						<p class=""><strong>Cierre Efectivo Sistema:</strong>  S/ <span id="spanTotalSistema"></span></p>
-						<p class=""><strong>Resumen:</strong> <span id="spanSobra"></span></p>
+						<hr>
+						<p class=""><strong>Resumen: <span id="spanSobra"></span> </strong></p>
 					</div>
 				</div>
 				
@@ -388,6 +390,7 @@ function calculoTicketVirtual() {
 
 	var efectivosSalida = parseFloat($('#strSumaSalida').attr('data-efectivo').replace(',', '.'));
 	var tarjetasSalida = parseFloat($('#strSumaSalida').attr('data-tarjeta').replace(',', '.'));
+	var bancosSalida = parseFloat($('#strSumaSalida').attr('data-banco').replace(',', '.'));
 
 	$('#spanAperturaDia').text(apertura.toFixed(2));
 
@@ -397,6 +400,8 @@ function calculoTicketVirtual() {
 
 	$('#spanCierreEfectivo').text(efectivosSalida.toFixed(2));
 	$('#spanCierreTarjetas').text(tarjetasSalida.toFixed(2));
+	$('#spanCierreBancos').text(bancosSalida.toFixed(2));
+	
 
 	cuadre = parseFloat(apertura+efectivosEntrada-efectivosSalida-tarjetasSalida).toFixed(2);
 	sobra = parseFloat(cuadre-cierre);
@@ -407,7 +412,7 @@ function calculoTicketVirtual() {
 		$('#spanSobra').text('Cuadre exacto');
 	}
 	if(sobra <0){
-		$('#spanSobra').text('Falta S/ '+ sobra.toFixed(2));		
+		$('#spanSobra').text('Falta S/ '+ (0-sobra).toFixed(2));		
 	}
 	if(sobra > 0){
 		$('#spanSobra').text('Sobra S/ '+ sobra.toFixed(2));		

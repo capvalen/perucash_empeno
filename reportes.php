@@ -48,32 +48,42 @@ require("php/conkarl.php");
 				<h2 class="purple-text text-lighten-1">Reporte productos</h2>
 				<div class="row">
 					<p>¿Qué tipo de reporte quieres ver?</p>
-					<div class="col-xs-12 col-sm-6" id="cmbEstadoProd">
+					<div class="col-xs-12 col-sm-3" id="cmbEstadoProd">
 					<select class="selectpicker mayuscula" title="Nuevo estado..." id="cmbEstadoCombo"  data-width="100%" data-live-search="true" data-size="15">
 						<option class="optProducto mayuscula" data-tokens="9999">Analítica</option>
 					<?php require 'php/detalleReporteOPT.php'; ?>
 					</select></div>
-					<div class=" divAnalitica col-xs-12 col-sm-6 hidden">
-					<select class="form-control" id="sltFiltroAnalitica">
-						<option value="0">Seleccione una opción</option>
-						<option value="4">Amortizaciones</option>
-						<option value="11">Gastos de almuerzo</option>
-						<option value="10">Gastos relacionados</option>
-						<option value="2">Intereses cobrados</option>
-						<option value="7">Inyecciones (otros)</option>
-						<option value="9">Inyecciones (por socios)</option>
-						<option value="12">Pagos de almuerzo</option>
-						<option value="13">Pagos de servicios</option>
-						<option value="3">Préstamos finalizados</option>
-						<option value="1">Préstamos y Desembolsos</option>
-						<option value="6">Rematados</option>
-						<option value="8">Retiro por socios</option>
-						<option value="5">Vendidos</option>
-					</select>
-					<div class="container-fluid" style="margin-top: 10px;">
-					<div class="col-xs-8"><input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos"></div>
-					<div class="col-xs-4"><button class="btn btn-success btn-outline" id="btnFiltroAnaticica">Filtrar <i class="icofont icofont-search-alt-1"></i></button></div>
+					<div class=" divAnalitica col-xs-12 col-sm-8 hidden">
+					<div class="col-xs-12 col-xs-4 divInternosReportes">
+						<select class="form-control" id="sltFiltroAnalitica">
+							<option value="0">Seleccione una opción</option>
+							<option value="4">Amortizaciones</option>
+							<option value="11">Gastos de almuerzo</option>
+							<option value="10">Gastos relacionados</option>
+							<option value="2">Intereses cobrados</option>
+							<option value="7">Inyecciones (otros)</option>
+							<option value="9">Inyecciones (por socios)</option>
+							<option value="12">Pagos de almuerzo</option>
+							<option value="13">Pagos de servicios</option>
+							<option value="3">Préstamos finalizados</option>
+							<option value="1">Préstamos y Desembolsos</option>
+							<option value="6">Rematados</option>
+							<option value="14">Reporte mayor</option>
+							<option value="8">Retiro por socios</option>
+							<option value="5">Vendidos</option>
+						</select>
 					</div>
+					<div class="col-xs-12 col-xs-4 divInternosReportes">
+						<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos">
+					</div>
+					<div class="col-xs-12 col-xs-4">
+						<button class="btn btn-success btn-outline" id="btnFiltroAnaticica">Filtrar <i class="icofont icofont-search-alt-1"></i></button>
+					</div>
+					
+					<!-- <div class="container-fluid" style="margin-top: 10px;">
+						<div class="col-xs-8"></div>
+						<div class="col-xs-4"></div>
+					</div> -->
 				<label class="hidden" id="spanError"><i class="icofont icofont-warning"></i>Tiene que seleccionar un tipo de producto</label>
 				</div>
 				</div>
@@ -86,8 +96,10 @@ require("php/conkarl.php");
 						<th data-sort="int" id="thUnds">Unds. <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Descripción del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
+						<th id="tdFechaUltPago" data-sort="int">Fecha <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/<i class="icofont icofont-expand-alt"></i></th>
+						
 					  </tr>
 					</thead>
 					<tbody>
@@ -133,6 +145,7 @@ $('#cmbEstadoCombo').change(function () {
 	$('tfoot').children().remove();
 	$('.divAnalitica').addClass('hidden');
 	$('#thUnds').removeClass('hidden');
+	$('#tdFechaUltPago').addClass('hidden');
 	$('#tdUltPago').text('Último pago');
 	$('#tablita .cabezaExtra').remove();
 	switch(estado){
@@ -162,7 +175,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -193,7 +206,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -221,7 +234,7 @@ $('#cmbEstadoCombo').change(function () {
 				if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 			});
@@ -250,7 +263,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -282,7 +295,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -314,7 +327,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -348,7 +361,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -380,7 +393,7 @@ $('#cmbEstadoCombo').change(function () {
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
-							<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+							<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 							</th></tfoot>`);
 					}
 				});
@@ -419,7 +432,7 @@ $('#cmbEstadoCombo').change(function () {
 				if(data.length==i+1){
 					$('#tablita').append(`<tfoot><th><td></td><td></td>
 						<td><strong>Total: </strong></td>
-						<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+						<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 						</th></tfoot>`);
 				}
 			});
@@ -440,14 +453,16 @@ $('#btnFiltroAnaticica').click(()=> {
 	}else{
 		$('tbody').children().remove();
 		$('tfoot').children().remove();
+		$('#tdFechaUltPago').addClass('hidden');
+		$('.divInternosReportes').removeClass('hidden');
 		switch ($('#sltFiltroAnalitica').val()) {
 			case '1':
 				$.ajax({url: 'php/reportePrestamosMes.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -455,7 +470,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					$.each(data, function (i, dato) {
 						sumaElementos+=parseFloat(dato.cajaValor);
 						$('tbody').append(`
-						<tr><td>${dato.idProducto}</td>
+						<tr><td>${dato.idProducto}</td><td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
@@ -463,9 +478,9 @@ $('#btnFiltroAnaticica').click(()=> {
 						</tr>`);
 						
 						if(data.length==i+1){
-							$('#tablita').append(`<tfoot><th><td></td><td></td>
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -473,10 +488,10 @@ $('#btnFiltroAnaticica').click(()=> {
 			case '2':
 				$.ajax({url: 'php/reporteInteresesCobrados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val() }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -484,7 +499,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					$.each(data, function (i, dato) {
 						sumaElementos+=parseFloat(dato.cajaValor);
 						$('tbody').append(`
-						<tr><td>${dato.idProducto}</td>
+						<tr><td>${dato.idProducto}</td><td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
@@ -492,20 +507,21 @@ $('#btnFiltroAnaticica').click(()=> {
 						</tr>`);
 						
 						if(data.length==i+1){
-							$('#tablita').append(`<tfoot><th><td></td><td></td>
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
 				}); break;
 				case '3':
+				$('#tdFechaUltPago').removeClass('hidden');
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 32 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -514,7 +530,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						sumaElementos+=parseFloat(dato.cajaValor);
 						sumaCapitales += parseFloat(dato.prodMontoEntregado);
 						$('tbody').append(`
-						<tr><td>${dato.idProducto}</td>
+						<tr><td>${dato.idProducto}</td><td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
@@ -525,19 +541,19 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
-								<td>S/. ${parseFloat(sumaCapitales).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaCapitales).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
 				}); break;
 				case '4':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 45 }}).done((resp)=> { //console.log(resp)
-					var data = JSON.parse(resp);
-					if(resp.length==0){
+					var data = JSON.parse(resp); console.log( data );
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -546,6 +562,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						sumaElementos+=parseFloat(dato.cajaValor);
 						$('tbody').append(`
 						<tr><td>${dato.idProducto}</td>
+							<td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
@@ -553,9 +570,9 @@ $('#btnFiltroAnaticica').click(()=> {
 						</tr>`);
 						
 						if(data.length==i+1){
-							$('#tablita').append(`<tfoot><th><td></td><td></td>
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -563,10 +580,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '5':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 21 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -574,7 +591,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					$.each(data, function (i, dato) {
 						sumaElementos+=parseFloat(dato.cajaValor);
 						$('tbody').append(`
-						<tr><td>${dato.idProducto}</td>
+						<tr><td>${dato.idProducto}</td><td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
@@ -582,9 +599,9 @@ $('#btnFiltroAnaticica').click(()=> {
 						</tr>`);
 						
 						if(data.length==i+1){
-							$('#tablita').append(`<tfoot><th><td></td><td></td>
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -592,10 +609,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '6':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 20 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen artículos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -613,7 +630,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -621,10 +638,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '7':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 31 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -642,7 +659,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -650,10 +667,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '8':
 				$.ajax({url: 'php/reporteRetiroSocios.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 41 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -672,7 +689,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -680,10 +697,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '9':
 				$.ajax({url: 'php/reporteRetiroSocios.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 80 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -702,7 +719,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -710,10 +727,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '10':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 42 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -732,7 +749,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -740,10 +757,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '11':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 87 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -762,7 +779,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -770,10 +787,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '12':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 86 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -792,7 +809,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
@@ -800,10 +817,10 @@ $('#btnFiltroAnaticica').click(()=> {
 				case '13':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 88 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
-					if(resp.length==0){
+					if(resp=='[]'){
 						$('tbody').append(`
 						<tr>
-							<td class="mayuscula">No existen procesos en ésta categoría</td>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);
@@ -822,12 +839,14 @@ $('#btnFiltroAnaticica').click(()=> {
 						if(data.length==i+1){
 							$('#tablita').append(`<tfoot><th><td></td><td></td>
 								<td><strong>Total: </strong></td>
-								<td>S/. ${parseFloat(sumaElementos).toFixed(2)}</td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
 								</th></tfoot>`);
 						}
 					});
 				}); break;
-				
+			case '14': 
+				$('.divInternosReportes').removeClass('hidden');
+			break;
 			default:
 				break;
 		}

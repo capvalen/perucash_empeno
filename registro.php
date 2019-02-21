@@ -12,7 +12,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 <body>
 
 <style>
-.btnMasterEntrada{ width: 90%; height: 100px; font-size: 20px; }
+/* .btnMasterEntrada{ width: 90%; height: 100px; font-size: 20px; } */
 .btnMasterEntrada i{font-size: 48px;}
 .spanNomProductov3{font-size: 17px;}
 .divMonto{color: #191c1f;}
@@ -30,8 +30,34 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			<!-- Empieza a meter contenido 2 --> 
 			<h3 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h3><hr>
 			<div class="contenedorBienvenida">
-				<h5>Elija una opción de registro</h5>
-				<div class="row"><br>
+				<h5>Elija una opción de registro:</h5>
+				<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<div class="panel panel-default btnMasterEntrada" id="btnRemateMaster">
+						<div class="panel-body">
+							<img src="images/graf_empeno.png?v=1.0" class="img-responsive" >
+							<h3 class="text-center blue-grey-text text-lighten-2">Prendarios</h3>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<div class="panel panel-default btnMasterEntrada" id="btnCompraMaster">
+						<div class="panel-body">
+							<img src="images/graf_compra.png?v=1.0" class="img-responsive" >
+							<h3 class="text-center blue-grey-text text-lighten-2">Compras</h3>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<div class="panel panel-default btnMasterEntrada" id="btnPrestamosSinDni">
+						<div class="panel-body">
+							<img src="images/graf_prestamo.png?v=1.0" class="img-responsive" >
+							<h3 class="text-center blue-grey-text text-lighten-2">Préstamos c/DNI</h3>
+						</div>
+					</div>
+				</div>
+				</div>
+				<!-- <div class="row"><br>
 					<div class="col-sm-4 text-center">
 						<button class="btn btn-warning btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-deal"></i> <br>Préstamo prendario</button>
 					</div>
@@ -41,7 +67,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 					<div class="col-sm-4 text-center">
 						<button class="btn btn-infocat btn-outline btnMasterEntrada" id="btnPrestamosSinDni"><i class="icofont icofont-id"></i> <br>Préstamos con Dni</button>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<span class="hidden queMichiEs"></span>
 			<div class="contenedorDatosCliente hidden">

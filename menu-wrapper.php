@@ -72,7 +72,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 							if( file_exists($imagen) ):?>
 								<img src="<?= $imagen; ?>" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
 							<? else: ?>
-							<img src="https://perucash.com/app/images/usuarios/noimg.svg?ver=1.1" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
+							<img src="https://perucash.com/app/images/usuarios/noimg.jpg?ver=1.2" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
 							<? endif;?>
 							</a>
 							<ul class="dropdown-menu">
