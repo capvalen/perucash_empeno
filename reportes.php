@@ -34,6 +34,7 @@ require("php/conkarl.php");
 	}
 	#tablita th{cursor: pointer;}
 	#spanError{color: #d50000;}
+	.sandbox-container{display: inline-block;}
 </style>
 <div id="wrapper">
 
@@ -54,7 +55,7 @@ require("php/conkarl.php");
 					<?php require 'php/detalleReporteOPT.php'; ?>
 					</select></div>
 					<div class=" divAnalitica col-xs-12 col-sm-8 hidden">
-					<div class="col-xs-12 col-xs-4 divInternosReportes">
+					<div class="col-xs-12 col-xs-4 ">
 						<select class="form-control" id="sltFiltroAnalitica">
 							<option value="0">Seleccione una opción</option>
 							<option value="4">Amortizaciones</option>
@@ -76,8 +77,18 @@ require("php/conkarl.php");
 					<div class="col-xs-12 col-xs-4 divInternosReportes">
 						<input type="text" id="dtpFechaIniciov3" class="form-control text-center" placeholder="Fecha para filtrar datos">
 					</div>
-					<div class="col-xs-12 col-xs-4">
+					<div class="col-xs-12 col-xs-4 divInternosReportes">
 						<button class="btn btn-success btn-outline" id="btnFiltroAnaticica">Filtrar <i class="icofont icofont-search-alt-1"></i></button>
+					</div>
+					<div class="col-xs-8 hidden" id="divReporteMayor">
+					<div class="sandbox-container">
+						<div class="input-daterange input-group" id="datepicker">
+							<input type="text" class="input-sm form-control" id="inputFechaInicio" name="start" />
+							<span class="input-group-addon" style="font-size: 12px;">hasta</span>
+							<input type="text" class="input-sm form-control" id="inputFechaFin" name="end" />
+						</div>
+					</div>
+					<button class="btn btn-primary btn-outline " style="margin-top: -3rem;"><i class="icofont icofont-search"></i></button>
 					</div>
 					
 					<!-- <div class="container-fluid" style="margin-top: 10px;">
@@ -86,6 +97,28 @@ require("php/conkarl.php");
 					</div> -->
 				<label class="hidden" id="spanError"><i class="icofont icofont-warning"></i>Tiene que seleccionar un tipo de producto</label>
 				</div>
+				</div>
+				<div class="row  table-responsive" id="tablasReporteMayor">
+					<table id="tablaGanancias">
+					<thead>
+						<tr>
+							<th>Estructura</th>
+							<th>Cobro</th>
+							<th>Capital</th>
+							<th>Ganancia</th>
+						</tr>
+					</thead>
+					</table>
+					<table id="tablaGastos">
+					<thead>
+						<tr>
+							<th>Estructura</th>
+							<th>Inversión</th>
+							<th>Gasto</th>
+						</tr>
+					</thead>
+					</table>
+					<h3>Ganancia Neta: S/ <span>0.00</span></h3>
 				</div>
 				
 				<div class="row tablaResultados table-responsive">
@@ -129,7 +162,9 @@ $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({ format : 'YYYY-MM', lang : 
 $(document).ready(function(){
 	$('#dtpFechaIniciov3').bootstrapMaterialDatePicker('setDate', moment());
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
-	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$('.sandbox-container input').datepicker({language: "es", autoclose: true, clearBtn: true, todayBtn: "linked", todayHighlight: true}); //para activar las fechas
+	$('.sandbox-container .input-daterange').datepicker({language: "es", autoclose: true,  clearBtn: true, todayBtn: "linked", todayHighlight: true});
+
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
 		var nueFecha=moment($(dato).text());
@@ -850,6 +885,19 @@ $('#btnFiltroAnaticica').click(()=> {
 			default:
 				break;
 		}
+	}
+});
+$('#sltFiltroAnalitica').click(function() {
+	if( $('#sltFiltroAnalitica').val()=='14' ){
+		$('.divInternosReportes').addClass('hidden');
+		$('.tablaResultados').addClass('hidden');
+		$('#divReporteMayor').removeClass('hidden');
+		$('#tablasReporteMayor').removeClass('hidden');
+	}else{
+		$('.divInternosReportes').removeClass('hidden');
+		$('.tablaResultados').removeClass('hidden');
+		$('#divReporteMayor').addClass('hidden');
+		$('#tablasReporteMayor').addClass('hidden');
 	}
 });
 
