@@ -21,14 +21,14 @@ if( $numRow>0){
 	$llamadoCliente->close();
 	//insertarProductos($idCliente, $conection );
 	//echo 'si existe su id es: '.$idCliente;
-	$sqlUpdDatos="UPDATE `Cliente` SET `cliApellidos`='{$cliente[0]['apellidoCli']}',`cliNombres`='{$cliente[0]['nombresCli']}', `cliDireccion`='{$cliente[0]['direccionCli']}',`cliCorreo`= '{$cliente[0]['celularCli']}',`cliCelular`='{$cliente[0]['celularCli']}',`cliFijo`='{$cliente[0]['fijoCli']}' WHERE `idCliente` = {$idCliente} ;";
+	$sqlUpdDatos="UPDATE `Cliente` SET `cliApellidos`=trim('{$cliente[0]['apellidoCli']}'),`cliNombres`=trim('{$cliente[0]['nombresCli']}'), `cliDireccion`='{$cliente[0]['direccionCli']}',`cliCorreo`= '{$cliente[0]['celularCli']}',`cliCelular`='{$cliente[0]['celularCli']}',`cliFijo`='{$cliente[0]['fijoCli']}' WHERE `idCliente` = {$idCliente} ;";
 	$resultadoUpdDatos=$cadena->query($sqlUpdDatos);
 	
 
 	
 }else{
 	//No existe insertar cliente nuevo
-	$sqlCliente="call insertClienteV3('{$cliente[0]['apellidoCli']}', '{$cliente[0]['nombresCli']}', '{$cliente[0]['dniCli']}', '{$cliente[0]['direccionCli']}', '{$cliente[0]['correoCli']}', '{$cliente[0]['celularCli']}', '{$cliente[0]['fijoCli']}' );";
+	$sqlCliente="call insertClienteV3(trim('{$cliente[0]['apellidoCli']}'), trim('{$cliente[0]['nombresCli']}'), '{$cliente[0]['dniCli']}', '{$cliente[0]['direccionCli']}', '{$cliente[0]['correoCli']}', '{$cliente[0]['celularCli']}', '{$cliente[0]['fijoCli']}' );";
 	
 	$llamadoClienteNew = $conection->prepare($sqlCliente);
 	$llamadoClienteNew->execute();

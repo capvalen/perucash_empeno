@@ -169,7 +169,7 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 				</div></div>
 			</div>
 			<div class="tarjeta">
-				<div class="col-xs-12 col-sm-6  tarjeta"><h3>Record 15 productos</h3>
+				<div class="col-xs-12 col-md-6  tarjeta"><h3>Record 15 productos</h3>
 					<canvas id="myChart" width="400" height="400"></canvas>
 				</div>
 			</div>

@@ -83,7 +83,7 @@ $cochera=0;
   border-radius: 5px;
   padding: 5px;
   display: flex;
-  background: #ab47bc; color: white;box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.13);
+  background: #a35bb4; color: white;box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.13);
   /* background: whitesmoke; */}
 .mensaje:before {
   width: 0;
@@ -138,6 +138,7 @@ $cochera=0;
     color: #fefbff;
     padding: 7px 45px;
 }
+
 </style>
 <div class="" id="wrapper">
 
@@ -191,9 +192,15 @@ $cochera=0;
 				<div class="col-xs-12 col-sm-5 divDatosProducto">
 					<h2 class="mayuscula purple-text text-lighten-1"><span id="spanClase"><?= $rowProducto['tipopDescripcion']; ?></span>: <span class="h2Producto"><?php echo  $rowProducto['prodNombre']; ?></span> <span class="badge"><?php echo $rowProducto['tipoDescripcion'] ?></span> </h2>
 					<h4 class="purple-text text-lighten-1">Código de producto: #<span><?php echo $rowProducto['idProducto']; ?></span></h4>
-				<?php if($esCompra=='0'){ ?>			
-					<p class="mayuscula">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span><a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a></p>
-				<?php } ?>
+							
+					<p class="mayuscula <?php if($esCompra=='1'){ echo "hidden";}?>">Dueño: <span class="hidden" id="spanIdDueno"><? if($esCompra =='1'){echo '00000000';}else{echo $rowProducto['cliDni'];} ?></span>
+						<?php if($esCompra=='0'){ ?>
+						<a href="cliente.php?idCliente=<?php echo $rowProducto['idCliente']; ?>" class="spanDueno" data-dni="<?= $rowProducto['cliDni']; ?>" data-propietario="<?= $rowProducto['idCliente']; ?>"><?php echo $rowProducto['cliNombres']; ?></a>
+						<?php }else{ ?>
+							<a href=#" class="spanDueno" data-dni="00000000" data-propietario="compra Sin Dni"><?php echo "compra Sin Dni"; ?></a>
+						<?php } ?>
+					</p>
+				
 					<p class="hidden">Registrado: <span><?php echo $rowProducto['prodFechaRegistro']; ?></span></p>
 					<p style="display:inline-block">Préstamo inicial: </p><h4 style="display:inline-block; padding-left:5px; margin-top: 0px;margin-bottom: 0px;"> S/ <span id="spanPresInicial"><?= str_replace(',', '', number_format($rowProducto['prodMontoEntregado'],2)); ?></span>
 					</h4>
@@ -268,7 +275,7 @@ $cochera=0;
 				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 			<?php }
 				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
-					<button class="btn btn-infocat btn-outline btn-block btn-lg hidden" id="btnPagoAutomatico">Automático</button>
+					<button class="btn btn-infocat btn-outline btn-block btn-lg " id="btnPagoAutomatico">Automático</button>
 
 					<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
 					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
@@ -350,6 +357,8 @@ $cochera=0;
 					<div class="tab-pane fade in active container-fluid" id="tabIntereses">
 					<!--Inicio de pestaña interior 01-->
 						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección intereses</h4>
+					<div class="row"> <!-- primer row en pestaña -->
+					<div class="col-xs-12 col-sm-6">
 					<?php 
 					if($esCompra=='1'){
 						?>
@@ -429,6 +438,24 @@ $cochera=0;
 					
 						} //Fin de else despues producto ya no genera intereses
 					} ?>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						
+						<div class="conjuntoMensajes">
+						<?php
+						$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres, ( case when tp.tipoDescripcion is NULL then 'Mensaje simple' else tp.tipoDescripcion end ) as 'tipoDescripcion'
+							FROM `avisos` a
+							left join tipoProceso tp on tp.idTipoProceso = a.tipoComentario
+							inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto']." order by a.idAviso desc;");
+						while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
+							<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje mayuscula"><?php echo $rowMensajes['aviMensaje']; ?></p> </div></div>
+						<?php } ?>
+						</div>
+						<?php if($rowProducto['prodObservaciones']<>''){ ?>
+							<div class="mensaje"><div class="texto"><p><strong class="mayuscula"><?php echo $rowProducto['usuNombres']; ?>:</strong></p> <p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
+						<?php } ?>
+					</div>
+					</div> <!-- fin de primer row  -->
 					<!--Fin de pestaña interior 01-->
 					</div>
 					<div class="tab-pane fade container-fluid" id="tabMovEstados">
@@ -442,7 +469,7 @@ $cochera=0;
 							</tr></thead>
 							<tbody>
 							<tr class="">
-								<td class="spanQuienRegistra"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
+								<td class="spanQuienRegistra mayuscula"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
 							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres, m.moneDescripcion FROM `caja` ca
@@ -482,21 +509,9 @@ $cochera=0;
 					<div class="tab-pane fade container-fluid" id="tabAdvertencias">
 					<!--Inicio de pestaña interior 04-->
 						<h4 class="purple-text text-lighten-1"><i class="icofont icofont-ui-clip"></i> Sección Observaciones y Advertencias antes de rematar</h4>
-						<?php if($rowProducto['prodObservaciones']<>''){ ?>
-							<div class="mensaje"><div class="texto"><p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
-						<?php } ?>
-						<div class="conjuntoMensajes">
-						<?php
-						$sqlMensajes=mysqli_query($conection, "SELECT a.*, u.usuNombres, ( case when tp.tipoDescripcion is NULL then 'Mensaje simple' else tp.tipoDescripcion end ) as 'tipoDescripcion'
-							FROM `avisos` a
-							left join tipoProceso tp on tp.idTipoProceso = a.tipoComentario
-							inner join usuario u on u.idUsuario= a.idUsuario where idProducto=".$_GET['idProducto'].";");
-						while($rowMensajes = mysqli_fetch_array($sqlMensajes, MYSQLI_ASSOC)){ ?>
-							<div class="mensaje"><div class="texto"><p><strong><?php echo $rowMensajes['usuNombres']; ?></strong> <small><i class="icofont icofont-clock-time"></i> <span class="spanFechaFormat"><?php echo $rowMensajes['aviFechaAutomatica']; ?></span></small></p> <p class="textoMensaje"><?php echo $rowMensajes['tipoDescripcion'].': '.$rowMensajes['aviMensaje']; ?></p> </div></div>
-						<?php } ?>
-						</div>
-						<div class="dejarMensaje row"><div class="col-sm-4">
-						<select name="" id="sltTipoMensaje" class="form-control">
+						
+						<div class="dejarMensaje row"><div class="col-sm-4 hidden">
+						<select name="" id="sltTipoMensaje" class="form-control ">
 							<option value="0" selected>Mensaje simple</option>
 					<?php 
 					$sqlTPMensajes = "SELECT * FROM `tipoProceso` where idTipoProceso in(62, 63, 64, 65, 66, 67, 73) order by tipoDescripcion asc;";
@@ -542,7 +557,7 @@ $cochera=0;
 					$numLineaMovimiento=$resultadoMovimiento->num_rows;
 					if($numLineaMovimiento>0){
 						while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
-							<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo $rowMovim['tipoDescripcion'].': <span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
+							<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo '<span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em class="hidden"><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
 						<?php }
 					}
 					$consultaMovimiento->fetch();
@@ -554,7 +569,7 @@ $cochera=0;
 					
 					<div class="row">
 					<div class="col-xs-12" id="divTipoMovAlmacen">
-						<select class="selectpicker mayuscula" id="sltTipoMovimiento"  data-width="50%" data-live-search="false" data-size="15">
+						<select class="selectpicker mayuscula hidden" id="sltTipoMovimiento"  data-width="50%" data-live-search="false" data-size="15">
 							<option class="optPiso mayuscula" data-tokens="23">En almacén</option>
 							<option class="optPiso mayuscula" data-tokens="46">Entrada a almacén</option>
 							<option class="optPiso mayuscula" data-tokens="47">Salida de almacén</option>
@@ -724,7 +739,7 @@ $cochera=0;
 					<label for="">Tipo de pago</label>
 					<div id="cmbEstadoPagos">
 					<select class="selectpicker mayuscula" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
-						<?php require 'php/detallePagosOPT.php'; ?>
+						<?php require 'php/detallePagosOPTv3.php'; ?>
 					</select></div>
 					<label for="">Fecha de pago</label>
 					<input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
@@ -1000,7 +1015,7 @@ $(document).ready(function(){
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
 		var nueFecha=moment($(dato).text());
-		$(dato).text(nueFecha.format('ddd DD/MMM/YYYY hh:mm a'));
+		$(dato).text(nueFecha.format('ddd DD MMM YYYY hh:mm a'));
 		//$(dato).attr('data-sort');//
 	});
 
@@ -1080,7 +1095,7 @@ $('#btnDejarMensaje').click(function () {
 			}
 		}).done(function (resp) { console.log(resp)
 			moment.locale('es');
-			$('.conjuntoMensajes').append(`<div class="mensaje"><div class="texto"><p><strong>${$.JsonUsuario.usunombres}</strong> <small><i class="icofont icofont-clock-time"></i> ${moment().format('LLLL')}</small></p> <p class="textoMensaje">${$('#sltTipoMensaje option:selected').text()} : ${ $('#txtDejarMensaje').val()}</p> </div></div>`);
+			$('.conjuntoMensajes').prepend(`<div class="mensaje"><div class="texto"><p><strong>${$.JsonUsuario.usunombres}</strong> <small><i class="icofont icofont-clock-time"></i> ${moment().format('LLLL')}</small></p> <p class="textoMensaje mayuscula">${ $('#txtDejarMensaje').val()}</p> </div></div>`);
 			$('#txtDejarMensaje').val('');
 		});
 	}

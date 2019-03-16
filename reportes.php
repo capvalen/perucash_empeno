@@ -98,8 +98,8 @@ require("php/conkarl.php");
 				<label class="hidden" id="spanError"><i class="icofont icofont-warning"></i>Tiene que seleccionar un tipo de producto</label>
 				</div>
 				</div>
-				<div class="row  table-responsive" id="tablasReporteMayor">
-					<table id="tablaGanancias">
+				<div class="row table-responsive hidden" id="tablasReporteMayor">
+					<table id="tablaGanancias" class="table table-hover">
 					<thead>
 						<tr>
 							<th>Estructura</th>
@@ -109,7 +109,7 @@ require("php/conkarl.php");
 						</tr>
 					</thead>
 					</table>
-					<table id="tablaGastos">
+					<table id="tablaGastos" class="table table-hover">
 					<thead>
 						<tr>
 							<th>Estructura</th>
@@ -850,7 +850,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					});
 				}); break;
 				case '13':
-				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 88 }}).done((resp)=> { //console.log(resp)
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 88 }}).done((resp)=> {
 					var data = JSON.parse(resp);
 					if(resp=='[]'){
 						$('tbody').append(`
