@@ -1637,6 +1637,9 @@ $('#btnPagoAutomatico').click(function() {
 });
 $('#txtAutoDinero').keyup(function () {
 	var total =0, dinero=0;
+	if( $('#txtAutoDinero').val()> $('#txtAutoDinero').attr('data-valor') ){
+		$('#txtAutoDinero').val(parseFloat($('#txtAutoDinero').attr('data-valor')).toFixed(2));
+	}
 	
 	$('#txtAutoCochera').val("0.00");
 	$('#txtAutoGastos').val("0.00");
