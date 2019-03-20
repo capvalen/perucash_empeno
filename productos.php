@@ -138,7 +138,10 @@ $cochera=0;
     color: #fefbff;
     padding: 7px 45px;
 }
-
+#modalPagoAutomatico .close{ color: #6f5e5e; }
+#modalPagoAutomatico .close:hover{color: #ea1010;opacity: 0.7;}
+#modalPagoAutomatico .modal-content{box-shadow: 0 5px 15px rgba(0,0,0,.5);}
+#modalPagoAutomatico .form-control{margin-bottom: 10px;}
 </style>
 <div class="" id="wrapper">
 
@@ -892,15 +895,29 @@ $cochera=0;
 
 <!--Modal Para llamar pago automático-->
 <div class="modal animated fadeIn " id="modalPagoAutomatico" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog ">
 		<div class="modal-content">
-			<div class="modal-header-infocat">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Pago automático</h4>
-			</div>
-			<div class="modal-body">
-				<p>Ingrese el nuevo capital</p>
-				<input type="number" class="form-control input-lg esMoneda text-center" id="txtDineroAutomatico">
+	
+			<div class="modal-body container-fluid">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+			<h3 class="text-center">Pago automático</h3>
+				<div class="row">
+					<div class="hidden-xs col-sm-4">
+						<img src="images/rect4945.png?v=1.0.1" alt="" class="img-responsive">
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p><strong>Dinero del cliente:</strong></p>
+						<input type="number" class="form-control input-lg inputGrande text-center esMoneda" autocomplete="nope" lang="en" id="txtAutoDinero" >
+						<p><strong>Cochera:</strong> <small></small></p>
+						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoCochera" readonly>
+						<p><strong>Gastos administrativos:</strong> <small></small></p>
+						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoGastos" readonly>
+						<p><strong>Intereses:</strong> <small></small></p>
+						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoInteres" readonly>
+						<p><strong>Capital:</strong> <small></small></p>
+						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 			<button class="btn btn-morado btn-outline" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-check"></i> Realizar pago</button>
@@ -1015,7 +1032,7 @@ $(document).ready(function(){
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
 		var nueFecha=moment($(dato).text());
-		$(dato).text(nueFecha.format('ddd DD MMM YYYY hh:mm a'));
+		$(dato).text(nueFecha.format('ddd DD MMMM YYYY hh:mm a'));
 		//$(dato).attr('data-sort');//
 	});
 
@@ -1604,11 +1621,72 @@ $('#btnActualizarFechaInt').click(function() {
 });
 $('#btnPagoAutomatico').click(function() {
 	pantallaOver(true);
-	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) {
-		console.log(resp)
+	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) { //console.log(resp)
+		var data = JSON.parse(resp);
+		console.log( data );
+		if( data.length>=1 ){
+			$('#txtAutoDinero').attr('data-valor', data[0].total ).val( "0.00").prev().find('small').text("S/ "+parseFloat(data[0].total).toFixed(2) );
+			$('#txtAutoCochera').attr('data-valor', data[0].cochera ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].cochera).toFixed(2) );
+			$('#txtAutoGastos').attr('data-valor', data[0].penalizacion ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].penalizacion).toFixed(2) );
+			$('#txtAutoInteres').attr('data-valor', data[0].interes ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].interes).toFixed(2) );
+			$('#txtAutoCapital').attr('data-valor', data[0].capital ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].capital).toFixed(2) );
+		}
 		pantallaOver(false);
 		$('#modalPagoAutomatico').modal('show');
 	});
+});
+$('#txtAutoDinero').keyup(function () {
+	var total =0, dinero=0;
+	
+	$('#txtAutoCochera').val("0.00");
+	$('#txtAutoGastos').val("0.00");
+	$('#txtAutoInteres').val("0.00");
+	$('#txtAutoCapital').val("0.00");
+
+	if(  $('#txtAutoDinero').val()!='' && $('#txtAutoDinero').val()!=0 ){
+		total = $('#txtAutoDinero').attr('data-valor');
+		dinero = parseFloat($('#txtAutoDinero').val());
+		
+		if(  parseFloat($('#txtAutoCochera').attr('data-valor'))>0 && dinero>0 ){
+			if( dinero >= parseFloat($('#txtAutoCochera').attr('data-valor')) ){
+				$('#txtAutoCochera').val(parseFloat($('#txtAutoCochera').attr('data-valor')).toFixed(2) );
+				dinero -= parseFloat($('#txtAutoCochera').attr('data-valor'));
+			}else{
+				$('#txtAutoCochera').val( dinero.toFixed(2) );
+				dinero = 0 ;
+			}
+			
+		}
+		if( parseFloat($('#txtAutoGastos').attr('data-valor'))>0 && dinero>0 ){
+			if( dinero >= parseFloat($('#txtAutoGastos').attr('data-valor')) ){
+				$('#txtAutoGastos').val(parseFloat($('#txtAutoGastos').attr('data-valor')).toFixed(2) );
+				dinero -= parseFloat($('#txtAutoGastos').attr('data-valor'));
+			}else{
+				$('#txtAutoGastos').val( dinero.toFixed(2) );
+				dinero = 0 ;
+			}
+		}
+		if( parseFloat($('#txtAutoInteres').attr('data-valor'))>0 && dinero>0 ){
+			if( dinero >= parseFloat($('#txtAutoInteres').attr('data-valor')) ){
+				$('#txtAutoInteres').val(parseFloat($('#txtAutoInteres').attr('data-valor')).toFixed(2) );
+				dinero -= parseFloat($('#txtAutoInteres').attr('data-valor'));
+			}else{
+				$('#txtAutoInteres').val( dinero.toFixed(2) );
+				dinero = 0 ;
+			}
+		}
+		if( parseFloat($('#txtAutoCapital').attr('data-valor'))>0 && dinero>0 ){
+			if( dinero >= parseFloat($('#txtAutoCapital').attr('data-valor')) ){
+				$('#txtAutoCapital').val(parseFloat($('#txtAutoCapital').attr('data-valor')).toFixed(2) );
+				dinero -= parseFloat($('#txtAutoCapital').attr('data-valor'));
+			}else{
+				$('#txtAutoCapital').val( dinero.toFixed(2) );
+				dinero = 0 ;
+			}
+		}
+		console.log("sobra "+dinero);
+
+	}
 });
 <?php }?>
 $('#btnGuardarCubicaje').click( ()=> {
