@@ -112,6 +112,17 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 						</div>
 					</div>
 				</div></div>
+				<div class="col-xs-6 col-sm-4"  style="padding-right: 0;"><div class="rowBlanco cuadroPeque">
+					<div class="container-fluid">
+						<div class="col-xs-3 divIcono round round-primary">
+							<i class="icofont icofont-money"></i> 
+						</div>
+						<div class="col-xs-9">
+							<span class="spanRelleno ">S/</span> <span class="spanValue "><?php include 'php/sumarInyeccionSociosHoy.php'; ?></span> <br>
+							<label>Inyección Socios</label>
+						</div>
+					</div>
+				</div></div>
 				<div class="col-xs-6 col-sm-4"  style="padding-left: 0;"><div class="rowBlanco cuadroPeque">
 					<div class="container-fluid">
 						<div class="col-xs-3 divIcono round round-primary">
