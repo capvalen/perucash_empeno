@@ -1,3 +1,10 @@
+RewriteEngine On
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+<IfModule mod_headers.c>    
+    Header set Access-Control-Allow-Origin *
+</IfModule>
 <FilesMatch "\.(js|css|ico|pdf|flv|jpg|jpeg|png|gif|swf|mp3|mp4|ttf|woff|woff2)$">
 Header set Cache-Control "public"
 Header set Expires "Thu, 15 Apr 2020 20:00:00 GMT"

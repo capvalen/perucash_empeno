@@ -442,9 +442,9 @@ $('#dtpFechaIniciov3').bootstrapMaterialDatePicker({
 	okText: 'Aceptar', nowText: 'Hoy'
 });
 $('#dtpCajaFechaPago').bootstrapMaterialDatePicker({
-	format: 'DD/MM/YYYY hh:mm a',
+	format: 'DD/MM/YYYY h:mm a',
 	lang: 'es',
-	time: true,
+	shortTime : true,
 	weekStart: 1,
 	cancelText : 'Cerrar',
 	nowButton : true,

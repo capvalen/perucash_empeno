@@ -172,6 +172,7 @@ $(document).ready(function(){
 	});
 });
 $('#cmbEstadoCombo').change(function () {
+	pantallaOver(true);
 	var estado=$('#cmbEstadoProd').find('li.selected a').attr('data-tokens');
 	var sumaElementos=0;
 	console.log(estado);
@@ -187,6 +188,7 @@ $('#cmbEstadoCombo').change(function () {
 		case '23':
 		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarInventarioAlmacen.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+			pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -206,7 +208,6 @@ $('#cmbEstadoCombo').change(function () {
 						<td data-sort-value="${moment(dato.cubFecha).format('X')}">${moment(dato.cubFecha, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
 						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 					</tr>`);
-					
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
 							<td><strong>Total: </strong></td>
@@ -218,6 +219,7 @@ $('#cmbEstadoCombo').change(function () {
 		case '24':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosProrrogav3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -249,6 +251,7 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '29':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 0}}).done(function (resp) {
+				pantallaOver(false);
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
 				 <tr>
@@ -277,6 +280,7 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '30':
 			$.ajax({url: 'php/listarInventarioPorEstado.php', type: 'POST', data:{ estado: 1}}).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -307,6 +311,7 @@ $('#cmbEstadoCombo').change(function () {
 		case '37':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosEmpenosv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -339,6 +344,7 @@ $('#cmbEstadoCombo').change(function () {
 		case '38':
 		$('#tablita').find('#tdUltPago').html('Fecha de compra <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarSoloCompras.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -372,6 +378,7 @@ $('#cmbEstadoCombo').change(function () {
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 		$('#tablita thead tr').append('<th class="cabezaExtra">Detalle.</th>');
 			$.ajax({url: 'php/listarProductosVencidos.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -405,6 +412,7 @@ $('#cmbEstadoCombo').change(function () {
 		case '72':
 		$('#tablita').find('#tdUltPago').html('Días vencido <i class="icofont icofont-expand-alt"></i>');
 			$.ajax({url: 'php/listarProductosVigentesv3.php', type: 'POST' }).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 				if(JSON.parse(resp).length==0){
 					$('tbody').append(`
 					<tr>
@@ -438,6 +446,7 @@ $('#cmbEstadoCombo').change(function () {
 			$('#thUnds').addClass('hidden');
 			$('#tdUltPago').text('Desembolso');
 			$.ajax({url: 'php/listarCreditosOnline.php', type: 'POST'}).done(function(resp) {
+				pantallaOver(false);
 				$('tbody').html(resp);
 			});
 		break;
@@ -446,6 +455,7 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		default:
 			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { //console.log(resp);
+				pantallaOver(false);
 			if(JSON.parse(resp).length==0){
 				$('tbody').append(`
 				<tr>

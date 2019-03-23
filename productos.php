@@ -48,6 +48,7 @@ $cochera=0;
 <head>
 	<title>Productos: PeruCash</title>
 	<?php include "header.php"; ?>
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
 </head>
 
 <body>
@@ -142,6 +143,8 @@ $cochera=0;
 #modalPagoAutomatico .close:hover{color: #ea1010;opacity: 0.7;}
 #modalPagoAutomatico .modal-content{box-shadow: 0 5px 15px rgba(0,0,0,.5);}
 #modalPagoAutomatico .form-control{margin-bottom: 10px;}
+/* .pEnLinea{display: inline-block;} */
+#modalPagoAutomatico .checkbox>label {color: inherit; font-size: 13px; font-weight: 700;} */
 </style>
 <div class="" id="wrapper">
 
@@ -560,7 +563,7 @@ $cochera=0;
 					$numLineaMovimiento=$resultadoMovimiento->num_rows;
 					if($numLineaMovimiento>0){
 						while($rowMovim = $resultadoMovimiento->fetch_assoc()){ ?>
-							<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo '<span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em class="hidden"><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
+							<li><span class='spanFechaFormat'><?php echo $rowMovim['cubFecha']; ?></span>: <strong style='color: #ab47bc;'>«<?php echo '<span class="mayuscula">'.$rowMovim['estDescripcion'].'</span> '.$rowMovim['pisoDescripcion'].' <span>'.$rowMovim['zonaDescripcion'].'</span>'; ?>»</strong> <span class='mayuscula'><?php echo $rowMovim['cubObservacion']; ?></span>. <em ><strong><?php echo $rowMovim['usuNombres']; ?></strong></em></li>
 						<?php }
 					}
 					$consultaMovimiento->fetch();
@@ -906,16 +909,29 @@ $cochera=0;
 						<img src="images/rect4945.png?v=1.0.1" alt="" class="img-responsive">
 					</div>
 					<div class="col-xs-12 col-sm-6">
-						<p><strong>Dinero del cliente:</strong></p>
+						<p class="pEnLinea"><strong>Dinero del cliente:</strong></p>
 						<input type="number" class="form-control input-lg inputGrande text-center esMoneda" autocomplete="nope" lang="en" id="txtAutoDinero" >
-						<p><strong>Cochera:</strong> <small></small></p>
-						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoCochera" readonly>
-						<p><strong>Gastos administrativos:</strong> <small></small></p>
-						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoGastos" readonly>
-						<p><strong>Intereses:</strong> <small></small></p>
-						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoInteres" readonly>
-						<p><strong>Capital:</strong> <small></small></p>
-						<input type="number" class="form-control input-sm esMoneda" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
+						<div class="checkbox checkbox-success checkbox-circle">
+							<input class="chkInterno" id="checkbox1" type="checkbox" class="styled" checked>
+							<label for="checkbox1">Cochera: </label> <small></small>
+						</div>
+						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCochera" readonly>
+						<div class="checkbox checkbox-success checkbox-circle">
+							<input class="chkInterno" id="checkbox2" type="checkbox" class="styled" checked>
+							<label for="checkbox2">Gastos administrativos: </label> <small></small>
+						</div>
+						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoGastos" readonly>
+						<div class="checkbox checkbox-success checkbox-circle">
+							<input class="chkInterno" id="checkbox3" type="checkbox" class="styled" checked>
+							<label for="checkbox3">Intereses: </label> <small></small>
+						</div>
+						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoInteres" readonly>
+						<div class="checkbox checkbox-success checkbox-circle">
+							<input class="chkInterno" id="checkbox4" type="checkbox" class="styled" checked>
+							<label for="checkbox4">Capital: </label> <small></small>
+						</div>
+						
+						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
 					</div>
 				</div>
 			</div>
@@ -1035,11 +1051,6 @@ $(document).ready(function(){
 		$(dato).text(nueFecha.format('ddd DD MMMM YYYY hh:mm a'));
 		//$(dato).attr('data-sort');//
 	});
-
-$('#dtpFechaPago').val('<?php
-	$date = new DateTime($_GET['fecha']);
-	echo  $date->format('d/m/Y h:mm a');
-?>');
 $('#txtFechaCongelar').val(moment().format('YYYY-MM-DD'));
 $('#dtpFechaPago').bootstrapMaterialDatePicker({
 	format: 'DD/MM/YYYY h:m a',
@@ -1140,7 +1151,7 @@ $('#btnActualizarEstado').click(function () {
 $('#dtpCajaFechaPago').bootstrapMaterialDatePicker({
 	format: 'DD/MM/YYYY hh:mm a',
 	lang: 'es',
-	time: true,
+	shortTime: true,
 	weekStart: 1,
 	cancelText : 'Cerrar',
 	nowButton : true,
@@ -1626,6 +1637,16 @@ $('#btnPagoAutomatico').click(function() {
 		console.log( data );
 		if( data.length>=1 ){
 			$('#txtAutoDinero').attr('data-valor', data[0].total ).val( "0.00").prev().find('small').text("S/ "+parseFloat(data[0].total).toFixed(2) );
+			if(data[0].cochera ==0){
+				$('#txtAutoCochera').addClass('hidden').prev().addClass('hidden');
+			}else{
+				$('#txtAutoCochera').removeClass('hidden').prev().removeClass('hidden');
+			}
+			if(data[0].penalizacion ==0){
+				$('#txtAutoGastos').addClass('hidden').prev().addClass('hidden');
+			}else{
+				$('#txtAutoGastos').removeClass('hidden').prev().removeClass('hidden');
+			}
 			$('#txtAutoCochera').attr('data-valor', data[0].cochera ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].cochera).toFixed(2) );
 			$('#txtAutoGastos').attr('data-valor', data[0].penalizacion ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].penalizacion).toFixed(2) );
 			$('#txtAutoInteres').attr('data-valor', data[0].interes ).val("0.00").prev().find('small').text("S/ "+parseFloat(data[0].interes).toFixed(2) );
@@ -1635,9 +1656,14 @@ $('#btnPagoAutomatico').click(function() {
 		$('#modalPagoAutomatico').modal('show');
 	});
 });
+$('.inputModif').keyup(function () {
+	var suma = 0;
+	suma = parseFloat($('#txtAutoCochera').val())+ parseFloat($('#txtAutoGastos').val())+ parseFloat($('#txtAutoInteres').val()) + parseFloat($('#txtAutoCapital').val());
+	$('#txtAutoDinero').val(suma.toFixed(2));
+});
 $('#txtAutoDinero').keyup(function () {
 	var total =0, dinero=0;
-	if( $('#txtAutoDinero').val()> $('#txtAutoDinero').attr('data-valor') ){
+	if( parseFloat($('#txtAutoDinero').val())> parseFloat($('#txtAutoDinero').attr('data-valor')) ){
 		$('#txtAutoDinero').val(parseFloat($('#txtAutoDinero').attr('data-valor')).toFixed(2));
 	}
 	
@@ -1691,6 +1717,13 @@ $('#txtAutoDinero').keyup(function () {
 
 	}
 });
+$('#btnPagarAutomatico').click(function() {
+	pantallaOver(true);
+	var quePaga = [];
+	quePaga.push({ codProd: '<?= $_GET['idProducto'];?>', total: $('#txtAutoDinero').val(), cochera: $('#txtAutoCochera').val(), penalizacion: $('#txtAutoGastos').val(), interes: $('#txtAutoInteres').val(), amortizacion: $('#txtAutoCapital').val() });
+	console.log( quePaga );
+	pantallaOver(false);
+});
 <?php }?>
 $('#btnGuardarCubicaje').click( ()=> {
 	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
@@ -1715,7 +1748,34 @@ $('#btnGuardarCubicaje').click( ()=> {
 			}
 		});}
 });
+$('.chkInterno').change(function() {
 
+	if( $('#txtAutoDinero').val()>0 ){
+		if($(this).prop('checked')==false  ){
+			if( $(this).parent().next().val()=='0.00' ){
+				$(this).parent().next().attr('readonly', true);	
+				$(this).prop('checked', true); //Bloquea el acceso al input
+				$(this).parent().next().focus();
+			}else{
+				$(this).parent().next().attr('readonly', false);
+			}
+		}else{
+			$(this).parent().next().attr('readonly', true);
+		}
+
+		$.each( $('.chkInterno'), function (i, elem) {
+			if( !$(elem).prop('checked')==false ){
+				$('#txtAutoDinero').attr('readonly', false);
+			}else{
+				$('#txtAutoDinero').attr('readonly', true);
+				return false;
+			}
+		});
+	}else{
+		$(this).prop('checked', true);
+		$('#txtAutoDinero').focus();
+	}
+});
 </script>
 
 <?php 
@@ -1728,7 +1788,6 @@ $('.modal-GuardadoCorrecto').modal('show');
 <?php  } ?>
 
 <?php } ?>
-
 </body>
 
 </html>
