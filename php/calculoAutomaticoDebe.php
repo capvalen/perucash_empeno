@@ -10,6 +10,11 @@ $filas = array();
 $resultado=$cadena->query($sql);
 $row=$resultado->fetch_assoc();
 
+$sqlAdela="SELECT `sumarAdelantos`(".$_POST['idProd'].");";
+$resultadoAdela=$esclavo->query($sqlAdela);
+$rowAdela=$resultadoAdela->fetch_row();
+$adelantos = $rowAdela[0];
+
 $base = $row['preCapital'];
 $dias = $row['diferenciaDias'];
 $interes = $row['preInteres'];
@@ -51,9 +56,9 @@ endif;
 
 
 if( $dias <=7){
-	$razonInteres= round($dias * ($interes),2);
+	$razonInteres= round(($dias * ($interes))-$adelantos,2);
 }else{
-	$razonInteres= round($dias * ($interes/7),2);
+	$razonInteres= round(($dias * ($interes/7))-$adelantos,2);
 }
 $intCalculado= round(($base*$razonInteres)/100,1,PHP_ROUND_HALF_UP );
 $sumTotal = $base + $cochera + $mora + $intCalculado;

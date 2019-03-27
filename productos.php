@@ -42,6 +42,7 @@ $iniRecupero=91;
 $finRecupero=160;
 
 $cochera=0;
+$adelantos=0;
 
 ?>
 
@@ -66,7 +67,7 @@ $cochera=0;
 }
 .h3Nombres{margin-top: 0px;}
 .divDatosProducto p{font-size: 13px;transition: all 0.4s ease-in-out; /* cursor:default; */ color: #546e7a;}
-.divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; }
+/* .divDatosProducto p:hover{font-size: 16px; transition: all 0.4s ease-in-out; color:#2979ff; } */
 .divImagen img{border-radius: 7px;}
 .divBotonesAccion{margin: 15px 0;}
 .tab-pane li{list-style: none;}
@@ -392,7 +393,9 @@ $cochera=0;
 						
 						
 							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if($rowProducto['presFechaCongelacion']<>''): echo '<strong>(Congelado)</strong>'; endif; if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? } ?></li>
+							<?php if( $adelantos >0 ){ ?>
 							<li>Adelantos: S/ <span><?= number_format($adelantos,2); ?></span></li>
+							<?php } ?>
 						<?php
 						
 						if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
@@ -1637,7 +1640,7 @@ $('#btnActualizarFechaInt').click(function() {
 });
 $('#btnPagoAutomatico').click(function() {
 	pantallaOver(true);
-	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) { //console.log(resp)
+	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd: <?= $_GET['idProducto'];?> }}).done(function(resp) { console.log(resp)
 		var data = JSON.parse(resp);
 		console.log( data );
 		if( data.length>=1 ){
@@ -1722,6 +1725,13 @@ $('#txtAutoDinero').keyup(function () {
 
 	}
 });
+$('#txtAutoInteres').keyup(function() {
+	if( parseFloat($(this).val())< parseFloat($(this).attr('data-valor')) ){
+		$('#txtAutoCapital').attr('readonly', true);
+		$('#checkbox4').prop('checked', true);
+		$('#txtAutoCapital').val('0.00');
+	}
+});
 $('#btnPagarAutomatico').click(function() {
 	pantallaOver(true);
 	var quePaga = [];
@@ -1756,14 +1766,32 @@ $('#btnGuardarCubicaje').click( ()=> {
 $('.chkInterno').change(function() {
 
 	if( $('#txtAutoDinero').val()>0 ){
-		if($(this).prop('checked')==false  ){
+		if($(this).prop('checked')==false ){
+			
 			if( $(this).parent().next().val()=='0.00' ){
 				$(this).parent().next().attr('readonly', true);	
 				$(this).prop('checked', true); //Bloquea el acceso al input
-				$(this).parent().next().focus();
 			}else{
 				$(this).parent().next().attr('readonly', false);
+				$(this).parent().next().focus();
 			}
+
+			switch ($(this).attr('id')) {
+					case "checkbox4":
+						if( parseFloat($('#txtAutoInteres').val()) == parseFloat($('#txtAutoInteres').attr('data-valor')) ){
+							$('#txtAutoCapital').attr('readonly', false);
+							$(this).prop('checked', false);
+						}else{
+							$('#txtAutoCapital').attr('readonly', true);
+							$(this).prop('checked', true);
+							return false;
+						}		
+						break;
+					
+					default:
+						break;
+				}
+				
 		}else{
 			$(this).parent().next().attr('readonly', true);
 		}
