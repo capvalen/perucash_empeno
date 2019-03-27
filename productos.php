@@ -381,6 +381,10 @@ $cochera=0;
 							}
 							$sqlIntereses = $conection->query($sqlBaseInteres);
 							$rowInteres = $sqlIntereses->fetch_assoc();
+							$sqlAdela="SELECT `sumarAdelantos`(".$_GET['idProducto'].");";
+							$resultadoAdela=$esclavo->query($sqlAdela);
+							$rowAdela=$resultadoAdela->fetch_row();
+							$adelantos = $rowAdela[0];
 							$gastosAdmin=0;
 							?>
 						<ul>
@@ -388,6 +392,7 @@ $cochera=0;
 						
 						
 							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if($rowProducto['presFechaCongelacion']<>''): echo '<strong>(Congelado)</strong>'; endif; if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? } ?></li>
+							<li>Adelantos: S/ <span><?= number_format($adelantos,2); ?></span></li>
 						<?php
 						
 						if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
