@@ -911,12 +911,13 @@ $adelantos=0;
 	
 			<div class="modal-body container-fluid">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-			<h3 class="text-center">Pago automático</h3>
+			
 				<div class="row">
-					<div class="hidden-xs col-sm-4">
-						<img src="images/rect4945.png?v=1.0.1" alt="" class="img-responsive">
+					<div class="hidden-xs col-sm-5">
+						<img src="images/1_XQdcsKkE_YPTrrif7rTnnQ.png?v=1.0.1" alt="" class="img-responsive">
 					</div>
 					<div class="col-xs-12 col-sm-6">
+						<h3 class="text-center">Pago automático</h3>
 						<p class="pEnLinea"><strong>Dinero del cliente:</strong></p>
 						<input type="number" class="form-control input-lg inputGrande text-center esMoneda" autocomplete="nope" lang="en" id="txtAutoDinero" >
 						<div class="checkbox checkbox-success checkbox-circle">
@@ -1735,8 +1736,42 @@ $('#txtAutoInteres').keyup(function() {
 $('#btnPagarAutomatico').click(function() {
 	pantallaOver(true);
 	var quePaga = [];
-	quePaga.push({ codProd: '<?= $_GET['idProducto'];?>', total: $('#txtAutoDinero').val(), cochera: $('#txtAutoCochera').val(), penalizacion: $('#txtAutoGastos').val(), interes: $('#txtAutoInteres').val(), amortizacion: $('#txtAutoCapital').val() });
-	console.log( quePaga );
+	var todoInteres=0, todoMora=0, todoCapital=0;
+	if( parseFloat($('#txtAutoGastos').val())== parseFloat($('#txtAutoGastos').attr('data-valor')) ){
+		todoMora=1;
+	}
+	if( parseFloat($('#txtAutoInteres').val())== parseFloat($('#txtAutoInteres').attr('data-valor')) ){
+		todoInteres=1;
+	}
+	if( parseFloat($('#txtAutoCapital').val())== parseFloat($('#txtAutoCapital').attr('data-valor')) ){
+		todoCapital=1;
+	}
+	quePaga.push({ codProd: '<?= $_GET['idProducto'];?>', total: $('#txtAutoDinero').val(), cochera: $('#txtAutoCochera').val(), penalizacion: $('#txtAutoGastos').val(), interes: $('#txtAutoInteres').val(), amortizacion: $('#txtAutoCapital').val(), capital: $('#txtAutoCapital').val() });
+	//console.log( quePaga );
+	$.ajax({url: 'php/autoInsertar.php', type: 'POST', data: { idProd: '<?= $_GET['idProducto'];?>', quePaga: quePaga, todoMora: todoMora,
+		todoInteres: todoInteres, todoCapital: todoCapital }}).done(function(resp) {
+		//console.log(resp)
+		var alma=JSON.parse(resp)[0];
+		console.log( alma.pagoAdelaInt );
+		var linea = '';
+		if( alma.pagoCoch =='1'){ linea = linea + "Cochera: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoPartePena =='1'){ linea = linea + "Mora parcial: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoPena =='1'){ linea = linea + "Mora: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoAdelaInt =='1'){ linea = linea + "Adelanto de interés: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoInt =='1'){ linea = linea + "Cancelación de interés: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoAmor =='1'){ linea = linea + "Amortización: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCochera').val()+"\n"; }
+		$.ajax({url: '<?= $servidorLocal?>', type: 'POST', data: {
+			codigo: "<?php echo $_GET['idProducto']; ?>",
+			hora: moment().format('DD/MM/YYYY hh:mm a'),
+			cliente: $('.spanDueno').text(),
+			articulo: $('.h2Producto'),
+			usuario: "<?= $_COOKIE['chAtiende'];?>",
+			linea: linea
+		 }}).done(function(resp) {
+			console.log(resp)
+		});
+	});
 	pantallaOver(false);
 });
 <?php }?>
@@ -1787,7 +1822,6 @@ $('.chkInterno').change(function() {
 							return false;
 						}		
 						break;
-					
 					default:
 						break;
 				}
