@@ -22,15 +22,17 @@ try {
     /* Print a "Hello world" receipt" */
     $printer = new Printer($connectorAuto);
     $printer -> setEmphasis(true);
-    $printer -> text("                PeruCash\n");
+    $printer->setJustification(Printer::JUSTIFY_CENTER);
+    $printer -> text("Peru Cash\n");
     $printer -> setEmphasis(false);
-    $printer -> text("      Casa de Préstamos y Empeños\n");
-    $printer -> text("          Oficina de Apoyo N° 1\n");
-    $printer -> text("   ----------------------------------\n");
+    $printer -> text("Casa de Préstamos y Empeños\n");
+    $printer -> text("Oficina de Apoyo N° 1\n");
+    $printer -> text("----------------------------------\n");
     $printer -> setEmphasis(true);
-    $printer -> text("        * Pagos *\n");
+    $printer -> text("* Pagos *\n");
+    $printer->setJustification(Printer::JUSTIFY_LEFT);
     $printer -> setEmphasis(false);
-    $printer -> text("   ".$_POST['hora']."\n\n");
+    $printer -> text("Fecha: ".$_POST['hora']."\n\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
     $printer -> text("Cod. Int.: ".$_POST['codArt']."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
