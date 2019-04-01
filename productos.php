@@ -44,6 +44,12 @@ $finRecupero=160;
 $cochera=0;
 $adelantos=0;
 
+$fecha1=$rowProducto['desFechaContarInteres'];
+$cuenta= new DateTime($fecha1); ;
+$hoy= new DateTime("now");
+$diasLimite=  $cuenta->diff($hoy);
+$limite=$diasLimite->days;
+
 ?>
 
 <head>
@@ -140,12 +146,13 @@ $adelantos=0;
     color: #fefbff;
     padding: 7px 45px;
 }
-#modalPagoAutomatico .close{ color: #6f5e5e; }
-#modalPagoAutomatico .close:hover{color: #ea1010;opacity: 0.7;}
-#modalPagoAutomatico .modal-content{box-shadow: 0 5px 15px rgba(0,0,0,.5);}
+#modalPagoAutomatico h3, .modal-pagoMaestro h3{ margin-top: 0px;}
+#modalPagoAutomatico .close, .modal-pagoMaestro .close { color: #6f5e5e; }
+#modalPagoAutomatico .close:hover, .modal-pagoMaestro .close:hover{color: #ea1010;opacity: 0.7;}
+#modalPagoAutomatico .modal-content, .modal-pagoMaestro .modal-content{box-shadow: 0 5px 15px rgba(0,0,0,.5);}
 #modalPagoAutomatico .form-control{margin-bottom: 10px;}
 /* .pEnLinea{display: inline-block;} */
-#modalPagoAutomatico .checkbox>label {color: inherit; font-size: 13px; font-weight: 700;} */
+#modalPagoAutomatico .checkbox>label {/* color: inherit; */color: #a35bb4; font-size: 13px; font-weight: 700;} */
 </style>
 <div class="" id="wrapper">
 
@@ -160,6 +167,7 @@ $adelantos=0;
 		<!-- Empieza a meter contenido 2.1 -->
 		<? if($filas >0):?>
 			<div class="container row" style="margin-bottom: 20px;">
+			
 				<div class="divBotonesEdicion" style="margin-bottom: 10px">
 					<div class="btn-group">
 					  <button type="button" class="btn btn-infocat btn-outline dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
@@ -169,9 +177,15 @@ $adelantos=0;
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
-						<? if( $_COOKIE['ckPower']==='1' )?>
+						<? if( $_COOKIE['ckPower']==='1' ){ ?>
 						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
-						<? ?>
+						<? } ?>
+						<? if( in_array($_COOKIE['ckPower'], $soloCaja )  ){ ?>
+						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático</a></li>
+						<? } ?>
+						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $limite>=37 && $esCompra==0 ){ ?>
+						<li><a href="#!" id="btnPagoRematev2"><i class="icofont icofont-flag"></i> Remate de producto</a></li>
+						<? } ?>
 					  </ul>
 					</div>
 				</div>
@@ -240,11 +254,7 @@ $adelantos=0;
 			?>
 				<div class="row">
 			<?php 
-			$fecha1=$rowProducto['desFechaContarInteres'];
-			$cuenta= new DateTime($fecha1); ;
-			$hoy= new DateTime("now");
-			$diasLimite=  $cuenta->diff($hoy);
-			$limite=$diasLimite->days;
+			
 
 			
 			$sql= "SELECT idTicket FROM `tickets` where cajaActivo in (0,1) and idProducto = {$_GET['idProducto']}"; // si tiene un ticket activo
@@ -271,9 +281,9 @@ $adelantos=0;
 				//fin de if de fallse
 				}else{
 
-				if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra=0 ){ ?>
-				<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-				<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
+				if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra==0 ){ ?>
+				<p style="margin-top: 10px; " class="hidden"><strong>Generar ticket:</strong></p>
+				<button class="btn btn-morado btn-lg btn-block btn-outline hidden"><i class="icofont icofont-mathematical-alt-1"></i> Rematar producto</button>
 
 			<?php } ?>
 
@@ -282,29 +292,14 @@ $adelantos=0;
 				<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
 			<?php }
 				if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
-					<button class="btn btn-infocat btn-outline btn-block btn-lg " id="btnPagoAutomatico">Automático</button>
+					<button class="btn btn-infocat btn-outline btn-block btn-lg hidden" id="">Automático</button>
 
-					<p style="margin-top: 10px;" ><strong>Pago especial</strong></p>
-					<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
+					<p style="margin-top: 10px;" class="hidden" ><strong>Pago especial</strong></p>
+					<button class="btn btn-morado btn-lg btn-block btn-outline hidden" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
 				<?php }
 				if($esCompra==0 && $rowProducto['prodActivo']==1 ){
 				
-					if( $limite >= 0 && $limite <= 35 ){ //zona de créditos ?>
-						<p style="margin-top: 10px;" ><strong>Zona pago de intereses</strong></p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de intereses</button>
-					<?php }
-					if( $limite == 36 ){ //zona de prórroga y zona de precio administrativo  && $limite <= 36  ?>
-						<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-						<p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-				<button class="btn btn-morado btn-lg btn-block btn-outline"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de rematar</button>
-					<?php }
-					if( $limite >= 37 ){ //zona venta de remate  && $limite <= 49 ?>
-					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
-						<!-- <p style="margin-top: 10px;" ><strong>Zona precio administrativo</strong> Vender a 250%</p>
-						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicket"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de precio admin.</button> -->
-					<?php }
+					
 					/* if( $limite >= 50 && $limite <= 59 ){ //zona  venta de remate ?>
 					<p style="margin-top: 10px;" ><strong>Zona prórroga</strong></p>
 						<button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketIntereses"><i class="icofont icofont-mathematical-alt-1"></i> Ticket de prórroga</button>
@@ -741,38 +736,47 @@ $adelantos=0;
 <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4) { ?>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header-primary">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar pago maestro</h4>
-			</div>
+		
 			<div class="modal-body">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 				<div class="container-fluid">
-					<p>Rellene cuidadosamente la siguiente información</p>
-					<label for="">Tipo de pago</label>
-					<div id="cmbEstadoPagos">
-					<select class="selectpicker mayuscula" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
-						<?php require 'php/detallePagosOPTv3.php'; ?>
-					</select></div>
-					<label for="">Fecha de pago</label>
-					<input id="dtpFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
-					<label for="">Método de pago</label>
-					<div id="divCmbMetodoPago">
-						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
-							<?php include 'php/listarMonedaOPT.php'; ?>
-						</select>
-					</div> <br>
-					<label for="">Monto de pago</label>
-					<input type="number" class="form-control input-lg mayuscula text-center" id="txtMontoPagos" autocomplete="off" style="font-size: 20px;">
-					<label for="">¿Observaciones?</label>
-					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
-					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+				<div class="row">
+					<div class="hidden-xs col-sm-6">
+					<img src="images/782a2fc7989fc1d244d2f7604a7d57ff.jpg?v=1.0.1" alt="" class="img-responsive">
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<h3 class="modal-tittle" style="color: #a35bb4;">Pago especial</h3>
+						
+						<label for="" class="hidden">Tipo de pago</label>
+						<div id="cmbEstadoPagos" class="hidden">
+						<select class="selectpicker mayuscula" id="cmbPagosOpt" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
+							<?php require 'php/detallePagosOPTv3.php'; ?>
+						</select></div>
+						<label for="" class="hidden">Fecha de pago</label>
+						<input id="dtpFechaPago" type="text" class="form-control input-lg text-center hidden" autocomplete="off">
+						<label for="">Método de pago</label>
+						<div id="divCmbMetodoPago">
+							<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+								<?php include 'php/listarMonedaOPT.php'; ?>
+							</select>
+						</div> <br>
+						<label for="">Cantidad de items vendidos</label>
+						<input type="number" class="form-control input-lg mayuscula text-center" id="txtCantPagos" value="1" max="<?= $rowProducto['prodCantidad']; ?>" autocomplete="off" style="font-size: 20px;">
+						<label for="">Monto</label>
+						<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" autocomplete="off" style="font-size: 20px;">
+						<label for="">¿Observaciones?</label>
+						<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+						<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+						<button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertRemate" ><i class="icofont icofont-save"></i> Insertar proceso</button>
+						<button class="btn btn-infocat btn-outline btn-block" id="btnInsertPagoMaestro" ><i class="icofont icofont-save"></i> Insertar proceso</button>
+					</div>
+				</div>
+					
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button class="btn btn-azul btn-outline" id="btnInsertPagoMaestro" ><i class="icofont icofont-bubble-down"></i> Insertar pago maestro</button>
-		</div>
+			
 		</div>
 	</div>
 </div>
@@ -917,36 +921,36 @@ $adelantos=0;
 						<img src="images/1_XQdcsKkE_YPTrrif7rTnnQ.png?v=1.0.1" alt="" class="img-responsive">
 					</div>
 					<div class="col-xs-12 col-sm-6">
-						<h3 class="text-center">Pago automático</h3>
-						<p class="pEnLinea"><strong>Dinero del cliente:</strong></p>
+						<h3 class="text-center" style="color: #a35bb4;">Pago automático</h3>
+						<p class="pEnLinea"  style="color: #a35bb4;"><strong>Dinero del cliente:</strong></p>
 						<input type="number" class="form-control input-lg inputGrande text-center esMoneda" autocomplete="nope" lang="en" id="txtAutoDinero" >
-						<div class="checkbox checkbox-success checkbox-circle">
+						<div class="checkbox checkbox-infocat checkbox-circle">
 							<input class="chkInterno" id="checkbox1" type="checkbox" class="styled" checked>
 							<label for="checkbox1">Cochera: </label> <small></small>
 						</div>
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCochera" readonly>
-						<div class="checkbox checkbox-success checkbox-circle">
+						<div class="checkbox checkbox-infocat checkbox-circle">
 							<input class="chkInterno" id="checkbox2" type="checkbox" class="styled" checked>
 							<label for="checkbox2">Gastos administrativos: </label> <small></small>
 						</div>
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoGastos" readonly>
-						<div class="checkbox checkbox-success checkbox-circle">
+						<div class="checkbox checkbox-infocat checkbox-circle">
 							<input class="chkInterno" id="checkbox3" type="checkbox" class="styled" checked>
 							<label for="checkbox3">Intereses: </label> <small></small>
 						</div>
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoInteres" readonly>
-						<div class="checkbox checkbox-success checkbox-circle">
+						<div class="checkbox checkbox-infocat checkbox-circle">
 							<input class="chkInterno" id="checkbox4" type="checkbox" class="styled" checked>
 							<label for="checkbox4">Capital: </label> <small></small>
 						</div>
 						
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
+
+						<button class="btn btn-infocat btn-outline btn-block" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-diskette"></i> Realizar pago</button>
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-			<button class="btn btn-morado btn-outline" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-check"></i> Realizar pago</button>
-		</div>
+			
 		</div>
 	</div>
 </div>
@@ -1350,6 +1354,8 @@ $('#btnInventariarNegativo').click(function () {
 });
 $('.modal-pagoMaestro').on('shown.bs.modal', function () {
 	$('#dtpFechaPago').val( moment().format('DD/MM/YYYY h:mm a') );
+	$('#sltMetodopago').selectpicker('val', 'Efectivo');
+	$('#txtMontoPagos').val('0.00');
 });
 $('#btnInsertPositivo').click(function () {
 	$.ajax({
@@ -1461,6 +1467,12 @@ $('#liEditDescription').click(function() {
 	$('#sltEstadoMod').val(<?= $rowProducto['prodActivo']; ?>);
 	$('.modalEditarProducto').modal('show');
 });
+$('#txtCantPagos').keyup(function(e) {
+	if (parseInt($('#txtCantPagos').val())> parseInt($('#txtCantPagos').attr('max'))){
+		$('#txtCantPagos').val($('#txtCantPagos').attr('max'));
+	}
+});
+
 <? if( $_COOKIE['ckPower']=='1' ):?>
 $('#liCongelar').click(function() {
 	$('.modalCongelarProducto').modal('show');
@@ -1525,9 +1537,45 @@ $('#txtMontoTicketIntereses').focusout(function () {
 	$("#txtMontoTicketIntereses").trigger(e);
 });
 
-<?php } if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4){ ?>
+<?php } if( in_array($_COOKIE['ckPower'], $soloCaja)){ ?>
 $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
+});
+$('#btnPagoRematev2').click(function() {
+	$('#btnInsertRemate').removeClass('hidden');
+	$('#btnInsertPagoMaestro').addClass('hidden');
+	$('#txtCantPagos').val(0);
+	$('#cmbPagosOpt').selectpicker('val', 'Rematado');
+	$('.modal-pagoMaestro').modal('show');
+});
+$('#btnInsertRemate').click(function() {
+	pantallaOver(true);
+	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
+	if( $('#txtMontoPagos').val()==0 ){
+		pantallaOver(false);
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Los pagos deben ser mayor a cero');
+	}else if($('#cmbPagosOpt').selectpicker('val')=='Rematado' && $('#txtCantPagos').val()==0){
+		pantallaOver(false);
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser cero');
+	}else{ 
+		$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
+			idProd: <?php echo $_GET['idProducto']; ?>,
+			quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
+			cuanto: $('#txtMontoPagos').val(),
+			cantidad: $('#txtCantPagos').val(),
+			moneda: idMoneda,
+			fecha : moment().format('YYYY-MM-DD H:mm'),
+			obs: $('#txtObsPagos').val()+' '+" Unds: -"+$('#txtCantPagos').val()
+		}}).done((resp)=> { console.log (resp);
+			pantallaOver(false);
+			if( $.isNumeric(resp) ){
+				$('.modal-pagoMaestro').modal('hide');
+				$('#btnRefre2').removeClass('hidden'); $('#btnBien').addClass('hidden');
+				$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
+				$('.modal-GuardadoCorrecto').modal('show');
+			}
+		});
+	}
 });
 $('#btnInsertPagoMaestro').click(function() {
 	pantallaOver(true);
@@ -1535,6 +1583,12 @@ $('#btnInsertPagoMaestro').click(function() {
 	if(idMoneda == null ){
 		pantallaOver(false);
 		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
+	}else if( $('#txtMontoPagos').val()==0 ){
+		pantallaOver(false);
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Los pagos deben ser mayor a cero');
+	}else if($('#cmbPagosOpt').selectpicker('val')=='Rematado' && $('#txtCantPagos').val()==0){
+		pantallaOver(false);
+		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser cero');
 	}else{ 
 		$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
 			idProd: <?php echo $_GET['idProducto']; ?>,
@@ -1752,29 +1806,30 @@ $('#btnPagarAutomatico').click(function() {
 		todoInteres: todoInteres, todoCapital: todoCapital }}).done(function(resp) {
 		//console.log(resp)
 		var alma=JSON.parse(resp)[0];
-		console.log( alma.pagoAdelaInt );
+		//console.log( alma.pagoAdelaInt );
 		var linea = '';
 		if( alma.pagoCoch =='1'){ linea = linea + "Cochera: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoPartePena =='1'){ linea = linea + "Mora parcial: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoPena =='1'){ linea = linea + "Mora: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoAdelaInt =='1'){ linea = linea + "Adelanto de interés: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoInt =='1'){ linea = linea + "Cancelación de interés: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoAmor =='1'){ linea = linea + "Amortización: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCochera').val()+"\n"; }
-		$.ajax({url: '<?= $servidorLocal?>', type: 'POST', data: {
-			codigo: "<?php echo $_GET['idProducto']; ?>",
+		if( alma.pagoPartePena =='1'){ linea = linea + "Mora parcial: S/ "+ $('#txtAutoGastos').val()+"\n"; }
+		if( alma.pagoPena =='1'){ linea = linea + "Mora: S/ "+ $('#txtAutoGastos').val()+"\n"; }
+		if( alma.pagoAdelaInt =='1'){ linea = linea + "Adelanto de interés: S/ "+ $('#txtAutoInteres').val()+"\n"; }
+		if( alma.pagoInt =='1'){ linea = linea + "Cancelación de interés: S/ "+ $('#txtAutoInteres').val()+"\n"; }
+		if( alma.pagoAmor =='1'){ linea = linea + "Amortización: S/ "+ $('#txtAutoCapital').val()+"\n"; }
+		if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCapital').val()+"\n"; }
+		$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
+			codArt: "<?= $_GET['idProducto']; ?>",
 			hora: moment().format('DD/MM/YYYY hh:mm a'),
 			cliente: $('.spanDueno').text(),
-			articulo: $('.h2Producto'),
-			usuario: "<?= $_COOKIE['chAtiende'];?>",
+			articulo: $('.h2Producto').text(),
+			usuario: "<?= $_COOKIE['ckAtiende'];?>",
 			linea: linea
 		 }}).done(function(resp) {
 			console.log(resp)
 		});
 	});
 	pantallaOver(false);
+	location.reload();
 });
-<?php }?>
+<?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {
 	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
 	var estante= $('#divSelectEstante').find('.selected a').attr('data-tokens');

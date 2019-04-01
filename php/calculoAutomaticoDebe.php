@@ -56,11 +56,11 @@ endif;
 
 
 if( $dias <=7){
-	$razonInteres= round(($dias * ($interes))-$adelantos,2);
+	$razonInteres= round(($dias * ($interes)),2);
 }else{
-	$razonInteres= round(($dias * ($interes/7))-$adelantos,2);
+	$razonInteres= round(($dias * ($interes/7)),2);
 }
-$intCalculado= round(($base*$razonInteres)/100,1,PHP_ROUND_HALF_UP );
+$intCalculado= round((($base*$razonInteres)/100)-$adelantos,1,PHP_ROUND_HALF_UP );
 $sumTotal = $base + $cochera + $mora + $intCalculado;
 
 $filas[0] = array( "capital"=> $row['preCapital'], "penalizacion"=> $mora , "cochera"=> $cochera, "soloInteres"=> $interes , "soloDias"=> $dias, "interes"=> str_replace( ',', '', number_format($intCalculado,2)), "total"=> str_replace( ',', '', number_format($sumTotal,2)) ) ;
