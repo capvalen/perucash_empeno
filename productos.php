@@ -481,6 +481,7 @@ $limite=$diasLimite->days;
 								<td class="spanQuienRegistra mayuscula"><?php echo $rowProducto['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowProducto['prodFechaInicial']; ?> </td><td>Registro de producto</td> <td></td> <td></td> <td><span class='spanCantv3'><?php echo number_format($rowProducto['prodMontoEntregado'],2) ?></span></td><td></td><td> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowProducto['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
 							<?php $i=0;
+							$fechaAnt= new DateTime($rowProducto['prodFechaInicial']);  $fechaAnt1= new DateTime($fechaAnt->format('Y-m-d'));
 							$sqlEstado=mysqli_query($conection, "SELECT ca.*, tp.tipoDescripcion, u.usuNombres, m.moneDescripcion FROM `caja` ca
 								inner join tipoProceso tp on tp.idTipoProceso= ca.idTipoProceso
 								inner join usuario u on u.idUsuario=ca.idUsuario
@@ -489,7 +490,7 @@ $limite=$diasLimite->days;
 							while($rowEstados = mysqli_fetch_array($sqlEstado, MYSQLI_ASSOC)){ ?>
 							<tr>
 								<td data-id="<?php echo $rowEstados['idCaja']; ?>" data-activo="<?php echo $rowEstados['cajaActivo']; ?>" class="spanQuienRegistra mayuscula"><?php echo $rowEstados['usuNombres']; ?></td><td class="spanFechaFormat"><?php echo $rowEstados['cajaFecha']; ?></td><td class="tpIdDescripcion" data-id="<?php echo $rowEstados['idTipoProceso']; ?>" ><?php echo $rowEstados['tipoDescripcion']; ?></td><td class="tdMoneda"><?= $rowEstados['moneDescripcion']; ?></td>
-								<? if($i>=1):  $fechaAct=new DateTime($rowEstados['cajaFecha']); $fechaAct1= new DateTime($fechaAct->format('Y-m-d')); $calculo = $fechaAct1->diff($fechaAnt1)->format('%a'); ?><td><i class="icofont icofont-arrow-up"></i> <? if($calculo =='0'){echo 'Mismo día';} if($calculo =='1'){echo '1 día';} if($calculo >'1'){echo $calculo.' días';} ?></td><? else: ?><td></td> <? endif;?>
+								<? if($i>=0):  $fechaAct=new DateTime($rowEstados['cajaFecha']); $fechaAct1= new DateTime($fechaAct->format('Y-m-d')); $calculo = $fechaAct1->diff($fechaAnt1)->format('%a'); ?><td><i class="icofont icofont-arrow-up"></i> <? if($calculo =='0'){echo 'Mismo día';} if($calculo =='1'){echo '1 día';} if($calculo >'1'){echo $calculo.' días';} ?></td><? else: ?><td></td> <? endif;?>
 								<td><span class='spanCantv3'><?php echo number_format($rowEstados['cajaValor'],2) ?></span></td>
 								<td class="tdObservacion mayuscula"><?php echo $rowEstados['cajaObservacion']; ?></td> <td> <span class="sr-only fechaPagov3"><?= $rowEstados['cajaFecha'];  ?></span> <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8): ?> <button class='btn btn-sm btn-success btn-outline btnEditarCajaMaestra'><i class='icofont icofont-edit'></i></button> <?php endif; ?> <button class='btn btn-sm btn-azul btn-outline btnImprimirTicket' data-boton=<?php echo $rowEstados['idTipoProceso']; ?>><i class='icofont icofont-print'></i></button></td>
 							</tr>
@@ -1804,7 +1805,7 @@ $('#btnPagarAutomatico').click(function() {
 	//console.log( quePaga );
 	$.ajax({url: 'php/autoInsertar.php', type: 'POST', data: { idProd: '<?= $_GET['idProducto'];?>', quePaga: quePaga, todoMora: todoMora,
 		todoInteres: todoInteres, todoCapital: todoCapital }}).done(function(resp) {
-		//console.log(resp)
+		console.log(resp)
 		var alma=JSON.parse(resp)[0];
 		//console.log( alma.pagoAdelaInt );
 		var linea = '';
@@ -1815,6 +1816,9 @@ $('#btnPagarAutomatico').click(function() {
 		if( alma.pagoInt =='1'){ linea = linea + "Cancelación de interés: S/ "+ $('#txtAutoInteres').val()+"\n"; }
 		if( alma.pagoAmor =='1'){ linea = linea + "Amortización: S/ "+ $('#txtAutoCapital').val()+"\n"; }
 		if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCapital').val()+"\n"; }
+		$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
+		$('.modal-GuardadoCorrecto #h1Bien').html( linea.replace(/\n/g, '<br>'));
+		$('.modal-GuardadoCorrecto').modal('show');		
 		$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
 			codArt: "<?= $_GET['idProducto']; ?>",
 			hora: moment().format('DD/MM/YYYY hh:mm a'),
@@ -1827,7 +1831,9 @@ $('#btnPagarAutomatico').click(function() {
 		});
 	});
 	pantallaOver(false);
-	location.reload();
+	$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
+		location.reload();
+	});
 });
 <?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {

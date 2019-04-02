@@ -16,7 +16,7 @@ if( floatval($quePaga["penalizacion"])>0 ){
       $sql2="CALL ingresarPagoMaestro({$_POST['idProd']}, 83, {$quePaga["penalizacion"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0);";
       $pagoPena=1;
    }else{
-      $sql2="CALL ingresarPagoMaestro({$_POST['idProd']}, 84, {$quePaga["penalizacion"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1), 0 ;";
+      $sql2="CALL ingresarPagoMaestro({$_POST['idProd']}, 84, {$quePaga["penalizacion"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0);";
       $pagoPartePena=1;
    }
    //echo $sql2;
@@ -26,10 +26,10 @@ if( floatval($quePaga["penalizacion"])>0 ){
 
 if( floatval($quePaga["interes"])>0 ){
    if( $_POST['todoInteres']=="1"){
-      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 44, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1), 0 ;";
+      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 44, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0);";
       $pagoInt=1;
-   }else{
-      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 33, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1), 0 ;";
+  }else{
+      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 33, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0) ;";
       $pagoAdelaInt=1;
    }
    //echo $sql3;
@@ -38,10 +38,10 @@ if( floatval($quePaga["interes"])>0 ){
 
 if( floatval($quePaga["capital"])>0 ){
    if( $_POST['todoCapital']=="1"){
-      $sql4="CALL ingresarPagoMaestro({$_POST['idProd']}, 32, {$quePaga["capital"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1), 0 ;";
+      $sql4="CALL ingresarPagoMaestro({$_POST['idProd']}, 32, {$quePaga["capital"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0);";
       $pagoFin=1;
    }else{
-      $sql4="CALL ingresarPagoMaestro({$_POST['idProd']}, 45, {$quePaga["capital"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1), 0 ;";
+      $sql4="CALL ingresarPagoMaestro({$_POST['idProd']}, 45, {$quePaga["capital"]}, now(), {$_COOKIE['ckidUsuario']}, '', 1, 0);";
       $pagoAmor=1;
    }
    //echo $sql4;

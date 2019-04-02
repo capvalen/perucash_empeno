@@ -56,7 +56,7 @@ endif;
 
 
 if( $dias <=7){
-	$razonInteres= round(($dias * ($interes)),2);
+	$razonInteres= round($interes,2);
 }else{
 	$razonInteres= round(($dias * ($interes/7)),2);
 }
