@@ -76,7 +76,7 @@ a:focus, a:hover { color: #62286f; }
 			</div>
 			
 			<?php if( isset($_GET['cuadre']) ): ?>		
-			<div class="container-fluid col-xs-12 ">
+			<div class="row container-fluid ">
 				<div class="pheader">
 					<h4> <i class="icofont icofont-plus-circle"></i> Entradas de dinero </h4>
 					<?php 
@@ -91,20 +91,22 @@ a:focus, a:hover { color: #62286f; }
 				</div>
 				
 				<div class=" panel panel-default" id="divEntradas">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
-					<tbody>
-					<?php
-					if( ! isset($_GET['cuadre']) ):
-						// require_once 'php/reporteIngresoDia.php';+
-						echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
-					else:
-						require_once 'php/reporteIngresoDiaxCuadre.php';
-					endif;
-					?>
-					</tbody> </table>
+					<div class="table-responsive">
+						<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de ingreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
+						<tbody>
+						<?php
+						if( ! isset($_GET['cuadre']) ):
+							// require_once 'php/reporteIngresoDia.php';+
+							echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
+						else:
+							require_once 'php/reporteIngresoDiaxCuadre.php';
+						endif;
+						?>
+						</tbody> </table>
+					</div>
 				</div>
 			</div>
-			<div class="container-fluid col-xs-12 ">
+			<div class="row container-fluid  ">
 				<div class="pheader">
 					<h4><i class="icofont icofont-minus-circle"></i> Salidas de dinero</h4>
 					<?php 
@@ -118,20 +120,22 @@ a:focus, a:hover { color: #62286f; }
 					<?php } ?>
 				</div>
 				<div class=" panel panel-default " id="divSalidas">
-					<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
-					<tbody>
-					<?php
-						if( ! isset($_GET['cuadre']) ):
-							// require_once 'php/reporteEgresoDia.php';+
-							echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
-						else:
-							require_once 'php/reporteEgresoDiaxCuadre.php';
-						endif;
-					?>
-					</tbody> </table>
+					<div class="table-responsive">
+						<table class="table table-hover">  <thead> <tr> <th>#</th> <th>Producto</th> <th>Motivo de egreso</th> <th>Usuario</th> <th>Cantidad</th> <th>Moneda</th> <th>Obs.</th> </tr> </thead>
+						<tbody>
+						<?php
+							if( ! isset($_GET['cuadre']) ):
+								// require_once 'php/reporteEgresoDia.php';+
+								echo "<tr><td>Tiene que seleccionar en el filtro el cuadre que desea ver</td></tr>";
+							else:
+								require_once 'php/reporteEgresoDiaxCuadre.php';
+							endif;
+						?>
+						</tbody> </table>
+					</div>
 				</div>
 			</div>
-			<div class="container-fluid col-xs-12">
+			<div class="row container-fluid ">
 				<div class="pheader"><h4><i class="icofont icofont-fax"></i> Resumen <strong> <span id="spanResultadoFinal"></span></strong></h4></div>
 				<div class="panel panel-default">
 					<div class="container-fluid" style="padding:20px;">

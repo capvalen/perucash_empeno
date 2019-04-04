@@ -181,6 +181,7 @@ $limite=$diasLimite->days;
 						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja )  ){ ?>
+						<li><a href="#!" id="btnDesembolsoAutomatico"><i class="icofont icofont-brand-tata-indicom"></i> Desembolso</a></li>
 						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático</a></li>
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $limite>=37 && $esCompra==0 ){ ?>
@@ -748,7 +749,7 @@ $limite=$diasLimite->days;
 					<img src="images/782a2fc7989fc1d244d2f7604a7d57ff.jpg?v=1.0.1" alt="" class="img-responsive">
 					</div>
 					<div class="col-xs-12 col-sm-6">
-						<h3 class="modal-tittle" style="color: #a35bb4;">Pago especial</h3>
+						<h3 class="modal-tittle" style="color: #a35bb4;" id="h3PagoEspecial">Pago especial</h3>
 						
 						<label for="" class="hidden">Tipo de pago</label>
 						<div id="cmbEstadoPagos" class="hidden">
@@ -923,6 +924,12 @@ $limite=$diasLimite->days;
 					</div>
 					<div class="col-xs-12 col-sm-6">
 						<h3 class="text-center" style="color: #a35bb4;">Pago automático</h3>
+						<p class="pEnLinea"  style="color: #a35bb4;"><strong>Método de pago:</strong></p>
+						<div id="divCmbMetodoPago3">
+							<select class="form-control selectpicker" id="sltMetodopago3" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+								<?php include 'php/listarMonedaOPT.php'; ?>
+							</select>
+						</div>
 						<p class="pEnLinea"  style="color: #a35bb4;"><strong>Dinero del cliente:</strong></p>
 						<input type="number" class="form-control input-lg inputGrande text-center esMoneda" autocomplete="nope" lang="en" id="txtAutoDinero" >
 						<div class="checkbox checkbox-infocat checkbox-circle">
@@ -1539,14 +1546,27 @@ $('#txtMontoTicketIntereses').focusout(function () {
 });
 
 <?php } if( in_array($_COOKIE['ckPower'], $soloCaja)){ ?>
+$('#modalPagoAutomatico').on('shown.bs.modal', function () { 
+	$('#sltMetodopago3').selectpicker('val', 'Efectivo');
+});
 $('#btnLlamarTicketMaestro').click(()=> {
 	$('.modal-pagoMaestro').modal('show');
 });
 $('#btnPagoRematev2').click(function() {
 	$('#btnInsertRemate').removeClass('hidden');
 	$('#btnInsertPagoMaestro').addClass('hidden');
-	$('#txtCantPagos').val(0);
+	$('#txtCantPagos').val(0).removeClass('hidden').prev().removeClass('hidden');
 	$('#cmbPagosOpt').selectpicker('val', 'Rematado');
+	$('#h3PagoEspecial').text('Remate');
+	$('.modal-pagoMaestro').modal('show');
+
+});
+$('#btnDesembolsoAutomatico').click(function() {
+	$('#btnInsertRemate').removeClass('hidden');
+	$('#btnInsertPagoMaestro').addClass('hidden');
+	$('#txtCantPagos').addClass('hidden').prev().addClass('hidden');
+	$('#cmbPagosOpt').selectpicker('val', 'Desembolso');
+	$('#h3PagoEspecial').text('Desembolso');
 	$('.modal-pagoMaestro').modal('show');
 });
 $('#btnInsertRemate').click(function() {
@@ -1559,6 +1579,13 @@ $('#btnInsertRemate').click(function() {
 		pantallaOver(false);
 		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('La cantidad no puede ser cero');
 	}else{ 
+		var obs ='', linea = '';
+		if($('#h3PagoEspecial').text()=='Remate' ){
+			obs=$('#txtObsPagos').val()+' '+" Unds: -"+$('#txtCantPagos').val();
+		}else{
+			obs=$('#txtObsPagos').val();
+		}
+		linea = linea + $('#cmbPagosOpt').selectpicker('val')+ ": S/ "+ $('#txtMontoPagos').val() +"\n";
 		$.ajax({url: 'php/ingresarPagoMaestro.php', type: 'POST', data: {
 			idProd: <?php echo $_GET['idProducto']; ?>,
 			quePago: $('#cmbEstadoPagos').find('.selected a').attr('data-tokens'),
@@ -1566,14 +1593,25 @@ $('#btnInsertRemate').click(function() {
 			cantidad: $('#txtCantPagos').val(),
 			moneda: idMoneda,
 			fecha : moment().format('YYYY-MM-DD H:mm'),
-			obs: $('#txtObsPagos').val()+' '+" Unds: -"+$('#txtCantPagos').val()
+			obs: obs
 		}}).done((resp)=> { console.log (resp);
 			pantallaOver(false);
+			
 			if( $.isNumeric(resp) ){
 				$('.modal-pagoMaestro').modal('hide');
 				$('#btnRefre2').removeClass('hidden'); $('#btnBien').addClass('hidden');
 				$('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
 				$('.modal-GuardadoCorrecto').modal('show');
+				$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
+					codArt: "<?= $_GET['idProducto']; ?>",
+					hora: moment().format('DD/MM/YYYY hh:mm a'),
+					cliente: $('.spanDueno').text(),
+					articulo: $('.h2Producto').text(),
+					usuario: "<?= $_COOKIE['ckAtiende'];?>",
+					linea: linea
+				}}).done(function(resp) {
+					console.log(resp)
+				});
 			}
 		});
 	}
@@ -1791,6 +1829,7 @@ $('#txtAutoInteres').keyup(function() {
 $('#btnPagarAutomatico').click(function() {
 	pantallaOver(true);
 	var quePaga = [];
+	var idMoneda= $('#divCmbMetodoPago3').find('.selected a').attr('data-tokens');
 	var todoInteres=0, todoMora=0, todoCapital=0;
 	if( parseFloat($('#txtAutoGastos').val())== parseFloat($('#txtAutoGastos').attr('data-valor')) ){
 		todoMora=1;
@@ -1804,7 +1843,7 @@ $('#btnPagarAutomatico').click(function() {
 	quePaga.push({ codProd: '<?= $_GET['idProducto'];?>', total: $('#txtAutoDinero').val(), cochera: $('#txtAutoCochera').val(), penalizacion: $('#txtAutoGastos').val(), interes: $('#txtAutoInteres').val(), amortizacion: $('#txtAutoCapital').val(), capital: $('#txtAutoCapital').val() });
 	//console.log( quePaga );
 	$.ajax({url: 'php/autoInsertar.php', type: 'POST', data: { idProd: '<?= $_GET['idProducto'];?>', quePaga: quePaga, todoMora: todoMora,
-		todoInteres: todoInteres, todoCapital: todoCapital }}).done(function(resp) {
+		todoInteres: todoInteres, todoCapital: todoCapital, moneda: idMoneda }}).done(function(resp) {
 		console.log(resp)
 		var alma=JSON.parse(resp)[0];
 		//console.log( alma.pagoAdelaInt );
