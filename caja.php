@@ -23,7 +23,7 @@ clear: left; }
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
-#txtMontoApertura, #txtMontoCierre, #txtMontoPagos {font-size: 26px;}
+#txtMontoApertura, #txtMontoCierre, #txtMontoPagos, #txtPasarPagos {font-size: 26px;}
 a{color: #a35bb4;}
 a:focus, a:hover { color: #62286f; }
 </style>
@@ -183,8 +183,10 @@ a:focus, a:hover { color: #62286f; }
 					<label for="">Tipo de proceso</label>
 					<div id="cmbEstadoPagos">
 					<h5 id="h5TipoPago"></h5></div>
-					<label for="">Monto S/</label>
+					<label id="lblMontoEntregar" for="">Monto en efectivo: (S/)</label>
 					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
+					<label id="lblMontoPasar" for="">Pasar por el P.O.S.: (S/)</label>
+					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtPasarPagos" val="0.00" autocomplete="off">
 					<label for="">Método de pago</label>
 					<div id="divCmbMetodoPago">
 						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
@@ -568,6 +570,14 @@ $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
 });
 $('.aLiProcesos').click(function() {
 	//console.log($(this).attr('data-id'));
+	$('#lblMontoEntregar').text('Monto: S/');
+	$('#lblMontoPasar').addClass('hidden');
+	$('#txtPasarPagos').addClass('hidden');
+	if( $(this).attr('data-id')=="74" ){
+		$('#lblMontoEntregar').text('Monto en efectivo: (S/)');
+		$('#lblMontoPasar').removeClass('hidden');
+		$('#txtPasarPagos').removeClass('hidden').val('0.00');
+	}
 	$('#h5TipoPago').text($(this).text());
 	$('#cmbEstadoPagos').attr('data-id', $(this).attr('data-id') );
 	$('.modal-pagoMaestro').modal('show');

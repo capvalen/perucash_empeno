@@ -71,6 +71,7 @@ require("php/conkarl.php");
 							<option value="6">Rematados</option>
 							<option value="14">Reporte mayor</option>
 							<option value="8">Retiro por socios</option>
+							<option value="15">Tarjetas</option>
 							<option value="5">Vendidos</option>
 						</select>
 					</div>
@@ -131,6 +132,7 @@ require("php/conkarl.php");
 						<th data-sort="string">Dueño del producto <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdFechaUltPago" data-sort="int">Fecha <i class="icofont icofont-expand-alt"></i></th>
 						<th id="tdUltPago" data-sort="int">Último Pago <i class="icofont icofont-expand-alt"></i></th>
+						<th data-sort="float" class="hidden" id="tventa">Venta S/<i class="icofont icofont-expand-alt"></i></th>
 						<th data-sort="float">Capital S/<i class="icofont icofont-expand-alt"></i></th>
 						
 					  </tr>
@@ -182,6 +184,7 @@ $('#cmbEstadoCombo').change(function () {
 	$('.divAnalitica').addClass('hidden');
 	$('#thUnds').removeClass('hidden');
 	$('#tdFechaUltPago').addClass('hidden');
+	$('#tventa').addClass('hidden');
 	$('#tdUltPago').text('Último pago');
 	$('#tablita .cabezaExtra').remove();
 	switch(estado){
@@ -199,14 +202,14 @@ $('#cmbEstadoCombo').change(function () {
 				}
 				var data = JSON.parse(resp);
 				$.each(data, function (i, dato) {
-					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					sumaElementos+=parseFloat(dato.preCapital);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}"></a></td>
 						<td data-sort-value="${moment(dato.cubFecha).format('X')}">${moment(dato.cubFecha, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
-						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
 					</tr>`);
 					if(data.length==i+1){
 						$('#tablita').append(`<tfoot><th><td></td><td></td>
@@ -230,14 +233,14 @@ $('#cmbEstadoCombo').change(function () {
 				}
 				var data = JSON.parse(resp);
 				$.each(data, function (i, dato) {
-					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					sumaElementos+=parseFloat(dato.preCapital);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
-						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
 					</tr>`);
 					
 					if(data.length==i+1){
@@ -322,14 +325,14 @@ $('#cmbEstadoCombo').change(function () {
 				}
 				var data = JSON.parse(resp);
 				$.each(data, function (i, dato) {
-					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					sumaElementos+=parseFloat(dato.preCapital);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
-						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
 					</tr>`);
 					
 					if(data.length==i+1){
@@ -389,14 +392,14 @@ $('#cmbEstadoCombo').change(function () {
 				}
 				var data = JSON.parse(resp);
 				$.each(data, function (i, dato) {
-					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					sumaElementos+=parseFloat(dato.preCapital);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}#tabMovEstados">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
-						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
 						<td>${dato.cliCelular}</td>
 					</tr>`);
 					
@@ -423,14 +426,14 @@ $('#cmbEstadoCombo').change(function () {
 				}
 				var data = JSON.parse(resp);
 				$.each(data, function (i, dato) {
-					sumaElementos+=parseFloat(dato.prodMontoEntregado);
+					sumaElementos+=parseFloat(dato.preCapital);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
 						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
-						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
+						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
 					</tr>`);
 					
 					if(data.length==i+1){
@@ -452,6 +455,7 @@ $('#cmbEstadoCombo').change(function () {
 		break;
 		case '9999':
 			$('.divAnalitica').removeClass('hidden');
+			pantallaOver(false);
 		break;
 		default:
 			$.ajax({url: 'php/listadoProductosEstado.php', type: 'POST', data:{ estado: estado }}).done(function (resp) { //console.log(resp);
@@ -623,6 +627,7 @@ $('#btnFiltroAnaticica').click(()=> {
 					});
 				}); break;
 				case '5':
+				$('#tventa').removeClass('hidden');
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 21 }}).done((resp)=> { //console.log(resp)
 					var data = JSON.parse(resp);
 					if(resp=='[]'){
@@ -641,6 +646,7 @@ $('#btnFiltroAnaticica').click(()=> {
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
 							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+							<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 						</tr>`);
 						
 						if(data.length==i+1){
@@ -859,7 +865,7 @@ $('#btnFiltroAnaticica').click(()=> {
 						}
 					});
 				}); break;
-				case '13':
+			case '13':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 88 }}).done((resp)=> {
 					var data = JSON.parse(resp);
 					if(resp=='[]'){
@@ -892,6 +898,36 @@ $('#btnFiltroAnaticica').click(()=> {
 			case '14': 
 				$('.divInternosReportes').removeClass('hidden');
 			break;
+			case '15':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 74 }}).done((resp)=> {
+					var data = JSON.parse(resp);
+					if(resp=='[]'){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
 			default:
 				break;
 		}
