@@ -951,8 +951,9 @@ $limite=$diasLimite->days;
 							<input class="chkInterno" id="checkbox4" type="checkbox" class="styled" checked>
 							<label for="checkbox4">Capital: </label> <small></small>
 						</div>
-						
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
+						<p class="pEnLinea"  style="color: #a35bb4;"><strong>Observaciones:</strong></p>
+						<input type="text" class="form-control input-lg " autocomplete="nope" id="txtAutoObserv" >
 
 						<button class="btn btn-infocat btn-outline btn-block" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-diskette"></i> Realizar pago</button>
 					</div>
@@ -1843,7 +1844,7 @@ $('#btnPagarAutomatico').click(function() {
 	quePaga.push({ codProd: '<?= $_GET['idProducto'];?>', total: $('#txtAutoDinero').val(), cochera: $('#txtAutoCochera').val(), penalizacion: $('#txtAutoGastos').val(), interes: $('#txtAutoInteres').val(), amortizacion: $('#txtAutoCapital').val(), capital: $('#txtAutoCapital').val() });
 	//console.log( quePaga );
 	$.ajax({url: 'php/autoInsertar.php', type: 'POST', data: { idProd: '<?= $_GET['idProducto'];?>', quePaga: quePaga, todoMora: todoMora,
-		todoInteres: todoInteres, todoCapital: todoCapital, moneda: idMoneda }}).done(function(resp) {
+		todoInteres: todoInteres, todoCapital: todoCapital, moneda: idMoneda, obs: $('#txtAutoObserv').val() }}).done(function(resp) {
 		console.log(resp)
 		var alma=JSON.parse(resp)[0];
 		//console.log( alma.pagoAdelaInt );

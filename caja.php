@@ -635,7 +635,24 @@ $('#btnUpdateCajaMaestra').click(function() {
 		}
 	});
 });
-
+$('#txtMontoPagos').keyup(function() {
+	var valor =0;
+	if( $('#txtMontoPagos').val()!='' ){
+		valor = parseFloat($('#txtMontoPagos').val());
+	}
+	var resultado = valor/0.85;
+	$('#txtPasarPagos').val(resultado.toFixed(2));
+	$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
+});
+$('#txtPasarPagos').keyup(function() {
+	var valor =0;
+	if( $('#txtPasarPagos').val()!='' ){
+		valor = parseFloat($('#txtPasarPagos').val());
+	}
+	var resultado = valor*0.85;
+	$('#txtMontoPagos').val(resultado.toFixed(2));
+	$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
+});
 <?php }
 if( in_array( $_COOKIE['ckPower'], $soloDios)){ ?>
 $('#btnCambiarApertura').click(function() {
