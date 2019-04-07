@@ -636,13 +636,16 @@ $('#btnUpdateCajaMaestra').click(function() {
 	});
 });
 $('#txtMontoPagos').keyup(function() {
-	var valor =0;
-	if( $('#txtMontoPagos').val()!='' ){
-		valor = parseFloat($('#txtMontoPagos').val());
+	if( $.trim($('#h5TipoPago').text())=='Operación por tarjeta' ){
+		var valor =0;
+		if( $('#txtMontoPagos').val()!='' ){
+			valor = parseFloat($('#txtMontoPagos').val());
+		}
+		var resultado = valor/0.85;
+		$('#txtPasarPagos').val(resultado.toFixed(2));
+		$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
+		
 	}
-	var resultado = valor/0.85;
-	$('#txtPasarPagos').val(resultado.toFixed(2));
-	$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
 });
 $('#txtPasarPagos').keyup(function() {
 	var valor =0;
@@ -651,7 +654,7 @@ $('#txtPasarPagos').keyup(function() {
 	}
 	var resultado = valor*0.85;
 	$('#txtMontoPagos').val(resultado.toFixed(2));
-	$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
+	$('#txtObsPagos').val('Monto pasado: S/ ' + valor.toFixed(2) );
 });
 <?php }
 if( in_array( $_COOKIE['ckPower'], $soloDios)){ ?>
