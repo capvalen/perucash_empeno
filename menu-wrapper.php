@@ -47,7 +47,8 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		<nav class="navbar navbar-fixed-top encoger">
 			<div class="container-fluid">
 				<div class="navbar-header ">
-				<a class="navbar-brand ocultar-mostrar-menu" href="#"><img id="imgLogoInfocat" class="img-responsive" src="images/logoInfocat.png" alt=""></a>
+				<a class="navbar-brand ocultar-mostrar-menu" href="#"><img id="imgLogoInfocat" class="img-responsive" src="https://infocatsoluciones.com/img/favicon_cat.png" width="64" height="64"
+				 alt=""> <span>Infocat Soluciones</span></a>
 					<button type="button" class="navbar-toggle collapsed" id="btnColapsador" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>

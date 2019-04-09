@@ -74,10 +74,13 @@ border: none;}
 ::-ms-clear {display: none;} .form-control-clear {  z-index: 10;  pointer-events: auto;  cursor: pointer;}
 #liDatosPersonales p{    margin-bottom: 3px;     padding-top: 7px;    line-height: 1px;}
 
-#imgLogoInfocat{width: 247px;  margin-top: -12px;}
+/* #imgLogoInfocat{width: 247px;  margin-top: -12px;}
 @media(min-width:1000px){
   #imgLogoInfocat{width: 222px;  margin-top: -12px; margin-left: 20px;}
-}
+} */
 .navbar-fixed-top {
   z-index: 999!important;
+}
+.navbar-brand>img{
+  display: inline-block;margin-left: 2rem; margin-top: -6px;
 }

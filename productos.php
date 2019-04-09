@@ -465,6 +465,15 @@ $limite=$diasLimite->days;
 							<div class="mensaje"><div class="texto"><p><strong class="mayuscula"><?php echo $rowProducto['usuNombres']; ?>:</strong></p> <p class="textoMensaje"><?php echo $rowProducto['prodObservaciones']; ?></p> </div></div>
 						<?php } ?>
 					</div>
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- bloque perucash -->
+					<ins class="adsbygoogle"
+						style="display:inline-block;width:728px;height:90px"
+						data-ad-client="ca-pub-4125840888226211"
+						data-ad-slot="3009733882"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
 					</div> <!-- fin de primer row  -->
 					<!--Fin de pestaña interior 01-->
 					</div>
@@ -613,7 +622,17 @@ $limite=$diasLimite->days;
 					</div>
 			</div>
             <? else:
-            ?> <h4 class="purple-text text-lighten-1"> <i class="icofont icofont-animal-cat-alt-4"></i> Éste código no pertenece a ningún producto en la Base de datos.</h4> <?
+            ?> <h4 class="purple-text text-lighten-1"> <i class="icofont icofont-animal-cat-alt-4"></i> Éste código no pertenece a ningún producto en la Base de datos.</h4>
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- bloque anuncio perucash -->
+				<ins class="adsbygoogle"
+					style="display:inline-block;width:728px;height:90px"
+					data-ad-client="ca-pub-4125840888226211"
+					data-ad-slot="3009733882"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+ <?
             endif; //fin de if de $filas >=0 ?>
 		</div> <!-- col-lg-12 contenedorDeslizable -->
     </div><!-- row noselect -->

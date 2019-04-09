@@ -352,6 +352,7 @@ $('#btnEditarClientDatos').click(function () {
 		$('.modal-nuevoProductoLista .icofont-refresh').addClass('sr-only');
 	}, success: function (resp) {
 		// body...
+		location.reload();
 	}
 	});
 });

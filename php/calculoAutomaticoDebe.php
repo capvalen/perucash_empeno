@@ -22,7 +22,7 @@ $mora = 0;
 
 if($dias==0){$dias++;}
 
-if($dias>=35){ //Cargar mora
+if($dias>35){ //Cargar mora
    if( $base >=0 && $base<=200 ){      
 		//echo 'entre 200';
 		$mora = 5;
