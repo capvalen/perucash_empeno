@@ -21,10 +21,3 @@
 <link rel="stylesheet" href="css/icocat.css?version=0.1" >
 
 <link rel="stylesheet" href="css/bootstrap-material-datetimepicker.css?version=2.0.3" />
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({
-          google_ad_client: "ca-pub-4125840888226211",
-          enable_page_level_ads: true
-     });
-</script>

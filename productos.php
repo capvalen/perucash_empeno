@@ -177,12 +177,15 @@ $limite=$diasLimite->days;
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
 						<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
-						<? if( $_COOKIE['ckPower']==='1' ){ ?>
+						<? if( $_COOKIE['ckPower']==='1' && $esCompra==0){ ?>
 						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
 						<? } ?>
-						<? if( in_array($_COOKIE['ckPower'], $soloCaja )  ){ ?>
+						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0 ){ ?>
 						<li><a href="#!" id="btnDesembolsoAutomatico"><i class="icofont icofont-brand-tata-indicom"></i> Desembolso</a></li>
 						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático</a></li>
+						<? } ?>
+						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==1 ){ ?>
+							<li><a href="#!" id="btnPagoVentav2"><i class="icofont icofont-flag"></i> Venta de producto</a></li>
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $limite>=37 && $esCompra==0 ){ ?>
 						<li><a href="#!" id="btnPagoRematev2"><i class="icofont icofont-flag"></i> Remate de producto</a></li>
@@ -791,6 +794,7 @@ $limite=$diasLimite->days;
 						<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
 						<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
 						<button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertRemate" ><i class="icofont icofont-save"></i> Insertar proceso</button>
+						<button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertVenta" ><i class="icofont icofont-save"></i> Insertar proceso</button>
 						<button class="btn btn-infocat btn-outline btn-block" id="btnInsertPagoMaestro" ><i class="icofont icofont-save"></i> Insertar proceso</button>
 					</div>
 				</div>
@@ -1579,7 +1583,14 @@ $('#btnPagoRematev2').click(function() {
 	$('#cmbPagosOpt').selectpicker('val', 'Rematado');
 	$('#h3PagoEspecial').text('Remate');
 	$('.modal-pagoMaestro').modal('show');
-
+});
+$('#btnPagoVentav2').click(function() {
+	$('#btnInsertRemate').removeClass('hidden');
+	$('#btnInsertPagoMaestro').addClass('hidden');
+	$('#txtCantPagos').val(0).removeClass('hidden').prev().removeClass('hidden');
+	$('#cmbPagosOpt').selectpicker('val', 'Vendido');
+	$('#h3PagoEspecial').text('Venta');
+	$('.modal-pagoMaestro').modal('show');
 });
 $('#btnDesembolsoAutomatico').click(function() {
 	$('#btnInsertRemate').removeClass('hidden');
@@ -1625,7 +1636,7 @@ $('#btnInsertRemate').click(function() {
 				$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
 					codArt: "<?= $_GET['idProducto']; ?>",
 					hora: moment().format('DD/MM/YYYY hh:mm a'),
-					cliente: $('.spanDueno').text(),
+					cliente: '',
 					articulo: $('.h2Producto').text(),
 					usuario: "<?= $_COOKIE['ckAtiende'];?>",
 					linea: linea
