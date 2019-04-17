@@ -25,13 +25,13 @@ try {
     $printer -> setEmphasis(true);
     $printer -> text("                PeruCash\n");
     $printer -> setEmphasis(false);
-    $printer -> text("      Casa de Préstamos y Empeños\n");
-    $printer -> text("          Oficina de Apoyo N° 1\n");
+    $printer->setJustification(Printer::JUSTIFY_CENTER);
+    $printer -> text("Peru Cash - Las Retamas\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("          * Prestamo Finalizado *\n");
-    $printer -> text("  ".$_POST['hora']."\n\n");
+    $printer -> text(" ".$_POST['hora']."\n");
     $printer -> text("Cliente: ".ucwords($_POST['cliente'])."\n");
-    $printer -> text("Cod. Int.: ".$_POST['codArt']."\n");
+    $printer -> text("Código: ".$_POST['codArt']."\n");
     $printer -> text("Artículo: ".ucwords(strtolower($_POST['articulo']))."\n");
     $printer -> text("Obs. ".ucwords(strtolower($_POST['obs']))."\n");
     $printer -> setEmphasis(true);
@@ -41,7 +41,6 @@ try {
     $printer -> text("Usuario: ".ucwords($_POST['usuario'])."\n");
     $printer -> text("   ----------------------------------\n");
     $printer -> text("         Celular: # 943 798696\n");
-    $printer -> text("         Web: www.perucash.com\n");
     $printer -> text("       Gracias por tu preferencia\n");
     $printer -> cut();
     /* Close printer */

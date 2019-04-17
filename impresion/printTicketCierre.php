@@ -30,7 +30,7 @@ try {
     $printer -> setEmphasis(true);    
     $printer -> text("             Cierre de caja \n");
     $printer -> text("   ----------------------------------\n");
-    $printer -> text(date("d/m/Y, g:i a")."\n");
+    $printer -> text(date("d/m/Y g:i a")."\n");
     $printer -> setEmphasis(false);
     $printer -> text("Apertura: S/ ".number_format($_POST['apertura'], 2)."\n");
     $printer -> text("   ------  Entradas  ----\n");

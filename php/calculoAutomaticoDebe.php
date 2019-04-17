@@ -3,7 +3,10 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 $idProd = $_POST['idProd'];
 
-$sql="SELECT round(p.preCapital,2) as preCapital, p.desFechaContarInteres,datediff( now(), desFechaContarInteres ) as diferenciaDias, preInteres FROM `prestamo_producto` p
+$sql="SELECT round(p.preCapital,2) as preCapital, preInteres,
+case ps.presFechaCongelacion when '' then datediff( now(), desFechaContarInteres ) else datediff( ps.presFechaCongelacion, desFechaContarInteres ) end as `diferenciaDias`
+FROM `prestamo_producto` p
+left join prestamo ps on p.idPrestamo = ps.idPrestamo
 where idProducto={$idProd};";
 
 $filas = array();
