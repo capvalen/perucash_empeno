@@ -23,7 +23,7 @@ clear: left; }
 table{color:#5f5f5f;}
 th{color:#a35bb4}
 #dtpFechaIniciov3{color: #a35bb4;}
-#txtMontoApertura, #txtMontoCierre, #txtMontoPagos, #txtPasarPagos {font-size: 26px;}
+#txtMontoApertura, #txtMontoCierre, #txtMontoPagos, #txtPasarPagos, #txtPorcentajePagos {font-size: 26px;}
 a{color: #a35bb4;}
 a:focus, a:hover { color: #62286f; }
 </style>
@@ -185,6 +185,8 @@ a:focus, a:hover { color: #62286f; }
 					<h5 id="h5TipoPago"></h5></div>
 					<label id="lblMontoEntregar" for="">Monto en efectivo: (S/)</label>
 					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
+					<label id="lblPorcentajePasar" for="">Porcentaje en juego: (%)</label>
+					<input type="number" class="form-control input-lg mayuscula text-center " id="txtPorcentajePagos" val="0.00" autocomplete="off">
 					<label id="lblMontoPasar" for="">Pasar por el P.O.S.: (S/)</label>
 					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtPasarPagos" val="0.00" autocomplete="off">
 					<label for="">Método de pago</label>
@@ -466,7 +468,7 @@ $('#btnCajaAbrir').click(function () {
 });
 $('#btnGuardarApertura').click(function () {
 	pantallaOver(true);
-	var monto = parseFloat($('#txtMontoApertura').attr('data-val'));
+	var monto = parseFloat($('#txtMontoApertura').val());//.attr('data-val')
 	var obs = $('#txtObsApertura').val();
 
 	if( $('#txtMontoApertura').val() == '' || monto <0){
@@ -573,10 +575,12 @@ $('.aLiProcesos').click(function() {
 	$('#lblMontoEntregar').text('Monto: S/');
 	$('#lblMontoPasar').addClass('hidden');
 	$('#txtPasarPagos').addClass('hidden');
+	$('#txtPorcentajePagos').addClass('hidden'); $('#lblPorcentajePasar').addClass('hidden');
 	if( $(this).attr('data-id')=="74" ){
 		$('#lblMontoEntregar').text('Monto en efectivo: (S/)');
 		$('#lblMontoPasar').removeClass('hidden');
 		$('#txtPasarPagos').removeClass('hidden').val('0.00');
+		$('#txtPorcentajePagos').removeClass('hidden').val(15); $('#lblPorcentajePasar').removeClass('hidden');
 	}
 	$('#h5TipoPago').text($(this).text());
 	$('#cmbEstadoPagos').attr('data-id', $(this).attr('data-id') );
@@ -638,10 +642,11 @@ $('#btnUpdateCajaMaestra').click(function() {
 $('#txtMontoPagos').keyup(function() {
 	if( $.trim($('#h5TipoPago').text())=='Operación por tarjeta' ){
 		var valor =0;
+		var interes = (100-$('#txtPorcentajePagos').val())/100;
 		if( $('#txtMontoPagos').val()!='' ){
 			valor = parseFloat($('#txtMontoPagos').val());
 		}
-		var resultado = valor/0.85;
+		var resultado = valor/interes; //0.85;
 		$('#txtPasarPagos').val(resultado.toFixed(2));
 		$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
 		
@@ -649,12 +654,23 @@ $('#txtMontoPagos').keyup(function() {
 });
 $('#txtPasarPagos').keyup(function() {
 	var valor =0;
+	var interes = (100-$('#txtPorcentajePagos').val())/100;
 	if( $('#txtPasarPagos').val()!='' ){
 		valor = parseFloat($('#txtPasarPagos').val());
 	}
-	var resultado = valor*0.85;
+	var resultado = valor*interes; //0.85;
 	$('#txtMontoPagos').val(resultado.toFixed(2));
 	$('#txtObsPagos').val('Monto pasado: S/ ' + valor.toFixed(2) );
+});
+$('#txtPorcentajePagos').keyup(function() {
+	var valor =0;
+	var interes = (100-$('#txtPorcentajePagos').val())/100;
+	if( $('#txtMontoPagos').val()!='' ){
+		valor = parseFloat($('#txtMontoPagos').val());
+	}
+	var resultado = valor/interes; //0.85;
+	$('#txtPasarPagos').val(resultado.toFixed(2));
+	$('#txtObsPagos').val('Monto pasado: S/ ' + resultado.toFixed(2) );
 });
 <?php }
 if( in_array( $_COOKIE['ckPower'], $soloDios)){ ?>
