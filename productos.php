@@ -1645,6 +1645,9 @@ $('#btnInsertRemate').click(function() {
 				});
 			}
 		});
+		$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
+			location.reload();
+		});
 	}
 });
 $('#btnInsertPagoMaestro').click(function() {
