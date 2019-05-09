@@ -4,10 +4,11 @@ include 'conkarl.php';
 $idProd = $_POST['idProd'];
 
 $sql="SELECT round(p.preCapital,2) as preCapital, preInteres,
-case when ps.presFechaCongelacion ='' then datediff( now(), desFechaContarInteres ) when ps.presFechaCongelacion is null then datediff( now(), desFechaContarInteres ) else datediff( ps.presFechaCongelacion, desFechaContarInteres ) end as `diferenciaDias`
+case when ps.presFechaCongelacion ='' then datediff( now(), desFechaContarInteres ) when ps.presFechaCongelacion is null then datediff( now(), desFechaContarInteres ) else datediff( ps.presFechaCongelacion, desFechaContarInteres ) end as `diferenciaDias`, po.idTipoProducto
 FROM `prestamo_producto` p
 left join prestamo ps on p.idPrestamo = ps.idPrestamo
-where idProducto={$idProd};";
+left join producto po on po.idProducto = p.idProducto
+where p.idProducto={$idProd};";
 
 $filas = array();
 $resultado=$cadena->query($sql);
@@ -46,12 +47,13 @@ if($dias>35){ //Cargar mora
 
 
 $cochera=0;
-if($rowProducto['idTipoProducto']=="1" ):
-	$cochera=2*$rowInteres['diferenciaDias'];
-elseif( $rowProducto['idTipoProducto']=="11" ):
-	$cochera=2*$rowInteres['diferenciaDias'];
-elseif( $rowProducto['idTipoProducto']=="42" ):
-	$cochera=1*$rowInteres['diferenciaDias'];
+
+if($row['idTipoProducto']=="1" ):
+	$cochera= 2* $dias;
+elseif( $row['idTipoProducto']=="11" ):
+	$cochera= 2* $dias;
+elseif( $row['idTipoProducto']=="42" ):
+	$cochera= 1* $dias;
 endif;
 
 

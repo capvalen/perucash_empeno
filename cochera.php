@@ -10,8 +10,8 @@
 <body>
 
 <style>
-.btnMasterEntrada{ width: 60%; height: 150px; font-size: 24px; }
-.btnMasterEntrada i{font-size: 48px;}
+.btnMasterEntrada, #btnListadoMaster{ width: 60%; height: 150px; font-size: 24px; }
+.btnMasterEntrada i, #btnListadoMaster i{font-size: 48px;}
 .spanNomProductov3{font-size: 17px;}
 .divMonto{color: #191c1f;}
 </style>
@@ -30,11 +30,14 @@
 			<div class="contenedorBienvenida">
 				<h5>Bienvenido a la cochera de PeruCash, para empezar selecciona que tipo de proceso deseas realizar</h5>
 				<div class="row"><br>
-					<div class="col-sm-6 text-center">
+					<div class="col-sm-4 text-center">
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-truck-alt"></i> <br>Ingreso</button>
 					</div>
-					<div class="col-sm-6 text-center">
+					<div class="col-sm-4 text-center">
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-delivery-time"></i> <br>Salida</button>
+					</div>
+					<div class="col-sm-4 text-center">
+						<button class="btn btn-morado btn-outline btnListadoMaster" id="btnListadoMaster"><i class="icofont icofont-list"></i> <br>Listado</button>
 					</div>
 				</div>
 			</div>
@@ -71,43 +74,48 @@
 			<!-- Fin de contenido 2 -->
 			</div>
 			<div class="row contenedorDatosProductos hidden">
-						<div class="col-sm-12 ">
-						<div class="row text-center hidden">
-							<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
-						</div><br>
-							
-						<div class="row">
-						<div class="col-xs-12" style="">
-							<div class="panel panel-default list-group-panel">
-							<div class="panel-body">
-								<ul class="list-group list-group-header">
-									<li class="list-group-item list-group-body">
-									<div class="row"><strong>
-										<div class="col-xs-8 text-left">Nombre producto</div>
-										<div class="col-xs-2 text-center">Precio</div>
-										<div class="col-xs-2 text-center">Porcentaje Semanal</div></strong>
+					<div class="col-sm-12 ">
+					<div class="row text-center hidden">
+						<button class="btn btn-outline btn-morado" id="btnAddNewProd"><i class="icofont icofont-plus"></i> Insertar un nuevo producto</button><br>
+					</div><br>
+						
+					<div class="row">
+					<div class="col-xs-12" style="">
+						<div class="panel panel-default list-group-panel">
+						<div class="panel-body">
+							<ul class="list-group list-group-header">
+								<li class="list-group-item list-group-body">
+								<div class="row"><strong>
+									<div class="col-xs-8 text-left">Nombre producto</div>
+									<div class="col-xs-2 text-center">Precio</div>
+									<div class="col-xs-2 text-center">Porcentaje Semanal</div></strong>
+								</div>
+								</li>
+							</ul>
+							<ul class="list-group list-group-body" id="ulListadoProductos">
+								<div class="row text-center">
+									<div class="container-fluid" id="conjuntoElementos"></div>
+									<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
 									</div>
-									</li>
-								</ul>
-								<ul class="list-group list-group-body" id="ulListadoProductos">
-									<div class="row text-center">
-										<div class="container-fluid" id="conjuntoElementos"></div>
-										<div class="col-xs-8 colNewProduct" > <p><i class="icofont icofont-plus"></i> <span >Agregar nuevos productos </span> <br><small class="tipProducto">Pulse para agregar</small> </p>
-										</div>
-										<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
-									</div>
-								</ul>
-							</div>
-							</div>
+									<div class="col-xs-2 text-left purple-text text-lighten-1 text-center"><strong>S/. <span class="spanTotalSumasv3"></span></strong></div>
+								</div>
+							</ul>
 						</div>
-						</div>
-					
-						<div class="col-sm-12 text-right">
-							<button class="btn btn-default btn-lg btn-outline pull-left btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
-							<button class="btn btn-azul btn-lg btn-outline btnGuardarDatos" ><i class="icofont icofont-diskette"></i> Guardar</button>
 						</div>
 					</div>
+					</div>
+				
+					<div class="col-sm-12 text-right">
+						<button class="btn btn-default btn-lg btn-outline pull-left btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+						<button class="btn btn-azul btn-lg btn-outline btnGuardarDatos" ><i class="icofont icofont-diskette"></i> Guardar</button>
+					</div>
 				</div>
+			</div>
+			<div class="row contenedorLista hidden">
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore dignissimos laborum atque delectus illo officia in nisi, vel necessitatibus. Accusamus enim obcaecati magni omnis error veniam sunt voluptatem, quibusdam delectus!</p>
+			<button class="btn btn-default btn-lg btn-outline pull-left btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
+			</div>
+				
 			
         </div> <!-- col-lg-12 contenedorDeslizable -->
     </div><!-- row noselect -->
@@ -181,6 +189,8 @@ $(document).ready(function(){
 });
 $('.btnMasterEntrada').click(function () {
 	$('.contenedorBienvenida').addClass('hidden');
+	$('.contenedorLista').addClass('hidden');
+
 	if( $(this).attr('id')=='btnRemateMaster'){
 		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esIngreso');
@@ -189,10 +199,21 @@ $('.btnMasterEntrada').click(function () {
 		$('.queMichiEs').attr('data-id', 'esSalida');
 	}
 });
+$('#btnListadoMaster').click(function () {
+	$('.contenedorBienvenida').addClass('hidden');
+	$('.queMichiEs').attr('data-id', 'esIngreso');
+	
+	$('.contenedorDatosCliente').addClass('hidden');
+	$('.contenedorDatosProductos').addClass('hidden');
+	$('.contenedorLista').addClass('animated fadeInRight').removeClass('hidden');
+	
+});
 $('.btnVolver').click(function () {
 	$('.contenedorBienvenida').removeClass('hidden').addClass('animated fadeInLeft');
 	$('.contenedorDatosCliente').removeClass('animated fadeInRight').addClass('hidden');
 	$('.contenedorDatosProductos').removeClass('animated fadeInRight').addClass('hidden');
+	$('.contenedorLista').removeClass('animated fadeInRight').addClass('hidden');
+
 });
 
 $('.btnGuardarDatos').click(function () {

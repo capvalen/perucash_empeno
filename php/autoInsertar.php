@@ -5,8 +5,7 @@ $quePaga = $_POST['quePaga'][0];
 $pagoCoch=0; $pagoPena=0; $pagoPartePena=0; $pagoInt=0; $pagoAdelaInt=0; $pagoAmor=0; $pagoFin=0;
 
 if( floatval($quePaga["cochera"])>0 ){
-   $sql=`CALL ingresarPagoMaestro({$_POST['idProd']}, 34, {$quePaga["cochera"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0) `;
-   //echo $sql;
+   $sql="CALL ingresarPagoMaestro({$_POST['idProd']}, 34, {$quePaga["cochera"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0)";
    $resultado=$cadena->query($sql);
    $pagoCoch=1;
 }
