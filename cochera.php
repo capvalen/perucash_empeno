@@ -5,6 +5,7 @@
 <head>
 	<title>Registro: PeruCash</title>
 	<?php include "header.php"; ?>
+	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css" >
 </head>
 
 <body>
@@ -37,7 +38,7 @@
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-delivery-time"></i> <br>Salida</button>
 					</div>
 					<div class="col-sm-4 text-center">
-						<button class="btn btn-morado btn-outline btnListadoMaster" id="btnListadoMaster"><i class="icofont icofont-list"></i> <br>Listado</button>
+						<button class="btn btn-morado btn-outline btnListadoMaster" id="btnListadoMaster"><i class="icofont icofont-list"></i> <br>En espera</button>
 					</div>
 				</div>
 			</div>
@@ -111,8 +112,24 @@
 					</div>
 				</div>
 			</div>
-			<div class="row contenedorLista hidden">
-			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore dignissimos laborum atque delectus illo officia in nisi, vel necessitatibus. Accusamus enim obcaecati magni omnis error veniam sunt voluptatem, quibusdam delectus!</p>
+			<div class="row contenedorLista hidden container-fluid">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th>N°</th>
+					<th>Vehículo</th>
+					<th>Placa</th>
+					<th>Fecha</th>
+					<th>Proceso</th>
+					<th>Deuda</th>
+					<th>Registrador</th>
+					<th>@</th>
+				</tr>
+				</thead>
+				<tbody>
+					<?php include 'php/listadoCochesActivos.php'; ?>
+				</tbody>
+			</table>
 			<button class="btn btn-default btn-lg btn-outline pull-left btnVolver"><i class="icofont icofont-rounded-double-left"></i> Volver</button>
 			</div>
 				
@@ -174,6 +191,28 @@
 </div>
 </div>
 
+<!-- Modal para pagar cochera -->
+<div class="modal fade modal-PagarCochera" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close red-text" data-dismiss="modal" aria-label="Close" style="opacity: 0.7;"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-help-robot"></i> Pagar cochera</h4>
+		</div>
+		<div class="modal-body">
+			<p>¿Cuánto está pagando el cliente?</p>
+			<input type="number" class="form-control input-lg input-block esMoneda text-center inputGrande" id="txtPagaCochera" autocomplete="nope">
+			<div class="checkbox checkbox-infocat">
+				<input id="chkRetirarCochera" class="styled" type="checkbox">
+				<label for="chkRetirarCochera">Retirar el vehículo de la cochera</label>
+			</div>
+			<div class="divError text-left animated fadeIn hidden" style="margin-bottom: 20px;"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
+			<button class="btn btn-morado btn-outline btn-block btn-lg" id='btnRealizarPago' ><i class="icofont icofont-atom"></i> Realizar pago</button>
+		</div>
+
+	</div>
+</div>
+</div>
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
 <?php include 'php/existeCookie.php'; ?>
@@ -236,15 +275,27 @@ $('.btnGuardarDatos').click(function () {
 				}else{
 					fecha =moment().format('YYYY-MM-DD HH:mm');
 				}
-				$.ajax({url: 'php/insertarPlacaMovimiento.php', type: 'POST', data: {placa: $('#txtPlacaEntrada').val(), fecha: fecha, precio: '2'  }}).done(function (resp) {
-					console.log(resp);
+				$.ajax({url: 'php/insertarPlacaMovimiento.php', type: 'POST', data: {placa: $('#txtPlacaEntrada').val(), vehiculo: $('#sltVehiculosListado').selectpicker('val'), fecha: fecha, precio: '2' }}).done(function (resp) { console.log( resp );
+					if( resp=='Cochera lista' ){
+						$('#spanBien').text('Placa registrada');
+						$('.modal-GuardadoCorrecto').modal('show');
+						$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
+							location.reload();
+						});
+					}
+					if( resp=='Ya registrado'){
+						$('#h1MyAlerta').text('La placa ya tiene un proceso abierto, revisa los reportes');
+						$('.modal-algunaAlerta').modal('show');
+						$('.modal-algunaAlerta').on('hidden.bs.modal', function () { 
+							location.reload();
+						});
+					}
 				});
 			}
 		break;
 	}
 });
 $('#divSelectVehiculoListado').on('click', '.optVehiculo', function () {
-	
 	var id= $('#divSelectVehiculoListado').find('.selected a').attr('data-tokens');
 	$.ajax({url: 'php/solicitarPrecioTipoVehiculo.php', type: 'POST', data: {idTipo: id}}).done(function (resp) {
 		if(parseInt(resp)>0){
@@ -254,6 +305,18 @@ $('#divSelectVehiculoListado').on('click', '.optVehiculo', function () {
 	});
 	
 });
+
+<?php if( in_array( $_COOKIE['ckPower'], $soloCaja )): ?>
+$('.btnPagarCochera').click(function() {
+	$('#btnRealizarPago').attr('data-placa', $(this).attr('data-placa'))
+	$('.modal-PagarCochera').modal('show');
+});
+$('#btnRealizarPago').click(function() {
+	$.ajax({url: 'php/pagarCochera.php', type: 'POST', data: { paga: $('#txtPagaCochera').val(), placa: $(this).attr('data-placa'), retirar: $('#chkRetirarCochera').prop('checked')  }}).done(function(resp) {
+		console.log(resp)
+	});
+});
+<?php endif; ?>
 </script>
 <?php } ?>
 </body>

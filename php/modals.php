@@ -1,4 +1,4 @@
-<!-- Modal para decir que hubo un error  -->
+<!-- Modal para decir que todo guardo bien  -->
 <div class="modal fade modal-GuardadoCorrecto" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
@@ -18,6 +18,31 @@
 		<div class="modal-footer">
 			<button class="btn btn-primary btn-outline hidden" id="btnRefre2" data-dismiss="modal" ><i class="icofont icofont-social-smugmug"></i> Ok</button>
 			<button class="btn btn-primary btn-outline" id="btnBien" data-dismiss="modal" ><i class="icofont icofont-social-smugmug"></i> Bien</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal para decir que hay una observación  -->
+<div class="modal fade modal-algunaAlerta" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-header-warning">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-social-readernaut"></i> Atención</h4>
+		</div>
+		<div class="modal-body">
+			<div class="container-fluid">
+			<div class="row">
+			<img src="images/anotacion171511.jpg?ver=1.1" class="img-responsive" alt="">
+			<p class="text-center orange-text text-lighten-1 hidden"><strong>Tu información fue guardada:</strong></p>
+			<div class="text-center orange-text text-lighten-1"><span id="spanMyAlerta"></span><h3 class="text-center orange-text text-lighten-1" id="h1MyAlerta"></h3></div>
+			</div>
+		</div>
+			
+		<div class="modal-footer">
+			<button class="btn btn-warning btn-outline" data-dismiss="modal" ><i class="icofont icofont-warning-alt"></i> Ok</button>
 		</div>
 	</div>
 	</div>
