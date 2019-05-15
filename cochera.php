@@ -34,7 +34,7 @@
 					<div class="col-sm-4 text-center">
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnRemateMaster"><i class="icofont icofont-truck-alt"></i> <br>Ingreso</button>
 					</div>
-					<div class="col-sm-4 text-center">
+					<div class="col-sm-4 text-center hidden">
 						<button class="btn btn-morado btn-outline btnMasterEntrada" id="btnCompraMaster"><i class="icofont icofont-delivery-time"></i> <br>Salida</button>
 					</div>
 					<div class="col-sm-4 text-center">
@@ -299,7 +299,7 @@ $('#divSelectVehiculoListado').on('click', '.optVehiculo', function () {
 	var id= $('#divSelectVehiculoListado').find('.selected a').attr('data-tokens');
 	$.ajax({url: 'php/solicitarPrecioTipoVehiculo.php', type: 'POST', data: {idTipo: id}}).done(function (resp) {
 		if(parseInt(resp)>0){
-			$('#lblPrecioIngreso').text('S/. '+parseFloat(resp).toFixed(2) + ' por día.');
+			$('#lblPrecioIngreso').text('S/ '+parseFloat(resp).toFixed(2) + ' por día.');
 			$('#txtPlacaEntrada').focus();
 		}
 	});
@@ -313,7 +313,9 @@ $('.btnPagarCochera').click(function() {
 });
 $('#btnRealizarPago').click(function() {
 	$.ajax({url: 'php/pagarCochera.php', type: 'POST', data: { paga: $('#txtPagaCochera').val(), placa: $(this).attr('data-placa'), retirar: $('#chkRetirarCochera').prop('checked')  }}).done(function(resp) {
-		console.log(resp)
+		if(resp=='ok'){
+			location.reload();
+		}
 	});
 });
 <?php endif; ?>

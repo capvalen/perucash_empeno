@@ -15,16 +15,28 @@ $placa = $row['movPlaca'];
 $deuda = $row['vehPrecio'];
 $paga = floatval($_POST['paga']);
 
+$sqlRetirar='';
+
+if( $_POST['retirar']=='true'){ $sqlRetirar="UPDATE `cocheraregistros` SET `idProceso` = '26' WHERE `cocheraregistros`.`idCocheraReg` = {$idReg};"; }
+
+
 $sqlPago='';
 if( $paga< $deuda){
    //solo adelantó
-   $sqlPago ="UPDATE `cocheraregistros` SET `movPrecio`= `movPrecio`+ {$paga} WHERE `idCocheraReg`= {$idReg}; ";
+   $sqlPago ="UPDATE `cocheraregistros` SET `movPrecio`= `movPrecio`+ {$paga} WHERE `idCocheraReg`= {$idReg}; 
+   INSERT INTO `caja`(`idCaja`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaMoneda`, `cajaActivo`, `idUsuario`, `idAprueba`, `idSucursal`) 
+   VALUES (null, 0, 76, now(), {$paga}, '{$_POST["obs"]} Placa: {$placa}', 1, 1, {$_COOKIE['ckidUsuario']}, 0, 1); "
+   . $sqlRetirar;
 }
 if( $paga == $deuda){
    //pagó completo
-   $sqlPago ="UPDATE `cocheraregistros` SET `movPrecio`= `movPrecio`+ {$paga}, `idProceso`=26 WHERE `idCocheraReg`= {$idReg}; ";
+   $sqlPago ="UPDATE `cocheraregistros` SET `movPrecio`= `movPrecio`+ {$paga}, `idProceso`=26 WHERE `idCocheraReg`= {$idReg}; 
+   INSERT INTO `caja`(`idCaja`, `idProducto`, `idTipoProceso`, `cajaFecha`, `cajaValor`, `cajaObservacion`, `cajaMoneda`, `cajaActivo`, `idUsuario`, `idAprueba`, `idSucursal`) 
+   VALUES (null, 0, 76, now(), {$paga}, '{$_POST["obs"]} Placa: {$placa}', 1, 1, {$_COOKIE['ckidUsuario']}, 0, 1); "
+   . $sqlRetirar;
 }
-   echo $sqlPago;
-   $cadena->query($sqlPago);
+   //echo $sqlPago;
+   $cadena->multi_query($sqlPago);
+   echo "ok";
 
 ?>
