@@ -226,7 +226,7 @@ $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
 });
-$('.btnMasterEntrada').click(function () {
+$('.btnMasterEntrada').click(function () { console.log( 'hola' );
 	$('.contenedorBienvenida').addClass('hidden');
 	$('.contenedorLista').addClass('hidden');
 
@@ -312,11 +312,13 @@ $('.btnPagarCochera').click(function() {
 	$('.modal-PagarCochera').modal('show');
 });
 $('#btnRealizarPago').click(function() {
-	$.ajax({url: 'php/pagarCochera.php', type: 'POST', data: { paga: $('#txtPagaCochera').val(), placa: $(this).attr('data-placa'), retirar: $('#chkRetirarCochera').prop('checked')  }}).done(function(resp) {
-		if(resp=='ok'){
-			location.reload();
-		}
-	});
+	if($('#txtPagaCochera').val()>0 ){
+		$.ajax({url: 'php/pagarCochera.php', type: 'POST', data: { paga: $('#txtPagaCochera').val(), placa: $(this).attr('data-placa'), retirar: $('#chkRetirarCochera').prop('checked')  }}).done(function(resp) {
+			if(resp=='ok'){
+				location.reload();
+			}
+		});
+	}
 });
 <?php endif; ?>
 </script>
