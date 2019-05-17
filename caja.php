@@ -26,6 +26,7 @@ th{color:#a35bb4}
 #txtMontoApertura, #txtMontoCierre, #txtMontoPagos, #txtPasarPagos, #txtPorcentajePagos {font-size: 26px;}
 a{color: #a35bb4;}
 a:focus, a:hover { color: #62286f; }
+#sltHistorialCierres { font-family: "IcoFont", Poppins, sans-serif; }
 </style>
 
 
@@ -371,7 +372,7 @@ a:focus, a:hover { color: #62286f; }
 datosUsuario();
 $(document).ready(function () {
 	$('#sltHistorialCierres').change(function () {
-		window.location.href = 'caja.php?cuadre='+$('#sltHistorialCierres').val();
+		window.location.href = 'caja.php?fecha='+moment($('#dtpFechaIniciov3').val(),'DD/MM/YYYY').format('YYYY-MM-DD')+'&cuadre='+$('#sltHistorialCierres').val();
 	});
 });
 $('#dtpFechaIniciov3').val('<?php

@@ -274,17 +274,20 @@ border-radius: 10px;}
 content: '';
 height: 7px;
 width: 100%;
-background-image: linear-gradient(to right, #a7d132 0%, #449015 50%);
-    border-radius: 5px 5px 0 0;
+/* background-image: linear-gradient(to right, #a7d132 0%, #449015 50%); */
+background-image: linear-gradient(to right, #e265ff 0%, #9730af 50%);
+border-radius: 5px 5px 0 0;
 }
 .divLargoCircular {
     color: white;
     text-align: center;
-    background: linear-gradient(45deg, #61c831 0%,#aad232 100%);
-    padding: 7px;
-    border-radius: 70px;
+    /* background: linear-gradient(45deg, #61c831 0%,#aad232 100%); */
+    background: linear-gradient(45deg, #bf31c8 0%,#9432d2 100%);
+    padding: 2px;
+    border-radius: 35px;
 }
-.h3Title{color: #6dbe1b!important;}
+.divLargoCircular h3{margin: 5px!important;}
+.h3Title{/*#6dbe1b */ color: #b447ce!important;}
 .open>.dropdown-menu>.selected>a>span{ color: white;}
 a:focus{outline: none;}
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .open>.dropdown-menu>.selected>a{
