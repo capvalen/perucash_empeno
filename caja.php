@@ -598,7 +598,8 @@ $('#btnInsertPagoOmiso').click(()=> {
 			tipo: $('#cmbEstadoPagos').attr('data-id'),
 			valor: $('#txtMontoPagos').val(),
 			moneda: idMoneda,
-			obs: $('#txtObsPagos').val()
+			obs: $('#txtObsPagos').val(),
+			porInteres: $('#txtPorcentajePagos').val()
 		}}).done((resp)=> {
 			if(resp== true){
 				location.reload();

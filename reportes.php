@@ -70,7 +70,7 @@ require("php/conkarl.php");
 							<option value="3">Préstamos finalizados</option>
 							<option value="1">Préstamos y Desembolsos</option>
 							<option value="6">Rematados</option>
-							<option value="14">Reporte mayor</option>
+							<option value="14">Liquidación</option>
 							<option value="8">Retiro por socios</option>
 							<option value="15">Tarjetas</option>
 							<option value="5">Vendidos</option>
@@ -84,13 +84,13 @@ require("php/conkarl.php");
 					</div>
 					<div class="col-xs-8 hidden" id="divReporteMayor">
 					<div class="sandbox-container">
-						<div class="input-daterange input-group" id="datepicker">
+						<div class="input-daterange input-group" id="datepickerMayor">
 							<input type="text" class="input-sm form-control" id="inputFechaInicio" name="start" />
 							<span class="input-group-addon" style="font-size: 12px;">hasta</span>
 							<input type="text" class="input-sm form-control" id="inputFechaFin" name="end" />
 						</div>
 					</div>
-					<button class="btn btn-primary btn-outline " style="margin-top: -3rem;"><i class="icofont icofont-search"></i></button>
+					<button class="btn btn-primary btn-outline " id="filtroMayor" style="margin-top: -3rem;"><i class="icofont icofont-search"></i></button>
 					</div>
 					
 					<!-- <div class="container-fluid" style="margin-top: 10px;">
@@ -100,27 +100,8 @@ require("php/conkarl.php");
 				<label class="hidden" id="spanError"><i class="icofont icofont-warning"></i>Tiene que seleccionar un tipo de producto</label>
 				</div>
 				</div>
-				<div class="row table-responsive hidden" id="tablasReporteMayor">
-					<table id="tablaGanancias" class="table table-hover">
-					<thead>
-						<tr>
-							<th>Estructura</th>
-							<th>Cobro</th>
-							<th>Capital</th>
-							<th>Ganancia</th>
-						</tr>
-					</thead>
-					</table>
-					<table id="tablaGastos" class="table table-hover">
-					<thead>
-						<tr>
-							<th>Estructura</th>
-							<th>Inversión</th>
-							<th>Gasto</th>
-						</tr>
-					</thead>
-					</table>
-					<h3>Ganancia Neta: S/ <span>0.00</span></h3>
+				<div class="table-responsive container-fluid hidden" id="tablasReporteMayor">
+					
 				</div>
 				
 				<div class="row tablaResultados table-responsive">
@@ -167,6 +148,8 @@ $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, clearBtn: true, todayBtn: "linked", todayHighlight: true}); //para activar las fechas
 	$('.sandbox-container .input-daterange').datepicker({language: "es", autoclose: true,  clearBtn: true, todayBtn: "linked", todayHighlight: true});
+
+	$('.input-daterange').data('datepicker').pickers[0].setDates(moment().format('DD/MM/YYYY'));
 
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
@@ -896,8 +879,8 @@ $('#btnFiltroAnaticica').click(()=> {
 						}
 					});
 				}); break;
-			case '14': 
-				$('.divInternosReportes').removeClass('hidden');
+			case '14':  //liquidación
+			
 			break;
 			case '15':
 				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 74 }}).done((resp)=> {
@@ -977,7 +960,13 @@ $('#sltFiltroAnalitica').click(function() {
 		$('#tablasReporteMayor').addClass('hidden');
 	}
 });
-
+$('#filtroMayor').click(function() {
+	console.log( 'hola' );
+				$.ajax({url: 'php/reporteLiquidacion.php', type: 'POST', data: {fecha1: moment($('#inputFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), fecha2:moment($('#inputFechaFin').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') }}).done(function(resp) {
+					$('#tablasReporteMayor').html(resp);
+				});
+				
+});
 </script>
 <?php } ?>
 </body>
