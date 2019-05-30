@@ -69,12 +69,13 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 						 <li class="dropdown text-center" id="liDatosPersonales">
 						 	
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-							<? $imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
-							if( file_exists($imagen) ):?>
-								<img src="<?= $imagen; ?>" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
-							<? else: ?>
-							<img src="https://perucash.com/app/images/usuarios/noimg.jpg?ver=1.2" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
-							<? endif;?>
+							<? //$imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
+							//if( file_exists($imagen) ):?>
+								<!-- <img src="<?= $imagen; ?>" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span> -->
+							<? //else: ?>
+							<!-- <img src="https://perucash.com/app/images/usuarios/noimg.jpg?ver=1.2" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span> -->
+							<? //endif;?>
+							<img src="<?= $_SESSION['userData']['picture']['url'];?>" alt="" class="img-responsive img-circle" style="max-width:50px; display: inline-block;"> <span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<li><a href="miperfil.php?usuario=soloyo"><i class="icofont icofont-ui-file"></i> Ver mi perfil</a></li>

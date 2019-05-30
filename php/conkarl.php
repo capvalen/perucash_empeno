@@ -21,4 +21,7 @@ $esclavo->set_charset("utf8");
 
 $cautivo= new mysqli($server, $username, $password, $db);
 $cautivo->set_charset("utf8");
+
+$dependencia= new mysqli($server, $username, $password, $db);
+$dependencia->set_charset("utf8");
 ?>

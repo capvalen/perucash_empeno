@@ -1,4 +1,6 @@
 <?php session_start();
+if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 require("php/conkarl.php");
 ?>
 <!DOCTYPE html>
@@ -961,11 +963,10 @@ $('#sltFiltroAnalitica').click(function() {
 	}
 });
 $('#filtroMayor').click(function() {
-	console.log( 'hola' );
-				$.ajax({url: 'php/reporteLiquidacion.php', type: 'POST', data: {fecha1: moment($('#inputFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), fecha2:moment($('#inputFechaFin').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') }}).done(function(resp) {
-					$('#tablasReporteMayor').html(resp);
-				});
-				
+	//console.log( 'hola' );
+	$.ajax({url: 'php/reporteLiquidacion.php', type: 'POST', data: {fecha1: moment($('#inputFechaInicio').val(), 'DD/MM/YYYY').format('YYYY-MM-DD'), fecha2:moment($('#inputFechaFin').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') }}).done(function(resp) {
+		$('#tablasReporteMayor').html(resp);
+	});
 });
 </script>
 <?php } ?>

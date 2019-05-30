@@ -8,6 +8,7 @@ if( floatval($quePaga["cochera"])>0 ){
    $sql="CALL ingresarPagoMaestro({$_POST['idProd']}, 34, {$quePaga["cochera"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0)";
    $resultado=$cadena->query($sql);
    $pagoCoch=1;
+   $cadena->close();
 }
 
 if( floatval($quePaga["penalizacion"])>0 ){
@@ -28,11 +29,11 @@ if( floatval($quePaga["interes"])>0 ){
       $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 44, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0);";
       $pagoInt=1;
   }else{
-      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 33, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0) ;";
+      $sql3="CALL ingresarPagoMaestro({$_POST['idProd']}, 33, {$quePaga["interes"]}, now(), {$_COOKIE['ckidUsuario']}, '{$_POST['obs']}', {$_POST['moneda']}, 0);";
       $pagoAdelaInt=1;
    }
    //echo $sql3;
-   $resultado3=$cadena->query($sql3);
+   $resultado3=$dependencia->query($sql3);
 }
 
 if( floatval($quePaga["capital"])>0 ){

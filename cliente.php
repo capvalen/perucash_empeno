@@ -1,5 +1,7 @@
-<?php // session_start();
-require("php/conkarl.php");
+<?php session_start();
+if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+include 'php/conkarl.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -1,8 +1,15 @@
 <?php 
+include 'php/facebookConect.php';
+require_once('vendor/autoload.php');
+if( isset($_SESSION['access_token'])){ 
+	if( $_COOKIE['ckPower']==7){ header('Location: bienvenido.php'); }else{
+		header('Location: principal.php'); 
+	}
+}
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 require "php/conkarl.php";
-require_once('vendor/autoload.php');
+
 $base58 = new StephenHill\Base58();
 if(isset($_GET['solicita'])){$correo=$base58->decode($_GET['solicita']);}
 ?>
@@ -75,12 +82,18 @@ body{
 }
 .contenidoCambiante{color: white; margin-bottom: 60px ;}
 .subText{font-size: 15px;}
-#btnEmpezar{width: 60%; margin: 0 auto;
+#btnEmpezar{/* width: 60%; */ margin: 0 auto;
 background-color: #6C56B8; margin-top: 40px ;  font-size: 16px;
-border-color: transparent; color: white; padding: 15px 0; border-radius: 50px;letter-spacing: 0.2rem;
+border-color: transparent; color: white; padding: 15px ; border-radius: 50px; /* letter-spacing: 0.2rem; */
 }
 .subText i{font-size: 12px;}
 #btnEmpezar:focus { outline: 0; }
+#btnEmpezarFace{/* width: 60%; */ margin: 0 auto;
+background-color: #2b59b5; margin-top: 40px ;  font-size: 16px;
+border-color: transparent; color: white; padding: 15px ; border-radius: 50px; /* letter-spacing: 0.2rem; */
+}
+.subText i{font-size: 12px;}
+#btnEmpezarFace:focus { outline: 0; }
 #divIntCenter{
 	background: white;
 	width: 188px;
@@ -234,7 +247,8 @@ display: inline-block;
 				<p class="subText"><i class="icofont icofont-quote-left"></i> Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas.<i class="icofont icofont-quote-right"></i></p>
 				<p>Friedrich Nietzsche</p>
 			<?php endif; ?>
-				<button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button>
+				<!-- <button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button> -->
+				<button class="btn btn-default " id="btnEmpezarFace" onclick="window.location='<?= $loginURL; ?>'"><i class="icofont icofont-social-facebook"></i> Ingrese con Facebook</button>
 				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a>
 			</div>
 			<?php if( isset($_GET['solicita']) ): ?>

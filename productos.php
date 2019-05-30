@@ -1,5 +1,9 @@
 <?php // session_start();
 date_default_timezone_set('America/Lima');
+
+if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+
 require("php/conkarl.php");
 require "php/variablesGlobales.php";
 ?>
@@ -13,7 +17,7 @@ if( isset($_GET['idProducto'])){
 	$esCompra=$resCompra[0];
 
 	if($esCompra =='0'){
-		$sql = mysqli_query($conection,"select p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, pre.desFechaContarInteres, c.cliDni, tpr.tipopDescripcion, pe.presFechaCongelacion
+		$sql = mysqli_query($conection,"SELECT p.*, concat (c.cliApellidos, ' ' , c.cliNombres) as cliNombres, tp.tipoDescripcion, tp.tipColorMaterial, prodActivo, esCompra, u.usuNombres, date_format(pre.desFechaContarInteres, '%Y-%m-%d') as desFechaContarInteres, c.cliDni, tpr.tipopDescripcion, pe.presFechaCongelacion
 		FROM producto p inner join Cliente c on c.idCliente=p.idCliente inner join prestamo_producto pre on pre.idProducto=p.idProducto inner join tipoProceso tp on tp.idTipoProceso=pre.presidTipoProceso
 		left join prestamo pe on pe.idPrestamo = pre.idPrestamo
 		inner join usuario u on u.idUsuario=p.idUsuario
@@ -21,7 +25,7 @@ if( isset($_GET['idProducto'])){
 		WHERE p.idProducto=".$_GET['idProducto'].";");
 		$rowProducto = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 	}else{//Cuando es una compra
-		$sql = mysqli_query($conection,"select p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres, tpr.tipopDescripcion 
+		$sql = mysqli_query($conection,"SELECT p.*, tp.tipoDescripcion, tp.tipColorMaterial, u.usuNombres, tpr.tipopDescripcion 
 		FROM producto p inner join tipoProceso tp on tp.idTipoProceso=p.prodQueEstado
 		inner join usuario u on u.idUsuario=p.idUsuario
 		inner join tipoProducto tpr on tpr.idTipoProducto = p.idTipoProducto
@@ -182,7 +186,7 @@ $limite=$diasLimite->days;
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0 ){ ?>
 						<li><a href="#!" id="btnDesembolsoAutomatico"><i class="icofont icofont-brand-tata-indicom"></i> Desembolso</a></li>
-						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático</a></li>
+						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático </a></li>
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==1 ){ ?>
 							<li><a href="#!" id="btnPagoVentav2"><i class="icofont icofont-flag"></i> Venta de producto</a></li>
@@ -1887,7 +1891,7 @@ $('#btnPagarAutomatico').click(function() {
 		$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
 		$('.modal-GuardadoCorrecto #h1Bien').html( linea.replace(/\n/g, '<br>'));
 		$('.modal-GuardadoCorrecto').modal('show');		
-		$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
+		/* $.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
 			codArt: "<?= $_GET['idProducto']; ?>",
 			hora: moment().format('DD/MM/YYYY hh:mm a'),
 			cliente: $('.spanDueno').text(),
@@ -1896,7 +1900,7 @@ $('#btnPagarAutomatico').click(function() {
 			linea: linea
 		 }}).done(function(resp) {
 			console.log(resp)
-		});
+		}); */
 	});
 	pantallaOver(false);
 	$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 

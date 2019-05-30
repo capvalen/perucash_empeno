@@ -1,5 +1,5 @@
 <?php
-//session_start();
+session_start();
 unset($_COOKIE['ckidUsuario']);
 unset($_COOKIE['ckidSucursal']);
 unset($_COOKIE['ckSucursal']);
@@ -20,7 +20,7 @@ setcookie("ckoficina", "", time() - 3600, $ruta);
 setcookie("ckInventario", "", time() - 3600, $ruta);
 setcookie("ckCorreo", "", time() - 3600, $ruta);
 
-if ($_SESSION['Sucursal']) {
+if ($_SESSION['access_token']) {
 	session_destroy();
 	
 }

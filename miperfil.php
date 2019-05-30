@@ -1,3 +1,8 @@
+<?php session_start();
+if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+include 'php/conkarl.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,20 +30,21 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-lg-3 container-fluid">
 					<h4>Mis datos:</h4>
-				<? $imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
-					if( file_exists($imagen) ):?>
-					<img src="<?= $imagen; ?>" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
-				<? else: ?>
-					<img src="https://perucash.com/app/images/usuarios/noimg.svg?ver=1.1" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
-				<? endif;?>
+				<? /* $imagen = '../app/images/usuarios/'.$_COOKIE['ckidUsuario'].'.jpg';
+					if( file_exists($imagen) ): */?>
+					<!-- <img src="<?= $imagen; ?>" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;"> -->
+				<? /* else: */ ?>
+					<!-- <img src="https://perucash.com/app/images/usuarios/noimg.svg?ver=1.1" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;"> -->
+				<? /* endif; */?>
+				<img src="<?= $_SESSION['userData']['picture']['url'];?>" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
 				<br>
                <label for="">Mi nombre</label> <input type="text" id="txtNombre" class="form-control text-center" readonly value="<?= $_COOKIE['cknomCompleto'];?>">
-               <label for="">Mi correo</label> <input type="text" id="txtCorreo" class="form-control text-center" autocomplete="nope" value="<?= $_COOKIE['ckCorreo'];?>">
+               <!-- <label for="">Mi correo</label> <input type="text" id="txtCorreo" class="form-control text-center" autocomplete="nope" value="<?= $_COOKIE['ckCorreo'];?>">
 					<button class="btn btn-azul btn-outline btn-block btn.lg" id="btnCambiarCorrreo"><i class="icofont icofont-ui-email"></i> Actualizar mi correo</button><br>
                <label for="">Cambiar contraseña:</label> <input type="password" id="txtPassN" class="form-control text-center" autocomplete="nope" value="*****************">
 					<input type="password" id="txtPassR" class="form-control text-center" autocomplete="nope" value="*****************">
 					<p class="perror hidden" style="color: rgb(213, 0, 0);"></p>
-					<button class="btn btn-azul btn-outline btn-block btn.lg" id="btnCambiarContrasena"><i class="icofont icofont-ui-fire-wall"></i> Actualizar mi contraseña</button>
+					<button class="btn btn-azul btn-outline btn-block btn.lg" id="btnCambiarContrasena"><i class="icofont icofont-ui-fire-wall"></i> Actualizar mi contraseña</button> -->
             </div>
             <div class="col-xs-12 col-sm-7 col-lg-8 ">
 					<h4>Mis comisiones</h4>

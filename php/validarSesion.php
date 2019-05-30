@@ -8,7 +8,8 @@ $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil 
 
 $local = '/chilca';
 
-$log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';");
+$log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
+//and usuPass='".md5($_POST['pws'])."';
 //echo "select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';";
 
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
@@ -37,9 +38,9 @@ if ($row['idUsuario']>=1){
 		$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
 		setcookie('ckInventario', $rowConf['inventarioActivo'], $expira, $local);
 		setcookie('ckSucursal', $rowConf['local'], $expira, $local);
-		echo 'concedido';
+		//echo 'concedido';
 	}else{
-		echo 'inhabilitado';
+		//echo 'inhabilitado';
 	}
 
 	
@@ -47,7 +48,7 @@ if ($row['idUsuario']>=1){
 	//echo $row['idUsuario'];
 	
 }else{
-	echo 'nada';
+	//echo 'nada';
 }
 
 /* liberar la serie de resultados */
