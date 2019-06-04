@@ -1,15 +1,13 @@
-#RewriteEngine On
+RewriteEngine On
 #RewriteCond %{HTTPS} !on
 #RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+Rewriterule ^index.php(.*)$ https://perucash.com/demo/$1 [r=301]
+
 
 <IfModule mod_headers.c>    
     Header set Access-Control-Allow-Origin *
 </IfModule>
-RewriteCond %{HTTPS} on
-# or RewriteCond %{SERVER_PORT} ^443$
-RewriteCond %{REQUEST_URI} !^(app)/
 
-RewriteRule .? http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 <FilesMatch "\.(js|css|ico|pdf|flv|jpg|jpeg|png|gif|swf|mp3|mp4|ttf|woff|woff2)$">
 Header set Cache-Control "public"

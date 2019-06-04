@@ -39,6 +39,7 @@ include 'php/conkarl.php';
 				<img src="<?= $_SESSION['userData']['picture']['url'];?>" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
 				<br>
                <label for="">Mi nombre</label> <input type="text" id="txtNombre" class="form-control text-center" readonly value="<?= $_COOKIE['cknomCompleto'];?>">
+               <label for="">Mi rol actual</label> <input type="text" id="txtNombre" class="form-control text-center" readonly value="<?= $_COOKIE['ckPower'];?>">
                <!-- <label for="">Mi correo</label> <input type="text" id="txtCorreo" class="form-control text-center" autocomplete="nope" value="<?= $_COOKIE['ckCorreo'];?>">
 					<button class="btn btn-azul btn-outline btn-block btn.lg" id="btnCambiarCorrreo"><i class="icofont icofont-ui-email"></i> Actualizar mi correo</button><br>
                <label for="">Cambiar contraseña:</label> <input type="password" id="txtPassN" class="form-control text-center" autocomplete="nope" value="*****************">

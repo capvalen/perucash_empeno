@@ -1,12 +1,13 @@
 <?php 
 // ini_set("session.cookie_lifetime","7200");
 // ini_set("session.gc_maxlifetime","7200");
+include 'variablesGlobales.php';
 //session_start();
 //header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas. Friedrich Nietzsche';
 
-$local = '/chilca';
+
 
 $log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
 //and usuPass='".md5($_POST['pws'])."';

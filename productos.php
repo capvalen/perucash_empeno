@@ -1,4 +1,4 @@
-<?php // session_start();
+<?php session_start();
 date_default_timezone_set('America/Lima');
 
 if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
@@ -1243,6 +1243,17 @@ $('.btnImprimirTicket').click(function () {
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
 				cliente: queDueno,
+				articulo: queArticulo,
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
+		case '20':
+			queTitulo='       * Remate *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketVenta.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
+				cliente: '-',
 				articulo: queArticulo,
 				monto: queMonto,
 				usuario: queUser

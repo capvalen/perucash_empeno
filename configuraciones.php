@@ -240,6 +240,7 @@ $(document).ready(function(){
 	// $.each( $('.sltNivelUser') , function(i, objeto){
 	// 	$(objeto).val($(objeto).attr('data-power'))
 	// });
+	$('#tabInvitados .sltNivelUser').selectpicker('val', 7 ).selectpicker('refresh');
 });
 $('#ulTabs a').click(function (e) {
   e.preventDefault()
@@ -270,7 +271,8 @@ $('#rdbDesactivarInventario').click(function () {
 $('.sltNivelUser').change(function() {
 	var padre= $(this).parent().parent();
 	var poder= $(this).val();
-	
+	//console.log(padre.html());
+	//console.log( poder );
 	$.ajax({url: 'php/actualizarPowerUser.php', type: 'POST', data: { 
 		poder: poder,
 		idUser: padre.attr('data-id')
@@ -329,7 +331,10 @@ $('#btnActualizarFaceDatos').click(function() {
 			console.log(resp)
 		});
 	}
+	$('#modalEditarUsuario').modal('hide');
 });
+
+
 </script>
 <?php } ?>
 </body>
