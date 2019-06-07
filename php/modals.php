@@ -55,13 +55,15 @@
 	<div class="modal-content">
 		<div class="modal-header-danger">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Faltan datos</h4>
+			<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-animal-cat-alt-4"></i> Hay un problema</h4>
 		</div>
 		<div class="modal-body">
 			<div class="container-fluid">
 			<div class="row">
-			<p><strong>Ups!</strong> Lo sentimos, <span id="spanMalo"></span></p>
-			<p>Comunícalo al área de Informática.</p>
+			<img src="images/gatodead30.png" class="img-responsive">
+			<p><strong>Ups!</strong> Lo sentimos sucediÓ un error interno en el servidor. <br>
+			<p>Comunícalo al área de Informática, quizá éste mensaje ayude:</p>
+			<span id="spanMalo"></span></p>
 			</div>
 		</div>
 			

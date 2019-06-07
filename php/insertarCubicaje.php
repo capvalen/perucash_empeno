@@ -8,7 +8,11 @@ if( $_POST["obs"] ==''){
 	$obs = $_COOKIE['ckAtiende'].' dice: '.$_POST["obs"];
 }
 
-$sql= "call insertarCubicaje(".$_POST['idProducto'].", ".$_POST['proceso'].", ".$_COOKIE['ckidUsuario']." , '".$obs."', ".$_POST['estante'].", ".$_POST['piso'].", ".$_POST['seccion']." );";
+$sqlAnt="UPDATE `cubicaje` SET `cuaVigente` = '0' WHERE idProducto={$_POST['idProducto']};";
+
+$cadena->query($sqlAnt);
+
+$sql= "CALL insertarCubicaje(".$_POST['idProducto'].", ".$_POST['proceso'].", ".$_COOKIE['ckidUsuario']." , '".$obs."', ".$_POST['estante'].", ".$_POST['piso'].", ".$_POST['seccion']." );";
 //echo $sql;
 $consultaDepos = $conection->prepare($sql);
 $consultaDepos ->execute();

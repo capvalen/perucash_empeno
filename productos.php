@@ -197,7 +197,7 @@ $limite=$diasLimite->days;
 					  </ul>
 					</div>
 				</div>
-				<div class="col-xs-12 col-sm-6 divImagen">
+				<div class="col-xs-12 col-sm-5 col-md-3 divImagen">
 					<?php 
 					$directorio = "images/productos/".$_GET['idProducto'];
 					if(file_exists($directorio)){$ficheros  = scandir($directorio, 1);
@@ -1102,7 +1102,7 @@ $('#txtNuevoFechaInt').datepicker({
     autoclose: true
 });
 $('#sltEstantes').on('changed.bs.select', function (e) {
- 	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); console.log( id );
+ 	var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); //console.log( id );
 	if(id==1){
 		$('#sltPiso').attr('disabled',true).selectpicker('refresh');
 		$('#sltSeccion').attr('disabled',true).selectpicker('refresh');
@@ -1129,11 +1129,11 @@ $('#sltEstantes').on('changed.bs.select', function (e) {
 	}
 });
 });
-$(window).load(function() {
-	$('.flexslider').flexslider({
+/*$(window).load(function() {
+	 $('.flexslider').flexslider({
 	 animation: "slide"
-	});
-});
+	}); 
+});*/
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 	var target = $(e.target).attr("href");
 	//console.log(target);
@@ -1920,6 +1920,7 @@ $('#btnPagarAutomatico').click(function() {
 });
 <?php } ?>
 $('#btnGuardarCubicaje').click( ()=> {
+	pantallaOver(true);
 	var proces = $('#divTipoMovAlmacen').find('.selected a').attr('data-tokens');
 	var estante= $('#divSelectEstante').find('.selected a').attr('data-tokens');
 	var piso= $('#divSelectPiso').find('.selected a').attr('data-tokens');
@@ -1941,6 +1942,7 @@ $('#btnGuardarCubicaje').click( ()=> {
 				location.reload();
 			}
 		});}
+	pantallaOver(false);
 });
 $('.chkInterno').change(function() {
 
