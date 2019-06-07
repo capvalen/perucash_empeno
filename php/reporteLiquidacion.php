@@ -42,7 +42,7 @@ $rowMora=$resultadoMora->fetch_assoc();
 $sumaMora= $rowMora['suma'];
 
 
-$sqlVendidos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma, IFNULL(round(sum(p.prodMontoEntregado),2), 0) as sumaCompra FROM `caja` ca
+$sqlVendidos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma, IFNULL(round(sum(ca.cajPrecioInicial),2), 0) as sumaCompra FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
 inner join producto p on p.idProducto = ca.idProducto
 where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (20, 21) "; 
