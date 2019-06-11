@@ -563,14 +563,14 @@ $('#btnFiltroAnaticica').click(()=> {
 						</tr>`);
 					}
 					$.each(data, function (i, dato) {
-						sumaElementos+=parseFloat(dato.cajaValor);
+						sumaElementos+=parseFloat(dato.valorAcum);
 						sumaCapitales += parseFloat(dato.prodMontoEntregado);
 						$('tbody').append(`
 						<tr><td>${dato.idProducto}</td><td></td>
 							<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
 							<td class="mayuscula">${dato.tipoDescripcion}</a></td>
 							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
-							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+							<td>${parseFloat(dato.valorAcum).toFixed(2)}</td>
 							<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
 						</tr>`);
 						

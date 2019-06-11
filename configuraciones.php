@@ -118,14 +118,13 @@ td .form-control{
 							<tr data-id="<?= $ussersInv['idUsuario'];?>">  <th><?= $i+1; ?></th> 
 							<td class='mayuscula' >  <img src="<?= $ussersInv['faceMiniatura'];?>" alt="" width="60" height="auto">  <span class="spanNombreFace"><?= $ussersInv['usuNombres'];?></span> <span class="spanApellidoFace"><?= $ussersInv['usuApellido']; ?></span></td>
 							<td> 
-							<select class="form-control sltNivelUser" data-power='<?= $ussersInv['usuPoder'];?>'>
-								<?php $sqlNivel= mysqli_query($esclavo, 'select * from poder where podActivo = 1');
+							<select class="form-control sltNivelUser" data-power='<?= $ussers['usuPoder'];?>'>
+								<?php $sqlNivel= mysqli_query($cadena, 'select * from poder where podActivo = 1');
 								while($nivell= mysqli_fetch_array($sqlNivel, MYSQLI_ASSOC)){
 									?>
 									<option value="<?= $nivell['idPoder']; ?>" <?php if($nivell['idPoder']==$ussers['usuPoder']){echo 'selected';} ?>><?= $nivell['Descripcion']; ?></option>
 									<?
 								}
-								
 								?>
 							</select>
 							
@@ -240,7 +239,8 @@ $(document).ready(function(){
 	// $.each( $('.sltNivelUser') , function(i, objeto){
 	// 	$(objeto).val($(objeto).attr('data-power'))
 	// });
-	$('#tabInvitados .sltNivelUser').selectpicker('val', 7 ).selectpicker('refresh');
+	//$('#tabInvitados .sltNivelUser').selectpicker('val', 7 ).selectpicker('refresh');
+	$('#tabInvitados .sltNivelUser').val(7);
 });
 $('#ulTabs a').click(function (e) {
   e.preventDefault()
@@ -271,8 +271,7 @@ $('#rdbDesactivarInventario').click(function () {
 $('.sltNivelUser').change(function() {
 	var padre= $(this).parent().parent();
 	var poder= $(this).val();
-	//console.log(padre.html());
-	//console.log( poder );
+	
 	$.ajax({url: 'php/actualizarPowerUser.php', type: 'POST', data: { 
 		poder: poder,
 		idUser: padre.attr('data-id')
