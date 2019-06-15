@@ -187,6 +187,7 @@ $limite=$diasLimite->days;
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0 ){ ?>
 						<li><a href="#!" id="btnDesembolsoAutomatico"><i class="icofont icofont-brand-tata-indicom"></i> Desembolso</a></li>
 						<li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático </a></li>
+						<li><a href="#!" id="btnProyeccion"><i class="icofont icofont-telescope"></i> Proyectar a futuro </a></li>
 						<? } ?>
 						<? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==1 ){ ?>
 							<li><a href="#!" id="btnPagoVentav2"><i class="icofont icofont-flag"></i> Venta de producto</a></li>
@@ -392,7 +393,7 @@ $limite=$diasLimite->days;
 							$gastosAdmin=0;
 							?>
 						<ul>
-							<li>Capital: S/. <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if( in_array($_COOKIE['ckPower'], $soloDios) ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
+							<li>Capital: S/ <span id="spanCapitalDefault"><?php echo $rowInteres['preCapital'];?></span> <?php if( in_array($_COOKIE['ckPower'], $soloDios) ): ?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeCapital"><i class="icofont icofont-bag-alt"></i> Cambiar capital</button> <? endif;?> </li>
 						
 						
 							<li>Tiempo de interés: <span><?php  if($rowInteres['diferenciaDias']=='0'){echo '1 día.';} else if($rowInteres['diferenciaDias']=='1'){echo '1 día.';}else{ echo  $rowInteres['diferenciaDias'].' días';} if($rowInteres['diferenciaDias']=='0'){$rowInteres['diferenciaDias']+=1;} ?> </span> <? if($rowProducto['presFechaCongelacion']<>''): echo '<strong>(	)</strong>'; endif; if( in_array($_COOKIE['ckPower'], $soloDios)){?> <button class="btn btn-morado btn-outline btn-sinBorde btn-xs" id="btnChangeFechaInt"><i class="icofont icofont-paper"></i> Cambiar fecha interés</button> <? } ?></li>
@@ -402,7 +403,7 @@ $limite=$diasLimite->days;
 						<?php
 						
 						if($rowInteres['diferenciaDias']>=1 && $rowInteres['diferenciaDias']<=7 ){ ?>
-							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/. <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
+							<li>Interés: <span><?php echo $rowInteres['preInteres']; ?>% = S/ <?php $interesJson= number_format(round($rowInteres['preCapital']*$rowInteres['preInteres']/100,1,PHP_ROUND_HALF_UP),2); echo $interesJson; ?></span></li>
 							<li>Razón del cálculo: <span><strong>Interés simple</strong> (del día 1 al 7)</span></li>
 						<?php }else if( $rowInteres['diferenciaDias']>=8 && $rowInteres['diferenciaDias']<=35 ){ 
 								$interesDiario= ($rowInteres['preInteres']/100)/7; ?>
@@ -977,6 +978,42 @@ $limite=$diasLimite->days;
 
 <?php } //fin de if power ?>
 
+<!--Modal Para proyectar el producto en el futuro -->
+<div class="modal animated fadeIn " id="modalProyectarFuturo" tabindex="-1" role="dialog">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<div class="modal-body container-fluid">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #f91313;"><span aria-hidden="true">&times;</span></button>
+			
+			<div class="row">
+				<div class="hidden-xs col-sm-5">
+					<img src="images/ezgif-4-46d2b60e1163.png" alt="" class="img-responsive">
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<h3 class="text-center" style="color: #a35bb4;">Proyección a futuro</h3>
+					<p>Realiza una proyección para cuando el cliente desee hacer un pago en una fecha futura.</p>
+					<div class="input-group">
+						<input type="text" class="form-control text-center" id="txtFechaFutura" placeholder="Fecha" style="height: 34px;">
+						<span class="input-group-btn"> <button class="btn btn-infocat " title="Realiza el cálculo" id="btnProyectarFuturo" type="button"><i class="icofont icofont-robot"></i></button> </span>
+					</div>
+					<div class="hidden" id="divCalculosFuturos">
+						<hr>
+						<p>Capital: S/ <span id="capitalFuturo"></span></p>
+						<p>Tiempo de interés: <span id="tiempoFuturo"></span> </p>
+						<p>Interés: 4% = S/ <span id="interesFuturo"></span></p>
+						<p>Cochera: S/ <span id="cocheraFuturo"></span></p>
+						<p>Gastos admnistrativos: S/ <span id="gastosFuturo"></span></p>
+						<p><strong>Deuda proyectada: S/ <span id="deudaFuturo"></span></strong></p>
+					</div>
+				</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+
 <? if( in_array($_COOKIE['ckPower'], $admis)){ ?>
 <!--Modal Para asignar nuevo capital al prestamo-->
 <div class="modal animated fadeIn " id="modalUpdateFechaInt" tabindex="-1" role="dialog">
@@ -1078,6 +1115,7 @@ $(document).ready(function(){
 	moment.locale('es');
 	//$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
+	$('#txtFechaFutura').datepicker({language: "es", autoclose: true, todayHighlight: true, todayBtn: "linked"}).datepicker( 'update', moment().format('DD/MM/YYYY') );
 	$('#tablita').stupidtable();
 	$.each( $('.spanFechaFormat'), function (i, dato) {
 		var nueFecha=moment($(dato).text());
@@ -1988,6 +2026,34 @@ $('.chkInterno').change(function() {
 		$(this).prop('checked', true);
 		$('#txtAutoDinero').focus();
 	}
+});
+$('#btnProyeccion').click(function() {
+	$('#modalProyectarFuturo').modal('show');
+});
+$('#btnProyectarFuturo').click(function() {
+	$('#divCalculosFuturos').addClass('hidden');
+	
+	$.ajax({url: 'php/calculoAutomaticoDebe.php', type: 'POST', data: { idProd:<?= $_GET['idProducto'];?> , limite: moment($('#txtFechaFutura').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') }}).done(function(resp) { console.log(resp)
+		var dato = JSON.parse(resp);
+		if(dato.length>=1){
+			$('#capitalFuturo').text(parseFloat(dato[0].capital).toFixed(2));
+			$('#tiempoFuturo').text(parseFloat(dato[0].soloDias).toFixed(2));
+			$('#interesFuturo').text(parseFloat(dato[0].interes).toFixed(2));
+			if( parseFloat(dato[0].cochera) >0){
+				$('#cocheraFuturo').text(parseFloat(dato[0].cochera).toFixed(2)).parent().removeClass('hidden');
+			}else{
+				$('#cocheraFuturo').parent().addClass('hidden');
+			}
+			if( parseFloat(dato[0].penalizacion) >0){
+				$('#gastosFuturo').text(parseFloat(dato[0].penalizacion).toFixed(2)).parent().removeClass('hidden');
+			}else{
+				$('#gastosFuturo').parent().addClass('hidden');
+			}
+			$('#deudaFuturo').text(parseFloat(dato[0].total).toFixed(2));
+		}
+		$('#divCalculosFuturos').removeClass('hidden');
+		pantallaOver(false);	
+	});
 });
 </script>
 

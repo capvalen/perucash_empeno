@@ -3,8 +3,14 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 $idProd = $_POST['idProd'];
 
+if(!isset($_POST['limite'])){
+	$fechaLimite = 'now()';
+}else{
+	$fechaLimite ="'{$_POST['limite']}'";
+}
+
 $sql="SELECT round(p.preCapital,2) as preCapital, preInteres,
-case when ps.presFechaCongelacion ='' then datediff( now(), desFechaContarInteres ) when ps.presFechaCongelacion is null then datediff( now(), desFechaContarInteres ) else datediff( ps.presFechaCongelacion, desFechaContarInteres ) end as `diferenciaDias`, po.idTipoProducto
+case when ps.presFechaCongelacion ='' then datediff( $fechaLimite, desFechaContarInteres ) when ps.presFechaCongelacion is null then datediff( $fechaLimite, desFechaContarInteres ) else datediff( ps.presFechaCongelacion, desFechaContarInteres ) end as `diferenciaDias`, po.idTipoProducto
 FROM `prestamo_producto` p
 left join prestamo ps on p.idPrestamo = ps.idPrestamo
 left join producto po on po.idProducto = p.idProducto

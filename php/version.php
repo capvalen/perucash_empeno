@@ -1,5 +1,5 @@
 <?php 
-echo "Versión 3.21g Build 20190606 ";
+echo "Versión 3.22 Build 20190615 ";
 
 /*
 Nuevos cambios en versiones:

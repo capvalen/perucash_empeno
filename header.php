@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.101" >
 <link rel="stylesheet" href="css/colorsmaterial.css">
 <link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
-<link rel="stylesheet" href="css/bootstrap-datepicker3.css">
+<link rel="stylesheet" href="css/bootstrap-datepicker3.css?version=1.0.1">
 <link rel="stylesheet" href="css/bootstrap-select.min.css?version=0.2" >
 <link rel="stylesheet" href="css/animate.css" >
 <link rel="stylesheet" href="iconfont/material-icons.css"> <!--Iconos en: https://design.google.com/icons/-->
