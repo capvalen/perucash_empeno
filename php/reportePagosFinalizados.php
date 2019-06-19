@@ -21,3 +21,4 @@ mysqli_free_result($log);
 mysqli_close($conection);
 echo json_encode($filas);
 ?>
+ 

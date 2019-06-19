@@ -966,7 +966,11 @@ $limite=$diasLimite->days;
 						<input type="number" class="form-control input-sm esMoneda inputModif" autocomplete="nope" lang="en" id="txtAutoCapital" readonly>
 						<p class="pEnLinea"  style="color: #a35bb4;"><strong>Observaciones:</strong></p>
 						<input type="text" class="form-control input-lg " autocomplete="nope" id="txtAutoObserv" >
-
+						<div class="checkbox checkbox-infocat">
+							<input id="chImprTicketAuto" class="styled" type="checkbox" checked="">
+							<label for="chImprTicketAuto"><i class="icofont icofont-paper"></i> Imprimir Ticket</label>
+						</div>
+					
 						<button class="btn btn-infocat btn-outline btn-block" data-dismiss="modal" id="btnPagarAutomatico" ><i class="icofont icofont-diskette"></i> Realizar pago</button>
 					</div>
 				</div>
@@ -1939,17 +1943,19 @@ $('#btnPagarAutomatico').click(function() {
 		if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCapital').val()+"\n"; }
 		$('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
 		$('.modal-GuardadoCorrecto #h1Bien').html( linea.replace(/\n/g, '<br>'));
-		$('.modal-GuardadoCorrecto').modal('show');		
-		/* $.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
-			codArt: "<?= $_GET['idProducto']; ?>",
-			hora: moment().format('DD/MM/YYYY hh:mm a'),
-			cliente: $('.spanDueno').text(),
-			articulo: $('.h2Producto').text(),
-			usuario: "<?= $_COOKIE['ckAtiende'];?>",
-			linea: linea
-		 }}).done(function(resp) {
-			console.log(resp)
-		}); */
+		$('.modal-GuardadoCorrecto').modal('show');
+		if( $('#chImprTicketAuto').prop('checked') ){
+			$.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
+				codArt: "<?= $_GET['idProducto']; ?>",
+				hora: moment().format('DD/MM/YYYY hh:mm a'),
+				cliente: $('.spanDueno').text(),
+				articulo: $('.h2Producto').text(),
+				usuario: "<?= $_COOKIE['ckAtiende'];?>",
+				linea: linea
+			}}).done(function(resp) {
+				console.log(resp)
+			});
+		}
 	});
 	pantallaOver(false);
 	$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
