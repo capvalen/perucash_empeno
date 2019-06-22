@@ -180,6 +180,7 @@ $limite=$diasLimite->days;
 					  <ul class="dropdown-menu">
 						<li><a href="#!" id="liAGestionrFotos"><i class="icofont icofont-shopping-cart"></i> Gestionar fotos</a></li>
 						<li><a href="#!" id="liHojaControl"><i class="icofont icofont-print"></i> Hoja de control</a></li>
+						<li><a href="php/printDeclaracionJurada.php?idProducto=<?= $_GET['idProducto']?>" id="" target="_blank"><i class="icofont icofont-paper"></i> Declaración jurada </a></li>
 						<li><a href="#!" id="liEditDescription"><i class="icofont icofont-exchange"></i> Edición de descripción</a></li>
 						<? if( $_COOKIE['ckPower']==='1' && $esCompra==0){ ?>
 						<li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
@@ -1371,6 +1372,17 @@ $('.btnImprimirTicket').click(function () {
 				codigo: "<?php echo $_GET['idProducto']; ?>",
 				titulo: queTitulo,
 				fecha: queFecha.replace('a las ', ''),
+				monto: queMonto,
+				usuario: queUser
+			}}).done(function (resp) { 	}); break;
+		case '43':
+			queTitulo='    * Desembolso *';
+			$.ajax({url: 'http://127.0.0.1/perucash/printTicketv3.php', type: 'POST', data: {
+				codigo: "<?php echo $_GET['idProducto']; ?>",
+				titulo: queTitulo,
+				fecha: queFecha.replace('a las ', ''),
+				cliente: queDueno,
+				articulo: queArticulo,
 				monto: queMonto,
 				usuario: queUser
 			}}).done(function (resp) { 	}); break;
