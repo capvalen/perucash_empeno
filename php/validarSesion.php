@@ -35,10 +35,10 @@ if ($row['idUsuario']>=1){
 		setcookie('ckCorreo', $row['usuEMail'], $expira, $local);
 	
 		
-		$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
-		$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
-		setcookie('ckInventario', $rowConf['inventarioActivo'], $expira, $local);
-		setcookie('ckSucursal', $rowConf['local'], $expira, $local);
+		//$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
+		//$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
+		//setcookie('ckInventario', $rowConf['inventarioActivo'], $expira, $local);
+		//setcookie('ckSucursal', $rowConf['local'], $expira, $local);
 		//echo 'concedido';
 	}else{
 		//echo 'inhabilitado';

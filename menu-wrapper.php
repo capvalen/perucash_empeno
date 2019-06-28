@@ -3,7 +3,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 <div id="sidebar-wrapper">
 	<ul class="sidebar-nav">
 		<div class="logoEmpresa ocultar-mostrar-menu">
-			<img class="img-responsive" src="images/empresa.png?version=1.1" alt="">
+			<img class="img-responsive" src="images/empresa.png?version=1.2" alt="">
 		</div>
 		<p class="text-center deep-purple-text text-lighten-2" style="font-size: 90%;"><? require_once 'php/version.php';?></p>
 		<li <?php if($nomArchivo =='principal.php') echo 'class="active"'; ?>>

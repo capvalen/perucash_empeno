@@ -8,7 +8,7 @@ $j=0;
 $productos= $_POST['jsonProductos'];
 //echo count($productos);
 for ($i=0; $i < count($productos) ; $i++) { 
-	$sql= $sql. "call insertarCompraSoloV3 ('".$productos[$i]['nombre']."', ".$productos[$i]['montoDado'].", '".$productos[$i]['fechaIngreso']."', '".$productos[$i]['observaciones']."' , ".$_COOKIE['ckidUsuario'].", '".$productos[$i]['fechaRegistro']."', ".$productos[$i]['tipoProducto'].");";
+	$sql= $sql. "call insertarCompraSoloV3 ('".$productos[$i]['nombre']."', ".$productos[$i]['montoDado'].", '".$productos[$i]['fechaIngreso']."', '".$productos[$i]['observaciones']."' , ".$_COOKIE['ckidUsuario'].", '".$productos[$i]['fechaRegistro']."', ".$productos[$i]['tipoProducto'].", ".$productos[$i]['cantidad'].");";
 	
 }
 //echo $sql;

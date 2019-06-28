@@ -2,6 +2,7 @@
 if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
 	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 include 'php/conkarl.php';
+include 'php/variablesGlobales.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -31,6 +32,15 @@ td .form-control{
 			<h2 class="purple-text text-lighten-1">Registro de Clientes, Productos y Compras <small><?php print $_COOKIE["ckAtiende"]; ?></small></h2><hr>
 			<div class="panel panel-default">
 				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-6 col-md-3">
+							<p><strong>IP de Caja (Ticketera):</strong></p>
+						</div>
+						<div class="col-sm-6 col-md-4">
+							<input type="text" class="form-control" value="<?= $ipServer;?>" id="txtIpServidor">
+						</div>
+					</div>
+					
 					<p><strong>Inventario</strong></p>
 			<?php $sql = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");
 				$row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
@@ -333,6 +343,13 @@ $('#btnActualizarFaceDatos').click(function() {
 	$('#modalEditarUsuario').modal('hide');
 });
 
+$('#txtIpServidor').keypress(function (e) { 
+	if(e.keyCode == 13){ 
+		$.ajax({url: 'php/updateIpCaja.php', type: 'POST', data: { ipServer : $('#txtIpServidor').val() }}).done(function(resp) {
+			console.log(resp)
+		});
+	}
+});
 
 </script>
 <?php } ?>
