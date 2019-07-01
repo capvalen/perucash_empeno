@@ -68,7 +68,9 @@ while($row=$resultado->fetch_assoc()){
 	</tr>
 	<?php
 }
-
+/* SELECT * FROM `caja` where idProducto=3589 and idCaja<10697
+order by idCaja desc
+limit 1 */
 ?>
 </tbody>
 </table>
