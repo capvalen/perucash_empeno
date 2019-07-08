@@ -185,17 +185,17 @@ $limite=$diasLimite->days;
                   <? if( $_COOKIE['ckPower']==='1' && $esCompra==0){ ?>
                   <li><a href="#!" id="liCongelar"><i class="icofont icofont-ice-cream"></i> Congelar crédito</a></li>
                   <? } ?>
-                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0  ){ //&& $hayCaja>0 ?>
+                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0 && $existeCaja>0 ){ //&& $hayCaja>0 ?>
                   <li><a href="#!" id="btnDesembolsoAutomatico"><i class="icofont icofont-brand-tata-indicom"></i> Desembolso</a></li>
                   <li><a href="#!" id="btnPagoAutomatico"><i class="icofont icofont-chart-histogram"></i> Pago Automático </a></li>
                   <? } ?>
                   <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==0 ){ ?>
                   <li><a href="#!" id="btnProyeccion"><i class="icofont icofont-telescope"></i> Proyectar a futuro </a></li>
                   <? } ?>
-                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==1  ){ //&& $hayCaja>0 ?>
+                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $esCompra==1  && $existeCaja>0 ){ //&& $hayCaja>0 ?>
                      <li><a href="#!" id="btnPagoVentav2"><i class="icofont icofont-flag"></i> Venta de producto</a></li>
                   <? } ?>
-                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $limite>=36 && $esCompra==0  ){ //&& $hayCaja>0 ?>
+                  <? if( in_array($_COOKIE['ckPower'], $soloCaja ) && $limite>=36 && $esCompra==0  && $existeCaja>0 ){ //&& $hayCaja>0 ?>
                   <li><a href="#!" id="btnPagoRematev2"><i class="icofont icofont-flag"></i> Remate de producto</a></li>
                   <? } ?>
                  </ul>
@@ -279,9 +279,7 @@ $limite=$diasLimite->days;
                echo '<h3 class="purple-text text-lighten-1">Ticket asignado #'.$rowDepos['idTicket'].'</h3>';
             }
          }else{
-            $hayCaja = require_once 'php/comprobarCajaHoy.php';
-            //if( $hayCaja2>0 ){echo 'numero'; }else{ echo 'no hay'; }
-            if($hayCaja ==false){
+            if($existeCaja == 0){
                //echo '<h3 class="red-text text-darken-1" >No hay ninguna caja aperturada</h3>';
                echo '<div class="alert alert-morado container-fluid" role="alert">
                <div class="col-xs-4 col-sm-2 col-md-3">
@@ -295,20 +293,19 @@ $limite=$diasLimite->days;
             }else{
 
             if( ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) && ($limite>=37) && $esCompra==0 ){ ?>
-            <p style="margin-top: 10px; " class="hidden"><strong>Generar ticket:</strong></p>
-            <button class="btn btn-morado btn-lg btn-block btn-outline hidden"><i class="icofont icofont-mathematical-alt-1"></i> Rematar producto</button>
-
+            <!-- <p style="margin-top: 10px; " class="hidden"><strong>Generar ticket:</strong></p>
+            <button class="btn btn-morado btn-lg btn-block btn-outline hidden"><i class="icofont icofont-mathematical-alt-1"></i> Rematar producto</button>-->
          <?php } ?>
 
          <?php if($esCompra==1 && $rowProducto['prodActivo']==1 && ($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==2 || $_COOKIE['ckPower']==5) ){?>
-            <p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
-            <button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button>
+           <!--  <p style="margin-top: 10px;"><strong>Generar ticket:</strong></p>
+            <button class="btn btn-morado btn-lg btn-block btn-outline" id="btnLlamarTicketVenta" ><i class="icofont icofont-people"></i> Ticket de venta</button> -->
          <?php }
             if( $_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4 ){ //zona de pago especial ?>
-               <button class="btn btn-infocat btn-outline btn-block btn-lg hidden" id="">Automático</button>
+               <!-- <button class="btn btn-infocat btn-outline btn-block btn-lg hidden" id="">Automático</button>
 
                <p style="margin-top: 10px;" class="hidden" ><strong>Pago especial</strong></p>
-               <button class="btn btn-morado btn-lg btn-block btn-outline hidden" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button>
+               <button class="btn btn-morado btn-lg btn-block btn-outline hidden" id="btnLlamarTicketMaestro"><i class="icofont icofont-mathematical-alt-1"></i> Insertar pago maestro</button> -->
             <?php }
             if($esCompra==0 && $rowProducto['prodActivo']==1 ){
             

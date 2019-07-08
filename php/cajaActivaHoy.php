@@ -3,7 +3,7 @@ require("conkarl.php");
 require "variablesGlobales.php";
 date_default_timezone_set('America/Lima');
 
-$hayCaja= require_once("comprobarCajaHoy.php");
+//$existeCaja= require_once("comprobarCajaHoy.php");
 $filas=array();
 if (! isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');
@@ -20,8 +20,8 @@ $row = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 $fechaHoy = new DateTime();
 $fechaReporte = new DateTime($row['fechaInicio']);
 
-if($hayCaja>0  ){ 
-	if( !isset($_GET['cuadre']) ){ //$hayCaja==$row['idCuadre'] &&  ?>
+if($existeCaja>0  ){ 
+	if( !isset($_GET['cuadre']) ){ //$existeCaja==$row['idCuadre'] &&  ?>
 	<div class="container-fluid row ">
 		<div class="col-xs-12 col-md-8" >
 				<div class='divTopLinea'></div>
@@ -32,7 +32,7 @@ if($hayCaja>0  ){
 						</div>
 					</div>
 					<div class="col-xs-8">
-						<h4 class="h3Title">Caja abierta!</h4> Cajero <strong class="mayuscula"><?php echo $row['usuNombres']; ?></strong> aperturó <strong> <a href="caja.php?fecha=<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('Y-m-d'); ?>&cuadre=<?= $hayCaja;?>"><i class="icofont icofont-dotted-right"></i>  <?= $fechaN->format('j/m/Y g:i a'); ?></a></strong>
+						<h4 class="h3Title">Caja abierta!</h4> Cajero <strong class="mayuscula"><?php $row['usuNombres']; ?></strong> aperturó <strong> <a href="caja.php?fecha=<?php $fechaN= new DateTime($row['fechaInicio']); echo $fechaN->format('Y-m-d'); ?>&cuadre=<?= $existeCaja;?>"><i class="icofont icofont-dotted-right"></i>  <?= $fechaN->format('j/m/Y g:i a'); ?></a></strong>
 					</div>
 				</div>
 		
@@ -74,7 +74,7 @@ if($hayCaja>0  ){
 if( isset($_GET['cuadre']) ){ ?>
 
 <div class="col-xs-12 text-center purple-text text-lighten-1">
-	<h4 class="mayuscula"><strong>Cajero: </strong> <?php echo $row['usuNombres']; if( $fechaReporte->format('j/n/Y')== $fechaReporte->format('j/n/Y') && $hayCaja==$_GET['cuadre'] && ( in_array($_COOKIE['ckPower'], $soloCaja) )  ){
+	<h4 class="mayuscula"><strong>Cajero: </strong> <?php echo $row['usuNombres']; if( $fechaReporte->format('j/n/Y')== $fechaReporte->format('j/n/Y') && $existeCaja==$_GET['cuadre'] && ( in_array($_COOKIE['ckPower'], $soloCaja) )  ){
 		?> <button class="btn btn-infocat btn-outline btn-xs" id="btnCajaCerrar"><i class="icofont icofont-tea"></i> Cerrar caja</button> <?php
 	} ?></h4>
 </div>

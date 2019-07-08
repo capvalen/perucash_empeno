@@ -27,6 +27,8 @@ th{color:#a35bb4}
 a{color: #a35bb4;}
 a:focus, a:hover { color: #62286f; }
 #sltHistorialCierres { font-family: "IcoFont", Poppins, sans-serif; }
+.modal-pagoMaestro .close, .modal-pagoMaestro .close { color: #6f5e5e; }
+.modal-pagoMaestro .close:hover, .modal-pagoMaestro .close:hover{color: #ea1010;opacity: 0.7;}
 </style>
 
 
@@ -172,38 +174,46 @@ a:focus, a:hover { color: #62286f; }
 <!-- Modal para Abrir caja  -->
 
 <div class="modal fade modal-pagoMaestro" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog ">
 		<div class="modal-content">
-			<div class="modal-header-primary">
+			<div class="modal-header-primary hidden">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-tittle"><i class="icofont icofont-animal-cat-alt-3"></i> Insertar proceso especial</h4>
 			</div>
 			<div class="modal-body">
-				<div class="container-fluid">
-					<p>Rellene cuidadosamente la siguiente información</p>
-					<label for="">Tipo de proceso</label>
-					<div id="cmbEstadoPagos">
-					<h5 id="h5TipoPago"></h5></div>
-					<label id="lblMontoEntregar" for="">Monto en efectivo: (S/)</label>
-					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
-					<label id="lblPorcentajePasar" for="">Porcentaje en juego: (%)</label>
-					<input type="number" class="form-control input-lg mayuscula text-center " id="txtPorcentajePagos" val="0.00" autocomplete="off">
-					<label id="lblMontoPasar" for="">Pasar por el P.O.S.: (S/)</label>
-					<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtPasarPagos" val="0.00" autocomplete="off">
-					<label for="">Método de pago</label>
-					<div id="divCmbMetodoPago">
-						<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
-							<?php include 'php/listarMonedaOPT.php'; ?>
-						</select>
-					</div> <br>
-					<label for="">¿Observaciones?</label>
-					<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
-					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span></div>
+			<div class="container-fluid">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
+				<div class="row">
+					<div class="col-sm-6">
+						<img class="img-responsive" src="images/youchai.jpg?ver=1.0" style="padding-top:50px">
+					</div>
+					<div class="col-sm-6 deep-purple-text">
+						<h4 class="">Ingresar Proceso Especial</h4>
+						<p>Rellene cuidadosamente la siguiente información</p>
+						<label for="">Tipo de proceso</label>
+						<div id="cmbEstadoPagos"> <h5><strong id="h5TipoPago"></strong></h5> </div>
+						<label id="lblMontoEntregar" for="">Monto en efectivo: (S/)</label>
+						<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" val="0.00" autocomplete="off">
+						<label id="lblPorcentajePasar" for="">Porcentaje en juego: (%)</label>
+						<input type="number" class="form-control input-lg mayuscula text-center " id="txtPorcentajePagos" val="0.00" autocomplete="off">
+						<label id="lblMontoPasar" for="">Pasar por el P.O.S.: (S/)</label>
+						<input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtPasarPagos" val="0.00" autocomplete="off">
+						<label for="">Método de pago</label>
+						<div id="divCmbMetodoPago">
+							<select class="form-control selectpicker" id="sltMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+								<?php include 'php/listarMonedaOPT.php'; ?>
+							</select>
+						</div> <br>
+						<label for="">¿Observaciones?</label>
+						<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+						<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span>
+					</div>
+						<button class="btn btn-morado btn-outline btn-block " id="btnInsertPagoOmiso" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
+					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button class="btn btn-azul btn-outline" id="btnInsertPagoOmiso" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
-		</div>
+			</div>
+			<div class="modal-footer hidden"></div>
 		</div>
 	</div>
 </div>
@@ -312,7 +322,7 @@ a:focus, a:hover { color: #62286f; }
 </div>
 <!--Modal Para insertar pago maestro -->
 <div class="modal fade modal-cajaMaestra" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog moda-sm">
 		<div class="modal-content">
 			<div class="modal-header-success">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">&times;</span></button>
@@ -320,36 +330,36 @@ a:focus, a:hover { color: #62286f; }
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<p>Rellene cuidadosamente la siguiente información</p>
-					<label for="">Tipo de pago</label>
-					<div id="cmbEstadoPagos2">
-					<select class="selectpicker mayuscula" id="spTipoPago2" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
-						<?php require 'php/detallePagosOPT.php'; ?>
-					</select></div>
-					<label for="">Fecha de pago</label>
-					<input id="dtpCajaFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
-					<label class="hidden" for="">Método de pago</label>
-					<div class="hidden" id="divCmbMetodoPago">
-						<select class="form-control selectpicker" id="sltCajaMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
-							<?php include 'php/listarMonedaOPT.php'; ?>
-						</select>
-					</div>
-					<label for="">Métodos de pago</label>
-					<div id="divCmbMetodoPago2">
-						<select class="form-control selectpicker" id="sltMetodopago2" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
-							<?php include 'php/listarMonedaOPT.php'; ?>
-						</select>
-					</div> <br>
-					<label for="">Monto de pago S/</label>
-					<input type="number" class="form-control input-lg mayuscula text-center " id="txtCajaMontoPagos" autocomplete="off" style="font-size: 20px;">
-					<label for="">¿Observaciones?</label>
-					<input type="text" class="form-control input-lg mayuscula" id="txtCajaObsPagos" autocomplete="off">
-					<label for="">¿Activo?</label>
-					<select name="" id="sltActivoV2" class="form-control">
-						<option value="0">Inactivo</option>
-						<option value="1">Activo</option>
+				<p>Rellene cuidadosamente la siguiente información</p>
+				<label for="">Tipo de pago</label>
+				<div id="cmbEstadoPagos2">
+				<select class="selectpicker mayuscula" id="spTipoPago2" title="Tipos de pago..."  data-width="100%" data-live-search="true" data-size="15">
+					<?php require 'php/detallePagosOPT.php'; ?>
+				</select></div>
+				<label for="">Fecha de pago</label>
+				<input id="dtpCajaFechaPago" type="text" class="form-control input-lg text-center" autocomplete="off">
+				<label class="hidden" for="">Método de pago</label>
+				<div class="hidden" id="divCmbMetodoPago">
+					<select class="form-control selectpicker" id="sltCajaMetodopago" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+						<?php include 'php/listarMonedaOPT.php'; ?>
 					</select>
-					<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
+				</div>
+				<label for="">Métodos de pago</label>
+				<div id="divCmbMetodoPago2">
+					<select class="form-control selectpicker" id="sltMetodopago2" title="Métodos..."  data-width="100%" data-live-search="true" data-size="15">
+						<?php include 'php/listarMonedaOPT.php'; ?>
+					</select>
+				</div> <br>
+				<label for="">Monto de pago S/</label>
+				<input type="number" class="form-control input-lg mayuscula text-center " id="txtCajaMontoPagos" autocomplete="off" style="font-size: 20px;">
+				<label for="">¿Observaciones?</label>
+				<input type="text" class="form-control input-lg mayuscula" id="txtCajaObsPagos" autocomplete="off">
+				<label for="">¿Activo?</label>
+				<select name="" id="sltActivoV2" class="form-control">
+					<option value="0">Inactivo</option>
+					<option value="1">Activo</option>
+				</select>
+				<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
 				</div>
 			</div>
 			<div class="modal-footer">
