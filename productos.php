@@ -156,7 +156,7 @@ $limite=$diasLimite->days;
 #modalPagoAutomatico .modal-content, .modal-pagoMaestro .modal-content{box-shadow: 0 5px 15px rgba(0,0,0,.5);}
 #modalPagoAutomatico .form-control{margin-bottom: 10px;}
 /* .pEnLinea{display: inline-block;} */
-#modalPagoAutomatico .checkbox>label {/* color: inherit; */color: #a35bb4; font-size: 13px; font-weight: 700;} */
+#modalPagoAutomatico .checkbox>label, .modal-pagoMaestro .checkbox>label {/* color: inherit; */color: #a35bb4; font-size: 13px; font-weight: 700;}
 </style>
 <div class="" id="wrapper">
 
@@ -782,6 +782,10 @@ $limite=$diasLimite->days;
                   <input type="number" class="form-control input-lg mayuscula text-center esMoneda" id="txtMontoPagos" autocomplete="off" style="font-size: 20px;">
                   <label for="">¿Observaciones?</label>
                   <input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
+                  <div class="checkbox checkbox-infocat">
+                     <input id="chImprTicketAuto2" class="styled" type="checkbox" checked="">
+                     <label for="chImprTicketAuto2"><i class="icofont icofont-paper"></i> Imprimir Ticket</label>
+                  </div>
                   <div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
                   <button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertRemate" ><i class="icofont icofont-save"></i> Insertar proceso</button>
                   <button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertVenta" ><i class="icofont icofont-save"></i> Insertar proceso</button>
@@ -1697,16 +1701,18 @@ $('#btnInsertRemate').click(function() {
             $('#btnRefre2').removeClass('hidden'); $('#btnBien').addClass('hidden');
             $('.modal-GuardadoCorrecto #spanBien').text('Pago insertado');
             $('.modal-GuardadoCorrecto').modal('show');
-            $.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
-               codArt: "<?= $_GET['idProducto']; ?>",
-               hora: moment().format('DD/MM/YYYY hh:mm a'),
-               cliente: '',
-               articulo: $('.h2Producto').text(),
-               usuario: "<?= $_COOKIE['ckAtiende'];?>",
-               linea: linea
-            }}).done(function(resp) {
-               console.log(resp)
-            });
+            if( $('#chImprTicketAuto2').prop('checked') ){
+               $.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
+                  codArt: "<?= $_GET['idProducto']; ?>",
+                  hora: moment().format('DD/MM/YYYY hh:mm a'),
+                  cliente: '',
+                  articulo: $('.h2Producto').text(),
+                  usuario: "<?= $_COOKIE['ckAtiende'];?>",
+                  linea: linea
+               }}).done(function(resp) {
+                  console.log(resp)
+               });
+            }
          }
       });
       $('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 

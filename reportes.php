@@ -68,6 +68,7 @@ require("php/conkarl.php");
 							<option value="16">Inyecciones (por inversionistas)</option>
 							<option value="17">Inyecciones (por tarjetas)</option>
 							<option value="9">Inyecciones (por socios)</option>
+							<option value="18">Pagos para personal</option>
 							<option value="12">Pagos de almuerzo</option>
 							<option value="13">Pagos de servicios</option>
 							<option value="3">Préstamos finalizados</option>
@@ -952,6 +953,36 @@ $('#btnFiltroAnaticica').click(()=> {
 						$('tbody').append(`
 						<tr>
 							<td class="mayuscula">No existen artículos en ésta categoría o intervalo de fechas</td>
+							<td class="mayuscula"></td>
+							<td></td>
+						</tr>`);
+					}
+					$.each(data, function (i, dato) {
+						sumaElementos+=parseFloat(dato.cajaValor);
+						$('tbody').append(`
+						<tr><td>${i+1}</td>
+							<td class="mayuscula"></td>
+							<td class="mayuscula">${dato.tipoDescripcion}</a> </td>
+							<td class="mayuscula"><em>${dato.cajaObservacion}</em></td>
+							<td data-sort-value="${moment(dato.cajaFecha).format('X')}">${moment(dato.cajaFecha).format('DD/MM/YYYY')}</td>
+							<td>${parseFloat(dato.cajaValor).toFixed(2)}</td>
+						</tr>`);
+						
+						if(data.length==i+1){
+							$('#tablita').append(`<tfoot><th><td></td><td></td><td></td>
+								<td><strong>Total: </strong></td>
+								<td>S/ ${parseFloat(sumaElementos).toFixed(2)}</td>
+								</th></tfoot>`);
+						}
+					});
+				}); break;
+				case '18':
+				$.ajax({url: 'php/reportePagosFinalizados.php', type: 'POST', data: { fecha: $('#dtpFechaIniciov3').val(), proceso: 91 }}).done((resp)=> {
+					var data = JSON.parse(resp);
+					if(resp=='[]'){
+						$('tbody').append(`
+						<tr>
+							<td class="mayuscula">No existen registros en ésta categoría o intervalo de fechas</td>
 							<td class="mayuscula"></td>
 							<td></td>
 						</tr>`);

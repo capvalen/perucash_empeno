@@ -79,10 +79,10 @@ td .form-control{
 							<tbody>
 						<?php
 						$i=0;
-						$sentencia = mysqli_query($conection,"SELECT `idUsuario`, `usuNombres`, `usuApellido`,	`usuPoder`, `usuActivo`, faceMiniatura FROM `usuario` where usuPoder <>7 and  usuActivo =1 order by usuNombres asc");
-						while($ussers= mysqli_fetch_array($sentencia, MYSQLI_ASSOC)){?>
+						$sentencia = mysqli_query($esclavo,"SELECT `idUsuario`, `usuNombres`, `usuApellido`,	`usuPoder`, `usuActivo`, faceMiniatura FROM `usuario` where usuPoder <>7 and  usuActivo =1 order by usuNombres asc");
+						while($ussers= mysqli_fetch_array($sentencia, MYSQLI_ASSOC)){ ?>
 							<tr data-id="<?= $ussers['idUsuario'];?>">  <th><?= $i+1; ?></th>
-							<td class='mayuscula' > <img src="<?= $ussers['faceMiniatura'];?>" alt="" width="60" height="auto"> <span class="spanNombreFace"> <?= $ussers['usuNombres'];?></span> <span class="spanApellidoFace"><?= $ussers['usuApellido']; ?></span></td>
+							<td class='mayuscula' > <img src="<?= $ussers['faceMiniatura']; ?>" alt="" width="60" height="auto"> <span class="spanNombreFace"> <?= $ussers['usuNombres'];?></span> <span class="spanApellidoFace"><?= $ussers['usuApellido']; ?></span></td>
 							<td> 
 							<select class="form-control sltNivelUser" data-power='<?= $ussers['usuPoder'];?>'>
 								<?php $sqlNivel= mysqli_query($cadena, 'select * from poder where podActivo = 1');
@@ -123,10 +123,10 @@ td .form-control{
 							<tbody>
 						<?php
 						$i=0;
-						$sentenciaInv = mysqli_query($conection,"SELECT `idUsuario`, `usuNombres`, `usuApellido`,	`usuPoder`, `usuActivo`, faceMiniatura FROM `usuario` where usuPoder =7 and  usuActivo =1 order by usuNombres asc");
-						while($ussersInv= mysqli_fetch_array($sentenciaInv, MYSQLI_ASSOC)){?>
+						$sentenciaInv = mysqli_query($esclavo,"SELECT `idUsuario`, `usuNombres`, `usuApellido`,	`usuPoder`, `usuActivo`, faceMiniatura FROM `usuario` where usuPoder =7 and  usuActivo =1 order by usuNombres asc");
+						while($ussersInv= mysqli_fetch_array($sentenciaInv, MYSQLI_ASSOC)){ ?>
 							<tr data-id="<?= $ussersInv['idUsuario'];?>">  <th><?= $i+1; ?></th> 
-							<td class='mayuscula' >  <img src="<?= $ussersInv['faceMiniatura'];?>" alt="" width="60" height="auto">  <span class="spanNombreFace"><?= $ussersInv['usuNombres'];?></span> <span class="spanApellidoFace"><?= $ussersInv['usuApellido']; ?></span></td>
+							<td class='mayuscula' > <img src="<?= $ussers['faceMiniatura']; ?>" alt="" width="60" height="auto">  <span class="spanNombreFace"><?= $ussersInv['usuNombres'];?></span> <span class="spanApellidoFace"><?= $ussersInv['usuApellido']; ?></span></td>
 							<td> 
 							<select class="form-control sltNivelUser" data-power='<?= $ussers['usuPoder'];?>'>
 								<?php $sqlNivel= mysqli_query($cadena, 'select * from poder where podActivo = 1');

@@ -28,6 +28,7 @@
 		<th>POS</th>
 		<th>N° dias</th>
 		<th>Capital</th>
+		<th>Cajero</th>
 	</tr>
 	</thead>
 	<tbody data-tipo=0>
@@ -38,7 +39,7 @@ include "conkarl.php";
 
 $sql="SELECT date_format(`cajaFecha`, '%d/%m/%Y') as cajaFecha, 
 case c.idTipoProceso when 34 then 'COCHER' when 44 then 'PI' when 45 then 'AMORT' when 32 then 'FP' when 33 then 'ADIN' when 31 then 'INYEC' when 90 then 'INYEC' when 89 then 'INYEC' when 80 then 'INYEC' else '' end as 'tipoMin', p.prodMontoEntregado,
-tp.tipoDescripcion, c.idProducto, p.prodNombre, c.cajaValor, cajaMoneda, c.idTipoProceso
+tp.tipoDescripcion, c.idProducto, p.prodNombre, c.cajaValor, cajaMoneda, c.idTipoProceso, retornarCajeroEnPasado(c.idCaja) as cajero
 FROM `caja` c
 inner join tipoProceso tp on c.idTipoProceso= tp.idTipoProceso
 left join producto p on c.idProducto = p.idProducto
@@ -65,6 +66,7 @@ while($row=$resultado->fetch_assoc()){
 		<td></td>
 		<td></td>
 		<td><?= $row['prodMontoEntregado'];?></td>
+		<td><?= $row['cajero'];?></td>
 	</tr>
 	<?php
 }
