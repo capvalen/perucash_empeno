@@ -1974,6 +1974,9 @@ $('#btnPagarAutomatico').click(function() {
             console.log(resp)
          });
       }
+   }).fail(function (params) {
+      $.variable = params;
+      console.log(params.responseText);
    });
    pantallaOver(false);
    $('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 

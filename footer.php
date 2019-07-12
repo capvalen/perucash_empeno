@@ -8,6 +8,7 @@
 <script type="text/javascript" src="js/impotem.js?version=1.0.4"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
+<script type="text/javascript" src="js/hefesto.js?version=1.0.1"></script>
 <!-- BEGIN JIVOSITE CODE {literal} -->
 <script type='text/javascript'>
 (function(){ var widget_id = 'ucFX66lIdV';var d=document;var w=window;function l(){
