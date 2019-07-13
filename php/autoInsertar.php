@@ -1,10 +1,11 @@
 <?php 
-include 'conkarl.php';
+session_start();
 
+if( !isset($_SESSION['access_token'])){header('HTTP/1.1 Error de protección a la BD'); die('err3');}else{
+   
    $existeCajaAntes = require_once("comprobarCajaHoy.php");
-   if($existeCajaAntes==0){
-      header('HTTP/1.1 Error de protección a la BD');
-      die('err3'); }else{
+   if($existeCajaAntes==0){ header('HTTP/1.1 Error de protección a la BD'); die('err3'); }else{
+      include 'conkarl.php';
 
       $quePaga = $_POST['quePaga'][0];
       $pagoCoch=0; $pagoPena=0; $pagoPartePena=0; $pagoInt=0; $pagoAdelaInt=0; $pagoAmor=0; $pagoFin=0;
@@ -57,6 +58,6 @@ include 'conkarl.php';
       $filas[0] = array("pagoCoch"=>$pagoCoch, "pagoPena"=>$pagoPena, "pagoPartePena"=>$pagoPartePena, "pagoInt"=>$pagoInt, "pagoAdelaInt"=>$pagoAdelaInt, "pagoAmor"=>$pagoAmor, "pagoFin"=>$pagoFin );
 
       echo json_encode($filas);
-} //fin de else que valida si hay tocken de facebook
+} } //fin de else que valida si hay tocken de facebook
  ?>
  

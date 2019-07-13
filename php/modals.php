@@ -61,9 +61,8 @@
 			<div class="container-fluid">
 			<div class="row">
 			<img src="images/gatodead30.png" class="img-responsive">
-			<p><strong>Ups!</strong> Lo sentimos sucediÓ un error interno en el servidor. <br>
-			<p>Comunícalo al área de Informática, quizá éste mensaje ayude:</p>
-			<span id="spanMalo"></span></p>
+			<p><strong>Ups!</strong> Lo sentimos sucedió un error, el servidor tiene un mensaje.</p>
+			<p><strong id="spanMalo"></strong></p>
 			</div>
 		</div>
 			

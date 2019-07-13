@@ -787,7 +787,7 @@ $limite=$diasLimite->days;
                      <label for="chImprTicketAuto2"><i class="icofont icofont-paper"></i> Imprimir Ticket</label>
                   </div>
                   <div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError"></span></div>
-                  <button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertRemate" ><i class="icofont icofont-save"></i> Insertar proceso</button>
+                  <button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertRemate" data-dismiss="modal" ><i class="icofont icofont-save"></i> Insertar proceso</button>
                   <button class="btn btn-infocat btn-outline btn-block hidden" id="btnInsertVenta" ><i class="icofont icofont-save"></i> Insertar proceso</button>
                   <button class="btn btn-infocat btn-outline btn-block" id="btnInsertPagoMaestro" ><i class="icofont icofont-save"></i> Insertar proceso</button>
                </div>
@@ -1694,8 +1694,7 @@ $('#btnInsertRemate').click(function() {
          fecha : moment().format('YYYY-MM-DD H:mm'),
          obs: obs
       }}).done((resp)=> { console.log (resp);
-         pantallaOver(false);
-         
+			pantallaOver(false);
          if( $.isNumeric(resp) ){
             $('.modal-pagoMaestro').modal('hide');
             $('#btnRefre2').removeClass('hidden'); $('#btnBien').addClass('hidden');
@@ -1714,6 +1713,9 @@ $('#btnInsertRemate').click(function() {
                });
             }
          }
+		}).fail(function (params) { console.log(params.responseText);
+			pantallaOver(false);
+         listaBugs(params.responseText);
       });
       $('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
          location.reload();
@@ -1948,7 +1950,8 @@ $('#btnPagarAutomatico').click(function() {
    //console.log( quePaga );
    $.ajax({url: 'php/autoInsertar.php', type: 'POST', data: { idProd: '<?= $_GET['idProducto'];?>', quePaga: quePaga, todoMora: todoMora,
       todoInteres: todoInteres, todoCapital: todoCapital, moneda: idMoneda, obs: $('#txtAutoObserv').val() }}).done(function(resp) {
-      console.log(resp)
+		console.log(resp)
+		pantallaOver(false);
       var alma=JSON.parse(resp)[0];
       //console.log( alma.pagoAdelaInt );
       var linea = '';
@@ -1960,7 +1963,7 @@ $('#btnPagarAutomatico').click(function() {
       if( alma.pagoAmor =='1'){ linea = linea + "Amortización: S/ "+ $('#txtAutoCapital').val()+"\n"; }
       if( alma.pagoFin =='1'){ linea = linea + "Fin de préstamo: S/ "+ $('#txtAutoCapital').val()+"\n"; }
       $('.modal-GuardadoCorrecto #spanBien').text('Ticket(s) a pagar:');
-      $('.modal-GuardadoCorrecto #h1Bien').html( linea.replace(/\n/g, '<br>'));
+		$('.modal-GuardadoCorrecto #h1Bien').html( linea.replace(/\n/g, '<br>'));
       $('.modal-GuardadoCorrecto').modal('show');
       if( $('#chImprTicketAuto').prop('checked') ){
          $.ajax({url: '<?= $servidorLocal; ?>printAutomatico.php', type: 'POST', data: {
@@ -1975,10 +1978,9 @@ $('#btnPagarAutomatico').click(function() {
          });
       }
    }).fail(function (params) {
-      $.variable = params;
-      console.log(params.responseText);
+		pantallaOver(false);
+      listaBugs(params.responseText);
    });
-   pantallaOver(false);
    $('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
       location.reload();
    });

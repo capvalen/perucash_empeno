@@ -508,6 +508,9 @@ $('#btnGuardarDatos').click(function () {
 							}else{
 								$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
 								$('.modal-GuardadoError').modal('show');}
+						}).fail(function (params) {
+							pantallaOver(false);
+							listaBugs(params.responseText);
 						});
 					}
 				});
@@ -549,6 +552,9 @@ $('#btnGuardarDatos').click(function () {
 							if($.isNumeric(resp)){ 
 								window.location= 'cliente.php?idCliente='+resp;
 							}
+						}).fail(function (params) {
+							pantallaOver(false);
+							listaBugs(params.responseText);
 						});
 					}
 				});

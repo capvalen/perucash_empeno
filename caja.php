@@ -208,7 +208,7 @@ a:focus, a:hover { color: #62286f; }
 						<input type="text" class="form-control input-lg mayuscula" id="txtObsPagos" autocomplete="off">
 						<div class="divError text-left hidden"><i class="icofont icofont-animal-cat-alt-4"></i> Lo sentimos, <span class="spanError">La cantidad de producto no puede ser cero o negativo.</span>
 					</div>
-						<button class="btn btn-morado btn-outline btn-block " id="btnInsertPagoOmiso" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
+						<button class="btn btn-morado btn-outline btn-block " id="btnInsertPagoOmiso" data-dismiss="modal" ><i class="icofont icofont-bubble-down"></i> Insertar proceso</button>
 					</div>
 				</div>
 			</div>
@@ -600,6 +600,7 @@ $('.aLiProcesos').click(function() {
 $(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#txtMontoPagos').val('0.00').focus(); });
 <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4) { ?>
 $('#btnInsertPagoOmiso').click(()=> {
+	pantallaOver(true);
 	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
 	if(idMoneda == null ){
 		$('.modal-pagoMaestro .divError').removeClass('hidden').find('.spanError').text('Debes seleccionar un método de pago primero');
@@ -611,12 +612,16 @@ $('#btnInsertPagoOmiso').click(()=> {
 			obs: $('#txtObsPagos').val(),
 			porInteres: $('#txtPorcentajePagos').val()
 		}}).done((resp)=> {
+			pantallaOver(false);
 			if(resp== true){
 				location.reload();
 			}else{
 				$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
 				$('.modal-GuardadoError').modal('show');
 			}
+		}).fail(function (params) {
+			pantallaOver(false);
+			listaBugs(params.responseText);
 		});
 	}
 });
