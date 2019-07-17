@@ -8,7 +8,10 @@ include 'php/conkarl.php';
 
 <?php 
 if( isset($_GET['idCliente'])){
-	$sql = mysqli_query($conection,"SELECT * FROM `Cliente` where idCliente = '".$_GET['idCliente']."';");
+	$sql = mysqli_query($conection,"SELECT c.*, ifnull(date_format(b.banFecha, '%d/%m/%Y'), '') as banFecha, ifnull(b.banMotivo, '') as banMotivo, ifnull(b.tipoBan, '') as tipoBan, nombreUsuario(b.idUsuario) as reportador 
+	FROM `Cliente` c 
+	left join baneados b on b.idCliente = c.idCliente
+	where c.idCliente = '".$_GET['idCliente']."';");
 	$rowCliente = mysqli_fetch_array($sql, MYSQLI_ASSOC);
 }
 ?>
@@ -62,7 +65,16 @@ a:focus, a:hover{color: #782786;}
 			<!-- Empieza a meter contenido 2.1 -->
 				<span><img src="images/user.png" class="img-responsive" style="margin: 0 auto;"></span>
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
-				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-edit"></i></button></h3>
+				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-edit"></i></button>  </h3>
+			<?php if( $rowCliente['banFecha']=='' ){ ?>
+				<button class="btn btn-danger btn-outline btn-sinBorde" id="spanBanearClient"><i class="icofont icofont-fire"></i></button> <br>
+			<?php }else{ 
+				if($rowCliente['tipoBan']=='1'){ ?>
+				<div class="alert alert-warning" role="alert"><strong>Advertencia <i class="icofont icofont-info"></i></strong>: <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia"><i class="icofont icofont-close"></i></button></div>
+			<?php }
+				if($rowCliente['tipoBan']=='2'){ ?>
+				<div class="alert alert-danger" role="alert"><strong>Baneado <i class="icofont icofont-info"></i></strong> <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia"><i class="icofont icofont-close"></i></button></div>
+				<?php }} ?>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
 						for ($i=0; $i <5 ; $i++) { 
@@ -285,6 +297,48 @@ a:focus, a:hover{color: #782786;}
 	</div>
 </div>
 </div>
+<!-- Modal para: banear al cliente -->
+<div class='modal fade modalBanearCliente' tabindex='-1' role='dialog' aria-hidden='true'>
+	<div class='modal-dialog modal-sm' >
+	<div class='modal-content '>
+		<div class='modal-header-danger'>
+			<button type='button' class='close' data-dismiss='modal' aria-label='Close' ><span aria-hidden='true'>&times;</span></button>
+			<h4 class='modal-tittle'> Banear al cliente</h4>
+		</div>
+		<div class='modal-body'>
+			<p>Estás a punto de mandar a éste cliente a la lista de no deseados, detalla un motivo</p>
+			<select name="" id="cmbTipoBan" class="form-control" >
+				<option value="1">Advertencia</option>
+				<option value="2">Banear</option>
+			</select>
+			
+			<input type="text" class="form-control" id="txtMotivoQuemado">
+			<label for="" class="text-danger hidden"></label>
+		</div>
+		<div class='modal-footer'>
+			<button type='button' class='btn btn-danger btn-outline' id="btnQuemarCliente"><i class="icofont icofont-fire"></i> Guardar</button>
+		</div>
+		</div>
+	</div>
+</div>
+<!-- Modal para: consultar borrado -->
+<div class='modal fade modalBorrarAlertaCliente' tabindex='-1' role='dialog' aria-hidden='true'>
+	<div class='modal-dialog modal-sm' >
+	<div class='modal-content '>
+		<div class='modal-header-danger'>
+			<button type='button' class='close' data-dismiss='modal' aria-label='Close' ><span aria-hidden='true'>&times;</span></button>
+			<h4 class='modal-tittle'> Eliminar alerta</h4>
+		</div>
+		<div class='modal-body'>
+			<p>¿Deseas borrar la alerta?</p>
+			<label for="" class="text-danger hidden"></label>
+		</div>
+		<div class='modal-footer'>
+			<button type='button' class='btn btn-danger btn-outline' id="btnBorrarAlertaCliente"><i class="icofont icofont-fire"></i> Borrar</button>
+		</div>
+		</div>
+	</div>
+</div>
 
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
@@ -357,6 +411,28 @@ $('#btnEditarClientDatos').click(function () {
 		location.reload();
 	}
 	});
+});
+$('#spanBanearClient').click(function() {
+	$('.modalBanearCliente').modal('show');
+});
+$('#btnQuemarCliente').click(function() {
+	if( $('#txtMotivoQuemado').val()=='' ){
+		$('.modalBanearCliente .text-dange').text('Debe rellenar un motivo antes de guardar').removeClass('hidden');
+	}else{
+		$.ajax({url: 'php/banearCliente.php', type: 'POST', data: { idCliente : <?= $_GET['idCliente'];?>, motivo: $('#txtMotivoQuemado').val(), tipoBan: $('#cmbTipoBan').val()  }}).done(function(resp) {
+			if(resp=='1'){
+				location.reload();
+			}else{
+				listaBugs('desconocido', resp);
+			}
+		});
+	}
+});
+$('.btnBorrarAdvertencia').click(function() {
+	$('.modalBorrarAlertaCliente').modal('show');
+});
+$('#btnBorrarAlertaCliente').click(function() {
+	
 });
 </script>
 <?php } ?>
