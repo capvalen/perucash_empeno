@@ -8,10 +8,9 @@ if($_POST['dniCli']<>''){
 $filas=array();
 $log = mysqli_query($conection,"call encontrarCliente('".$_POST['dniCli']."');");
 
-
-while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
-{
-	$filas[]= array('idCliente' => $row['idCliente'],
+$i=0;
+while($row = mysqli_fetch_array($log, MYSQLI_ASSOC)){
+	/* $filas[]= array('idCliente' => $row['idCliente'],
 		'cliApellidos' => $row['cliApellidos'],
 		'cliNombres' => $row['cliNombres'],		
 		'cliDni' => $row['cliDni'],
@@ -19,8 +18,9 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'cliCorreo' => $row['cliCorreo'],
 		'cliCelular' => $row['cliCelular'],
 		'cliFijo' => $row['cliFijo']
-	);
-	
+	); */
+	$filas[$i]= $row;
+	$i++;
 }
 
 /* liberar la serie de resultados */

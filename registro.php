@@ -74,20 +74,43 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			</div>
 			<span class="hidden queMichiEs"></span>
 			<div class="contenedorDatosCliente hidden">
+				<div class="row">
+				<div class="col-sm-12" id="divColumnaDatos">
 					<div class="row">
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
+						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
+						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
+						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
+					</div>
+					<div class="row">
+						<div class="col-sm-8"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente" autocomplete="off"></div>
+						<div class="col-sm-4"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente" autocomplete="off"></div>
+						
+					</div>
+					<div class="row">
+						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
+						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-6"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente" autocomplete="off"></div>
-					<div class="col-sm-3"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente" autocomplete="off"></div>
-					
+				<div class="col-sm-4 hidden" id="divColumnaAdvertencia">
+					<div class="panel panel-danger hidden" id="panelBaneado">
+						<div class="panel-body" style="background-color: #e15345; color: white; padding: 25px 15px;">
+							<h2 class="text-center" style="font-size: 50px;"><i class="icofont icofont-warning"></i></h2>
+							<h5>Cliente Baneado</h5>
+							<p>El cliente que intentas registrar tuvo problemas y fue prohibido de acceder a nuevos créditos, motivo: </p>
+							<ul><li><span class="spanMotivoBan"></span> - <strong class="text-capitalize spanUserBaneador"></strong> </li></ul>
+						</div>
+					</div>
+					<div class="panel panel-warning" id="panelAdvertido">
+						<div class="panel-body" style="background-color: #f9ab06; color: white; padding: 25px 15px;">
+							<h2 class="text-center" style="font-size: 50px;"><i class="icofont icofont-warning"></i></h2>
+							<h5>Cautela con el cliente</h5>
+							<p>Toma en cuenta las advertencias antes de dar el crédito: </p>
+							<ul><li><span class="spanMotivoBan"></span> - <strong class="text-capitalize spanUserBaneador"></strong> </li></ul>
+						</div>
+					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
-					<div class="col-sm-6 col-md-3"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
-				</div>
+				</div>		
+				
 
 				
 			<!-- Fin de contenido 2 -->
@@ -457,6 +480,7 @@ if($('#txtDni').val()!=''){
 	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {//console.log(resp);
 		// console.log(JSON.parse(resp).length)
 		if(JSON.parse(resp).length==1 ){
+			var data = JSON.parse(resp)[0];
 			$.each(JSON.parse(resp), function (i, dato) {
 				$('#txtIdCliente').val(dato.idCliente); /*.attr("disabled", 'true')*/
 				$('#txtApellidos').val(dato.cliApellidos); /*.attr("disabled", 'true')*/
@@ -466,15 +490,39 @@ if($('#txtDni').val()!=''){
 				$('#txtCelular').val(dato.cliCelular); /*.attr("disabled", 'true')*/
 				$('#txtFono').val(dato.cliFijo); /*.attr("disabled", 'true')*/
 			});
-		}
-		else{
+			if(data.banFecha !=''){ //console.log(data)
+				$('#divColumnaDatos').removeClass('col-sm-12').addClass('col-sm-8');
+				$('#divColumnaAdvertencia').removeClass('hidden');
+				$('.spanMotivoBan').text(data.banMotivo);
+				$('.spanUserBaneador').text(data.reportador);
+				
+				switch(data.tipoBan) {
+					case '1':
+						$('#panelBaneado').addClass('hidden')
+						$('#panelAdvertido').removeClass('hidden');
+						$('#btnGuardarDatos').removeClass('hidden');
+						break;
+					case '2':
+						$('#panelBaneado').removeClass('hidden')
+						$('#panelAdvertido').addClass('hidden');
+						$('#btnGuardarDatos').addClass('hidden');
+						break;
+					default:
+						break;
+				}
+
+			}else{
+				$('#divColumnaDatos').removeClass('col-sm-8').addClass('col-sm-12');
+				$('#divColumnaAdvertencia').addClass('hidden');
+			}
+		}else{
 			$('#txtIdCliente').val('').removeAttr("disabled");
-				$('#txtApellidos').val('').removeAttr("disabled");
-				$('#txtNombres').val('').removeAttr("disabled");
-				$('#txtDireccion').val('').removeAttr("disabled");
-				$('#txtCorreo').val('').removeAttr("disabled");
-				$('#txtCelular').val('').removeAttr("disabled");
-				$('#txtFono').val('').removeAttr("disabled");
+			$('#txtApellidos').val('').removeAttr("disabled");
+			$('#txtNombres').val('').removeAttr("disabled");
+			$('#txtDireccion').val('').removeAttr("disabled");
+			$('#txtCorreo').val('').removeAttr("disabled");
+			$('#txtCelular').val('').removeAttr("disabled");
+			$('#txtFono').val('').removeAttr("disabled");
 		}
 	});
 }

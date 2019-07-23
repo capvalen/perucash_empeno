@@ -8,7 +8,7 @@ include 'php/conkarl.php';
 
 <?php 
 if( isset($_GET['idCliente'])){
-	$sql = mysqli_query($conection,"SELECT c.*, ifnull(date_format(b.banFecha, '%d/%m/%Y'), '') as banFecha, ifnull(b.banMotivo, '') as banMotivo, ifnull(b.tipoBan, '') as tipoBan, nombreUsuario(b.idUsuario) as reportador 
+	$sql = mysqli_query($conection,"SELECT c.*, ifnull(date_format(b.banFecha, '%d/%m/%Y'), '') as banFecha, ifnull(b.banMotivo, '') as banMotivo, ifnull(b.tipoBan, '') as tipoBan, nombreUsuario(b.idUsuario) as reportador, b.idBaneado
 	FROM `Cliente` c 
 	left join baneados b on b.idCliente = c.idCliente
 	where c.idCliente = '".$_GET['idCliente']."';");
@@ -67,13 +67,13 @@ a:focus, a:hover{color: #782786;}
 				<h3 class="h3Apellidos mayuscula"><?php echo $rowCliente['cliApellidos']; ?></h3>
 				<h3 class="h3Nombres mayuscula"><?php echo $rowCliente['cliNombres']; ?> <button class="btn btn-primary btn-outline btn-sinBorde" id="spanEditarDatoClient"><i class="icofont icofont-edit"></i></button>  </h3>
 			<?php if( $rowCliente['banFecha']=='' ){ ?>
-				<button class="btn btn-danger btn-outline btn-sinBorde" id="spanBanearClient"><i class="icofont icofont-fire"></i></button> <br>
+				<button class="btn btn-danger btn-outline btn-sinBorde" id="spanBanearClient">Banear <i class="icofont icofont-fire"></i></button> <br>
 			<?php }else{ 
 				if($rowCliente['tipoBan']=='1'){ ?>
-				<div class="alert alert-warning" role="alert"><strong>Advertencia <i class="icofont icofont-info"></i></strong>: <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia"><i class="icofont icofont-close"></i></button></div>
+				<div class="alert alert-warning" role="alert"><strong>Advertencia <i class="icofont icofont-info"></i></strong>: <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia" data-id="<?= $rowCliente['idBaneado'];?>"><i class="icofont icofont-close"></i></button></div>
 			<?php }
 				if($rowCliente['tipoBan']=='2'){ ?>
-				<div class="alert alert-danger" role="alert"><strong>Baneado <i class="icofont icofont-info"></i></strong> <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia"><i class="icofont icofont-close"></i></button></div>
+				<div class="alert alert-danger" role="alert"><strong>Baneado <i class="icofont icofont-info"></i></strong> <br> <span class="text-capitalize"><?= $rowCliente['reportador']; ?></span> indicó que: <strong>«<?= $rowCliente['banMotivo']; ?>»</strong> en fecha <?= $rowCliente['banFecha']; ?>. <button class="btn btn-outline btn-danger btnSinBorde btn-xs btnBorrarAdvertencia" data-id="<?= $rowCliente['idBaneado'];?>"><i class="icofont icofont-close"></i></button></div>
 				<?php }} ?>
 				<span class="rate yellow-text text-darken-2" style="font-size: 18px;">
 					<?php
@@ -416,6 +416,7 @@ $('#spanBanearClient').click(function() {
 	$('.modalBanearCliente').modal('show');
 });
 $('#btnQuemarCliente').click(function() {
+	pantallaOver(true);
 	if( $('#txtMotivoQuemado').val()=='' ){
 		$('.modalBanearCliente .text-dange').text('Debe rellenar un motivo antes de guardar').removeClass('hidden');
 	}else{
@@ -425,6 +426,7 @@ $('#btnQuemarCliente').click(function() {
 			}else{
 				listaBugs('desconocido', resp);
 			}
+			pantallaOver(false);
 		});
 	}
 });
@@ -432,7 +434,14 @@ $('.btnBorrarAdvertencia').click(function() {
 	$('.modalBorrarAlertaCliente').modal('show');
 });
 $('#btnBorrarAlertaCliente').click(function() {
-	
+	$.ajax({url: 'php/borrarBanCliente.php', type: 'POST', data: { idBan: $('.btnBorrarAdvertencia').attr('data-id') }}).done(function(resp) {
+		console.log(resp)
+		if(resp=='1'){
+			location.reload();
+		}else{
+			listaBugs('desconocido', resp);
+		}
+	});
 });
 </script>
 <?php } ?>
