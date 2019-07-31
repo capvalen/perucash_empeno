@@ -109,7 +109,9 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 						</div>
 					</div>
 				</div>
-				</div>		
+				</div>
+			
+			</div>
 				
 
 				

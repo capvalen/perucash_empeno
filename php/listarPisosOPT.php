@@ -1,7 +1,7 @@
 <?php 
 require("conkarl.php");
 
-$sql = mysqli_query($conection,"SELECT * FROM `piso`;");
+$sql = mysqli_query($conection,"SELECT * FROM `piso` order by pisoDescripcion;");
 
 while($row = mysqli_fetch_array($sql, MYSQLI_ASSOC))
 {

@@ -43,7 +43,7 @@ tp.tipoDescripcion, c.idProducto, p.prodNombre, c.cajaValor, cajaMoneda, c.idTip
 FROM `caja` c
 inner join tipoProceso tp on c.idTipoProceso= tp.idTipoProceso
 left join producto p on c.idProducto = p.idProducto
-where cajaFecha between '2019-07-01 00:00:00' and now() and cajaActivo =1 AND
+where cajaFecha between '2019-06-29 00:00:00' and now() and cajaActivo =1 AND
 c.idTipoProceso in (83, 84, 44, 45, 33, 32, 31, 80, 89, 90, 34)
 order by cajaFecha, idProducto, c.idTipoProceso;";
 $resultado=$cadena->query($sql);

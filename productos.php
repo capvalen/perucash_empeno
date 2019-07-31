@@ -1149,7 +1149,7 @@ $('#txtNuevoFechaInt').datepicker({
     autoclose: true
 });
 $('#sltEstantes').on('changed.bs.select', function (e) {
-    var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); //console.log( id );
+   var id= $('#divSelectEstante').find('.selected a').attr('data-tokens'); //console.log( id );
    if(id==1){
       $('#sltPiso').attr('disabled',true).selectpicker('refresh');
       $('#sltSeccion').attr('disabled',true).selectpicker('refresh');
@@ -1157,7 +1157,7 @@ $('#sltEstantes').on('changed.bs.select', function (e) {
       $('#sltPiso').removeAttr('disabled').selectpicker('refresh');
       $('#sltSeccion').removeAttr('disabled').selectpicker('refresh');
 
-      $('#sltSeccion').find('option[data-tokens=5]').attr('disabled', true);
+      //$('#sltSeccion').find('option[data-tokens=5]').attr('disabled', true);
       $('#sltSeccion').find('option[data-tokens=6]').attr('disabled', true);
       $('#sltSeccion').find('option[data-tokens=7]').attr('disabled', true);
 
