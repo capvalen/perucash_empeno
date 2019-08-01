@@ -6,7 +6,7 @@ inner join seccion s on s.idZona = cu.idZona
 inner join piso pi on pi.idPiso = cu.idPiso
 inner join producto p on p.idProducto = cu.idProducto
 where Idestante = {$_POST['almacen']} and idTipoProceso=23 and cuaVigente=1
-order by cu.idProducto desc");
+order by cu.idProducto desc;");
 $i=0;
 // if (!$sql) { ////codigo para ver donde esta el error
 //     printf("Error: %s\n", mysqli_error($conection));

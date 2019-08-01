@@ -41,14 +41,21 @@ h3{color: #ab47bc;}
 			</div>
 			<br>
 			<?php 
-			if(  isset($_GET['estanteExhibicion'])  ){
+			if( isset($_GET['estanteExhibicion'])  ){
 				$estante = array (
 					array(1),//pisos
 					array('A','B','C', 'D'),//seccion
 				);
-				if( isset($_GET['estanteAmarillo'])){ echo '<h3>Estante Amarillo</h3>';}
+				if( isset($_GET['estanteAmarillo'])){ }
 				if( isset($_GET['estanteExhibicion'])){ echo '<h3>Almacén 1</h3>';}
 				if( isset($_GET['estanteRojo'])){ echo '<h3>Estante Rojo</h3>';}
+			}
+			else if( isset($_GET['estanteAmarillo']) ){
+				$estante = array (
+					array(5, 4, 3, 2, 1),//pisos
+					array('A','B','C'),//seccion
+				);
+				echo '<h3>Estante Amarillo</h3>';
 			}
 			else if( isset($_GET['estanteNegro']) || isset($_GET['estantePlateado']) ){
 				$estante = array (
@@ -187,7 +194,7 @@ $(document).ready(function(){
 	$('#dtpFechaInicio').val(moment().format('DD/MM/YYYY'));
 	$('.selectpicker').selectpicker('refresh');
 	$('.sandbox-container input').datepicker({language: "es", autoclose: true, todayBtn: "linked"}); //para activar las fechas
-	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> {
+	$.ajax({url: 'php/contenidoAlmacen.php', type: 'POST', data: { almacen: <?= $_GET['almacen']; ?>}}).done((resp)=> { console.log(resp);
 		$.each( JSON.parse(resp), function (i, dato) { console.log(dato)
 			$("td[dCol='"+dato.numPiso+"'][dRow='"+dato.zonaDescripcion+"']" ).prepend(`
 			<p class="text-center pProdAlmacen" data-toggle="tooltip" data-placement="top" title="${dato.prodNombre.toUpperCase()}"><a href="productos.php?idProducto=${dato.idProducto}">${dato.idProducto}</a> <a href="#!" class="aRemoveProductAlmacen pull-right" data-cubicaje="${dato.idCubicaje}"><i class="icofont icofont-close" ></i></a></p>`);
