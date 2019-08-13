@@ -40,6 +40,14 @@ td .form-control{
 							<input type="text" class="form-control" value="<?= $ipServer;?>" id="txtIpServidor">
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-6 col-md-3">
+							<p><strong>Clave para abrir gaveta automática:</strong></p>
+						</div>
+						<div class="col-sm-6 col-md-4">
+							<input type="text" class="form-control" value="" id="txtIpServidor">
+						</div>
+					</div>
 					
 					<p><strong>Inventario</strong></p>
 			<?php $sql = mysqli_query($conection,"SELECT `inventarioActivo` FROM `configuraciones` WHERE 1");

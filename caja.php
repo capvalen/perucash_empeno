@@ -1,9 +1,11 @@
 <?php session_start();
 date_default_timezone_set('America/Lima');
+
 if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');
 }
- ?>
+include "php/variablesGlobales.php";
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -29,6 +31,16 @@ a:focus, a:hover { color: #62286f; }
 #sltHistorialCierres { font-family: "IcoFont", Poppins, sans-serif; }
 .modal-pagoMaestro .close, .modal-pagoMaestro .close { color: #6f5e5e; }
 .modal-pagoMaestro .close:hover, .modal-pagoMaestro .close:hover{color: #ea1010;opacity: 0.7;}
+.btnBotonCajon{
+	margin-top: -37px;
+	height: 40px;
+	margin-bottom: 20px;
+	background-color: transparent;
+}
+.btnBotonCajon:hover, .btnBotonCajon:active,.btnBotonCajon:focus, .btnBotonCajon:active:focus{
+	background-color: transparent;
+	color: #eabff5;
+}
 </style>
 
 
@@ -48,7 +60,7 @@ a:focus, a:hover { color: #62286f; }
 				<div class="row col-sm-7"><h3 class="purple-text" style="margin-top: 21px;"><span class="glyphicon glyphicon-piggy-bank"></span> Reporte de caja </h3></div>
 			</div>
 
-			<div class="container-fluid  ">
+			<div class="row container-fluid  ">
 				<p class="pheader col-xs-12"><i class="icofont icofont-filter"></i> Filtros</p>
 				<div class="panel panel-default container-fluid ">
 					<div class="col-xs-12 col-sm-6 col-md-3">
@@ -65,7 +77,7 @@ a:focus, a:hover { color: #62286f; }
 				</div>
 			</div>
 	
-			<div class="container-fluid">
+			<div class="row container-fluid">
 					<p class="pheader col-xs-12"><i class="icofont icofont-hard-disk"></i> Datos del cuadre</p>
 					<div class="panel panel-default container-fluid" style="padding: 18px 0;">
 						<!-- <div class="col-xs-12 col-sm-6 text-center">
@@ -84,8 +96,9 @@ a:focus, a:hover { color: #62286f; }
 					<h4> <i class="icofont icofont-plus-circle"></i> Entradas de dinero </h4>
 					<?php 
 					if(date('Y-m-d')==$_GET['fecha']){ ?>
-						<div class="dropdown">
-							<button class="btn btn-default dropdown-toggle pull-right " type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-add"></i> <span class="caret"></span></button>
+						<div class="dropdown pull-right">
+							<button class="btn btn-default btn-sinBorde btn-outline btnBotonCajon"><i class="icofont icofont-key-hole"></i></button>
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-add"></i> <span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownEntradas">
 								<?php include "php/omitidasEntradasLI.php"; ?>
 							</ul>
@@ -114,8 +127,9 @@ a:focus, a:hover { color: #62286f; }
 					<h4><i class="icofont icofont-minus-circle"></i> Salidas de dinero</h4>
 					<?php 
 					if(date('Y-m-d')==$_GET['fecha']){ ?>
-						<div class="dropdown">
-							<button class="btn btn-default dropdown-toggle pull-right " type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-remove"></i> <span class="caret"></span></button>
+						<div class="dropdown pull-right">
+							<button class="btn btn-default btn-sinBorde btn-outline btnBotonCajon"><i class="icofont icofont-key-hole"></i></button>
+							<button class="btn btn-default dropdown-toggle  " type="button" id="dropdownEntradas" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin-top: -37px; color: #a35bb4;"><i class="icofont icofont-ui-rate-remove"></i> <span class="caret"></span></button>
 							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownEntradas">
 								<?php include "php/omitidasSalidasLI.php"; ?>
 							</ul>
@@ -394,7 +408,7 @@ $('#dtpFechaIniciov3').val('<?php
 		}
 		?>');
 moment.locale('es');
-<? if(isset($_GET[cuadre])){ ?>
+<? if(isset($_GET['cuadre'])){ ?>
 calculoTicketVirtual();
 
 function calculoTicketVirtual() {
@@ -471,10 +485,24 @@ $('#dtpCajaFechaPago').bootstrapMaterialDatePicker({
 	okText: 'Aceptar', nowText: 'Hoy'
 });
 $('#btnCajaAbrir').click(function () {
+	pantallaOver(true);
 	$.ajax({url: 'php/listarUltimoCuadreValor.php', type: 'POST'}).done(function(resp) {
 		$('#txtMontoApertura').val(parseFloat(resp).toFixed(2));
 		$('#txtMontoApertura').attr('data-val',resp);
 	});
+	/* $.ajax({url: '<?= $serverLocal; ?>solicitarTokenCaja.php', type: 'POST'}).done(function(resp) {
+		console.log(resp)
+		if( resp.length ==3){
+
+		}else{
+			listaBugs('sin', resp);	
+		}
+		pantallaOver(false);
+	}).fail(function () {
+		listaBugs('sin', 'Revise la IP del cajero');
+		pantallaOver(false);
+	}); */
+	pantallaOver(false);
 	$('.modal-aperturarCaja').modal('show');
 });
 $('#btnGuardarApertura').click(function () {
@@ -563,11 +591,14 @@ $('#btnGuardarCierre').click(function () {
 			$('.modal-GuardadoCorrecto #spanBien').text('¿Deseas imprimir el ticket de cierre?');
 			$('.modal-GuardadoCorrecto #h1Bien').html( '<button class="btn btn-negro btn-outline" id="btnPrintTCierre"><i class="icofont icofont-print"></i> Ticket de cierre</button>');
 			$('.modal-GuardadoCorrecto').modal('show');
+			$('.modal-GuardadoCorrecto').on('hidden.bs.modal', function () { 
+				location.reload();
+			});
 		});
 	}
 });
 $('.modal-GuardadoCorrecto').on('click', '#btnPrintTCierre', function (e) {
-	$.ajax({url: 'http://127.0.0.1/perucash/printTicketCierre.php', type: 'POST', data: {
+	$.ajax({url: '<?= $servidorLocal;?>printTicketCierre.php', type: 'POST', data: {
 		apertura: $('#spanApertura').text(),
 		cierre: $('#txtMontoCierre').val(),
 		efectivoEntrada: $('#spanResultadoFinal').attr('sumaEfectivo'),
@@ -597,8 +628,11 @@ $('.aLiProcesos').click(function() {
 	$('#cmbEstadoPagos').attr('data-id', $(this).attr('data-id') );
 	$('.modal-pagoMaestro').modal('show');
 });
-$(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#txtMontoPagos').val('0.00').focus(); });
+$(".modal-pagoMaestro").on("shown.bs.modal", function () { $('#sltMetodopago').selectpicker('val','Efectivo').selectpicker('refresh'); $('#txtMontoPagos').val('0.00').focus(); });
 <?php if($_COOKIE['ckPower']==1 || $_COOKIE['ckPower']==8 || $_COOKIE['ckPower']==4) { ?>
+function abriCajon(){
+	$.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
+}
 $('#btnInsertPagoOmiso').click(()=> {
 	pantallaOver(true);
 	var idMoneda= $('#divCmbMetodoPago').find('.selected a').attr('data-tokens');
@@ -614,6 +648,7 @@ $('#btnInsertPagoOmiso').click(()=> {
 		}}).done((resp)=> {
 			pantallaOver(false);
 			if(resp== true){
+				$.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
 				location.reload();
 			}else{
 				$('.modal-GuardadoError').find('#spanMalo').text('El servidor dice: \n' + resp);
@@ -624,6 +659,9 @@ $('#btnInsertPagoOmiso').click(()=> {
 			listaBugs(params.responseText);
 		});
 	}
+});
+$('.btnBotonCajon').click(function() {
+	abriCajon();
 });
 $('.btnEditarCajaMaestra').click(function() { 
 	var padre = $(this).parent().parent();

@@ -1,6 +1,6 @@
 <?php 
 require("conkarl.php");
-
+//include "variablesGlobales.php";
 
 $fechaCompr=date('Y-m-d');
 $sql = mysqli_query($esclavo,"SELECT idCuadre FROM `cuadre` cu

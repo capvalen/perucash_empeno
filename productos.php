@@ -1977,6 +1977,9 @@ $('#btnPagarAutomatico').click(function() {
             console.log(resp)
          });
       }
+      if( $('#sltMetodopago3').val()=="Efectivo" ){
+         $.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
+      }
    }).fail(function (params) {
 		pantallaOver(false);
       listaBugs(params.responseText);

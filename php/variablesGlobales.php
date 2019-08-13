@@ -15,7 +15,6 @@ $local = '/'.$folder;
 $sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
 $rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
 
-
 $ipServer = $rowConf['ipServidor'];
 $serverLocal= "//{$ipServer}/perucash/";
 $servidorLocal = $serverLocal;

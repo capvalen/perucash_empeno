@@ -1,9 +1,9 @@
 <?php 
-require("conkarl.php");
-require "variablesGlobales.php";
+require("conkarl.php"); 
+
 date_default_timezone_set('America/Lima');
 
-$existeCajaU= require_once("comprobarCajaHoy.php");
+$existeCajaU= intval(require "comprobarCajaHoy.php");
 $filas=array();
 if (! isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');
@@ -58,7 +58,7 @@ if($existeCajaU>0  ){
 				 ?>
 					<p>La última caja se encuentra en <a href="caja.php?fecha=<?= $rowLast['fechaInicio']; ?>&cuadre=<?= $rowLast['idCuadre'];?>"><i class="icofont icofont-dotted-right"></i> <?= $rowLast['fechaInicioC']; ?></a></p>
 					<?php if( in_array($_COOKIE['ckPower'], $soloCaja) && date('Y-m-d')== $_GET['fecha'] ){ ?>
-					<span>También puedes: </span><button class="btn btn-morado btn-outline btn-xs" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar caja nueva</button>
+					<span>También puedes: </span><button class="btn btn-morado btn-outline btn-sm" id="btnCajaAbrir"><i class="icofont icofont-coins"></i> Aperturar caja nueva</button>
 					<?php } ?>
 				</div>
 			</div>
