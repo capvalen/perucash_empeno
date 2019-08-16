@@ -38,13 +38,14 @@
 include "conkarl.php";
 
 $sql="SELECT date_format(`cajaFecha`, '%d/%m/%Y') as cajaFecha, 
-case c.idTipoProceso when 34 then 'COCHER' when 44 then 'PI' when 45 then 'AMORT' when 32 then 'FP' when 33 then 'ADIN' when 31 then 'INYEC' when 90 then 'INYEC' when 89 then 'INYEC' when 80 then 'INYEC' else '' end as 'tipoMin', p.prodMontoEntregado,
+case c.idTipoProceso when 34 then 'COCHER' when 44 then 'PI' when 45 then 'AMORT' when 32 then 'FP' when 33 then 'ADIN' when 31 then 'INYEC' when 90 then 'INYEC' when 89 then 'INYEC' when 80 then 'INYEC' when 86 then 'ALMUERZO' else '' end as 'tipoMin',
+p.prodMontoEntregado,
 tp.tipoDescripcion, c.idProducto, p.prodNombre, c.cajaValor, cajaMoneda, c.idTipoProceso, retornarCajeroEnPasado(c.idCaja) as cajero
 FROM `caja` c
 inner join tipoProceso tp on c.idTipoProceso= tp.idTipoProceso
 left join producto p on c.idProducto = p.idProducto
 where cajaFecha between '2019-06-29 00:00:00' and now() and cajaActivo =1 AND
-c.idTipoProceso in (83, 84, 44, 45, 33, 32, 31, 80, 89, 90, 34)
+c.idTipoProceso in (83, 84, 44, 45, 33, 32, 31, 80, 86, 89, 90, 34)
 order by cajaFecha, idProducto, c.idTipoProceso;";
 $resultado=$cadena->query($sql);
 while($row=$resultado->fetch_assoc()){ 

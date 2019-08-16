@@ -17,7 +17,7 @@ try {
 }
 
 if( !$accessToken ){
-   header('Location: sesionFacebook.php');
+   header('Location: index.php'); //sesionDatosFace.php
    exit();
 }
 

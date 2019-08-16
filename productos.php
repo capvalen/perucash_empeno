@@ -1713,6 +1713,9 @@ $('#btnInsertRemate').click(function() {
                });
             }
          }
+         if( $('#sltMetodopago3').val()=="Efectivo" ){
+            $.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
+         }
 		}).fail(function (params) { console.log(params.responseText);
 			pantallaOver(false);
          listaBugs(params.responseText);

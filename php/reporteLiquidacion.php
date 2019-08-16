@@ -10,8 +10,8 @@ $fecha2= $_POST['fecha2'];
 /*idcaja, ca.idProducto, tp.tipoDescripcion, ca.idTipoProceso, cajavalor */
 $sqlInteres="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma  FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (44, 33) 
-and not idProducto in (select idProducto from caja where idTipoProceso in (32) and  date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' )"; //order by tipoDescripcion
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (44, 33)
+and not idProducto in (select idProducto from caja where idTipoProceso in (32) and  date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' ) and cajaActivo=1"; //order by tipoDescripcion
 $resultadoInteres=$cadena->query($sqlInteres);
 $rowSumInt=$resultadoInteres->fetch_assoc();
 $sumaIntereses= $rowSumInt['suma'];
@@ -20,7 +20,7 @@ $sumaIntereses= $rowSumInt['suma'];
 $sqlFines="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
 where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (44, 32) 
-and ca.idProducto in (select idProducto from caja where idTipoProceso in (32) and date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' )"; //order by tipoDescripcion
+and ca.idProducto in (select idProducto from caja where idTipoProceso in (32) and date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' ) and cajaActivo=1"; //order by tipoDescripcion
 $resultadoFines=$cadena->query($sqlFines);
 $rowFines=$resultadoFines->fetch_assoc();
 $sumaFines= $rowFines['suma'];
@@ -28,7 +28,7 @@ $sumaFines= $rowFines['suma'];
 
 $sqlCapital="SELECT IFNULL(round(sum( p.prodMontoEntregado ),2), 0) as suma  from caja c
 inner join producto p on p.idProducto = c.idProducto
-where idTipoProceso = 32 and date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}';";
+where idTipoProceso = 32 and date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and cajaActivo=1;";
 $resultadoCapital=$cadena->query($sqlCapital);
 $rowCapital=$resultadoCapital->fetch_assoc();
 $sumaCapital= $rowCapital['suma'];
@@ -36,7 +36,7 @@ $sumaCapital= $rowCapital['suma'];
 
 $sqlMora="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (36, 83) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (36, 83) and cajaActivo=1"; 
 $resultadoMora=$cadena->query($sqlMora);
 $rowMora=$resultadoMora->fetch_assoc();
 $sumaMora= $rowMora['suma'];
@@ -45,7 +45,7 @@ $sumaMora= $rowMora['suma'];
 $sqlVendidos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma, IFNULL(round(sum(ca.cajPrecioInicial),2), 0) as sumaCompra FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
 inner join producto p on p.idProducto = ca.idProducto
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (20, 21) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (20, 21) and cajaActivo=1"; 
 $resultadoVendidos=$cadena->query($sqlVendidos);
 $rowVendidos=$resultadoVendidos->fetch_assoc();
 $sumaVendidos= $rowVendidos['suma'];
@@ -54,7 +54,7 @@ $sumaVendidosCompra= $rowVendidos['sumaCompra'];
 
 $sqlTarjetas="SELECT IFNULL(round(sum(cajavalor),1), 0) as suma, IFNULL(round(sum((cajavalor/(100-cajPorcentaje)*100)*(cajPorcentaje-5)/100),1), 0) as suma2 FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (74) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (74) and cajaActivo=1"; 
 $resultadoTarjetas=$cadena->query($sqlTarjetas);
 $rowTarjetas=$resultadoTarjetas->fetch_assoc();
 $sumaTarjetas= $rowTarjetas['suma'];
@@ -63,7 +63,7 @@ $sumaTarjetasGana= $rowTarjetas['suma2'];
 
 $sqlPrestamos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (28) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (28) and cajaActivo=1"; 
 $resultadoPrestamos=$cadena->query($sqlPrestamos);
 $rowPrestamos=$resultadoPrestamos->fetch_assoc();
 $sumaPrestamos= $rowPrestamos['suma'];
@@ -71,7 +71,7 @@ $sumaPrestamos= $rowPrestamos['suma'];
 
 $sqlComprass="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (38) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (38) and cajaActivo=1"; 
 $resultadoComprass=$cadena->query($sqlComprass);
 $rowComprass=$resultadoComprass->fetch_assoc();
 $sumaComprass= $rowComprass['suma'];
@@ -79,7 +79,7 @@ $sumaComprass= $rowComprass['suma'];
 
 $sqlServicios="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (88) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (88) and cajaActivo=1"; 
 $resultadoServicios=$cadena->query($sqlServicios);
 $rowServicios=$resultadoServicios->fetch_assoc();
 $sumaServicios= $rowServicios['suma'];
@@ -87,7 +87,7 @@ $sumaServicios= $rowServicios['suma'];
 
 $sqlGastos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (42) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (42) and cajaActivo=1"; 
 $resultadoGastos=$cadena->query($sqlGastos);
 $rowGastos=$resultadoGastos->fetch_assoc();
 $sumaGastos= $rowGastos['suma'];
@@ -95,7 +95,7 @@ $sumaGastos= $rowGastos['suma'];
 
 $sqlPagos="SELECT IFNULL(round(sum(cajavalor),2), 0) as suma FROM `caja` ca
 inner join tipoProceso tp on tp.idTipoProceso = ca.idTipoProceso
-where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (39, 40) "; 
+where date_format(cajaFecha, '%Y-%m-%d') between '{$fecha1}' and '{$fecha2}' and ca.idTipoProceso in (39, 40) and cajaActivo=1"; 
 $resultadoPagos=$cadena->query($sqlPagos);
 $rowPagos=$resultadoPagos->fetch_assoc();
 $sumaPagos= $rowPagos['suma'];
