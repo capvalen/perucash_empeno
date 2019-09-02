@@ -1,5 +1,6 @@
 <?php 
 include 'conkarl.php';
+date_default_timezone_set('America/Lima');
 header('Content-Type: text/html; charset=utf8');
 
 if($_POST['obs']<>''){

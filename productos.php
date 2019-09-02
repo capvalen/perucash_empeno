@@ -1716,6 +1716,9 @@ $('#btnInsertRemate').click(function() {
          if( $('#sltMetodopago3').val()=="Efectivo" ){
             $.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
          }
+         if(  $('#cmbEstadoPagos').find('.selected a').attr('data-tokens')==21 && $('#sltMetodopago').val()=="Efectivo" ){
+            $.post('http://127.0.0.1/perucash/soloAbrirCaja.php');
+         }
 		}).fail(function (params) { console.log(params.responseText);
 			pantallaOver(false);
          listaBugs(params.responseText);

@@ -63,11 +63,11 @@ $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
       </ul>
    </div>
    <div id="divContenidoTexto" class="text-justify">
-      <p><strong>DECLARO BAJO JURAMENTO</strong> que <strong>SOY PROPIETARIO EXCLUSIVO</strong> del(os) bien(es) descrito(s), que no forman parte, que NO ha(n) sido otorgado(s) como garantía, aporte de capital social a alguna empresa o sociedad conyugal, NO están afectos a restricciones legales de ninguna índole, total o parciamente que me impidan la libre disposición.</p>
+      <p><strong>DECLARO BAJO JURAMENTO</strong> que <strong>SOY PROPIETARIO EXCLUSIVO</strong> del(os) bien(es) descrito(s), que no forman parte, que NO ha(n) sido otorgado(s) como garantía, aporte de capital social a alguna empresa o sociedad conyugal, NO están afectos a restricciones legales de ninguna índole, total o parciaLlmente que me impidan la libre disposición.</p>
       <p>Motivo por el cual, otorgo en calidad de <strong>GARANTÍA a PERUCASH</strong> y eximo de cualquier responsabilidad jurídica o penal que pudiera ocasionar a la empresa o cualquier persona vinculada a ella, asumiento YO toda la responsabilidad que podría generar.</p>
-      <p>El Pignoraticio es por el plazo y monto previoamente pactado, luego de finalizado el plazo, se generarán gastos administrativos, intereses moratorios y penalidades, por o tanto, doy la autorización expresa a PERUCASH para la libre disposición del bien para que pueda ser <strong>VENDIDO, TRANSFERIDO, ENAJENADO; ÍNTEGRAMENTE O POR PARTES, SIN PERJUICIO NI RECLAMO ALGUNO.</strong></p>
+      <p>El Pignoraticio es por el plazo y monto previamente pactado, luego de finalizado el plazo, se generarán gastos administrativos, intereses moratorios y penalidades, por o tanto, doy la autorización expresa a PERUCASH para la libre disposición del bien para que pueda ser <strong>VENDIDO, TRANSFERIDO, ENAJENADO; ÍNTEGRAMENTE O POR PARTES, SIN PERJUICIO NI RECLAMO ALGUNO.</strong></p>
       <p>En señal de conformidad firmo al pie, y adjunto la copia de mi DNI, pongo mi huela digital y/o un documento biométrico de la RENIEC para validar mi identidad.</p>
-      <p>Huancayo, a los <?= date('d'); ?> días de <?= $meses[date('n')]; ?> de <?= date('Y'); ?>.</p>
+      <p>Huancayo, a los <?= date('d'); ?> días de <?= $meses[date('n')-1]; ?> de <?= date('Y'); ?>.</p>
    </div>
    <div class="row">
    <div class="col-xs-3 text-center">
@@ -77,7 +77,7 @@ $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
    <div class="col-xs-5 text-center">
       <p><small>Firma</small></p>
       <span id="recuadroFirma"></span>
-      <p class="text-capitalize">Nommbre: <?= $rowCliente['cliApellidos']." ".$rowCliente['cliNombres']; ?></p>
+      <p class="text-capitalize">Nombre: <?= $rowCliente['cliApellidos']." ".$rowCliente['cliNombres']; ?></p>
       <p>D.N.I.: <?= $rowCliente['cliDni']; ?></p>
    </div>
    <div class="col-xs-3 text-center">
