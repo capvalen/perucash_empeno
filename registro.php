@@ -16,9 +16,22 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 
 <style>
 /* .btnMasterEntrada{ width: 90%; height: 100px; font-size: 20px; } */
+.btnMasterEntrada{cursor:pointer;}
 .btnMasterEntrada i{font-size: 48px;}
 .spanNomProductov3{font-size: 17px;}
 .divMonto{color: #191c1f;}
+#panelInformativo{
+	border: 2px solid #001fff91;
+	color: #005aff;
+}
+#panelBaneado{
+	border: 2px solid #ff000091;
+	color: #ff2f00;
+}
+#panelAdvertido{
+	border: 2px solid #ffac0091;
+	color: #ffac00;
+}
 
 </style>
 <div id="wrapper">
@@ -77,33 +90,43 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 				<div class="row">
 				<div class="col-sm-12" id="divColumnaDatos">
 					<div class="row">
-						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
-						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
-						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
+						<div class="col-sm-6 "><label><span class="txtObligatorio">*</span> D.N.I.: </label><input type="text" class="form-control" id="txtDni" placeholder="Número del documento de identidad" maxlength="8" size="8" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');"></div>
 					</div>
+					<div class="row">
+						<div class="col-sm-6 "><label><span class="txtObligatorio">*</span> Apellidos:</label><input type="text" class="form-control mayuscula" id="txtApellidos" placeholder="Apellidos completos" autocomplete="off"></div>
+						<div class="col-sm-6 "><label><span class="txtObligatorio">*</span> Nombres:</label><input type="text" class="form-control mayuscula" id="txtNombres" placeholder="Nombres completos" autocomplete="off"></div>
+						</div>
 					<div class="row">
 						<div class="col-sm-8"><label>Dirección domiciliaria:</label><input type="text" class="form-control mayuscula" id="txtDireccion" placeholder="Dirección del cliente" autocomplete="off"></div>
-						<div class="col-sm-4"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente" autocomplete="off"></div>
-						
+						<div class="col-sm-6 hidden"><label>Correo electrónico:</label><input type="text" class="form-control" id="txtCorreo" placeholder="Correo electrónico del cliente" autocomplete="off"></div>
 					</div>
 					<div class="row">
-						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
-						<div class="col-sm-6 col-md-4"><label><span class="txtObligatorio">*</span> Otro número de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
+						<div class="col-sm-6 "><label><span class="txtObligatorio">*</span> Celular:</label><input type="text" class="form-control" id="txtCelular" placeholder="Número de celular" autocomplete="off"></div>
+						<div class="col-sm-6 "><label><span class="txtObligatorio">*</span> Celular de referencia:</label><input type="text" class="form-control" id="txtFono" placeholder="Número de Tlf. o Cel. extra" autocomplete="off"></div>
 					</div>
 				</div>
 				<div class="col-sm-4 hidden" id="divColumnaAdvertencia">
+					<div class="panel panel-danger hidden" id="panelInformativo">
+						<div class="panel-body" style="">
+							<h4 class="text-center"><span style="font-size: 25px;"><i class="icofont icofont-stethoscope-alt"></i></span> Salud prendaria en el Sistema </h4>
+							<ul style="padding:10px;">
+								<li>Total de empeños: <strong id="totalEmpenios"></strong> </li>
+								<li>Empeños pendientes de pago: <strong id="totalPendientesPago"></strong> </li>
+								<li>Días promedio en retirar: <strong id="totalPromedioPago"></strong></li>
+								<li>Antigüedad: <strong id="totalAntiguedad"></strong> </li>
+							</ul>
+						</div>
+					</div>
 					<div class="panel panel-danger hidden" id="panelBaneado">
-						<div class="panel-body" style="background-color: #e15345; color: white; padding: 25px 15px;">
-							<h2 class="text-center" style="font-size: 50px;"><i class="icofont icofont-warning"></i></h2>
-							<h5>Cliente Baneado</h5>
+						<div class="panel-body" style="">
+							<h4 class="text-center" ><span style="font-size: 25px;"><i class="icofont icofont-warning"></i></span> Cliente Baneado </h4>
 							<p>El cliente que intentas registrar tuvo problemas y fue prohibido de acceder a nuevos créditos, motivo: </p>
 							<ul><li><span class="spanMotivoBan"></span> - <strong class="text-capitalize spanUserBaneador"></strong> </li></ul>
 						</div>
 					</div>
-					<div class="panel panel-warning" id="panelAdvertido">
-						<div class="panel-body" style="background-color: #f9ab06; color: white; padding: 25px 15px;">
-							<h2 class="text-center" style="font-size: 50px;"><i class="icofont icofont-warning"></i></h2>
-							<h5>Cautela con el cliente</h5>
+					<div class="panel panel-warning hidden" id="panelAdvertido">
+						<div class="panel-body" style="">
+							<h4 class="text-center" ><span style="font-size: 25px;"><i class="icofont icofont-warning"></i></span> Cautela con el cliente </h4>
 							<p>Toma en cuenta las advertencias antes de dar el crédito: </p>
 							<ul><li><span class="spanMotivoBan"></span> - <strong class="text-capitalize spanUserBaneador"></strong> </li></ul>
 						</div>
@@ -115,8 +138,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 				
 
 				
-			<!-- Fin de contenido 2 -->
-			</div>
+			
 			<div class="row contenedorDatosProductos hidden">
 				<div class="col-sm-12 ">
 				<div class="row text-center hidden">
@@ -232,6 +254,7 @@ $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
 			</div>
 			</div>
 
+			
 			</div>
 			<!-- Fin de contenido principal -->
 		</div> <!-- col-lg-12 contenedorDeslizable -->
@@ -477,10 +500,24 @@ $('#someSwitchOptionWarning').change(function (e) {
 	}
 	$('#txtNombreProducto').focus();
 });
+$('#txtDni').keyup(function (e) {
+	if($(this).val().length<8){
+		bloquearTxts(true);
+	}else{
+		//bloquearTxts(false);
+	}
+   if(e.which==13 ){	e.preventDefault();
+//      $('#txtDni').focusout();
+		$('#txtApellidos').focus();
+   }
+
+})
 $('#txtDni').focusout(function () {
 if($('#txtDni').val()!=''){
+	pantallaOver(true);
 	$.ajax({url: 'php/encontrarCliente.php', type:'POST', data:{ dniCli:$('#txtDni').val() }}).done(function (resp) {//console.log(resp);
-		// console.log(JSON.parse(resp).length)
+		 console.log(JSON.parse(resp))
+		bloquearTxts(false);
 		if(JSON.parse(resp).length==1 ){
 			var data = JSON.parse(resp)[0];
 			$.each(JSON.parse(resp), function (i, dato) {
@@ -491,10 +528,20 @@ if($('#txtDni').val()!=''){
 				$('#txtCorreo').val(dato.cliCorreo); /*.attr("disabled", 'true')*/
 				$('#txtCelular').val(dato.cliCelular); /*.attr("disabled", 'true')*/
 				$('#txtFono').val(dato.cliFijo); /*.attr("disabled", 'true')*/
-			});
-			if(data.banFecha !=''){ //console.log(data)
+				
+				$('#totalEmpenios').text(dato.queTotal);
+				$('#totalPendientesPago').text(dato.cantProdCliente);
+				$('#totalPromedioPago').text(dato.queDemora);
+				$('#totalAntiguedad').text(dato.queViejo);
 				$('#divColumnaDatos').removeClass('col-sm-12').addClass('col-sm-8');
 				$('#divColumnaAdvertencia').removeClass('hidden');
+				$('#panelInformativo').removeClass('hidden');
+				
+			});
+			
+			
+			if(data.banFecha !=''){ //console.log(data)
+				
 				$('.spanMotivoBan').text(data.banMotivo);
 				$('.spanUserBaneador').text(data.reportador);
 				
@@ -509,13 +556,12 @@ if($('#txtDni').val()!=''){
 						$('#panelAdvertido').addClass('hidden');
 						$('#btnGuardarDatos').addClass('hidden');
 						break;
-					default:
-						break;
+					default: break;
 				}
 
 			}else{
-				$('#divColumnaDatos').removeClass('col-sm-8').addClass('col-sm-12');
-				$('#divColumnaAdvertencia').addClass('hidden');
+				/* $('#divColumnaDatos').removeClass('col-sm-8').addClass('col-sm-12');
+				$('#divColumnaAdvertencia').addClass('hidden'); */
 			}
 		}else{
 			$('#txtIdCliente').val('').removeAttr("disabled");
@@ -526,6 +572,7 @@ if($('#txtDni').val()!=''){
 			$('#txtCelular').val('').removeAttr("disabled");
 			$('#txtFono').val('').removeAttr("disabled");
 		}
+		pantallaOver(false);
 	});
 }
 });
@@ -613,6 +660,14 @@ $('#btnGuardarDatos').click(function () {
 		break;
 	}
 });
+function bloquearTxts(estado) {
+		$('#txtApellidos').attr('readonly', estado)
+		$('#txtNombres').attr('readonly', estado)
+		$('#txtDireccion').attr('readonly', estado)
+		$('#txtCorreo').attr('readonly', estado)
+		$('#txtCelular').attr('readonly', estado)
+		$('#txtFono').attr('readonly', estado)
+}
 $('#txtBuscarNivelGod').keyup(function (e) {
 	var valor= $(this).val();
 	 if(e.keyCode==13){
@@ -631,11 +686,13 @@ $('.btnMasterEntrada').click(function () {
 	$('.contenedorBienvenida').addClass('hidden');
 	var nomBtn=$(this).attr('id');
 	if( nomBtn=='btnRemateMaster'){
+		bloquearTxts(true);
 		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
 		$('.contenedorDatosProductos').addClass('animated fadeInRight').removeClass('hidden');
 		$('.queMichiEs').attr('data-id', 'esRemate');
 		$('#txtDni').focus();
 	}else if(nomBtn =='btnPrestamosSinDni'){
+		bloquearTxts(true);
 		$('.contenedorDatosCliente').addClass('animated fadeInRight').removeClass('hidden');
 		$('.contenedorDatosSinDni').addClass('animated fadeInRight').removeClass('hidden');
 		
