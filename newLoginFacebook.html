@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Prueba con firebase</title>
+	<!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+<body>
+
+	<input class="form-control" type="text" id="txtEmail" placeholder="email">
+	<input class="form-control" type="text" id="txtPassword" placeholder="email">
+	<button id="btnLogin" class='btn btn-action'>Login</button>
+	<button id="btnRegistro" class='btn btn-secondary'>Registro</button>
+	<button id="btnLogout" class='btn btn-action hide'>Cerrar sessión</button>
+	<button id="btnFacebook" class='btn btn-action '>Facebook</button>
+	<img src="" alt="" id="avatar">
+
+
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+
+<script>
+
+
+
+var firebaseConfig = {
+    apiKey: "AIzaSyCx8j31h6JtEzKuAB97WZcrmqVsqZyefo8",
+    authDomain: "appmusicaprivada.firebaseapp.com",
+    databaseURL: "https://appmusicaprivada.firebaseio.com",
+    projectId: "appmusicaprivada",
+    storageBucket: "appmusicaprivada.appspot.com",
+    messagingSenderId: "799839544435",
+    appId: "1:799839544435:web:be0825ccbaa4f0a8187606",
+    measurementId: "G-4Q0B8V6V15"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+	firebase.auth().languageCode = 'es';
+
+
+
+  
+const txtEmail = document.getElementById('txtEmail');
+const txtPassword = document.getElementById('txtPassword');
+const btnLogin = document.getElementById('btnLogin');
+const btnRegistro = document.getElementById('btnRegistro');
+const btnLogout = document.getElementById('btnLogout');
+
+//Anadir evento login
+btnLogin.addEventListener('click', e => {
+	const email = txtEmail.value;
+	const pass = txtPassword.value;
+	const auth = firebase.auth();
+
+	//Login con firebase
+	const promesa = auth.signInWithEmailAndPassword(email, pass);
+	promesa.catch(e => console.log(e.message));
+})
+
+//Evento registro
+btnRegistro.addEventListener('click', e => {
+	const email = txtEmail.value;
+	const pass = txtPassword.value;
+	const auth = firebase.auth();
+
+	//Registra con firebase, y luego se loguea
+	const promesa = auth.createUserWithEmailAndPassword(email, pass);
+	promesa.catch(e => console.log(e.message));
+})
+
+btnLogout.addEventListener('click', e => {
+	firebase.auth().signOut();
+})
+
+//Listener en tiempo real
+firebase.auth().onAuthStateChanged(firebaseuser => {
+	if(firebaseuser){ //Si se logueó el usuario 
+		var usuario = firebase.auth().currentUser;
+
+		btnLogout.classList.remove('hide');
+		//console.log(firebaseuser.providerData);
+		console.log('Proviene de: '+ usuario.providerId);
+		console.log('Nombre: '+ usuario.displayName);
+		console.log('Foto: '+ usuario.photoURL);
+		document.getElementById('avatar').setAttribute('src', usuario.photoURL)
+		
+	}else{
+		console.log('no logueado');
+		btnLogout.classList.add('hide');
+		document.getElementById('avatar').setAttribute('src', '')
+	}
+})
+
+
+btnFacebook.addEventListener('click', e =>{ ingresoFacebook(); })
+
+function ingresoFacebook(){
+	
+	const provider = new firebase.auth.FacebookAuthProvider();
+
+	firebase.auth().signInWithPopup(provider).then(result => {
+		// This gives you a Facebook Access Token. You can use it to access the Facebook API.
+	  var token = result.credential.accessToken;
+	  // The signed-in user info.
+	  var user = result.user;
+	  console.log(user.displayName)
+	  document.getElementById('avatar').setAttribute('src', user.photoURL)
+	  
+	  // ...
+	}).catch(function(error) {
+	  // Handle Errors here.
+	  var errorCode = error.code;
+	  var errorMessage = error.message;
+	  // The email of the user's account used.
+	  var email = error.email;
+	  // The firebase.auth.AuthCredential type that was used.
+	  var credential = error.credential;
+	  console.log(error)
+	  // ...
+	});
+
+	
+
+}
+</script>
+</body>
+</html>
