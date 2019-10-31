@@ -103,10 +103,11 @@ a:focus, a:hover{color: #782786;}
 				<?php
 				$i=0;
 				if( isset($_GET['idCliente'])){
-					$sql = mysqli_query($conection,"SELECT p.idProducto, p.prodNombre, pp.preCapital, p.prodActivo, pp.desFechaContarInteres, tp.tipoDescripcion, tp.tipColorMaterial,  pp.presidTipoProceso
+					$sql = mysqli_query($conection,"SELECT p.idProducto, p.prodNombre, pp.preCapital, p.prodActivo, pp.desFechaContarInteres, tp.tipoDescripcion, tp.tipColorMaterial,  pp.presidTipoProceso, tpr.tipopDescripcion
 					FROM `prestamo_producto` pp
 					inner join producto p on p.idProducto= pp.idProducto
 					inner join tipoProceso tp on tp.idTipoProceso = pp.presidTipoProceso
+					inner join tipoProducto tpr on tpr.idTipoProducto = p.idTipoProducto
 					where p.idCliente = ".$_GET['idCliente']."
 					order by p.prodActivo desc, p.idProducto desc;");
 					$rowCount = mysqli_num_rows($sql);
@@ -119,7 +120,7 @@ a:focus, a:hover{color: #782786;}
 								<div class=' paPrestamo'><div>
 								<div class='row <? if( $rowPrestamos['prodActivo']==1 ){ echo "purple-text text-lighten-1";} else{ echo 'grey-text text-darken-3'; } ?>'>
 									<div class='hidden codRegistro'><?= $rowPrestamos['idProducto']; ?></div>
-									<div class='col-xs-6 mayuscula'> <i class="icofont icofont-social-slack"></i> <span><?= $rowPrestamos['idProducto']; ?></span> <span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['prodNombre'].' s'.$rowPrestamos['prodActivo'];?> </div>
+									<div class='col-xs-6 mayuscula'> <i class="icofont icofont-social-slack"></i> <span><?= $rowPrestamos['idProducto']; ?></span> <span class='spanIcoProd'><i class='icofont icofont-gift'></i></span> <?= $rowPrestamos['tipopDescripcion']. " ". $rowPrestamos['prodNombre']; ?> </div>
 									<div class='col-xs-2'>S/. <?= number_format($rowPrestamos['preCapital'],2); ?></div>
 									<div class='col-xs-2 hastaHoy mayuscula' data-toggle="tooltip" data-placement="top" > <?= $rowPrestamos['desFechaContarInteres']; ?></div>
 									<div class='col-xs-2'><? if($rowPrestamos['presidTipoProceso']=="85"){ echo "<span class='red-text text-darken-2'>Congelado</span>"; }else {if( $rowPrestamos['prodActivo']==1 ){ echo 'Pendiente'; }else{ echo 'Inactivo'; }} ?> <span class='pull-right purple-text text-lighten-1'><i class='icofont icofont-rounded-right'></i></span></div>

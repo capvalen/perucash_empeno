@@ -194,7 +194,7 @@ $('#cmbEstadoCombo').change(function () {
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}"></a></td>
 						<td data-sort-value="${moment(dato.cubFecha).format('X')}">${moment(dato.cubFecha, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
 						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
@@ -225,7 +225,7 @@ $('#cmbEstadoCombo').change(function () {
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
 						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
@@ -317,7 +317,7 @@ $('#cmbEstadoCombo').change(function () {
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
 						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
@@ -345,12 +345,12 @@ $('#cmbEstadoCombo').change(function () {
 					</tr>`);
 				}
 				var data = JSON.parse(resp);
-				$.each(data, function (i, dato) { console.log(dato)
+				$.each(data, function (i, dato) { //console.log(dato)
 					sumaElementos+=parseFloat(dato.prodMontoEntregado);
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${moment(dato.prodFechaInicial).format('X')}">${moment(dato.prodFechaInicial, 'YYYY-MM-DD').format('DD/MM/YYYY')}</td>
 						<td>${parseFloat(dato.prodMontoEntregado).toFixed(2)}</td>
@@ -384,7 +384,7 @@ $('#cmbEstadoCombo').change(function () {
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}#tabMovEstados">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}#tabMovEstados">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
 						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>
@@ -418,7 +418,7 @@ $('#cmbEstadoCombo').change(function () {
 					$('tbody').append(`
 					<tr><td>${dato.idProducto}</td>
 						<td>${dato.prodCantidad}</td>
-						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.prodNombre}</a></td>
+						<td class="mayuscula"><a href="productos.php?idProducto=${dato.idProducto}">${dato.tipopDescripcion} ${dato.prodNombre}</a></td>
 						<td class="mayuscula"><a href="cliente.php?idCliente=${dato.idCliente}">${dato.cliNombres}</a></td>
 						<td data-sort-value="${dato.diasDeuda}">${dato.diasDeuda}</td>
 						<td>${parseFloat(dato.preCapital).toFixed(2)}</td>

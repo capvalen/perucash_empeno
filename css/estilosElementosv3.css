@@ -380,3 +380,7 @@ input{ cursor: url("../images/curs85617.png") 2 2, text;  } */
     text-align: left;
     vertical-align: middle;
   }
+
+  .navbar>.container-fluid .navbar-brand {
+    margin-left: 0;
+}

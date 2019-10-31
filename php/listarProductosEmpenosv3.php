@@ -18,7 +18,8 @@ while($row = mysqli_fetch_array($log, MYSQLI_ASSOC))
 		'desFechaContarInteres' => $row['desFechaContarInteres'],
 		'diasDeuda' => $row['diasDeuda'],
 		'prodCantidad' => $row['prodCantidad'],
-		'preCapital' => $row['preCapital']
+		'preCapital' => $row['preCapital'],
+		'tipopDescripcion' => $row['tipopDescripcion']
 	);
 	
 }

@@ -3,7 +3,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 <div id="sidebar-wrapper">
 	<ul class="sidebar-nav">
 		<div class="logoEmpresa ocultar-mostrar-menu">
-			<img class="img-responsive" src="images/empresa.png?version=1.2" alt="">
+			<img class="img-responsive" src="images/empresa.png?version=1.3" alt="">
 		</div>
 		<p class="text-center deep-purple-text text-lighten-2" style="font-size: 90%;"><? require_once 'php/version.php';?></p>
 		<li <?php if($nomArchivo =='principal.php') echo 'class="active"'; ?>>
@@ -33,6 +33,9 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		<li <?php if($nomArchivo =='almacen.php') echo 'class="active"'; ?>>
 				<a href="almacen.php"><i class="icofont icofont-box"></i> Almacén</a>
 		</li>
+		<!-- <li <?php if($nomArchivo =='calendario.php') echo 'class="active"'; ?>>
+				<a href="calendario.php"><i class="icofont icofont-ui-calendar"></i> Calendario</a>
+		</li> -->
 		<?php if( $_COOKIE['ckPower']==1){ ?>
 		<li <?php if($nomArchivo =='configuraciones.php') echo 'class="active"'; ?>>
 			<a href="configuraciones.php"><i class="icofont icofont-settings"></i> Configuraciones</a>
@@ -48,7 +51,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 		<nav class="navbar navbar-fixed-top encoger">
 			<div class="container-fluid">
 				<div class="navbar-header ">
-				<a class="navbar-brand ocultar-mostrar-menu" href="#"><img id="imgLogoInfocat" class="img-responsive" src="https://infocatsoluciones.com/img/favicon_cat.png" width="64" height="64"
+				<a class="navbar-brand ocultar-mostrar-menu" href="#"><span><i class="icofont icofont-navigation-menu"></i></span> <img id="imgLogoInfocat" class="img-responsive" src="https://infocatsoluciones.com/img/favicon_cat.png" width="64" height="64"
 				 alt=""> <span>Infocat Soluciones</span></a>
 					<button type="button" class="navbar-toggle collapsed" id="btnColapsador" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 					<span class="sr-only">Toggle navigation</span>
@@ -62,7 +65,7 @@ $nomArchivo = basename($_SERVER['PHP_SELF']); ?>
 					<ul class="nav navbar-nav navbar-right " style="padding:0 30px;">
 						 <li>
 							<div class="btn-group has-clear "><label for="txtBuscarNivelGod" class="text-muted visible-xs" style="color:white; font-weight: 500;">Buscar algo:</label>
-								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;">
+								<input type="text" class="form-control" id="txtBuscarNivelGod" placeholder="&#xedef;" autocomplete="off">
 								<span class="form-control-clear icofont icofont-close form-control-feedback hidden" id="spanClear" style="color: #fff;"></span>
 							</div>
 						 </li>

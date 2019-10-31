@@ -536,6 +536,13 @@ if($('#txtDni').val()!=''){
 				$('#divColumnaDatos').removeClass('col-sm-12').addClass('col-sm-8');
 				$('#divColumnaAdvertencia').removeClass('hidden');
 				$('#panelInformativo').removeClass('hidden');
+
+				console.log(parseInt(dato.cantProdCliente)>=3)
+				if(parseInt(dato.cantProdCliente)>=3){
+					$('#btnGuardarDatos').addClass('hidden');
+				}else{
+					$('#btnGuardarDatos').removeClass('hidden');
+				}
 				
 			});
 			
@@ -549,7 +556,7 @@ if($('#txtDni').val()!=''){
 					case '1':
 						$('#panelBaneado').addClass('hidden')
 						$('#panelAdvertido').removeClass('hidden');
-						$('#btnGuardarDatos').removeClass('hidden');
+						//$('#btnGuardarDatos').removeClass('hidden');
 						break;
 					case '2':
 						$('#panelBaneado').removeClass('hidden')

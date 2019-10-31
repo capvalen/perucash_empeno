@@ -11,7 +11,7 @@
 <link rel="shortcut icon" href="images/favicon.png">
 <link rel="stylesheet" href="css/sidebarDeslizable.css?version=1.1.15" >
 <link rel="stylesheet" href="css/cssBarraTop.css?version=1.0.11">
-<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.101" >
+<link rel="stylesheet" href="css/estilosElementosv3.css?version=3.0.102" >
 <link rel="stylesheet" href="css/colorsmaterial.css">
 <link rel="stylesheet" href="css/icofont.css"> <!-- iconos extraidos de: http://icofont.com/-->
 <link rel="stylesheet" href="css/bootstrap-datepicker3.css?version=1.0.1">

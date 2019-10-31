@@ -45,7 +45,7 @@ if($rows>0){ ?>
 	<tr>
 		<td><?php if($row['prodActivo']==1)  {?> <span class="mitooltip <?=$color;?>" data-toggle="tooltip" title="Activo"><i class="icocat-circulo"></i></span> <?php }else{ ?> <span class="mitooltip <?=$color;?>" data-toggle="tooltip" title="Finalizado"><i class="icocat-circulo"></i></span> <?php } ?> </td>
 		<td><?= $j;?></td>
-		<td class="mayuscula"><a href="productos.php?idProducto=<?php echo $row['idproducto']; ?>" class="<?=$color;?>"><?php echo $row['prodnombre']; ?></a></td>
+		<td class="mayuscula"><a href="productos.php?idProducto=<?php echo $row['idproducto']; ?>" class="<?=$color;?>"><?php echo $row['tipopDescripcion'].' '.$row['prodnombre']; ?></a></td>
 		<td class="eleNom mayuscula"><a href="cliente.php?idCliente=<?php echo $row['idCliente']; ?>" class="<?=$color;?>"><?php echo $row['cliapellidos'].' '.$row['clinombres']; ?></a></td>
 		<td class="<?=$color;?>">S/ <?php echo number_format($row['prodMontoEntregado'],2); ?></td>
 	</tr>

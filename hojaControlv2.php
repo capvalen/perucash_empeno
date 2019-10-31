@@ -79,7 +79,7 @@ $(document).ready(function () {
 window.print();	//Activa la impresion apenas cargo todo
 });
 /*Determina si se imprimio o se cancelo, para cerrar la pesataña activa*/
-(function () {
+/* (function () {
 	var afterPrint = function () {
 	window.top.close();
 	};
@@ -92,7 +92,7 @@ window.print();	//Activa la impresion apenas cargo todo
 		});
 	}
 	window.onafterprint = afterPrint;
-}());
+}()); */
 </script>
 </div>
 </body>
