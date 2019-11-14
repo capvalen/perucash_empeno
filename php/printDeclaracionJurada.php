@@ -54,7 +54,7 @@ $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
    <img src="../images/empresa.png?version=1.1" alt="" style="width: 150px;">
    <div id="divCabecera" class="text-justify">
       <p class="text-center"><strong>Declaración Jurada</strong></p>
-      <p>Por el presente documento, Yo: <strong class="text-capitalize"><?= $rowCliente['cliApellidos']." ".$rowCliente['cliNombres']; ?></strong> identificado con D.N.I. N° <?= $rowCliente['cliDni']; ?>, domiciliado en: <span class="text-capitalize"><?= $rowCliente['cliDireccion']; ?></span>, distrito de __________________, provincia de ________________, departamento de: _______________________, con celular/fijo N° <?= $rowCliente['cliCelular']." ". $rowCliente['cliFijo']; ?></p>
+      <p>Por el presente documento, Yo: <strong class="text-capitalize"><?= $rowCliente['cliApellidos']." ".$rowCliente['cliNombres']; ?></strong> identificado con D.N.I. N° <?= $rowCliente['cliDni']; ?>, domiciliado en: <span class="text-capitalize"><?= $rowCliente['cliDireccion']; ?></span>, distrito de __________________, provincia de ________________, departamento de: _______________________, con celular personal N° ___________________ y celular de referencia N°: ______________________. </p>
       <p>Productos:</p>
       <ul>
       <?php while($rowProds=$resultadoProds->fetch_assoc()){  ?>

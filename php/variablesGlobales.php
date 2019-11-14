@@ -8,7 +8,7 @@ $soloDios=array(1);
 $soloCaja=array(1,4);
 $soloEspecial=array(8);
 
-$folder = 'chilca';
+$folder = 'huancavelica';
 $local = '/'.$folder;
 
 

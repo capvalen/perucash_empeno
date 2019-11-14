@@ -1,11 +1,11 @@
 <?php 
 include 'php/facebookConect.php';
 require_once('vendor/autoload.php');
-if( isset($_SESSION['access_token'])){ 
+/* if( isset($_SESSION['access_token'])){ 
 	if( $_COOKIE['ckPower']==7){ header('Location: bienvenido.php'); }else{
 		header('Location: principal.php'); 
 	}
-}
+} */
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 require "php/conkarl.php";

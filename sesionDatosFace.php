@@ -17,7 +17,8 @@ try {
 }
 
 if( !$accessToken ){
-   header('Location: index.php'); //sesionDatosFace.php
+   header('Location: http://perucash.com/'.$folder.'/index.php'); //sesionDatosFace.php
+   //header('Location: https://google.com/'); 
    exit();
 }
 
