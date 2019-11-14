@@ -8,7 +8,7 @@ unset($_COOKIE['cknomCompleto']);
 unset($_COOKIE['ckPower']);
 unset($_COOKIE['ckoficina']);
 
-$ruta = '/demo';
+$ruta = '/huancavelica';
 
 setcookie("ckidUsuario", "", time() - 3600, $ruta);
 setcookie("ckidSucursal", "", time() - 3600, $ruta);
@@ -24,5 +24,6 @@ if ($_SESSION['access_token']) {
 	session_destroy();
 	
 }
-header("location:..\index.php");
+//header("location:..\index.php");
+header('Location: https://perucash.com'.$ruta.'/index.php');
 ?>
