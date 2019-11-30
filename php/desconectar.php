@@ -8,7 +8,7 @@ unset($_COOKIE['cknomCompleto']);
 unset($_COOKIE['ckPower']);
 unset($_COOKIE['ckoficina']);
 
-$ruta = '/huancavelica';
+$ruta = '/app';
 
 setcookie("ckidUsuario", "", time() - 3600, $ruta);
 setcookie("ckidSucursal", "", time() - 3600, $ruta);
