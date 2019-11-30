@@ -75,6 +75,34 @@ if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
 	</div>
 </div>
 </div>
+<!-- Modal para crear un evento  -->
+<div class="modal fade" id="modalNuevoEvento" tabindex="-1" role="dialog" aria-labelledby="">
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		<div class="modal-body">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4><i class="icofont icofont-ui-calendar"></i> Nuevo de evento</h4>
+			<div class="container-fluid">
+			<div class="row text-right">
+				<div class="text-left">
+					<label for="">Título</label>
+					<input type="text" class="form-control" id="txtTituloEventoNuevo">
+					<label for="">Descripción</label>
+					<input type="text" class="form-control" id="txtDescripcionEventoNuevo">
+					<label for="">Fecha de inicio</label>
+					<input type="date" class="form-control" id="txtFechaIniEventoNuevo">
+					<label for="">Fecha final</label>
+					<input type="date" class="form-control" id="txtFechaFinEventoNuevo">
+				</div>
+				<div class="text-center orange-text text-lighten-1"><span id="spanMyAlerta"></span><h3 class="text-center orange-text text-lighten-1" id="h1MyAdvertencia"></h3></div>
+				<button class="btn btn-warning btn-outline" id="btnNuevoEvento" data-dismiss="modal" ><i class="icofont icofont-refresh"></i> Crear evento</button>
+			</div>
+		</div>
+
+	</div>
+	</div>
+</div>
+</div>
 
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
@@ -83,6 +111,9 @@ if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
 <script src='fullcalendar/interaction/main.js'></script>
 <script src='fullcalendar/core/locales/es.js'></script>
 <script src='fullcalendar/daygrid/main.js'></script>
+<script src='js/moment.js'></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.0/build/alertify.min.js"></script>
+
 		
 
 <?php if ( isset($_COOKIE['ckidUsuario']) ){?>
@@ -98,7 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		editable: true,
 		eventLimit: true, // cuando hay muchos eventos en el día, los visualiza en un popover
 		header: {
-			left: 'title'
+			left: 'title',
+			center: 'addEventButton'
 		},
 		events: [{
 			id: 265,
@@ -132,6 +164,42 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (!confirm("is this okay?")) {
 				info.revert();
 			}
+		},
+		customButtons: {
+      addEventButton: {
+        text: 'add event...',
+        click: function() {
+					var d = new Date();
+					$('#txtFechaIniEventoNuevo').val( moment().format('YYYY-MM-DD') );
+					$('#txtFechaFinEventoNuevo').val( moment().format('YYYY-MM-DD') );
+					$('#modalNuevoEvento').modal('show');
+					
+				/* 	calendar.addEvent({
+						title: $('#txtTituloEventoNuevo').val(),
+						contenido: $('#txtDescripcionEventoNuevo').val(),
+						allDay: true,
+						start: $('#txtFechaIniEventoNuevo').val(),
+						end: $('#txtFechaFinEventoNuevo').val(),
+						backgroundColor: '#942da7',
+						borderColor: '#942da7',
+						textColor: '#fff'
+					}); */
+					
+          /* var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+          var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+          if (!isNaN(date.valueOf())) { // valid?
+            calendar.addEvent({
+              title: 'dynamic event',
+              start: date,
+              allDay: true
+            });
+            alert('Great. Now, update your database...');
+          } else {
+            alert('Invalid date.');
+          } */
+        }
+			}
 		}
 	});
 
@@ -141,18 +209,31 @@ document.addEventListener('DOMContentLoaded', function() {
 	calendar.on('dateClick', function(info) {
 		console.log('clicked on ' + info.dateStr);
 	});
+
+	$('#btnNuevoEvento').click(function(){
+		calendar.addEvent({
+						title: $('#txtTituloEventoNuevo').val(),
+						contenido: $('#txtDescripcionEventoNuevo').val(),
+						allDay: true,
+						start: $('#txtFechaIniEventoNuevo').val(),
+						end: $('#txtFechaFinEventoNuevo').val(),
+						backgroundColor: '#942da7',
+						borderColor: '#942da7',
+						textColor: '#fff'
+					});
+	})
+	$('#btnPrueba').click(function(){
+		calendar.addEvent( 'addEventSource', [{
+			title: "hola mundo",
+			allDay: true,
+			start: '2019-11-01',
+			end: '2019-11-03',
+			backgroundColor: '#942da7',
+			borderColor: '#942da7',
+			textColor: '#fff'
+		}] );
+	});
 });
-$('#btnPrueba').click(function(){
-	calendar( 'addEventSource', [{
-		title: "hola mundo",
-		allDay: true,
-		start: '2019-11-01',
-		end: '2019-11-03',
-		backgroundColor: '#942da7',
-		borderColor: '#942da7',
-		textColor: '#fff'
-	}] );
-})
 </script>
 <?php } ?>
 </body>
