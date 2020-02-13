@@ -9,7 +9,7 @@ $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil 
 
 
 
-$log = mysqli_query($conection,"select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
+$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
 //and usuPass='".md5($_POST['pws'])."';
 //echo "select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';";
 
@@ -24,7 +24,9 @@ if ($row['idUsuario']>=1){
 	// $_SESSION['oficina']=$_POST['offi'];
 
 	if( $row['usuActivo']=='1' ){
-		$expira=time()+60*60*3; //cookie para 3 horas
+
+		$local='/';
+		$expira=time()+60*60*4; //cookie para 4 horas
 		setcookie('ckidSucursal', $row['idSucursal'], $expira, $local);
 		setcookie('ckSucursal', $row['sucLugar'], $expira, $local);
 		setcookie('ckAtiende', $row['usuNombres'], $expira, $local);
