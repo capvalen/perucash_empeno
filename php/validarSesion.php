@@ -26,7 +26,7 @@ if ($row['idUsuario']>=1){
 	if( $row['usuActivo']=='1' ){
 
 		$local='/';
-		$expira=time()+60*60*4; //cookie para 4 horas
+		$expira=time()+60*60*8; //cookie para 8 horas
 		setcookie('ckidSucursal', $row['idSucursal'], $expira, $local);
 		setcookie('ckSucursal', $row['sucLugar'], $expira, $local);
 		setcookie('ckAtiende', $row['usuNombres'], $expira, $local);
@@ -35,7 +35,6 @@ if ($row['idUsuario']>=1){
 		setcookie('ckidUsuario', $row['idUsuario'], $expira, $local);
 		setcookie('ckoficina', $_POST['offi'], $expira, $local);
 		setcookie('ckCorreo', $row['usuEMail'], $expira, $local);
-	
 		
 		//$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
 		//$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);

@@ -15,5 +15,5 @@ $redirectURL = "https://perucash.com/{$folder}/sesionDatosFace.php";
 $permissions = ['email'];
 $loginURL = $helper->getLoginURL($redirectURL, $permissions);
 
-//echo $loginURL;
+//echo $loginURL; die();
 ?>
