@@ -1,7 +1,7 @@
 <?php  session_start();
 
-if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
-if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+if( !isset($_COOKIE['ckidUsuario'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 
 date_default_timezone_set('America/Lima');
 require("php/conkarl.php");
@@ -71,7 +71,13 @@ label{color: #99abb4;font-weight: 500;font-size: 14px;}
 <div id="page-content-wrapper">
 	<div class="container-fluid " id="miniMenu">
 		<div class="col-xs-7">
-			<h3 class="purple-text text-lighten-1">Panel de administración <small>Bienvenido: <?= $_SESSION['userData']['first_name'].' '.$_SESSION['userData']['last_name'];?></small></h3>
+			<h3 class="purple-text text-lighten-1">Panel de administración <small>Bienvenido: <?php
+			if(isset($_COOKIE['facebook'])):
+			 	echo $_SESSION['userData']['first_name'].' '.$_SESSION['userData']['last_name'];
+			else:
+				echo $_COOKIE['cknomCompleto'];
+			endif;
+			 ?></small></h3>
 		</div>
 		<!-- <div class="col-xs-5">
 			<div class="col-xs-6" id="divMontoMes" data-toggle="tooltip" title="Suma de Recuperación - Inversión"><p>Éste mes</p><h4 id="montoMes">S/. <?php //include 'php/recuperacionEsteMes.php'; ?></h4> <h4><i class="icofont icofont-chart-histogram-alt"></i></h4> </div>

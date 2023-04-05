@@ -1,8 +1,8 @@
 <?php session_start();
 date_default_timezone_set('America/Lima');
 
-if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
-   if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+if( !isset($_COOKIE['ckidUsuario'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 
 require("php/conkarl.php");
 require "php/variablesGlobales.php";

@@ -1,5 +1,5 @@
 <?php session_start();
-if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+if( !isset($_COOKIE['ckidUsuario'])){header('Location: index.php');}else{
 	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 include 'php/conkarl.php';
 include 'php/variablesGlobales.php';
@@ -70,7 +70,7 @@ td .form-control{
 			<h2 class="purple-text text-lighten-1">Configuración de usuarios</h2>
 			<div class="panel panel-default">
 				<div class="panel-body">
-				<button class="btn btn-azul btn-outline hidden" id="btnAgregarNuevoUsuario"><i class="icofont icofont-ui-add"></i> Agregar nuevo usuario</button>
+				<button class="btn btn-azul btn-outline " id="btnAgregarNuevoUsuario"><i class="icofont icofont-ui-add"></i> Agregar nuevo usuario</button>
 				<ul class="nav nav-tabs" id="ulTabs">
 					<li role="presentation" class="active"><a href="#tabUsuarios" aria-controls="home" role="tab" data-toggle="tab">Usuarios con privilegios</a></li>
 					<li role="presentation"><a href="#tabInvitados" aria-controls="home" role="tab" data-toggle="tab">Invitados</a></li>

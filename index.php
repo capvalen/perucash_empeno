@@ -1,5 +1,5 @@
 <?php 
-include 'php/facebookConect.php';
+//include 'php/facebookConect.php';
 require_once('vendor/autoload.php');
 /* if( isset($_SESSION['access_token'])){ 
 	if( $_COOKIE['ckPower']==7){ header('Location: bienvenido.php'); }else{
@@ -34,23 +34,20 @@ body{
 
 body{
 	background-color: #39bcf0;
-	background: url('images/shutterstock_360655751.jpg?v=0.1');
-	/*background-repeat: no-repeat;
+	background: url('images/fondo-habitaciones.jpg?v=0.1');
+	background-repeat: no-repeat;
 	background-position: center;
-	background-size: cover;*/
+	background-size: cover;
 	background-attachment: fixed;
 	
-	position: absolute;
+	/* position: absolute;
 	display: block;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
-	background-repeat: no-repeat;
-	background-position: top;
-	background-size: inherit;
+	bottom: 0; */
 }
 .puntos{ background: url(images/gridtile_3x3.png);
 	position: fixed;
@@ -247,9 +244,9 @@ display: inline-block;
 				<p class="subText"><i class="icofont icofont-quote-left"></i> Es sencillo hacer que las cosas sean complicadas, pero difícil hacer que sean sencillas.<i class="icofont icofont-quote-right"></i></p>
 				<p>Friedrich Nietzsche</p>
 			<?php endif; ?>
-				<!-- <button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button> -->
-				<button class="btn btn-default " id="btnEmpezarFace" onclick="window.location='<?= $loginURL; ?>'"><i class="icofont icofont-social-facebook"></i> Ingrese con Facebook</button>
-				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a>
+				<button class="btn btn-default btn-block" id="btnEmpezar">INGRESAR</button>
+				<!-- <button class="btn btn-default " id="btnEmpezarFace" onclick="window.location='<?= $loginURL; ?>'"><i class="icofont icofont-social-facebook"></i> Ingrese con Facebook</button>
+				<a class="hidden" href="https://idevie.com/tutorials/designing-an-ios-app-in-sketch">Extraer de</a> -->
 			</div>
 			<?php if( isset($_GET['solicita']) ): ?>
 			<div class="contenidoCambiante  container-fluid hidden" id="secDiv">

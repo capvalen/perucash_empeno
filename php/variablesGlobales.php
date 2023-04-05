@@ -1,6 +1,6 @@
 <?php
 
-include "conkarl.php";
+include __DIR__. "/conkarl.php";
 
 $admis=array(1,4,8);
 $soloAdmis=array(1,4,8);
@@ -19,7 +19,7 @@ $ipServer = $rowConf['ipServidor'];
 $serverLocal= "//{$ipServer}/perucash/";
 $servidorLocal = $serverLocal;
 
-$existeCaja = intval(require_once 'php/comprobarCajaHoy.php' );
+$existeCaja = intval(require __DIR__.'/comprobarCajaHoy.php' );
 //if( $existeCaja>0 ){echo 'numero'; }else{ echo 'no hay'; }
 
 ?>

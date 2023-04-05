@@ -9,9 +9,8 @@ $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil 
 
 
 
-$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
-//and usuPass='".md5($_POST['pws'])."';
-//echo "select * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."';";
+//$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
+$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '{$_POST['user']}' and usuPass=md5('{$_POST['pws']}') and usuActivo=1; ");
 
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if ($row['idUsuario']>=1){
@@ -26,23 +25,23 @@ if ($row['idUsuario']>=1){
 	if( $row['usuActivo']=='1' ){
 
 		$local='/';
-		$expira=time()+60*60*8; //cookie para 8 horas
+		$expira=0; //time()+60*60*8 //cookie para 8 horas
 		setcookie('ckidSucursal', $row['idSucursal'], $expira, $local);
 		setcookie('ckSucursal', $row['sucLugar'], $expira, $local);
 		setcookie('ckAtiende', $row['usuNombres'], $expira, $local);
 		setcookie('cknomCompleto', $row['usuNombres'].', '.$row['usuApellido'], $expira, $local);
 		setcookie('ckPower', $row['usuPoder'], $expira, $local);
 		setcookie('ckidUsuario', $row['idUsuario'], $expira, $local);
-		setcookie('ckoficina', $_POST['offi'], $expira, $local);
+		setcookie('ckoficina', 'algo', $expira, $local); // $_POST['offi']
 		setcookie('ckCorreo', $row['usuEMail'], $expira, $local);
 		
 		//$sqlConf = mysqli_query( $conection,  "SELECT * FROM `configuraciones`");
 		//$rowConf = mysqli_fetch_array($sqlConf, MYSQLI_ASSOC);
 		//setcookie('ckInventario', $rowConf['inventarioActivo'], $expira, $local);
 		//setcookie('ckSucursal', $rowConf['local'], $expira, $local);
-		//echo 'concedido';
+		echo 'concedido';
 	}else{
-		//echo 'inhabilitado';
+		echo 'inhabilitado';
 	}
 
 	
@@ -50,7 +49,7 @@ if ($row['idUsuario']>=1){
 	//echo $row['idUsuario'];
 	
 }else{
-	//echo 'nada';
+	echo 'nada';
 }
 
 /* liberar la serie de resultados */

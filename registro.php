@@ -1,6 +1,6 @@
 <?php session_start();
 date_default_timezone_set('America/Lima');
-if( !isset($_SESSION['access_token'])){header('Location: index.php');}else{
+if( !isset($_COOKIE['ckidUsuario'])){header('Location: index.php');}else{
 	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 
 $hayCaja= require_once("php/comprobarCajaHoy.php"); ?>
@@ -624,6 +624,7 @@ $('#btnGuardarDatos').click(function () {
 			if( $('#txtDni').val().length<8){
 				$('#spanMalo').text('El DNI no es correcto'); 
 				$('.modal-GuardadoError').modal('show');
+				pantallaOver(false);
 			}
 			else if( $('#txtApellidos').val()=='' || $('#txtNombres').val()==''){
 				pantallaOver(false);
@@ -657,6 +658,7 @@ $('#btnGuardarDatos').click(function () {
 								window.location= 'cliente.php?idCliente='+resp;
 							}
 						}).fail(function (params) {
+							console.log(params)
 							pantallaOver(false);
 							listaBugs(params.responseText);
 						});

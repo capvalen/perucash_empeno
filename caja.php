@@ -2,8 +2,8 @@
 date_default_timezone_set('America/Lima');
 include "php/variablesGlobales.php";
 
-if( !isset($_SESSION['access_token'])){header("Location: https://perucash.com/{$folder}/index.php");}else{
-   if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
+if( !isset($_COOKIE['ckidUsuario'])){header('Location: index.php');}else{
+	if( $_COOKIE['ckPower']=="7"){ header('Location: bienvenido.php'); } }
 
 if (!isset($_GET['fecha'])) { //si existe lista fecha requerida
 	$_GET['fecha']=date('Y-m-d');

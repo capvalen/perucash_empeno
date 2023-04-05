@@ -1,17 +1,17 @@
 <?php
 session_start();
 
-if( !isset($_SESSION['access_token'])){header('HTTP/1.1 Error de protección a la BD'); die('err1');}else{
+if( !isset($_COOKIE['ckidUsuario'])){header('HTTP/1.1 Error de protección a la BD'); die('err1');}else{
 	$existeCajaAntes = require_once("comprobarCajaHoy.php");
 	if($existeCajaAntes==0){ header('HTTP/1.1 Error de protección a la BD'); die('err3'); }else{
 		require('conkarl.php');
 		header('Content-Type: text/html; charset=utf8');
 
 		/** Reportes de error */
-		error_reporting(E_ALL);
+		/* error_reporting(E_ALL);
 		ini_set('display_errors', TRUE);
 		ini_set('display_startup_errors', TRUE);
-		date_default_timezone_set('America/Lima');
+		date_default_timezone_set('America/Lima'); */
 
 		$cliente= $_POST['jsonCliente'];
 
