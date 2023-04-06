@@ -49,7 +49,7 @@ include 'php/conkarl.php';
 			<span class="hidden queMichiEs"></span>
 			<div class="contenedorDatosCliente hidden">
 				<div class="row">
-				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" style="">
+				<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" >
 					<div class="panel panel-default list-group-panel">
 					<div class="panel-body">
 					<h5 class="text-center purple-text text-lighten-1">Ingreso de Vehículo</h5>
@@ -85,7 +85,7 @@ include 'php/conkarl.php';
 					</div><br>
 						
 					<div class="row">
-					<div class="col-xs-12" style="">
+					<div class="col-xs-12" >
 						<div class="panel panel-default list-group-panel">
 						<div class="panel-body">
 							<ul class="list-group list-group-header">

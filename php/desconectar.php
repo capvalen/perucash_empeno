@@ -20,7 +20,7 @@ setcookie("ckoficina", "", time() - 3600, $ruta);
 setcookie("ckInventario", "", time() - 3600, $ruta);
 setcookie("ckCorreo", "", time() - 3600, $ruta);
 
-if ($_SESSION['access_token']) {
+if ($_COOKIE['ckidUsuario']) {
 	session_destroy();
 	
 }

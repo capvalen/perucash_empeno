@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=utf8');
 include 'conkarl.php';
 
 $sql="SELECT idUsuario FROM `usuario`
-where usuNick = lower('{$_POST['texto']}');
+where usuNick = lower('{$_POST['texto']}') and usuActivo=1;
 ";
 $conjunto=$cadena->query($sql);
 $lineas = $conjunto->num_rows;
