@@ -36,7 +36,8 @@ include 'php/conkarl.php';
 				<? /* else: */ ?>
 					<!-- <img src="https://perucash.com/app/images/usuarios/noimg.svg?ver=1.1" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;"> -->
 				<? /* endif; */?>
-				<img src="<?= $_SESSION['userData']['picture']['url'];?>" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
+				
+				<img src="https://perucash.com/app/images/usuarios/noimg.jpg?ver=1.2" class="img-responsive img-circle" style=" display: inline-block; padding: 0 40px;">
 				<br>
                <label for="">Mi nombre</label> <input type="text" id="txtNombre" class="form-control text-center" readonly value="<?= $_COOKIE['cknomCompleto'];?>">
                <label for="">Mi rol actual</label> <input type="text" id="txtNombre" class="form-control text-center" readonly value="<?= $_COOKIE['ckPower'];?>">
@@ -50,6 +51,8 @@ include 'php/conkarl.php';
             <div class="col-xs-12 col-sm-7 col-lg-8 ">
 					<h4>Mis comisiones</h4>
 					<p>Pronto acá se mostrarán las comisiones de cada usuario</p>
+					<h4>Nueva contraseña de acceso</h4>
+					<button class="btn btn-primary btn-outline" data-toggle="modal" data-target="#modalClaveNueva">Cambiar mi clave</button>
 				</div>
          </div>
 
@@ -61,6 +64,23 @@ include 'php/conkarl.php';
 </div><!-- /#page-content-wrapper -->
 </div><!-- /#wrapper -->
 
+<!-- Modal para decir que hay una observación  -->
+<div class="modal fade " id="modalClaveNueva" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header-warning">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><i class="icofont icofont-social-readernaut"></i> Cambiar clave</h4>
+			</div>
+			<div class="modal-body">
+				<p>Ingrese su nueva contraseña a cambiar</p>
+				<input type="text" class="form-control" id="txt_clave_nueva" autocomplete="off">
+				<button class="btn btn-primary btn-outline" onclick="actualizarClave()">Actualizar contraseña</button>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
 
 <?php include 'footer.php'; ?>
 <?php include 'php/modals.php'; ?>
@@ -107,6 +127,21 @@ $('#btnCambiarContrasena').click(function() {
 	}
 	
 });
+async function actualizarClave(){
+	let datos = new FormData();
+	datos.append('texto', $('#txt_clave_nueva').val() )
+	fetch('php/updatePassSinDatos.php', {
+		method:'POST', body:datos
+	}).then(res=> res.text() )
+	.then(respuesta =>{
+		$('#modalClaveNueva').modal('hide');
+		if(respuesta=='1'){
+			$('#h1Bien').text('Contraseña actualizado con éxito');
+			$('.modal-GuardadoCorrecto').modal('show');
+		}
+		
+	})
+}
 
 </script>
 <?php } ?>

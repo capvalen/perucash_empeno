@@ -10,7 +10,9 @@ $clavePrivada= 'Es sencillo hacer que las cosas sean complicadas, pero difícil 
 
 
 //$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where idFacebook = '".$_POST['idFace']."' and usuActivo =1; ");
-$log = mysqli_query($conection,"SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '{$_POST['user']}' and usuPass=md5('{$_POST['pws']}') and usuActivo=1; ");
+$sentencia = "SELECT * from  usuario u inner join sucursal s on s.idSucursal=u.idSucursal where usuNick = '{$_POST['user']}' and usuPass=md5('{$_POST['pws']}') and usuActivo=1; ";
+//echo $sentencia;die();
+$log = mysqli_query($conection,$sentencia);
 
 $row = mysqli_fetch_array($log, MYSQLI_ASSOC);
 if ($row['idUsuario']>=1){

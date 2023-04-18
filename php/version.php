@@ -1,5 +1,5 @@
 <?php 
-echo "Versión 3.4 Build 23.0404 ";
+echo "Versión 3.4c Build 23.0417";
 
 /*
 Nuevos cambios en versiones:

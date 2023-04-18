@@ -5,8 +5,8 @@ include 'conkarl.php';
 
 
 $filas=array();
-$log = mysqli_query($conection,"call updateUserDatosConPass('".$_POST['nombre']."', '".$_POST['apellido']."' , '".$_POST['nick']."' , '".$_POST['pass']."' , '".$_POST['poder']."' , ".$_POST['sucursal']." , '".$_POST['idUser']."' );");
-
+$log = mysqli_query($conection,"UPDATE `usuario` SET `usuNombres`='".$_POST['nombre']."',`usuApellido`='".$_POST['apellido']."',`usuPass`=md5('".$_POST['pass']."')
+WHERE idUsuario = '".$_POST['idUser']."'");
 
 /* cerrar la conexión */
 mysqli_close($conection);

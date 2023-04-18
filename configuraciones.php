@@ -229,6 +229,8 @@ td .form-control{
 			<input type="text" class="form-control" id="txtFaceNombre">
 			<label for="">Apellidos:</label>
 			<input type="text" class="form-control" id="txtFaceApellidos">
+			<label for="">Contraseña:</label>
+			<input type="text" class="form-control" id="txt_Cambiante" autocomplete="off">
 		</div>
 		<div class='modal-footer'>
 			<button type='button' class='btn btn-primary btn-outline' id="btnActualizarFaceDatos"><i class="icofont icofont-refresh"></i> Actualizar datos</button>
@@ -342,9 +344,10 @@ $('.btnEditarUsuario').click(function() {
 	$('#modalEditarUsuario').modal('show');
 });
 $('#btnActualizarFaceDatos').click(function() {
-	if( $('#txtFaceNombre').val()!='' && $('#txtFaceApellidos').val()!='' ){
+	if( $('#txtFaceNombre').val()!='' && $('#txtFaceApellidos').val()!='' ){ //poder: $('#btnActualizarFaceDatos').attr('data-power'), 
 		$.ajax({url: 'php/updateUserDatosConPass.php', type: 'POST', data: { nombre: $('#txtFaceNombre').val(), apellido: $('#txtFaceApellidos').val(), 
-		nick: '', pass:'', poder: $('#btnActualizarFaceDatos').attr('data-power'), sucursal: 1, idUser: $('#btnActualizarFaceDatos').attr('data-id') }}).done(function(resp) {
+		nick: '', pass: $('#txt_Cambiante').val(), sucursal: 1, idUser: $('#btnActualizarFaceDatos').attr('data-id'),
+	 }}).done(function(resp) {
 			console.log(resp)
 		});
 	}

@@ -1,4 +1,5 @@
 <?php
+require_once('variablesGlobales.php');
 session_start();
 unset($_COOKIE['ckidUsuario']);
 unset($_COOKIE['ckidSucursal']);
@@ -8,7 +9,7 @@ unset($_COOKIE['cknomCompleto']);
 unset($_COOKIE['ckPower']);
 unset($_COOKIE['ckoficina']);
 
-$ruta = '/app';
+
 
 setcookie("ckidUsuario", "", time() - 3600, $ruta);
 setcookie("ckidSucursal", "", time() - 3600, $ruta);
@@ -25,5 +26,5 @@ if ($_COOKIE['ckidUsuario']) {
 	
 }
 //header("location:..\index.php");
-header('Location: https://perucash.com'.$ruta.'/index.php');
+header('Location: https://perucash.com/'.$folder.'/index.php');
 ?>
